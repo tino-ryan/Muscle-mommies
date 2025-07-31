@@ -1,102 +1,258 @@
+
 # 💪 Muscle Mommies
 
 A full-stack fitness application with client, server, and documentation components, built as a monorepo.
 
+---
+
 ## 🧱 Project Structure
 
+```
 Muscle-mommies/
 │
-├── client/ # Frontend (React, hosted on Firebase)
-├── server/ # Backend (Node.js + Express)
-├── docs/ # Project documentation (Docusaurus, deployed via GitHub Pages)
+├── client/        # Frontend (React, hosted on Firebase)
+├── server/        # Backend (Node.js + Express)
+├── docs/          # Project documentation (Docusaurus, deployed via GitHub Pages)
 ├── README.md
 └── ...
-
-
+```
 
 ---
 
 ## 🚀 Quick Start Guide
 
-This project uses **Node.js** and **npm**. Make sure they're installed.
+This project uses **Node.js**, **npm**, and **React**. Please ensure the following are installed:
+
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
+- [React](https://react.dev/)
+- [Firebase CLI](https://firebase.google.com/docs/cli)
+
+---
 
 ### 1. Clone the Repo
 
+```bash
 git clone https://github.com/tino-ryan/Muscle-mommies.git
 cd Muscle-mommies
-2. Install All Dependencies
-Install dependencies in each folder:
+```
 
+---
 
+### 2. Install Dependencies
+
+```bash
 cd client && npm install
 cd ../server && npm install
 cd ../docs && npm install
-📦 Running Locally
-🔹 Client
-bash
-Copy
-Edit
+```
+
+---
+
+### 📦 Running Locally
+
+#### Client (Frontend)
+
+```bash
 cd client
-npm run dev   # or npm start depending on your setup
-Frontend runs at: http://localhost:3000
+npm run dev
+```
 
-🔹 Server
-bash
-Copy
-Edit
+Runs at: [http://localhost:3000](http://localhost:3000)
+
+---
+
+#### Server (Backend)
+
+```bash
 cd server
-npm run dev   # Make sure nodemon is installed, or use `node index.js`
-Backend runs at: http://localhost:5000
+npm run dev
+```
 
-The backend handles user logic, data endpoints, and connects to Firebase (already set up).
+Runs at: [http://localhost:5000](http://localhost:5000)
 
-🔹 Docs
-bash
-Copy
-Edit
+---
+
+#### Documentation (Docs)
+
+```bash
 cd docs
 npm run start
-Docs run at: http://localhost:3001
+```
 
-🌐 Deployment Info
-✅ Frontend
-Deployed on Firebase Hosting
-Visit: [your-firebase-project-url]
+Runs at: [http://localhost:3001](http://localhost:3001)
 
-✅ Documentation
-Deployed via GitHub Actions to gh-pages branch
-Visit: https://tino-ryan.github.io/Muscle-mommies
+---
 
-❗ Backend
-Currently runs locally on localhost:5000.
+### 🔒 Firebase Setup
 
-Deployment platform: TBD (Render, Railway, etc.).
+Firebase Auth and Firestore are already configured.
 
-🧪 Recommended Setup Checks
- Firebase Hosting and Auth configured ✅
+Manage settings from your [Firebase Console](https://console.firebase.google.com/).
 
- GitHub Pages for docs working ✅
+No additional setup needed unless you're changing providers.
 
- .env setup (coming soon)
+---
 
- Backend hosting setup (WIP)
+### 🌐 Deployment
 
- Role-based routing (e.g. admin/user) handled in client
+#### Client
 
-📚 Docs & Contribution
-To contribute or learn more about this project:
+Deployed on **Firebase Hosting**.
 
+To redeploy:
 
+```bash
+cd client
+npm run build
+firebase deploy
+```
+
+---
+
+#### Docs
+
+Deployed using **GitHub Pages** (`gh-pages` branch).
+
+To deploy:
+
+```bash
 cd docs
-npm run start
-Explore the local documentation at localhost:3001, or visit the online version.
+npm run deploy
+```
 
-👨‍💻 Author
-Tinotenda Gozho
-GitHub: @tino-ryan
+Make sure GitHub Pages is enabled in the repo settings.
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repo  
+2. Create a branch:
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Commit your changes  
+4. Push to your fork  
+5. Submit a pull request
+
+---
+
+## 📄 License
+
+MIT © 2025 Tino Ryan
 
 
+---
 
+## 🔐 Safe Git Workflow for Pushing Code
 
+Follow this guide to safely push changes to any project repository without breaking production or other developers' work.
 
+---
+
+### 🧱 1. Pull the Latest Changes
+
+Always sync with the remote repo before starting work:
+
+```bash
+git checkout main
+git pull origin main
+```
+
+> ✅ This ensures your local copy is up to date.
+
+---
+
+### 🌿 2. Create a New Feature or Fix Branch
+
+Use a clear, descriptive name for the branch:
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+Examples:
+- `feature/signup-form`
+- `fix/login-bug`
+- `docs/update-readme`
+
+---
+
+### 💻 3. Make Changes and Stage Them
+
+Check your changes:
+
+```bash
+git status
+```
+
+Add specific files or everything:
+
+```bash
+git add file1.js file2.js
+# or
+git add .
+```
+
+---
+
+### 📝 4. Commit with a Clear Message
+
+Use present tense and describe what the commit does:
+
+```bash
+git commit -m "Add login validation and error handling"
+```
+
+---
+
+### 🚀 5. Push the Branch to GitHub
+
+```bash
+git push origin feature/your-feature-name
+```
+
+---
+
+### 📬 6. Create a Pull Request (PR)
+
+1. Go to the repo on GitHub.
+2. Open a Pull Request from your branch into `main` (or `dev` if applicable).
+3. Add a title and description of what you changed.
+4. Submit the PR for review.
+
+> Optionally assign teammates or reviewers.
+
+---
+
+### ✅ 7. Merge Safely
+
+Once approved or reviewed:
+- **Use "Squash and merge"** for clean history.
+- Delete the branch after merging.
+
+---
+
+### 🧹 8. Clean Up (Optional)
+
+After merge, clean your local branches:
+
+```bash
+git checkout main
+git pull origin main
+git branch -d feature/your-feature-name
+```
+
+---
+
+### 💡 Tip: Use `.gitignore` to Avoid Pushing Unwanted Files
+
+Make sure `node_modules/`, `.env`, and build artifacts are ignored.
+
+---
+
+This workflow keeps your codebase safe, readable, and team-friendly.
 
