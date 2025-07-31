@@ -1,9 +1,12 @@
 name: Deploy Docusaurus Docs
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
-      - main  # change if your main branch has a different name
+      - main  # Change if your default branch is different
 
 jobs:
   deploy:
