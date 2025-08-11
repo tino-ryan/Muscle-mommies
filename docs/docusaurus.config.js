@@ -10,9 +10,9 @@ const config = {
   favicon: 'img/favicon.ico',
 
   url: 'https://tino-ryan.github.io', // Your website URL
-  baseUrl: '/Muscle-mommies/',        // Path to your repo (if deployed to GitHub Pages)
-  organizationName: 'tino-ryan',      // GitHub org/user name
-  projectName: 'Muscle-mommies',      // GitHub repo name
+  baseUrl: '/Muscle-mommies/', // Path to your repo (if deployed to GitHub Pages)
+  organizationName: 'tino-ryan', // GitHub org/user name
+  projectName: 'Muscle-mommies', // GitHub repo name
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -34,7 +34,8 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/tino-ryan/Muscle-mommies/edit/main/blog/',
+          editUrl:
+            'https://github.com/tino-ryan/Muscle-mommies/edit/main/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

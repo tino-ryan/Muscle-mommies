@@ -7,7 +7,7 @@ A full-stack fitness application with client, server, and documentation componen
 
 ## 🧱 Project Structure
 
-```
+```txt
 Muscle-mommies/
 │
 ├── client/        # Frontend (React, hosted on Firebase)

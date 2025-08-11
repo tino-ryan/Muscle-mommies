@@ -16,9 +16,7 @@ export default function Home() {
           <li>pixelbub</li>
           <li>Yurisha</li>
           <li>Tino Ryan</li>
-
         </ul>
-
       </main>
     </Layout>
   );
