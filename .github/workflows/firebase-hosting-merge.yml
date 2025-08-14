@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies and build client
         run: |
           cd client
-          npm ci
+          npm npm install
           npm run build
 
       - name: Deploy to Firebase Hosting
