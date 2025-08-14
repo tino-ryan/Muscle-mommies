@@ -5,7 +5,7 @@ Our application uses the following technologies:
 - **Frontend**: React  
   - As none of our group members had prior experience with a JavaScript framework, we chose this project as an opportunity to learn and work with React.  
   - We selected React due to its popularity, simplicity, and ability to build fast, dynamic, and responsive web pages.
-  - **Resources**: [React Documentation](https://react.dev/)
+  - **Resources**: [React Documentation](https://react.dev/learn)
 - **Backend**: Node.js + Express  
   - We have worked with Node.js and Express before, so we felt confident using them for this project.  
   - Express makes it simple to set up APIs.  
