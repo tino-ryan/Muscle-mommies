@@ -18,7 +18,9 @@ Our application uses the following technologies:
   - We chose Firestore because it’s easy to set up and works really well with Firebase Authentication.  
   - Its real-time updates are helpful for our app, and we don’t have to worry about managing our own database server.  
   - **Resources**: [Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
-- **Hosting**:
+- **Hosting**: Firebase Hosting  
+  - We chose Firebase Hosting because it’s quick to set up and works seamlessly with the other Firebase services we’re already using.  
+  - **Resources**: [Firebase Hosting Documentation](https://firebase.google.com/docs/hosting)
 - **Testing**: Jest  
   - We use Jest for unit and integration testing to make sure our code works as expected.  
   - It’s easy to set up with JavaScript and gives quick feedback when tests fail.  
