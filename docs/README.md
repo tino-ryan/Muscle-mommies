@@ -1,6 +1,8 @@
 
 # 💪 Muscle Mommies
 
+[![codecov](https://codecov.io/gh/tino-ryan/Muscle-mommies/branch/dev/graph/badge.svg)](https://codecov.io/gh/tino-ryan/Muscle-mommies)
+
 A full-stack fitness application with client, server, and documentation components, built as a monorepo.
 
 ---
