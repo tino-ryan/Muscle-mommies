@@ -1,0 +1,29 @@
+[33m79e3fe2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/dev[m[33m)[m testing testing
+[33m5664f92[m[33m ([m[1;32mmain[m[33m)[m version control,git meth, husky, coe\de cov test
+[33md6eb413[m test pre-commit hooks
+[33mf326ccd[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update tech-stack.md
+[33m0bbf945[m fix typo
+[33m3c136ef[m fix typo
+[33ma326485[m Update firebase-hosting-pull-request.yml
+[33mbff403f[m Update firebase-hosting-merge.yml
+[33me9b3e28[m Update test.yml
+[33m7998c62[m Update tech-stack.md
+[33m122a7a0[m Update tech-stack.md
+[33m99d30fd[m Update tech-stack.md
+[33m52caebb[m Update CI/CD to use Node.js 20 and npm install
+[33mbdd855d[m Add CI/CD pipeline with Jest testing setup
+[33m2142e38[m added version control documentation
+[33m77a44cc[m Update firebase config
+[33m158d734[m some stuff
+[33m3217f67[m some stuff
+[33m069fb34[m some stuff
+[33m7b4c8a7[m Update README.md
+[33m71c06d9[m Update README.md
+[33m8861189[m Update deploy-docs.yml
+[33m8e46129[m Create deploy-docs.yml
+[33m819982b[m Ready set up docs and deploy
+[33m687fac6[m Update firebase-hosting-pull-request.yml
+[33m9586672[m Update firebase-hosting-merge.yml
+[33m87939d3[m Update firebase-hosting-merge.yml
+[33m2fa6791[m Add firebase config and github actions workflow
+[33m1976624[m Initial Commit ,Lets go
