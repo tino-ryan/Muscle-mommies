@@ -86,6 +86,64 @@ We use **Git** as our version control system, hosted on **GitHub** for repositor
 - Enable **Format On Save** and ESLint validation in VSCode settings
 - Use workspace settings to enforce consistency across team
 
+### Git Hooks & Automated Linting with Husky
+
+To ensure code quality and consistent styling, we’ve integrated **Husky** and **lint-staged** into our Git workflow.
+
+#### What We Did
+
+1. **Installed Husky and lint-staged**
+   ```bash
+   npm install --save-dev husky lint-staged
+   ```
+2. **Initialized Husky** to enable Git hooks:
+   ```bash
+   npx husky install
+   ```
+3. **Created a pre-commit hook** to run linting and formatting automatically:
+   ```bash
+   npx husky add .husky/pre-commit "npx lint-staged"
+   ```
+4. **Configured lint-staged** in `package.json` to run ESLint and Prettier on staged files:
+   ```json
+   "lint-staged": {
+     "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+     "*.{json,md}": ["prettier --write"]
+   }
+   ```
+
+#### Why This Matters
+
+- **Enforces code quality**: ESLint checks for errors and potential bugs before code is committed.
+- **Ensures consistent styling**: Prettier formats code automatically so the whole team follows the same conventions.
+- **Reduces manual steps**: Developers no longer need to run `eslint` or `prettier` manually.
+- **Prevents bad code from reaching the repo**: Commits fail if linting errors are detected, ensuring `main` and `dev` branches stay clean.
+
+#### How Team Members Should Use It
+
+1. After cloning the repo, install dependencies:
+   ```bash
+   npm install
+   ```
+2. Enable Husky hooks:
+   ```bash
+   npx husky install
+   ```
+3. Make changes and stage files with:
+   ```bash
+   git add <files>
+   ```
+4. When committing, Husky automatically runs lint-staged:
+   ```bash
+   git commit -m "Your commit message"
+   ```
+5. If linting errors occur:
+   - Fix the errors indicated by ESLint/Prettier.
+   - Stage the fixed files.
+   - Commit again.
+
+**Note:** This ensures that every commit meets our code standards without extra effort from developers.
+
 ---
 
 ## Semantic Versioning Rules
@@ -107,9 +165,9 @@ v1.1.1  → Sprint 3 fixes bugs
 ### Why semantic versioning Rules
 
 - Brendan Griffiths advised this one during the lecture on 14/08/2024 and the team was not familiar with any other versioning methodologies
-- Clear and consisntent method which can be understood by Devs all around the world
+- Clear and consistent method which can be understood by Devs all around the world
 - Helps with planning sprints and releases
-  -Makes it easier to track which features or fixes are in which sprint
+  - Makes it easier to track which features or fixes are in which sprint
 
 ---
 
@@ -117,10 +175,9 @@ v1.1.1  → Sprint 3 fixes bugs
 
 We use **Semantic Versioning (MAJOR.MINOR.PATCH)** to clearly communicate the scope of changes in each release.
 
-**What Counts as a Version Change?**
+### What Counts as a Version Change?
 
-**MAJOR**\
-Increase this when we introduce breaking changes — anything that forces developers or users to change how they use the system.
+**MAJOR**Increase this when we introduce breaking changes — anything that forces developers or users to change how they use the system.
 
 **Examples:**
 
@@ -129,8 +186,7 @@ Increase this when we introduce breaking changes — anything that forces develo
 
 **Reason:** Breaking changes require planning for migration, so they must be clearly signaled.
 
-**MINOR**\
-Increase this when we add new features that are backward compatible.
+**MINOR**Increase this when we add new features that are backward compatible.
 
 **Examples:**
 
@@ -139,8 +195,7 @@ Increase this when we add new features that are backward compatible.
 
 **Reason:** Signals that the release contains new capabilities but won’t break existing use cases.
 
-**PATCH**\
-Increase this for backward-compatible bug fixes or minor improvements.
+**PATCH**Increase this for backward-compatible bug fixes or minor improvements.
 
 **Examples:**
 
@@ -151,18 +206,16 @@ Increase this for backward-compatible bug fixes or minor improvements.
 
 ---
 
-**How to Tag in Git**
+### How to Tag in Git
 
-**Annotated Tag (Recommended)**\
-Includes metadata like author, date, and a description.
+**Annotated Tag (Recommended)**Includes metadata like author, date, and a description.
 
 ```bash
 git tag -a v1.0.0 -m "Initial stable release"
 git push origin v1.0.0
 ```
 
-**Lightweight Tag**\
-Just a pointer to a commit (not recommended for official releases).
+**Lightweight Tag**Just a pointer to a commit (not recommended for official releases).
 
 ```bash
 git tag v1.0.0
@@ -171,7 +224,7 @@ git push origin v1.0.0
 
 ---
 
-**When to Tag**
+### When to Tag
 
 - **End of each sprint** → Tag the merged `main` branch with a new version.
 - **After a hotfix** → Tag `main` immediately so the fix is tracked historically.
@@ -179,7 +232,7 @@ git push origin v1.0.0
 
 ---
 
-**9.4 Pre-Release Tags**
+### Pre-Release Tags
 
 For versions not yet ready for production but needing tracking:
 
