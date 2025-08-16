@@ -5,8 +5,7 @@ permissions:
 
 on:
   push:
-    branches:
-      - main  # Change if your default branch is different
+    branches: [ main, dev, gh-pages ]
 
 jobs:
   deploy:
