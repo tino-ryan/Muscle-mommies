@@ -33,8 +33,10 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          directory: ./client/coverage
+          files: ./client/coverage/lcov.info
           flags: frontend
+          fail_ci_if_error: true
+
 
   test-backend:
     runs-on: ubuntu-latest
@@ -62,5 +64,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          directory: ./server/coverage
+          files: ./server/coverage/lcov.info
           flags: backend
+          fail_ci_if_error: true
+
