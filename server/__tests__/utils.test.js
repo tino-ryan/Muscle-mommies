@@ -16,7 +16,9 @@ describe('BMI calculation', () => {
   });
 
   test('throws error for invalid inputs', () => {
-    expect(() => calculateBMI(0, 1.75)).toThrow('Weight and height must be positive numbers');
+    expect(() => calculateBMI(0, 1.75)).toThrow(
+      'Weight and height must be positive numbers'
+    );
   });
 });
 
@@ -26,7 +28,7 @@ describe('Response formatting', () => {
     expect(result).toEqual({
       success: true,
       message: 'Success',
-      data: { id: 1, name: 'Test' }
+      data: { id: 1, name: 'Test' },
     });
   });
 
