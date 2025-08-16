@@ -15,7 +15,7 @@
  @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
  */
 const sidebars = {
-  tutorialSidebar: ['intro', 'tech-stack', 'Version-control'],
+  tutorialSidebar: ['intro', 'tech-stack', 'Version-control', 'project-management'],
 };
 
 export default sidebars;
