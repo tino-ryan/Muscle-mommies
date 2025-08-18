@@ -1,18 +1,25 @@
 const express = require('express');
 const cors = require('cors');
-const admin = require('./firebase');
+const admin = require('./config/firebase');
+// Firebase Admin SDK
+const authRoutes = require('./routes/authRoutes'); // your auth routes
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // allows all origins — good for dev
-
+// Middleware
+app.use(cors()); // allow all origins (adjust for production)
 app.use(express.json());
 
+// Root route
 app.get('/', (req, res) => {
   res.send('Backend is live!');
 });
 
+// Auth routes
+app.use('/api/auth', authRoutes);
+
+// (Optional) Users route - dev/admin use only
 app.get('/api/users', async (req, res) => {
   try {
     const snapshot = await admin.firestore().collection('users').get();
@@ -23,4 +30,5 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

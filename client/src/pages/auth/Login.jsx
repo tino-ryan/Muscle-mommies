@@ -1,24 +1,56 @@
 // src/pages/Login.jsx
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
+      // Login with Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const uid = userCredential.user.uid;
+
+      // Fetch user profile from Firestore
+      const userDocRef = doc(db, 'users', uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        setError('User profile not found.');
+        return;
+      }
+
+      const userData = userSnap.data();
+
+      // Role-based navigation
+      switch (userData.role) {
+        case 'customer':
+          navigate('/customer/home'); // customer pages
+          break;
+        case 'storeOwner':
+          navigate('/store/home'); // store owner pages
+          break;
+        case 'admin':
+          navigate('/admin/dashboard'); // admin pages
+          break;
+        default:
+          setError('Unknown user role.');
+      }
     } catch (err) {
-      setError('Login failed. Check your credentials.' + err.message);
+      setError('Login failed. Check your credentials. ' + err.message);
     }
   };
 
