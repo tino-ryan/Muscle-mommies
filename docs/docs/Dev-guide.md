@@ -1,158 +1,140 @@
-# Development Guides
+# Muscle-Mommies Development Guide
 
-This document explains how to set up the development environment for Muscle-mommies, including creating the development database, API, and frontend site.
+This guide documents how to set up the development environment for **Muscle-Mommies**, explaining how to run the application locally. It covers backend API, frontend React app, Firebase, environment variables, and local workflows.
 
 ---
 
-## 1. How to Create a Development Database (Firebase)
-
-Our project uses **Firebase** as the backend database. Follow these steps to set up your development Firebase environment:
+## 1. Setting Up Locally
 
 ### Prerequisites
 
-- Google account
-- Firebase CLI installed (`npm install -g firebase-tools`)
-- Access to the Firebase project or create your own Firebase project
+- Node.js (v16+ recommended)
+- npm or yarn
+- Firebase CLI: `npm install -g firebase-tools`
+- Access to Firebase project or create a new one
 
-### Steps
+---
+
+### 1.1 Backend Setup
+
+1. **Navigate to server folder**
+
+```bash
+cd server
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Create `.env` file**
+   Add **only sensitive information**:
+
+```env
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<YOUR_KEY>\n-----END PRIVATE KEY-----\n"
+FIREBASE_CLIENT_EMAIL=your-service-account-email@project.iam.gserviceaccount.com
+```
+
+**Why we chose these variables:**
+
+- `FIREBASE_PRIVATE_KEY` and `FIREBASE_CLIENT_EMAIL` are sensitive credentials required to authenticate the backend server with Firebase Admin SDK.
+- Other Firebase configuration fields are public and do not need to be secret, so we hardcode them for simplicity.
+- This separation ensures sensitive credentials are never pushed to GitHub.
+
+4. **Run the backend**
+
+```bash
+node index.js
+```
+
+- Backend should run on `http://localhost:3000` by default.
+- Test endpoints with Postman or curl (`GET /api/users`).
+
+---
+
+### 1.2 Frontend Setup
+
+1. **Navigate to client folder**
+
+```bash
+cd client
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Create `.env` file**
+   Add Firebase public keys and API URL:
+
+```env
+REACT_APP_FIREBASE_API_KEY=<your-public-key>
+REACT_APP_API_URL=http://localhost:3000
+```
+
+**Why we chose these variables:**
+
+- `REACT_APP_FIREBASE_API_KEY` is safe to expose in the frontend and is required to initialize Firebase for client-side operations.
+- `REACT_APP_API_URL` allows switching between local and production backend easily.
+
+4. **Start the frontend**
+
+```bash
+npm start
+```
+
+- Runs on `http://localhost:3001`.
+- Uses proxy to forward API calls to backend.
+
+---
+
+### 1.3 Firebase Setup
 
 1. **Login to Firebase CLI**
 
-   ```bash
-   firebase login
-   ```
+```bash
+firebase login
+```
 
-2. **Initialize Firebase in the server directory**  
-   If not already done, run in `/server`:
+2. **Optional: Run local Firestore emulator**
 
-   ```bash
-   firebase init
-   ```
+```bash
+firebase emulators:start --only firestore
+```
 
-   Select features you need (e.g., Firestore).
-
-3. **Set up Firebase config**  
-   Get your Firebase config credentials from your Firebase console under project settings.
-
-4. **Create `.env` file in `/server`**  
-   Add your Firebase config keys as environment variables, e.g.:
-
-   ```env
-   FIREBASE_API_KEY=your-api-key
-   FIREBASE_AUTH_DOMAIN=your-auth-domain
-   FIREBASE_PROJECT_ID=your-project-id
-   FIREBASE_STORAGE_BUCKET=your-storage-bucket
-   FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
-   FIREBASE_APP_ID=your-app-id
-   ```
-
-5. **Initialize Firestore locally or use Firebase emulator** (optional)  
-   For offline/local development, run:
-   ```bash
-   firebase emulators:start --only firestore
-   ```
+- Useful for testing locally without touching production data.
 
 ---
 
-## 2. How to Create a Development API (Node.js + Express)
+## 2. Local Development Workflow
 
-The backend API serves data and business logic.
-
-### Prerequisites
-
-- Node.js (v16 or above recommended)
-- npm or yarn
-
-### Steps
-
-1. **Navigate to the backend directory**
-
-   ```bash
-   cd server
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Create a `.env` file** (if not existing) in `/server` with required environment variables (including Firebase keys as above).
-
-4. **Run the API server**
-
-   ```bash
-   npm run dev
-   ```
-
-   This should start the backend server, typically on `http://localhost:5000`
-
-5. **Test endpoints**  
-   Use Postman or curl to test API routes (e.g., `GET /api/users`).
+1. Start backend: `node index.js`
+2. Start frontend: `npm start`
+3. Log in as different users to test role-based routing.
+4. Make API calls via the frontend or Postman.
+5. Debug errors using console logs and Firebase Emulator.
 
 ---
 
-## 3. How to Create a Development Site (React Frontend)
+## 3. Deployment Notes
 
-The frontend React app provides the UI.
+- **Frontend:** Hosted on Firebase Hosting
+- **Backend:** Hosted on Railway
+- **Environment Variables / Secrets:**
+  - Backend: Add `FIREBASE_PRIVATE_KEY` and `FIREBASE_CLIENT_EMAIL` in Railway secrets.
+  - Frontend: Use Firebase Hosting environment or `.env.production`.
 
-### Prerequisites
-
-- Node.js and npm/yarn
-- Firebase project setup (for hosting and database connection)
-
-### Steps
-
-1. **Navigate to the client directory**
-
-   ```bash
-   cd client
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Create a `.env` file** with your Firebase config (same as backend but adapted for client if needed)  
-   Example:
-
-   ```env
-   REACT_APP_FIREBASE_API_KEY=your-api-key
-   REACT_APP_FIREBASE_AUTH_DOMAIN=your-auth-domain
-   REACT_APP_FIREBASE_PROJECT_ID=your-project-id
-   REACT_APP_FIREBASE_STORAGE_BUCKET=your-storage-bucket
-   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
-   REACT_APP_FIREBASE_APP_ID=your-app-id
-   ```
-
-4. **Run the React app**
-
-   ```bash
-   npm start
-   ```
-
-   The frontend should now be running on `http://localhost:3000`
-
-5. **Ensure it connects to the development backend and Firebase database**  
-   Verify API calls and database queries work correctly.
+- **API URLs:** Frontend points to production backend (`https://muscle-mommies-production.up.railway.app`).
 
 ---
 
-## Troubleshooting
+## 4. Key Points
 
-- Make sure all `.env` files are set correctly with valid Firebase credentials.
-- Backend and frontend ports should not conflict.
-- For Firebase emulator issues, try restarting the emulator or checking firewall permissions.
-
----
-
-## Summary
-
-- Setup Firebase project and config
-- Start backend API server with `npm run dev` in `/server`
-- Start React frontend with `npm start` in `/client`
-- Use Firebase emulator for local database testing (optional)
-
----
+- Backend and frontend run on separate ports locally.
+- Environment variables keep secrets out of GitHub.
+- Frontend uses proxy in development to avoid CORS issues.
+- Use Firebase Emulator for safe local testing (optional).

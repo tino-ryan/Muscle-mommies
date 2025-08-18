@@ -1,23 +1,119 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
+/* Hero Banner */
 .heroBanner {
-  padding: 4rem 0;
+  padding: 6rem 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
+.heroBanner h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.heroBanner p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Floating shapes */
+.heroBanner::before,
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float 12s infinite linear;
+}
+
+.heroBanner::before {
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.2);
+  top: 10%;
+  left: 15%;
+}
+
+.heroBanner::after {
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.15);
+  bottom: 15%;
+  right: 10%;
+  animation-duration: 18s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
   }
 }
 
+/* Buttons Container */
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 1; /* Ensure buttons stay above floating shapes */
+  position: relative;
+}
+
+/* Button Styles */
+.buttons button {
+  background-color: #fff;
+  color: #ff6f61;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.buttons button:hover {
+  background-color: #ff6f61;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 1rem;
+  }
+
+  .heroBanner h1 {
+    font-size: 2.2rem;
+  }
+
+  .heroBanner p {
+    font-size: 1rem;
+  }
+
+  .buttons button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+  }
 }

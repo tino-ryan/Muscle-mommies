@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { API_URL } from '../api';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -10,23 +10,30 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserRole = async () => {
-      const user = auth.currentUser;
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
-        navigate('/'); // redirect to login if not logged in
+        setRole('guest');
+        setLoading(false);
+        navigate('/');
         return;
       }
 
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists()) {
-        setRole(userDoc.data().role);
-      } else {
-        setRole('guest'); // fallback if profile not found
-      }
-      setLoading(false);
-    };
+      try {
+        // Fetch user role from backend API
+        const res = await fetch(`${API_URL}/api/users/${user.uid}`);
+        if (!res.ok) throw new Error('Failed to fetch user role');
 
-    fetchUserRole();
+        const userData = await res.json();
+        setRole(userData.role || 'guest');
+      } catch (err) {
+        console.error('Error fetching user role:', err);
+        setRole('guest');
+      }
+
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, [navigate]);
 
   const handleLogout = async () => {
@@ -41,11 +48,10 @@ export default function Dashboard() {
       <h1>Welcome to your Dashboard 🎉</h1>
 
       <div style={{ marginTop: 20 }}>
-        {/* Show links based on role */}
         {role === 'guest' && (
           <>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login')}
               style={{ marginRight: 10, padding: '0.5rem 1rem' }}
             >
               Login

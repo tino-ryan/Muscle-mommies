@@ -21,6 +21,7 @@ const sidebars = {
     'Version-control',
     'git-methodology',
     'Dev-guide',
+    'Structure',
   ],
 };
 

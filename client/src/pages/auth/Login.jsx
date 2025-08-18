@@ -1,9 +1,8 @@
-// src/pages/Login.jsx
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../firebase';
+import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { API_URL } from '../../api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,27 +23,22 @@ export default function Login() {
       );
       const uid = userCredential.user.uid;
 
-      // Fetch user profile from Firestore
-      const userDocRef = doc(db, 'users', uid);
-      const userSnap = await getDoc(userDocRef);
+      // Fetch user profile from backend API
+      const res = await fetch(`${API_URL}/api/users/${uid}`);
+      if (!res.ok) throw new Error('Failed to fetch user profile');
 
-      if (!userSnap.exists()) {
-        setError('User profile not found.');
-        return;
-      }
-
-      const userData = userSnap.data();
+      const userData = await res.json();
 
       // Role-based navigation
       switch (userData.role) {
         case 'customer':
-          navigate('/customer/home'); // customer pages
+          navigate('/customer/home');
           break;
         case 'storeOwner':
-          navigate('/store/home'); // store owner pages
+          navigate('/store/home');
           break;
         case 'admin':
-          navigate('/admin/dashboard'); // admin pages
+          navigate('/admin/dashboard');
           break;
         default:
           setError('Unknown user role.');

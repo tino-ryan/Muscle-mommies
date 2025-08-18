@@ -1,19 +1,18 @@
-// server/config/firebase.js
-require('dotenv').config();
 const admin = require('firebase-admin');
 
 const serviceAccount = {
-  type: process.env.FIREBASE_TYPE,
-  project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  client_id: process.env.FIREBASE_CLIENT_ID,
-  auth_uri: process.env.FIREBASE_AUTH_URI,
-  token_uri: process.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
+  type: 'service_account',
+  project_id: 'muscle-mommies',
+  private_key_id: 'b8e9f2551b62b658e6086d333ad8b6ad7c38985b',
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // env var
+  client_email: process.env.FIREBASE_CLIENT_EMAIL, // env var
+  client_id: '108258526107570575397',
+  auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+  token_uri: 'https://oauth2.googleapis.com/token',
+  auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+  client_x509_cert_url:
+    'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40muscle-mommies.iam.gserviceaccount.com',
+  universe_domain: 'googleapis.com',
 };
 
 if (!admin.apps.length) {
@@ -22,5 +21,4 @@ if (!admin.apps.length) {
   });
 }
 
-// Export the full admin object so you can use admin.auth() and admin.firestore()
 module.exports = admin;
