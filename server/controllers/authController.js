@@ -1,6 +1,6 @@
 const admin = require('../config/firebase'); // Firebase Admin SDK
 
-const User = require('../models/user'); // User model
+const User = require('../models/User'); // match the file
 
 // Signup via email & password
 exports.signup = async (req, res) => {
