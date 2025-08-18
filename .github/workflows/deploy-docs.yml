@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    branches: [ main, dev, gh-pages ]
+    branches: [main, dev, gh-pages]
 
 jobs:
   deploy:

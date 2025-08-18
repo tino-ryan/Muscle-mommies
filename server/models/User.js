@@ -8,7 +8,6 @@ class User {
     this.email = email;
     this.role = role;
   }
-
   // Save user to Firestore
   async save() {
     await db.collection('users').doc(this.uid).set({
@@ -46,5 +45,4 @@ class User {
     };
   }
 }
-
 module.exports = User;

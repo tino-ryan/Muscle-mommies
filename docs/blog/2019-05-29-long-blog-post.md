@@ -1,7 +1,6 @@
 ---
 slug: long-blog-post
 title: Long Blog Post
-
 ---
 
 This is the summary of a very long blog post,

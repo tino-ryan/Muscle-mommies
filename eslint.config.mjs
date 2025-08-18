@@ -15,32 +15,27 @@ export default defineConfig([
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
     },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
   },
 
   // React files config
   {
     files: ['**/*.{js,jsx,mjs,cjs}'],
     plugins: { react: pluginReact, prettier: pluginPrettier },
-    extends: [
-      pluginReact.configs.flat.recommended,
-      prettierFlat, // <-- use this instead
-    ],
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    extends: [pluginReact.configs.flat.recommended, prettierFlat],
+    settings: { react: { version: 'detect' } },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'prettier/prettier': 'error',
+      'prettier/prettier': ['error', { endOfLine: 'lf' }],
     },
   },
 
-  // Test files override
+  // Jest test files override
   {
-    files: ['**/*.test.js', '**/*.spec.js'],
+    files: ['**/*.test.js', '**/*.test.jsx', '**/*.spec.js', '**/*.spec.jsx'],
     languageOptions: {
       globals: {
         test: 'readonly',
@@ -48,6 +43,7 @@ export default defineConfig([
         describe: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',
+        jest: 'readonly',
       },
     },
   },
@@ -59,10 +55,10 @@ export default defineConfig([
     language: 'markdown/gfm',
     extends: [markdown.configs.recommended],
     rules: {
-      // Disable rule that mistakes YAML front matter for link refs
       'markdown/no-missing-label-refs': 'off',
     },
   },
+
   // Ignore CSS files completely
   {
     ignores: ['**/*.css'],

@@ -1,7 +1,4 @@
-
 # 💪 Muscle Mommies
-
-
 
 A full-stack fitness application with client, server, and documentation components, built as a monorepo.
 
@@ -129,15 +126,15 @@ Make sure GitHub Pages is enabled in the repo settings.
 
 ## 🤝 Contributing
 
-1. Fork the repo  
+1. Fork the repo
 2. Create a branch:
 
 ```bash
 git checkout -b feature/your-feature
 ```
 
-3. Commit your changes  
-4. Push to your fork  
+3. Commit your changes
+4. Push to your fork
 5. Submit a pull request
 
 ---
@@ -145,7 +142,6 @@ git checkout -b feature/your-feature
 ## 📄 License
 
 MIT © 2025 Tino Ryan
-
 
 ---
 
@@ -177,6 +173,7 @@ git checkout -b feature/your-feature-name
 ```
 
 Examples:
+
 - `feature/signup-form`
 - `fix/login-bug`
 - `docs/update-readme`
@@ -233,6 +230,7 @@ git push origin feature/your-feature-name
 ### ✅ 7. Merge Safely
 
 Once approved or reviewed:
+
 - **Use "Squash and merge"** for clean history.
 - Delete the branch after merging.
 
@@ -257,4 +255,3 @@ Make sure `node_modules/`, `.env`, and build artifacts are ignored.
 ---
 
 This workflow keeps your codebase safe, readable, and team-friendly.
-
