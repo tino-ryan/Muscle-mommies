@@ -44,65 +44,68 @@ export default function Dashboard() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div style={{ padding: 20, maxWidth: 600, margin: '0 auto' }}>
-      <h1>Welcome to your Dashboard 🎉</h1>
-
-      <div style={{ marginTop: 20 }}>
-        {role === 'guest' && (
-          <>
-            <button
-              onClick={() => navigate('/login')}
-              style={{ marginRight: 10, padding: '0.5rem 1rem' }}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => navigate('/signup/customer')}
-              style={{ marginRight: 10, padding: '0.5rem 1rem' }}
-            >
-              Customer Signup
-            </button>
-            <button
-              onClick={() => navigate('/signup/store')}
-              style={{ padding: '0.5rem 1rem' }}
-            >
-              Store Owner Signup
-            </button>
-          </>
-        )}
-
-        {role === 'customer' && (
+    <div
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
+    >
+      {/* Navigation Bar */}
+      <nav
+        style={{
+          backgroundColor: '#f8f8f8',
+          padding: '1rem',
+          borderBottom: '1px solid #ddd',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', gap: '1rem' }}>
           <button
-            onClick={() => navigate('/customer/home')}
-            style={{ padding: '0.5rem 1rem' }}
+            onClick={() => navigate('/login')}
+            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
           >
-            Go to Customer Home
+            Login
           </button>
-        )}
-
-        {role === 'storeOwner' && (
           <button
-            onClick={() => navigate('/store/home')}
-            style={{ padding: '0.5rem 1rem' }}
+            onClick={() => navigate('/signup/customer')}
+            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
           >
-            Go to Store Home
+            Customer Signup
           </button>
-        )}
-
-        {role === 'admin' && (
           <button
-            onClick={() => navigate('/admin/dashboard')}
-            style={{ padding: '0.5rem 1rem' }}
+            onClick={() => navigate('/signup/store')}
+            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
           >
-            Go to Admin Dashboard
+            Store Owner Signup
           </button>
-        )}
-      </div>
-
-      <div style={{ marginTop: 40 }}>
-        <button onClick={handleLogout} style={{ padding: '0.5rem 1rem' }}>
+        </div>
+        <button
+          onClick={handleLogout}
+          style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
+        >
           Logout
         </button>
+      </nav>
+
+      {/* Main Content */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2rem',
+          textAlign: 'center',
+        }}
+      >
+        <h1
+          style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '1rem' }}
+        >
+          THRIFTFINDER
+        </h1>
+        <p style={{ fontSize: '1.5rem', color: '#666' }}>
+          coming soon (promise)
+        </p>
       </div>
     </div>
   );
