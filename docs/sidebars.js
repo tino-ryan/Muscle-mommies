@@ -23,7 +23,8 @@ const sidebars = {
     'Dev-guide',
     'Structure',
     'initial-design',
-    'development-plan'
+    'development-plan',
+    'project-management'
   ],
 };
 
