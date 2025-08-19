@@ -22,6 +22,8 @@ const sidebars = {
     'git-methodology',
     'Dev-guide',
     'Structure',
+    'initial-design',
+    'development-plan'
   ],
 };
 
