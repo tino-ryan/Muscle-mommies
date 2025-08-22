@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY, // keep this in .env
+  apiKey: 'AIzaSyCQY-9dZw6Oe8dmuDK3kahh74Rq4pDJTog', // keep this in .env
   authDomain: 'muscle-mommies.firebaseapp.com',
   projectId: 'muscle-mommies',
   storageBucket: 'muscle-mommies.appspot.com',
