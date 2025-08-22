@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+const API_URL = 'hhttp://localhost:3000';
 
 function SignupPage({ role }) {
   // role = 'customer' or 'storeOwner'
@@ -16,7 +17,7 @@ function SignupPage({ role }) {
     setSuccess('');
 
     try {
-      const res = await axios.post('http://localhost:3000/api/auth/signup', {
+      const res = await axios.post(`${API_URL}/api/auth/signup`, {
         name,
         email,
         password,
@@ -34,7 +35,7 @@ function SignupPage({ role }) {
     try {
       // The backend should handle Google OAuth
       const res = await axios.post(
-        'http://localhost:3000/api/auth/signup/google',
+        `${API_URL}/api/auth/signup/google`,
         { role },
         { withCredentials: true } // if your backend uses cookies/session
       );

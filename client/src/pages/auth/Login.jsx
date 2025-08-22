@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -16,33 +15,9 @@ export default function Login() {
 
     try {
       // Login with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const uid = userCredential.user.uid;
-
-      // Fetch user profile from backend API
-      const res = await fetch(`${API_URL}/api/users/${uid}`);
-      if (!res.ok) throw new Error('Failed to fetch user profile');
-
-      const userData = await res.json();
-
-      // Role-based navigation
-      switch (userData.role) {
-        case 'customer':
-          navigate('/customer/home');
-          break;
-        case 'storeOwner':
-          navigate('/store/home');
-          break;
-        case 'admin':
-          navigate('/admin/dashboard');
-          break;
-        default:
-          setError('Unknown user role.');
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      // Redirect to home page
+      navigate('/customer/home');
     } catch (err) {
       setError('Login failed. Check your credentials. ' + err.message);
     }
