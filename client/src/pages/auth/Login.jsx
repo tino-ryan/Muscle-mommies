@@ -5,10 +5,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
-import { auth } from '../../firebase'; // Assuming this exports auth
+import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../../api'; // Import API_URL from api.js (fix any hardcoded typos)
+const API_URL = 'https://muscle-mommies-server.onrender.com';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -16,9 +16,9 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Helper function to get role and redirect
   const getRoleAndRedirect = async (uid) => {
     try {
+      console.log('Fetching role for UID:', uid);
       const res = await axios.post(`${API_URL}/api/auth/getRole`, { uid });
       const role = res.data.role;
 
@@ -33,6 +33,7 @@ export default function Login() {
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Error fetching role');
+      console.error('Role fetch error:', err);
     }
   };
 
@@ -41,18 +42,29 @@ export default function Login() {
     setError('');
 
     try {
-      // Login with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const uid = userCredential.user.uid;
-
-      // Get role and redirect
-      await getRoleAndRedirect(uid);
+      // Retry login to handle potential propagation delays
+      let attempts = 3;
+      while (attempts > 0) {
+        try {
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          const uid = userCredential.user.uid;
+          console.log('Login successful, UID:', uid);
+          await getRoleAndRedirect(uid);
+          return;
+        } catch (loginErr) {
+          attempts--;
+          if (attempts === 0) throw loginErr;
+          console.log('Retrying login, attempts left:', attempts);
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1s
+        }
+      }
     } catch (err) {
-      setError('Login failed. Check your credentials. ' + err.message);
+      setError(`Login failed: ${err.code} - ${err.message}`);
+      console.error('Login error:', err.code, err.message);
     }
   };
 
@@ -63,11 +75,11 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       const uid = result.user.uid;
-
-      // Get role and redirect
+      console.log('Google login successful, UID:', uid);
       await getRoleAndRedirect(uid);
     } catch (err) {
-      setError('Google login failed: ' + err.message);
+      setError(`Google login failed: ${err.code} - ${err.message}`);
+      console.error('Google login error:', err.code, err.message);
     }
   };
 
