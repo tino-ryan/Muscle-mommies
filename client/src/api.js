@@ -3,4 +3,4 @@
 export const API_URL =
   process.env.NODE_ENV === 'development'
     ? '' // empty string → use proxy in dev
-    : process.env.REACT_APP_API_URL;
+    : 'https://muscle-mommies-server.onrender.com';
