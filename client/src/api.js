@@ -1,5 +1,4 @@
-// src/api.js
-
+// src/api.js (assuming this is correctly set up as provided)
 // Automatically pick the right backend URL
 export const API_URL =
   process.env.NODE_ENV === 'development'

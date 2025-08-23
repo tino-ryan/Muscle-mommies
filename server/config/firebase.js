@@ -4,7 +4,7 @@ const serviceAccount = {
   type: 'service_account',
   project_id: 'muscle-mommies',
   private_key_id: 'b8e9f2551b62b658e6086d333ad8b6ad7c38985b',
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  private_key: process.env.FIREBASE_PRIVATE_KEY,
   client_email:
     'firebase-adminsdk-fbsvc@muscle-mommies.iam.gserviceaccount.com',
   client_id: '108258526107570575397',

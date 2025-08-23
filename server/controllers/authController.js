@@ -1,5 +1,5 @@
+// server/controllers/authController.js (updated with getRole)
 const admin = require('../config/firebase'); // Firebase Admin SDK
-
 const User = require('../models/User');
 
 // Signup via email & password
@@ -64,5 +64,20 @@ exports.googleSignup = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+// Get user role by UID
+exports.getRole = async (req, res) => {
+  const { uid } = req.body;
+  try {
+    const userData = await User.getByUid(uid);
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ role: userData.role });
+  } catch (err) {
+    console.error('Get role error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
