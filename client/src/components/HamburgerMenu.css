@@ -1,0 +1,19 @@
+.hamburger-menu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.menu-items {
+  background-color: #fcf8f8;
+  border: 1px solid #e7d0d1;
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  top: 40px;
+}
+
+.menu-items p {
+  margin: 10px 0;
+  cursor: pointer;
+}

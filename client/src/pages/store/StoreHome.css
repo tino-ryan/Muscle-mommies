@@ -1,0 +1,42 @@
+.store-home {
+  padding: 20px;
+  text-align: center;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.options button {
+  padding: 15px 30px;
+  background-color: #2E86DE;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.store-setup-prompt {
+  padding: 40px;
+  text-align: center;
+}
+
+.store-setup-prompt button {
+  padding: 15px 30px;
+  background-color: #2E86DE;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.loading, .error {
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
+}

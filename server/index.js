@@ -1,10 +1,10 @@
-// server/index.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const admin = require('./config/firebase');
 // Firebase Admin SDK
-const authRoutes = require('./routes/authRoutes'); // your auth routes
+const authRoutes = require('./routes/authRoutes');
+const storeRoutes = require('./routes/storeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,8 +18,9 @@ app.get('/', (req, res) => {
   res.send('Backend is live!');
 });
 
-// Auth routes
+// Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/stores', storeRoutes);
 
 // (Optional) Users route - dev/admin use only
 app.get('/api/users', async (req, res) => {
