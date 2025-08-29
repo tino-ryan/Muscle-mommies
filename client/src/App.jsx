@@ -8,6 +8,7 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 
 // Customer pages
 import CustomerHome from './pages/customer/Home';
+import Store from './pages/customer/Store';
 
 // Store owner pages
 import StoreHome from './pages/store/Home';
@@ -30,6 +31,8 @@ function App() {
       <Route path="/customer/home" element={<CustomerHome />} />
       <Route path="/store/home" element={<StoreHome />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+      <Route path="/store/:id" element={<Store />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

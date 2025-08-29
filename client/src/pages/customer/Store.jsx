@@ -16,32 +16,75 @@ export default function Store() {
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // Example options (ideally fetched from backend)
+  // Example options
   const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
   const styleOptions = ['Vintage', 'Casual', 'Formal', 'Streetwear'];
   const categoryOptions = ['Tops', 'Pants', 'Dresses', 'Shoes', 'Accessories'];
 
+  // Mock store and clothes data
+  const mockStore = {
+    name: 'Vintage Thrift',
+    address: '123 Main St, Joburg',
+    description: 'A cozy store full of unique finds',
+    profileImageURL: 'https://via.placeholder.com/150?text=Thrift+Store',
+  };
+
+  const mockClothes = [
+    {
+      id: 1,
+      name: 'Retro Jacket',
+      category: 'Jackets',
+      style: 'Vintage',
+      size: 'M',
+      price: 350,
+      imageURL: 'https://via.placeholder.com/200?text=Jacket',
+    },
+    {
+      id: 2,
+      name: 'Denim Jeans',
+      category: 'Pants',
+      style: 'Casual',
+      size: 'L',
+      price: 250,
+      imageURL: 'https://via.placeholder.com/200?text=Jeans',
+    },
+    {
+      id: 3,
+      name: 'Floral Dress',
+      category: 'Dresses',
+      style: 'Vintage',
+      size: 'S',
+      price: 400,
+      imageURL: 'https://via.placeholder.com/200?text=Dress',
+    },
+    {
+      id: 4,
+      name: 'White Sneakers',
+      category: 'Shoes',
+      style: 'Streetwear',
+      size: 'M',
+      price: 500,
+      imageURL: 'https://via.placeholder.com/200?text=Sneakers',
+    },
+    {
+      id: 5,
+      name: 'Leather Belt',
+      category: 'Accessories',
+      style: 'Formal',
+      size: 'L',
+      price: 150,
+      imageURL: 'https://via.placeholder.com/200?text=Belt',
+    },
+  ];
+
+  // Simulate fetching data
   useEffect(() => {
-    const fetchStore = async () => {
-      try {
-        const storeRes = await fetch(http://localhost:3000/api/stores/${id});
-        const storeData = await storeRes.json();
-
-        const clothesRes = await fetch(
-          http://localhost:3000/api/stores/${id}/clothes
-        );
-        const clothesData = await clothesRes.json();
-
-        setStore(storeData);
-        setClothes(clothesData);
-      } catch (err) {
-        console.error('Error fetching store:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStore();
-  }, [id]);
+    setTimeout(() => {
+      setStore(mockStore);
+      setClothes(mockClothes);
+      setLoading(false);
+    }, 500); // simulate network delay
+  }, []);
 
   // Filtering logic
   const filteredClothes = clothes.filter((item) => {
@@ -73,20 +116,6 @@ export default function Store() {
     );
   }
 
-  if (!store) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen text-gray-600">
-        <p>Store not found.</p>
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Go Back
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Back button */}
@@ -100,10 +129,7 @@ export default function Store() {
       {/* Store header */}
       <div className="flex flex-col sm:flex-row gap-6 items-start mb-8">
         <img
-          src={
-            store.profileImageURL ||
-            'https://via.placeholder.com/150?text=Thrift+Store'
-          }
+          src={store.profileImageURL}
           alt={store.name}
           className="w-40 h-40 rounded-lg object-cover shadow"
         />
@@ -219,7 +245,7 @@ export default function Store() {
                   className="bg-white shadow rounded-lg overflow-hidden hover:shadow-md transition"
                 >
                   <img
-                    src={item.imageURL || 'https://via.placeholder.com/200'}
+                    src={item.imageURL}
                     alt={item.name}
                     className="w-full h-48 object-cover"
                   />
