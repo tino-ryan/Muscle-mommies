@@ -6,6 +6,9 @@ const admin = require('./config/firebase');
 // Firebase Admin SDK
 const authRoutes = require('./routes/authRoutes'); // your auth routes
 
+//store routes
+const storeRoutes = require('./routes/storeRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -20,6 +23,8 @@ app.get('/', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes);
+// store routes
+app.use('/api/stores', storeRoutes);
 
 // (Optional) Users route - dev/admin use only
 app.get('/api/users', async (req, res) => {

@@ -1,5 +1,6 @@
 // App.jsx
 import { Routes, Route } from 'react-router-dom';
+import 'leaflet/dist/leaflet.css';
 
 // Auth pages
 import Login from './pages/auth/Login';
