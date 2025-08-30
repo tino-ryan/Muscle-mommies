@@ -153,7 +153,9 @@ export default function StoreListings() {
               <thead>
                 <tr>
                   <th>Item</th>
+                  <th>Department</th> {/* Added */}
                   <th>Category</th>
+                  <th>Style</th> {/* Added */}
                   <th>Price</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -169,7 +171,9 @@ export default function StoreListings() {
                         <div className="no-image">No Image</div>
                       )}
                     </td>
+                    <td>{item.department || 'N/A'}</td> {/* Added */}
                     <td>{item.category || 'N/A'}</td>
+                    <td>{item.style || 'N/A'}</td> {/* Added */}
                     <td>{`R${Number(item.price).toFixed(2)}`}</td>
                     <td>
                       <button className="status-button">{item.status}</button>

@@ -212,8 +212,17 @@ const getItems = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const userId = req.user.uid;
-    const { name, description, category, size, price, quantity, status } =
-      req.body;
+    const {
+      name,
+      description,
+      category,
+      department,
+      style,
+      size,
+      price,
+      quantity,
+      status,
+    } = req.body;
     const images = req.files || [];
     if (!userId) {
       return res.status(401).json({ error: 'User ID not provided' });
@@ -279,6 +288,8 @@ const createItem = async (req, res) => {
       name,
       description: description || '',
       category: category || '',
+      department: department || '',
+      style: style || '',
       size: size || '',
       price: parseFloat(price) || 0,
       quantity: parseInt(quantity) || 0,
@@ -457,8 +468,17 @@ const updateItem = async (req, res) => {
   try {
     const userId = req.user.uid;
     const { itemId } = req.params;
-    const { name, description, category, size, price, quantity, status } =
-      req.body;
+    const {
+      name,
+      description,
+      category,
+      department,
+      style,
+      size,
+      price,
+      quantity,
+      status,
+    } = req.body;
     const images = req.files || [];
 
     if (!userId) {
@@ -539,6 +559,8 @@ const updateItem = async (req, res) => {
       name,
       description: description || '',
       category: category || '',
+      department: department || '',
+      style: style || '',
       size: size || '',
       price: parseFloat(price) || 0,
       quantity: parseInt(quantity) || 0,
@@ -546,7 +568,6 @@ const updateItem = async (req, res) => {
       images: updatedImages,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     };
-
     await itemRef.update(itemData);
     res.json({ itemId, ...itemData });
   } catch (error) {

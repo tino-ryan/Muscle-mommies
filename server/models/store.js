@@ -36,6 +36,8 @@ const Item = {
     name: String,
     description: String,
     category: String,
+    department: String, // Added: "mens" or "womens"
+    style: String, // Added: e.g., "streetwear" or "streetwear,casual"
     size: String,
     price: Number,
     quantity: Number,
@@ -57,4 +59,26 @@ const ItemImage = {
   },
 };
 
-module.exports = { Store, Item, ItemImage };
+const Conversation = {
+  collection: 'conversations',
+  fields: {
+    chatId: String, // e.g., "uid1_uid2" (sorted)
+    participants: Array, // [uid1, uid2]
+    lastMessage: String,
+    lastTimestamp: Object,
+  },
+};
+
+const Message = {
+  collection: 'messages',
+  fields: {
+    chatId: String,
+    senderId: String,
+    receiverId: String,
+    message: String,
+    timestamp: Object,
+    read: Boolean,
+  },
+};
+
+module.exports = { Store, Item, ItemImage, Conversation, Message };

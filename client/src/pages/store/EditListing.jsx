@@ -11,11 +11,12 @@ export default function EditListing() {
     name: '',
     description: '',
     category: '',
+    department: '',
+    style: '',
     size: '',
     price: '',
     quantity: '',
     status: 'Available',
-    images: [],
   });
   const [newImages, setNewImages] = useState([]);
   const [error, setError] = useState('');
@@ -78,6 +79,9 @@ export default function EditListing() {
       formData.append('price', item.price);
       formData.append('quantity', item.quantity);
       formData.append('status', item.status);
+      formData.append('department', item.department);
+      formData.append('style', item.style);
+
       newImages.forEach((image) => formData.append('images', image));
       await axios.put(`${API_URL}/api/stores/items/${itemId}`, formData, {
         headers: {
@@ -190,6 +194,22 @@ export default function EditListing() {
               value={item.category}
               onChange={handleItemChange}
               placeholder="Category"
+            />
+            <select
+              name="department"
+              value={item.department}
+              onChange={handleItemChange}
+            >
+              <option value="">Select Department</option>
+              <option value="mens">Men&apos;s</option>
+              <option value="womens">Women&apos;s</option>
+            </select>
+            <input
+              type="text"
+              name="style"
+              value={item.style}
+              onChange={handleItemChange}
+              placeholder="Style Tags (e.g., streetwear,casual)"
             />
             <input
               type="text"

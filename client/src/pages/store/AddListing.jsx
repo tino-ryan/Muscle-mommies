@@ -11,6 +11,8 @@ export default function AddListing() {
     name: '',
     description: '',
     category: '',
+    department: '',
+    style: '',
     size: '',
     price: '',
     quantity: '',
@@ -47,6 +49,8 @@ export default function AddListing() {
       formData.append('price', item.price);
       formData.append('quantity', item.quantity);
       formData.append('status', item.status);
+      formData.append('department', item.department);
+      formData.append('style', item.style);
       images.forEach((image) => formData.append('images', image));
       await axios.post(`${API_URL}/api/stores/items`, formData, {
         headers: {
@@ -89,6 +93,22 @@ export default function AddListing() {
               value={item.category}
               onChange={handleItemChange}
               placeholder="Category"
+            />
+            <select
+              name="department"
+              value={item.department}
+              onChange={handleItemChange}
+            >
+              <option value="">Select Department</option>
+              <option value="mens">Men&apos;s</option>
+              <option value="womens">Women&apos;s</option>
+            </select>
+            <input
+              type="text"
+              name="style"
+              value={item.style}
+              onChange={handleItemChange}
+              placeholder="Style Tags (e.g., streetwear,casual)"
             />
             <input
               type="text"
