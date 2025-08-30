@@ -3,7 +3,7 @@
 // Fetch all items for a given store
 export const getStoreItems = async (storeId) => {
   try {
-    const res = await fetch(`/api/items?storeId=${storeId}`);
+    const res = await fetch(`/api/stores/${storeId}/items`);
     if (!res.ok) throw new Error("Failed to fetch items");
     return await res.json();
   } catch (err) {
@@ -44,3 +44,4 @@ export const reserveItem = async (itemId, userId, storeId) => {
     throw err;
   }
 };
+
