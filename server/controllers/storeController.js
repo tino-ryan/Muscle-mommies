@@ -9,9 +9,25 @@ const storesRef = db.collection('stores');
 const getStores = async (req, res) => {
   try {
     const snapshot = await storesRef.get();
-    const stores = snapshot.docs.map(
-      (doc) => new Store({ id: doc.id, ...doc.data() })
-    );
+    const stores = snapshot.docs.map((doc) => {
+      const data = doc.data();
+
+      return new Store({
+        storeId: data.storeId || doc.id,
+        storeName: data.storeName,
+        address: data.address,
+        location: data.location || null,
+        lat: data.lat,
+        lng: data.lng,
+        description: data.description,
+        profileImageURL: data.profileImageURL,
+        contactInfo: data.contactInfo,
+        ownerId: data.ownerId,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      });
+    });
+
     res.json(stores);
   } catch (err) {
     res.status(500).json({ error: err.message });

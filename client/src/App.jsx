@@ -9,6 +9,7 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 // Customer pages
 import CustomerHome from './pages/customer/Home';
 import Store from './pages/customer/Store';
+import Search from './pages/customer/Search';
 
 // Store owner pages
 import StoreHome from './pages/store/Home';
@@ -33,6 +34,7 @@ function App() {
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
       <Route path="/store/:id" element={<Store />} />
+      <Route path="/search" element={<Search />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

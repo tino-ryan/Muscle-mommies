@@ -1,22 +1,31 @@
 // models/storeModel.js
-
 class Store {
   constructor({
-    id,
-    name,
+    storeId,
+    storeName,
     address,
     location,
-    openingHours,
+    lat,
+    lng,
+    description,
+    profileImageURL,
+    contactInfo,
     ownerId,
     createdAt,
+    updatedAt,
   }) {
-    this.id = id; // Firestore doc id
-    this.name = name;
+    this.storeId = storeId;
+    this.storeName = storeName;
     this.address = address;
-    this.location = location; // Firestore GeoPoint
-    this.openingHours = openingHours; // array of { day, open, close }
+    this.location = location; // might be redundant since you also store lat/lng
+    this.lat = parseFloat(lat);
+    this.lng = parseFloat(lng);
+    this.description = description;
+    this.profileImageURL = profileImageURL;
+    this.contactInfo = contactInfo;
     this.ownerId = ownerId;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
