@@ -49,22 +49,38 @@ const getStore = async (req, res) => {
 const createOrUpdateStore = async (req, res) => {
   try {
     const userId = req.user.uid;
-    const { storeName, description, address, lat, lng } = req.body;
+    const { storeName, description, address, location, profileImageURL } =
+      req.body;
     if (!userId) {
       return res.status(401).json({ error: 'User ID not provided' });
     }
-    if (!storeName || !address || !lat || !lng) {
+    if (!storeName || !address || !location) {
       return res.status(400).json({
-        error: 'Missing required fields: storeName, address, lat, lng',
+        error: 'Missing required fields: storeName, address, location',
       });
     }
-    let profileImageURL = '';
+
+    // Parse location if it's a JSON string
+    let parsedLocation;
+    try {
+      parsedLocation =
+        typeof location === 'string' ? JSON.parse(location) : location;
+      if (!parsedLocation.lat || !parsedLocation.lng) {
+        return res.status(400).json({ error: 'Invalid location format' });
+      }
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ error: 'Failed to parse location', details: error.message });
+    }
+
+    let imageURL = profileImageURL || '';
     if (req.file) {
       try {
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: 'muscle-mommies',
         });
-        profileImageURL = result.secure_url;
+        imageURL = result.secure_url;
         try {
           fs.unlinkSync(req.file.path);
         } catch (cleanupError) {
@@ -81,6 +97,7 @@ const createOrUpdateStore = async (req, res) => {
         });
       }
     }
+
     const storeRef = admin
       .firestore()
       .collection(Store.collection)
@@ -91,13 +108,17 @@ const createOrUpdateStore = async (req, res) => {
       storeName,
       description: description || '',
       address,
-      location: { lat: parseFloat(lat), lng: parseFloat(lng) },
-      profileImageURL: profileImageURL || '',
+      location: {
+        lat: parseFloat(parsedLocation.lat),
+        lng: parseFloat(parsedLocation.lng),
+      },
+      profileImageURL: imageURL,
       createdAt: snapshot.empty
         ? admin.firestore.FieldValue.serverTimestamp()
         : snapshot.docs[0].data().createdAt,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     };
+
     let storeId;
     if (snapshot.empty) {
       const newStoreRef = await admin
@@ -113,6 +134,7 @@ const createOrUpdateStore = async (req, res) => {
         .doc(storeId)
         .update(storeData);
     }
+
     res.json({ storeId, ...storeData });
   } catch (error) {
     console.error('Error creating/updating store:', error);

@@ -20,6 +20,7 @@ export default function StoreProfile() {
   const [storeId, setStoreId] = useState(null);
   const [addressSearch, setAddressSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [addressOptions, setAddressOptions] = useState([]);
   const [profileImage, setProfileImage] = useState(null);
   const auth = getAuth();
   const navigate = useNavigate();
@@ -50,7 +51,14 @@ export default function StoreProfile() {
             setEditing(true); // Prompt setup if no store
           }
         } catch (error) {
-          setError('Failed to fetch store: ' + error.message);
+          console.error(
+            'Fetch store error:',
+            error.response?.data || error.message
+          );
+          setError(
+            'Failed to fetch store: ' +
+              (error.response?.data?.error || error.message)
+          );
         }
       } else {
         setError('Please log in to view your store.');
@@ -62,14 +70,7 @@ export default function StoreProfile() {
 
   const handleStoreChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'lat' || name === 'lng') {
-      setStore((prev) => ({
-        ...prev,
-        location: { ...prev.location, [name]: value },
-      }));
-    } else {
-      setStore((prev) => ({ ...prev, [name]: value }));
-    }
+    setStore((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddressSearchChange = (e) => {
@@ -78,11 +79,14 @@ export default function StoreProfile() {
 
   const handleAddressSearch = async () => {
     if (!addressSearch.trim()) {
-      setError('Please enter an address to search.');
+      setError(
+        'Please enter house number, street name, suburb, and city (e.g., 123 Main St, Rondebosch, Cape Town).'
+      );
       return;
     }
     setIsSearching(true);
     setError('');
+    setAddressOptions([]);
     try {
       const response = await axios.get(
         'https://nominatim.openstreetmap.org/search',
@@ -91,7 +95,7 @@ export default function StoreProfile() {
             q: `${addressSearch}, South Africa`,
             format: 'json',
             addressdetails: 1,
-            limit: 1,
+            limit: 5,
             countrycodes: 'ZA',
           },
           headers: {
@@ -100,20 +104,44 @@ export default function StoreProfile() {
         }
       );
       if (response.data.length > 0) {
-        const { lat, lon, display_name } = response.data[0];
-        setStore((prev) => ({
-          ...prev,
-          address: display_name,
-          location: { lat, lng: lon },
+        const options = response.data.map((result) => ({
+          display: `${
+            result.address.house_number ? result.address.house_number + ' ' : ''
+          }${result.address.road || result.address.street || 'Unknown Street'}, ${
+            result.address.suburb ||
+            result.address.neighbourhood ||
+            'Unknown Suburb'
+          }, ${result.address.city || result.address.town || 'Unknown City'}`,
+          fullAddress: result.display_name,
+          lat: result.lat,
+          lng: result.lon,
         }));
+        setAddressOptions(options);
       } else {
         setError('No results found for the address. Please try again.');
       }
     } catch (error) {
-      setError('Failed to search address: ' + error.message);
+      console.error(
+        'Address search error:',
+        error.response?.data || error.message
+      );
+      setError(
+        'Failed to search address: ' +
+          (error.response?.data?.error || error.message)
+      );
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const handleAddressSelect = (option) => {
+    setStore((prev) => ({
+      ...prev,
+      address: option.display,
+      location: { lat: option.lat, lng: option.lng },
+    }));
+    setAddressOptions([]);
+    setAddressSearch('');
   };
 
   const handleProfileImageChange = (e) => {
@@ -140,7 +168,14 @@ export default function StoreProfile() {
       setContactInfos([...contactInfos, response.data]);
       setNewContact({ type: 'email', value: '' });
     } catch (error) {
-      setError('Failed to add contact: ' + error.message);
+      console.error(
+        'Add contact error:',
+        error.response?.data || error.message
+      );
+      setError(
+        'Failed to add contact: ' +
+          (error.response?.data?.error || error.message)
+      );
     }
   };
 
@@ -154,7 +189,14 @@ export default function StoreProfile() {
         contactInfos.filter((contact) => contact.id !== contactId)
       );
     } catch (error) {
-      setError('Failed to delete contact: ' + error.message);
+      console.error(
+        'Delete contact error:',
+        error.response?.data || error.message
+      );
+      setError(
+        'Failed to delete contact: ' +
+          (error.response?.data?.error || error.message)
+      );
     }
   };
 
@@ -182,6 +224,10 @@ export default function StoreProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!store.storeName.trim()) {
+      setError('Store name is required.');
+      return;
+    }
     if (contactInfos.length === 0 && !newContact.value) {
       setError('At least one contact info is required.');
       return;
@@ -206,23 +252,33 @@ export default function StoreProfile() {
             },
           }
         );
-        profileImageURL = response.data.profileImageURL;
+        profileImageURL = response.data.imageURL;
       }
       const storeData = {
         storeName: store.storeName,
         description: store.description,
         address: store.address,
-        location: JSON.stringify(store.location),
+        location: JSON.stringify(store.location), // Send as JSON string
         profileImageURL,
       };
-      await axios.post(`${API_URL}/api/stores`, storeData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const storeResponse = await axios.post(
+        `${API_URL}/api/stores`,
+        storeData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setStoreId(storeResponse.data.storeId);
+      setStore(storeResponse.data);
       if (newContact.value) await addContact();
       setEditing(false);
       alert('Store updated successfully!');
     } catch (error) {
-      setError('Failed to update store: ' + error.message);
+      console.error('Submit error:', error.response?.data || error.message);
+      setError(
+        'Failed to update store: ' +
+          (error.response?.data?.error || error.message)
+      );
     }
   };
 
@@ -328,7 +384,8 @@ export default function StoreProfile() {
                   type="text"
                   value={addressSearch}
                   onChange={handleAddressSearchChange}
-                  placeholder="Search Address (e.g., 123 Main St, Cape Town)"
+                  placeholder="Enter house number, street, suburb, city (e.g., 123 Main St, Rondebosch, Cape Town)"
+                  className="large-input"
                 />
                 <button
                   type="button"
@@ -338,29 +395,34 @@ export default function StoreProfile() {
                   {isSearching ? 'Searching...' : 'Search'}
                 </button>
               </div>
+              {addressOptions.length > 0 && (
+                <div className="address-options">
+                  <select
+                    onChange={(e) =>
+                      handleAddressSelect(addressOptions[e.target.value])
+                    }
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select an address
+                    </option>
+                    {addressOptions.map((option, index) => (
+                      <option key={index} value={index}>
+                        {option.display}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <input
                 type="text"
                 name="address"
                 value={store.address}
                 readOnly
-                placeholder="Full Address (auto-filled after search)"
+                placeholder="Selected address will appear here"
               />
-              <div className="location-fields">
-                <input
-                  type="number"
-                  name="lat"
-                  value={store.location.lat}
-                  readOnly
-                  placeholder="Latitude (auto-filled)"
-                />
-                <input
-                  type="number"
-                  name="lng"
-                  value={store.location.lng}
-                  readOnly
-                  placeholder="Longitude (auto-filled)"
-                />
-              </div>
+              <input type="hidden" name="lat" value={store.location.lat} />
+              <input type="hidden" name="lng" value={store.location.lng} />
               <input
                 type="file"
                 accept="image/*"

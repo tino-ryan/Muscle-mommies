@@ -170,7 +170,7 @@ export default function StoreListings() {
                       )}
                     </td>
                     <td>{item.category || 'N/A'}</td>
-                    <td>{`$${Number(item.price).toFixed(2)}`}</td>
+                    <td>{`R${Number(item.price).toFixed(2)}`}</td>
                     <td>
                       <button className="status-button">{item.status}</button>
                     </td>
