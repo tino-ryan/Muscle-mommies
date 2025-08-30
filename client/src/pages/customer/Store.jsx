@@ -1,8 +1,13 @@
 // src/pages/customer/Store.jsx
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  getStoreItems,
+  getStoreDetails,
+  reserveItem,
+} from "./itemController";
 
-export default function Store() {
+export default function Store({ currentUser }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -18,41 +23,39 @@ export default function Store() {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   // Example options
-  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
-  const styleOptions = ['Vintage', 'Casual', 'Formal', 'Streetwear'];
-  const categoryOptions = ['Tops', 'Pants', 'Dresses', 'Shoes', 'Accessories'];
+  const sizeOptions = ["XS", "S", "M", "L", "XL"];
+  const styleOptions = ["Vintage", "Casual", "Formal", "Streetwear"];
+  const categoryOptions = ["Tops", "Pants", "Dresses", "Shoes", "Accessories"];
 
-  // Mock store and clothes data
-  const mockStore = {
-    name: 'Vintage Thrift',
-    address: '123 Main St, Joburg',
-    description: 'A cozy store full of unique finds',
-    profileImageURL: 'https://via.placeholder.com/150?text=Thrift+Store',
-  };
-
-  const mockClothes = [
-    { id: 1, name: 'Retro Jacket', category: 'Jackets', style: 'Vintage', size: 'M', price: 350, imageURL: 'https://via.placeholder.com/200?text=Jacket', reserved: false, description: 'A stylish retro jacket perfect for layering.' },
-    { id: 2, name: 'Denim Jeans', category: 'Pants', style: 'Casual', size: 'L', price: 250, imageURL: 'https://via.placeholder.com/200?text=Jeans', reserved: false, description: 'Comfortable denim jeans for everyday wear.' },
-    { id: 3, name: 'Floral Dress', category: 'Dresses', style: 'Vintage', size: 'S', price: 400, imageURL: 'https://via.placeholder.com/200?text=Dress', reserved: false, description: 'A beautiful floral dress for sunny days.' },
-    { id: 4, name: 'White Sneakers', category: 'Shoes', style: 'Streetwear', size: 'M', price: 500, imageURL: 'https://via.placeholder.com/200?text=Sneakers', reserved: false, description: 'Classic white sneakers that go with everything.' },
-    { id: 5, name: 'Leather Belt', category: 'Accessories', style: 'Formal', size: 'L', price: 150, imageURL: 'https://via.placeholder.com/200?text=Belt', reserved: false, description: 'A sleek leather belt to complete your outfit.' },
-  ];
-
-  // Simulate fetching data
+  // Fetch from DB instead of mocks
   useEffect(() => {
-    setTimeout(() => {
-      setStore(mockStore);
-      setClothes(mockClothes);
-      setLoading(false);
-    }, 500);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const storeData = await getStoreDetails(id);
+        const itemsData = await getStoreItems(id);
+
+        setStore(storeData);
+        setClothes(itemsData);
+      } catch (err) {
+        console.error("Error loading store:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   // Filtering logic
   const filteredClothes = clothes.filter((item) => {
-    const inPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
-    const inSize = selectedSizes.length === 0 || selectedSizes.includes(item.size);
-    const inStyle = selectedStyles.length === 0 || selectedStyles.includes(item.style);
-    const inCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
+    const inPrice = item.Price >= priceRange[0] && item.Price <= priceRange[1];
+    const inSize =
+      selectedSizes.length === 0 || selectedSizes.includes(item.Size);
+    const inStyle =
+      selectedStyles.length === 0 || selectedStyles.includes(item.Style);
+    const inCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(item.Category);
+
     return inPrice && inSize && inStyle && inCategory;
   });
 
@@ -64,11 +67,25 @@ export default function Store() {
     }
   };
 
-  const handleReserve = (id) => {
-    setClothes((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, reserved: true } : item))
-    );
-    setSelectedItem((prev) => ({ ...prev, reserved: true }));
+  // Reserve item → updates DB + UI
+  const handleReserve = async (itemId) => {
+    try {
+      const reservation = await reserveItem(itemId, currentUser.id, id);
+
+      // Update item in list
+      setClothes((prev) =>
+        prev.map((item) =>
+          item.ItemId === itemId ? { ...item, Status: "Reserved" } : item
+        )
+      );
+
+      // Update modal if open
+      setSelectedItem((prev) =>
+        prev && prev.ItemId === itemId ? { ...prev, Status: "Reserved" } : prev
+      );
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   if (loading) {
@@ -91,16 +108,23 @@ export default function Store() {
 
       {/* Store header */}
       <div className="flex flex-col sm:flex-row gap-6 items-start mb-8">
-        <img
-          src={store.profileImageURL}
-          alt={store.name}
-          className="w-40 h-40 rounded-lg object-cover shadow"
-        />
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">{store.name}</h1>
-          <p className="text-gray-600 mt-1">{store.address}</p>
-          <p className="text-gray-700 mt-3">{store.description}</p>
-        </div>
+        {store && (
+  <>
+    <img
+      src={
+        store.ProfileImageURL ||
+        "https://via.placeholder.com/150?text=Thrift+Store"
+      }
+      alt={store.Name || "Store"}
+      className="w-40 h-40 rounded-lg object-cover shadow"
+    />
+    <div>
+      <h1 className="text-3xl font-bold text-gray-800">{store.Name}</h1>
+      <p className="text-gray-600 mt-1">{store.Address}</p>
+      <p className="text-gray-700 mt-3">{store.Description}</p>
+    </div>
+  </>
+)}
       </div>
 
       {/* Layout: Clothes + Filters */}
@@ -109,32 +133,38 @@ export default function Store() {
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 overflow-y-auto max-h-[75vh]">
           {filteredClothes.map((item) => (
             <div
-              key={item.id}
+              key={item.ItemId}
               onClick={() => setSelectedItem(item)}
-              className={`bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transition-transform cursor-pointer relative flex flex-col`}
+              className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transition-transform cursor-pointer relative flex flex-col"
             >
-              {item.reserved && (
+              {item.Status === "Reserved" && (
                 <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
                   Reserved
                 </span>
               )}
               <img
-                src={item.imageURL}
-                alt={item.name}
+                src={item.ImageURL || "https://via.placeholder.com/200"}
+                alt={item.Name}
                 className="w-full h-48 object-cover rounded-t-lg"
               />
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-800 truncate">{item.name}</h3>
-                  <p className="text-sm text-gray-600 truncate">{item.category}</p>
-                  <p className="text-sm text-gray-600">{item.size}</p>
+                  <h3 className="font-semibold text-gray-800 truncate">
+                    {item.Name}
+                  </h3>
+                  <p className="text-sm text-gray-600 truncate">
+                    {item.Category}
+                  </p>
+                  <p className="text-sm text-gray-600">{item.Size}</p>
                 </div>
-                <p className="text-blue-600 font-bold mt-2">R{item.price}</p>
+                <p className="text-blue-600 font-bold mt-2">R{item.Price}</p>
               </div>
             </div>
           ))}
           {filteredClothes.length === 0 && (
-            <p className="text-gray-600 col-span-full">No clothes match the selected filters.</p>
+            <p className="text-gray-600 col-span-full">
+              No clothes match the selected filters.
+            </p>
           )}
         </div>
 
@@ -170,7 +200,9 @@ export default function Store() {
                 <input
                   type="checkbox"
                   checked={selectedSizes.includes(size)}
-                  onChange={() => toggleSelection(size, selectedSizes, setSelectedSizes)}
+                  onChange={() =>
+                    toggleSelection(size, selectedSizes, setSelectedSizes)
+                  }
                   className="mr-2 h-4 w-4"
                 />
                 {size}
@@ -186,7 +218,9 @@ export default function Store() {
                 <input
                   type="checkbox"
                   checked={selectedStyles.includes(style)}
-                  onChange={() => toggleSelection(style, selectedStyles, setSelectedStyles)}
+                  onChange={() =>
+                    toggleSelection(style, selectedStyles, setSelectedStyles)
+                  }
                   className="mr-2 h-4 w-4"
                 />
                 {style}
@@ -202,7 +236,9 @@ export default function Store() {
                 <input
                   type="checkbox"
                   checked={selectedCategories.includes(cat)}
-                  onChange={() => toggleSelection(cat, selectedCategories, setSelectedCategories)}
+                  onChange={() =>
+                    toggleSelection(cat, selectedCategories, setSelectedCategories)
+                  }
                   className="mr-2 h-4 w-4"
                 />
                 {cat}
@@ -224,26 +260,38 @@ export default function Store() {
             </button>
             <div className="flex flex-col md:flex-row gap-6">
               <img
-                src={selectedItem.imageURL}
-                alt={selectedItem.name}
+                src={selectedItem.ImageURL || "https://via.placeholder.com/200"}
+                alt={selectedItem.Name}
                 className="w-full md:w-1/2 h-64 object-cover rounded-lg"
               />
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800">{selectedItem.name}</h2>
-                  <p className="text-gray-600 mt-2">{selectedItem.description}</p>
-                  <p className="text-sm text-gray-600 mt-1">Category: {selectedItem.category}</p>
-                  <p className="text-sm text-gray-600">Size: {selectedItem.size}</p>
-                  <p className="text-blue-600 font-bold mt-2 text-xl">R{selectedItem.price}</p>
-                  {selectedItem.reserved && (
-                    <p className="text-red-600 font-semibold mt-2">This item is reserved</p>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {selectedItem.Name}
+                  </h2>
+                  <p className="text-gray-600 mt-2">{selectedItem.Description}</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Category: {selectedItem.Category}
+                  </p>
+                  <p className="text-sm text-gray-600">Size: {selectedItem.Size}</p>
+                  <p className="text-blue-600 font-bold mt-2 text-xl">
+                    R{selectedItem.Price}
+                  </p>
+                  {selectedItem.Status === "Reserved" && (
+                    <p className="text-red-600 font-semibold mt-2">
+                      This item is reserved
+                    </p>
                   )}
                 </div>
                 <div className="mt-4 flex gap-4">
                   <button
-                    onClick={() => handleReserve(selectedItem.id)}
-                    disabled={selectedItem.reserved}
-                    className={`px-4 py-2 rounded-lg text-white font-semibold ${selectedItem.reserved ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                    onClick={() => handleReserve(selectedItem.ItemId)}
+                    disabled={selectedItem.Status === "Reserved"}
+                    className={`px-4 py-2 rounded-lg text-white font-semibold ${
+                      selectedItem.Status === "Reserved"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
+                    }`}
                   >
                     Reserve
                   </button>
