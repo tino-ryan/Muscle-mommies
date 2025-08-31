@@ -6,6 +6,7 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 
 // Customer pages
 import CustomerHome from './pages/customer/Home';
+import ItemDetail from './pages/customer/ItemDetail'; // New import
 
 // Store owner pages
 import StoreHome from './pages/store/StoreHome';
@@ -17,6 +18,9 @@ import Reservations from './pages/store/Reservations';
 import Chats from './pages/store/Chats.jsx';
 import Analytics from './pages/store/Analytics.jsx';
 
+//customer pages
+import UserChats from './pages/customer/UserChats.jsx';
+import ChatWindow from './pages/ChatWindow.jsx';
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard.jsx';
 
@@ -42,6 +46,13 @@ function App() {
       <Route path="/store/chats" element={<Chats />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+      <Route path="/user/chats" element={<UserChats />} />
+      <Route path="/user/chats/:chatId" element={<ChatWindow />} />
+      <Route path="/store/chats/:chatId" element={<ChatWindow />} />
+
+      {/* New Item Detail page for testing */}
+      <Route path="/item/:itemId" element={<ItemDetail />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

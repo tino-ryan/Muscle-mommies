@@ -1,0 +1,113 @@
+/* UserChats.css */
+
+/* Container for the entire page */
+.user-chats {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+/* Layout container with sidebar and content */
+.layout-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sidebar (reuse or adjust based on your HamburgerMenu/component styling) */
+.sidebar {
+  width: 250px;
+  background-color: #fff;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+/* Content area for the chat list */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading style */
+.content h1 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Error message styling */
+.error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* Chat list container */
+.chat-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Individual chat item */
+.chat-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Hover effect for chat items */
+.chat-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Strong text (e.g., other user's name) */
+.chat-item strong {
+  font-size: 1.1em;
+  color: #222;
+  margin-right: 10px;
+}
+
+/* Last message paragraph */
+.chat-item p {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 0.9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .chat-item p {
+    max-width: 70%;
+  }
+}
+
+/* Active chat item (optional, if you add selection logic) */
+.chat-item.active {
+  background-color: #e0f7fa;
+  font-weight: bold;
+}

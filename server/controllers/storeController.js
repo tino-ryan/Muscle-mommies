@@ -3,7 +3,7 @@ const uuid = require('uuid');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
-const { Store, Item, ItemImage } = require('../models/store');
+const { Store, Item, ItemImage, Chat, Message } = require('../models/store');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '../../uploads');
@@ -420,34 +420,16 @@ const deleteContactInfo = async (req, res) => {
   }
 };
 
-// Get single item by ID
+// In getItem function
 const getItem = async (req, res) => {
   try {
-    const userId = req.user.uid;
     const { itemId } = req.params;
-    if (!userId) {
-      return res.status(401).json({ error: 'User ID not provided' });
-    }
-    const storeRef = admin
-      .firestore()
-      .collection(Store.collection)
-      .where('ownerId', '==', userId);
-    const storeSnapshot = await storeRef.get();
-    if (storeSnapshot.empty) {
-      return res.status(400).json({ error: 'Store not found' });
-    }
-    const storeId = storeSnapshot.docs[0].id;
     const itemRef = admin.firestore().collection(Item.collection).doc(itemId);
     const itemDoc = await itemRef.get();
     if (!itemDoc.exists) {
       return res.status(404).json({ error: 'Item not found' });
     }
     const itemData = itemDoc.data();
-    if (itemData.storeId !== storeId) {
-      return res
-        .status(403)
-        .json({ error: 'Unauthorized to access this item' });
-    }
     const imagesRef = admin
       .firestore()
       .collection(ItemImage.collection)
@@ -460,6 +442,26 @@ const getItem = async (req, res) => {
     res
       .status(500)
       .json({ error: 'Failed to fetch item', details: error.message });
+  }
+};
+const getStoreById = async (req, res) => {
+  try {
+    const { storeId } = req.params;
+    const storeDoc = await admin
+      .firestore()
+      .collection(Store.collection)
+      .doc(storeId)
+      .get();
+    if (!storeDoc.exists) {
+      return res.status(404).json({ error: 'Store not found' });
+    }
+    // Remove ownership check for testing
+    res.json({ storeId, ...storeDoc.data() });
+  } catch (error) {
+    console.error('Error fetching store:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch store', details: error.message });
   }
 };
 
@@ -578,6 +580,123 @@ const updateItem = async (req, res) => {
   }
 };
 
+// Get conversations (now chats) for the current user
+const getChats = async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const chatsRef = admin.firestore().collection(Chat.collection);
+    const snapshot = await chatsRef
+      .where('participants', 'array-contains', userId)
+      .get();
+    let chats = snapshot.docs.map((doc) => ({ chatId: doc.id, ...doc.data() }));
+    chats.sort(
+      (a, b) =>
+        (b.lastTimestamp?.seconds || 0) - (a.lastTimestamp?.seconds || 0)
+    );
+    for (let chat of chats) {
+      const otherId = chat.participants.find((id) => id !== userId);
+      const userRecord = await admin.auth().getUser(otherId);
+      chat.otherName = userRecord.displayName || userRecord.email || 'Unknown';
+      // Optionally fetch item/store names if linked
+    }
+    res.json(chats);
+  } catch (error) {
+    console.error('Error fetching chats:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch chats', details: error.message });
+  }
+};
+
+// Get messages for a specific chatId
+const getMessagesForChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const messagesRef = admin.firestore().collection(Message.collection);
+    const snapshot = await messagesRef
+      .where('chatId', '==', chatId)
+      .orderBy('timestamp')
+      .get();
+    const messages = snapshot.docs.map((doc) => ({
+      messageId: doc.id,
+      ...doc.data(),
+    }));
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch messages', details: error.message });
+  }
+};
+
+// Send a message (add itemId/storeId support)
+const sendMessage = async (req, res) => {
+  try {
+    const senderId = req.user.uid;
+    const { receiverId, message, itemId, storeId } = req.body;
+    if (!receiverId || !message) {
+      return res.status(400).json({ error: 'Missing receiverId or message' });
+    }
+    const sortedIds = [senderId, receiverId].sort();
+    const chatId = sortedIds.join('_');
+    const messageData = {
+      chatId,
+      senderId,
+      receiverId,
+      message,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      read: false,
+    };
+    const messageRef = await admin
+      .firestore()
+      .collection(Message.collection)
+      .add(messageData);
+    // Update chat doc
+    const chatRef = admin.firestore().collection(Chat.collection).doc(chatId);
+    const chatData = {
+      chatId,
+      participants: sortedIds,
+      lastMessage: message,
+      lastTimestamp: admin.firestore.FieldValue.serverTimestamp(),
+      itemId: itemId || null,
+      storeId: storeId || null,
+    };
+    await chatRef.set(chatData, { merge: true });
+    res.json({ messageId: messageRef.id, ...messageData });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to send message', details: error.message });
+  }
+};
+
+// Mark messages as read (call from frontend when viewing)
+const markAsRead = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const userId = req.user.uid;
+    const messagesRef = admin.firestore().collection(Message.collection);
+    const unreadQuery = messagesRef
+      .where('chatId', '==', chatId)
+      .where('receiverId', '==', userId)
+      .where('read', '==', false);
+    const snapshot = await unreadQuery.get();
+    const batch = admin.firestore().batch();
+    snapshot.docs.forEach((doc) => {
+      batch.update(doc.ref, { read: true });
+    });
+    await batch.commit();
+    res.json({ message: 'Messages marked as read' });
+  } catch (error) {
+    console.error('Error marking as read:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to mark as read', details: error.message });
+  }
+};
+
 module.exports = {
   getStore,
   createOrUpdateStore,
@@ -588,5 +707,10 @@ module.exports = {
   addContactInfo,
   deleteContactInfo,
   getItem,
+  getStoreById,
   updateItem,
+  getChats,
+  getMessagesForChat,
+  sendMessage,
+  markAsRead,
 };

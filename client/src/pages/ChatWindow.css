@@ -1,0 +1,16 @@
+.messages-container { height: 400px; overflow-y: scroll; }
+.message { margin: 10px; padding: 10px; border-radius: 10px; }
+.sent { background: #dcf8c6; text-align: right; }
+.received { background: #fff; text-align: left; }
+.unread { background: #f0f0f0; } /* Gray for unread */
+.read { border: 1px solid #007bff; background: #fff; } /* Blue border for read */
+.timestamp { font-size: 0.8em; color: gray; }
+.suggestions { display: flex; gap: 10px; margin-bottom: 10px; }
+.suggestion-chip { padding: 5px 10px; background: #eee; cursor: pointer; border-radius: 20px; }
+.drawer { position: fixed; right: 0; top: 0; width: 300px; height: 100%; background: white; box-shadow: -2px 0 5px rgba(0,0,0,0.1); padding: 20px; overflow-y: auto; }
+.drawer.hidden { display: none; }
+.chat-header { cursor: pointer; background: #f0f0f0; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+.chat-header span { font-size: 0.9em; color: #555; }
+.input-container { display: flex; gap: 10px; margin-top: 10px; }
+.input-container input { flex: 1; padding: 5px; }
+.input-container button { padding: 5px 15px; }

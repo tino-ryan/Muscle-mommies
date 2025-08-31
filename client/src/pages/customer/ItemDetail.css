@@ -1,0 +1,51 @@
+.item-detail {
+  padding: 20px;
+}
+
+.layout-container {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-gallery img {
+  object-fit: cover;
+}
+
+.store-info {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.actions button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+}
