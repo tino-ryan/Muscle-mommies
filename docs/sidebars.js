@@ -25,6 +25,7 @@ const sidebars = {
     'initial-design',
     'development-plan',
     'project-management',
+    'user-feedback',
   ],
 };
 
