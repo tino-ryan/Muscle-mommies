@@ -29,6 +29,7 @@ const sidebars = {
     'api_documentation',
     'database_documentation',
     'user-feedback',
+    'Bug-tracker'
   ],
 };
 
