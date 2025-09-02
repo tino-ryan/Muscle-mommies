@@ -318,7 +318,7 @@ export default function EditListing() {
                   <img
                     key={index}
                     src={image.imageURL}
-                    alt={`Image ${index + 1}`}
+                    alt={`${item.name || 'Item'} ${index + 1}`} // Use item name or fallback
                     style={{ width: '100px', margin: '5px' }}
                   />
                 ))

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../api';
@@ -16,13 +16,12 @@ export default function StoreReservations() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
 
-    const fetchRoleAndReservations = async () => {
       try {
         const token = await user.getIdToken();
         const roleResponse = await axios.post(
@@ -92,10 +91,10 @@ export default function StoreReservations() {
             (err.response?.data?.error || err.message)
         );
       }
-    };
+    });
 
-    fetchRoleAndReservations();
-  }, [navigate]);
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   const handleUpdateStatus = async (reservationId, newStatus) => {
     if (role !== 'storeOwner') return;

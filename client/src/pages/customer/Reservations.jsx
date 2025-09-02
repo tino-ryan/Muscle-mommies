@@ -1,11 +1,9 @@
-// src/components/Reservations.jsx
 import { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Reservations.css'; // Create this CSS file
-
+import './Reservations.css';
 import { API_URL } from '../../api';
 
 export default function Reservations() {
@@ -17,13 +15,12 @@ export default function Reservations() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
 
-    const fetchReservations = async () => {
       try {
         const token = await user.getIdToken();
         // Fetch reservations
@@ -71,10 +68,10 @@ export default function Reservations() {
             (err.response?.data?.error || err.message)
         );
       }
-    };
+    });
 
-    fetchReservations();
-  }, [navigate]);
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   return (
     <div className="reservations">

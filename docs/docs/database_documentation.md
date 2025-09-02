@@ -1,14 +1,17 @@
 # ThriftFinder Firestore Database Documentation
 
 ## Overview
+
 ThriftFinder uses **Firebase Firestore** as its database to manage thrift store data, user interactions, and photo journal entries. The database supports the ThriftFinder app's core functionality (e.g., store management, item listings, reservations, and messaging) and the external API for integration with the Campus Quest project. This documentation describes the Firestore collections, their structure, purpose, and how they enable the application's features and external API endpoints.
 
 The database is designed to:
+
 - Store thrift store profiles and their inventory for display in ThriftFinder and as quest locations or advertisements in Campus Quest.
 - Manage user interactions like reservations and messaging.
 - Support photo uploads for user photo journals via the external API, stored in a separate `externalImages` collection to avoid interference with ThriftFinder’s internal logic.
 
 ## Database Setup
+
 - **Database**: Google Firebase Firestore (NoSQL, document-based).
 - **Collections**: The database consists of seven main collections: `users`, `stores`, `items`, `itemImages`, `Reservations`, `chats`, `messages`, and an additional `externalImages` collection for the external API.
 - **Environment**: Configured via Firebase Admin SDK in the backend (`config/firebase.js`), with credentials stored in environment variables (`FIREBASE_*` in `.env`).
@@ -17,9 +20,11 @@ The database is designed to:
 ## Collections
 
 ### 1. `users`
+
 Stores user profile information, including their role (customer or store owner).
 
 #### Structure
+
 - **Document ID**: Firebase UID (e.g., `dTGCpDOOteSXAq02NirTMZ2EOQk2`)
 - **Fields**:
   - `createdAt`: Timestamp of user creation (Firestore Timestamp, e.g., 18 August 2025 at 21:29:35 UTC+2)
@@ -28,11 +33,13 @@ Stores user profile information, including their role (customer or store owner).
   - `role`: User role (string, enum: `customer` or `storeOwner`)
 
 #### Purpose
+
 - Tracks user accounts and their roles to differentiate between customers and store owners.
 - Used by `authController.js` for signup and role retrieval (`/api/auth/getRole`).
 - Links users to stores (via `ownerId` in `stores`) and reservations/messages (via `userId`, `senderId`, etc.).
 
 #### Example
+
 ```json
 {
   "createdAt": { "_seconds": 1724099375, "_nanoseconds": 0 },
@@ -43,9 +50,11 @@ Stores user profile information, including their role (customer or store owner).
 ```
 
 ### 2. `stores`
+
 Stores thrift shop profiles, used for both ThriftFinder’s storefronts and Campus Quest’s quest locations/advertisements.
 
 #### Structure
+
 - **Document ID**: Auto-generated Firestore ID or UUID (e.g., `c2e14220-5ebc-4211-9995-b056ad6e852f`)
 - **Fields**:
   - `address`: Physical address (string, e.g., `Wits Sports West Campus, Braamfontein, ...`)
@@ -65,11 +74,13 @@ Stores thrift shop profiles, used for both ThriftFinder’s storefronts and Camp
     - `value`: Contact value (string, e.g., `0667778888`)
 
 #### Purpose
+
 - Stores thrift shop metadata for display in ThriftFinder’s storefronts and Campus Quest’s quest locations/advertisements (`GET /external/stores`).
 - Links to `items`, `Reservations`, `chats`, and `messages` via `storeId`.
 - Subcollection `contactInfos` stores additional contact details (e.g., phone, social media).
 
 #### Example
+
 ```json
 {
   "address": "Wits Sports West Campus, Braamfontein, Johannesburg Ward 60, ...",
@@ -85,9 +96,11 @@ Stores thrift shop profiles, used for both ThriftFinder’s storefronts and Camp
 ```
 
 ### 3. `items`
+
 Stores thrift item listings for sale in stores.
 
 #### Structure
+
 - **Document ID**: UUID (e.g., `1f8a7251-342c-409f-aaa2-54c6e5af3ab0`)
 - **Fields**:
   - `category`: Item category (string, e.g., `footwear`)
@@ -106,11 +119,13 @@ Stores thrift item listings for sale in stores.
   - `updatedAt`: Last update timestamp (Firestore Timestamp, e.g., 2 September 2025 at 00:02:59 UTC+2)
 
 #### Purpose
+
 - Stores item listings for ThriftFinder’s inventory management and shopping features.
 - Links to `Reservations`, `chats`, and `messages` via `itemId`.
 - Used by `itemController.js` for CRUD operations (`/api/items`, `/api/stores/:storeId/items`, etc.).
 
 #### Example
+
 ```json
 {
   "category": "footwear",
@@ -142,9 +157,11 @@ Stores thrift item listings for sale in stores.
 ```
 
 ### 4. `itemImages`
+
 Stores metadata for images associated with items, uploaded to Cloudinary.
 
 #### Structure
+
 - **Document ID**: UUID (e.g., `121d5f7d-818b-4831-9e6f-11ae3c68b7e7`)
 - **Fields**:
   - `imageId`: UUID (string, matches document ID)
@@ -153,11 +170,13 @@ Stores metadata for images associated with items, uploaded to Cloudinary.
   - `itemId`: Reference to item (string, e.g., `58509fa7-5125-412e-b6eb-648fd822cb16`)
 
 #### Purpose
+
 - Stores image metadata for item listings, linked to `items` via `itemId`.
 - Populated by `storeController.js` during item creation/update (`/api/stores/items`, `/api/stores/items/:itemId`).
 - Separate from `externalImages` to isolate ThriftFinder’s internal images from Campus Quest’s photo journal uploads.
 
 #### Example
+
 ```json
 {
   "imageId": "121d5f7d-818b-4831-9e6f-11ae3c68b7e7",
@@ -168,9 +187,11 @@ Stores metadata for images associated with items, uploaded to Cloudinary.
 ```
 
 ### 5. `Reservations`
+
 Tracks item reservations made by customers.
 
 #### Structure
+
 - **Document ID**: UUID (e.g., `3cf472eb-f579-4561-8bba-d0b3e3fe9196`)
 - **Fields**:
   - `itemId`: Reference to item (string, e.g., `1f8a7251-342c-409f-aaa2-54c6e5af3ab0`)
@@ -182,11 +203,13 @@ Tracks item reservations made by customers.
   - `userId`: Firebase UID of the reserving user (string, e.g., `m4lMopagfkbd2RURe9JeralPK4R2`)
 
 #### Purpose
+
 - Manages item reservations for ThriftFinder’s order system (`/api/stores/reservations`, `/api/stores/reserve/:itemId`).
 - Links to `items` and `stores` via `itemId` and `storeId`.
 - Used by store owners to confirm/cancel reservations (`updateReservation` in `storeController.js`).
 
 #### Example
+
 ```json
 {
   "itemId": "1f8a7251-342c-409f-aaa2-54c6e5af3ab0",
@@ -200,9 +223,11 @@ Tracks item reservations made by customers.
 ```
 
 ### 6. `chats`
+
 Stores conversation metadata between users (e.g., customer and store owner).
 
 #### Structure
+
 - **Document ID**: Concatenated Firebase UIDs (e.g., `dTGCpDOOteSXAq02NirTMZ2EOQk2_m4lMopagfkbd2RURe9JeralPK4R2`)
 - **Fields**:
   - `chatId`: Concatenated UIDs (string, matches document ID)
@@ -213,11 +238,13 @@ Stores conversation metadata between users (e.g., customer and store owner).
   - `storeId`: Reference to store (string, optional, e.g., `c2e14220-5ebc-4211-9995-b056ad6e852f`)
 
 #### Purpose
+
 - Tracks conversations for ThriftFinder’s in-app messaging (`/api/stores/chats`, `/api/stores/messages`).
 - Links to `messages`, `items`, and `stores` via `chatId`, `itemId`, and `storeId`.
 - Populated when users send messages or create chats (`sendMessage`, `createChat` in `storeController.js`).
 
 #### Example
+
 ```json
 {
   "chatId": "dTGCpDOOteSXAq02NirTMZ2EOQk2_m4lMopagfkbd2RURe9JeralPK4R2",
@@ -233,9 +260,11 @@ Stores conversation metadata between users (e.g., customer and store owner).
 ```
 
 ### 7. `messages`
+
 Stores individual messages within conversations.
 
 #### Structure
+
 - **Document ID**: Auto-generated Firestore ID (e.g., `92mnQMtLGwz1plHns8hK`)
 - **Fields**:
   - `chatId`: Reference to chat (string, e.g., `dTGCpDOOteSXAq02NirTMZ2EOQk2_m4lMopagfkbd2RURe9JeralPK4R2`)
@@ -248,11 +277,13 @@ Stores individual messages within conversations.
   - `timestamp`: Message timestamp (Firestore Timestamp, e.g., 1 September 2025 at 09:37:04 UTC+2)
 
 #### Purpose
+
 - Stores message history for ThriftFinder’s chat feature (`/api/stores/chats/:chatId/messages`).
 - Links to `chats`, `items`, and `stores` via `chatId`, `itemId`, and `storeId`.
 - Supports read receipts (`markAsRead` in `storeController.js`).
 
 #### Example
+
 ```json
 {
   "chatId": "dTGCpDOOteSXAq02NirTMZ2EOQk2_m4lMopagfkbd2RURe9JeralPK4R2",
@@ -267,9 +298,11 @@ Stores individual messages within conversations.
 ```
 
 ### 8. `externalImages`
+
 Stores metadata for photos uploaded via the external API (`POST /external/upload`) for Campus Quest’s photo journal feature.
 
 #### Structure
+
 - **Document ID**: Cloudinary public ID (e.g., `muscle-mommies/external/abc123`)
 - **Fields**:
   - `imageId`: Cloudinary public ID (string, matches document ID)
@@ -277,11 +310,13 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
   - `createdAt`: Upload timestamp (Firestore Timestamp, e.g., 1 September 2025 at 09:00:00 UTC+2)
 
 #### Purpose
+
 - Stores metadata for photos uploaded by Campus Quest users, separate from `itemImages` to avoid interference with ThriftFinder’s internal logic.
 - Populated by `externalController.js` (`uploadPhoto`) and retrieved via `GET /external/photos`.
 - Supports Campus Quest’s photo journal feature, allowing users to upload quest-related images (e.g., thrift finds).
 
 #### Example
+
 ```json
 {
   "imageId": "muscle-mommies/external/abc123",
@@ -291,6 +326,7 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
 ```
 
 ## Why This Setup?
+
 - **Firestore Choice**: Firestore’s NoSQL structure supports flexible schemas, real-time updates, and scalability, ideal for ThriftFinder’s dynamic data (stores, items, chats) and Campus Quest’s integration needs.
 - **Separation of Concerns**:
   - `users`, `stores`, `items`, `itemImages`, `Reservations`, `chats`, and `messages` support ThriftFinder’s core functionality (storefronts, inventory, messaging, reservations).
@@ -306,6 +342,7 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
 - **Scalability**: Firestore’s automatic scaling handles growing data. The `externalImages` collection uses Cloudinary public IDs as document IDs to avoid collisions and simplify lookups.
 
 ## How It Works
+
 1. **ThriftFinder App**:
    - Users sign up (`authController.js`) and are stored in `users`.
    - Store owners create/update stores (`createOrUpdateStore`), populating `stores` and `contactInfos`.
@@ -326,6 +363,7 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
    - **Photo Journal**: External client uploads photo → Cloudinary → `externalImages`.
 
 ## Usage Notes
+
 - **Access**: The backend uses Firebase Admin SDK with full access. The external API restricts `externalImages` access to API key holders (`validateApiKey` in `externalController.js`).
 - **Security**:
   - Firebase Security Rules should restrict read/write access to authenticated users for `users`, `stores`, `items`, etc., except for `stores` (public read for `/external/stores`).
@@ -340,6 +378,7 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
   - Ensure Cloudinary folder `muscle-mommies/external` is monitored for storage limits.
 
 ## Example Data Flow
+
 1. **Store Owner Adds Item**:
    - Creates store in `stores` (`c2e14220-5ebc-4211-9995-b056ad6e852f`).
    - Adds item (`1f8a7251-342c-409f-aaa2-54c6e5af3ab0`) to `items` with images in `itemImages`.
@@ -352,6 +391,7 @@ Stores metadata for photos uploaded via the external API (`POST /external/upload
    - Uploads a photo via `POST /external/upload`, storing metadata in `externalImages`.
 
 ## Notes
+
 - **Indexes**: Ensure Firestore composite indexes are set for queries (e.g., `chats.participants`, `items.storeId`, `Reservations.userId`). Check the Firestore console for index errors.
 - **Backups**: Use Firebase’s export feature to back up data regularly.
 - **Campus Quest Collaboration**: Share this documentation and the API key with the Campus Quest team. Discuss additional needs (e.g., filtering stores by location or linking photos to quests).

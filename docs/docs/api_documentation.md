@@ -1,13 +1,16 @@
 # ThriftFinder External API Documentation
 
 ## Overview
+
 The ThriftFinder External API provides access to thrift store data and photo journal management for integration with the Campus Quest project. This API enables Campus Quest to:
+
 - Retrieve thrift store details to use as quest locations or advertisements, exposing thrift stores to a broader audience.
 - Manage user photo journals by uploading and retrieving photos, stored via Cloudinary and tracked in Firestore.
 
 The API is hosted at `http://localhost:3000/external` (update to production URL when deployed). It includes two main endpoint groups: **Stores** and **Photos**.
 
 ## Authentication
+
 - **Stores Endpoint (`/external/stores`)**: No authentication required, as it’s intended for public access to promote thrift stores.
 - **Photos Endpoints (`/external/upload`, `/external/photos`)**: Require an API key, sent in the `x-api-key` header. Contact the ThriftFinder team to obtain a valid API key.
   - Header: `x-api-key: your-secure-api-key`
@@ -17,11 +20,14 @@ The API is hosted at `http://localhost:3000/external` (update to production URL 
 ## Endpoints
 
 ### 1. GET /external/stores
+
 Retrieves a list of all thrift stores from the ThriftFinder database. This can be used by Campus Quest to:
+
 - Display thrift stores as quest locations or points of interest.
 - Promote thrift stores to Campus Quest users, increasing their visibility.
 
 #### Request
+
 - **Method**: GET
 - **URL**: `http://localhost:3000/external/stores`
 - **Headers**: None
@@ -29,20 +35,24 @@ Retrieves a list of all thrift stores from the ThriftFinder database. This can b
 - **Body**: None
 
 #### Example Request
+
 Using cURL:
+
 ```bash
 curl http://localhost:3000/external/stores
 ```
 
 Using JavaScript (Fetch):
+
 ```javascript
 fetch('http://localhost:3000/external/stores')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error));
 ```
 
 #### Response
+
 - **Status**: `200 OK` on success, `500 Internal Server Error` on failure.
 - **Body**: JSON array of store objects.
   - `storeId`: Unique identifier for the store.
@@ -55,6 +65,7 @@ fetch('http://localhost:3000/external/stores')
   - `createdAt`, `updatedAt`: Firestore timestamps.
 
 #### Example Response
+
 ```json
 [
   {
@@ -73,6 +84,7 @@ fetch('http://localhost:3000/external/stores')
 ```
 
 #### Error Response
+
 ```json
 {
   "error": "Failed to fetch thrift stores",
@@ -81,9 +93,11 @@ fetch('http://localhost:3000/external/stores')
 ```
 
 ### 2. POST /external/upload
+
 Uploads a photo to Cloudinary for use in Campus Quest’s user photo journals (e.g., photos taken during quests). The photo metadata is stored in Firestore’s `externalImages` collection.
 
 #### Request
+
 - **Method**: POST
 - **URL**: `http://localhost:3000/external/upload`
 - **Headers**:
@@ -94,7 +108,9 @@ Uploads a photo to Cloudinary for use in Campus Quest’s user photo journals (e
 - **Query Parameters**: None
 
 #### Example Request
+
 Using cURL:
+
 ```bash
 curl -X POST http://localhost:3000/external/upload \
   -H "x-api-key: my-unique-secret-key-123" \
@@ -102,18 +118,21 @@ curl -X POST http://localhost:3000/external/upload \
 ```
 
 Using Postman:
+
 1. Set request type to POST and URL to `http://localhost:3000/external/upload`.
 2. In "Headers", add `x-api-key: my-unique-secret-key-123`.
 3. In "Body", select `form-data`, add key `image` (type: File), and select an image file.
 4. Send the request.
 
 #### Response
+
 - **Status**: `200 OK` on success, `400 Bad Request` or `500 Internal Server Error` on failure.
 - **Body**:
   - `imageId`: Cloudinary public ID of the uploaded image.
   - `imageURL`: Secure URL to access the image on Cloudinary.
 
 #### Example Response
+
 ```json
 {
   "imageId": "muscle-mommies/external/abc123",
@@ -122,14 +141,17 @@ Using Postman:
 ```
 
 #### Error Responses
+
 - Missing file: `{ "error": "No image provided" }` (400)
 - Invalid API key: `{ "error": "Invalid or missing API key" }` (401)
 - Upload failure: `{ "error": "Failed to upload image", "details": "Error message here" }` (500)
 
 ### 3. GET /external/photos
+
 Retrieves a list of all photo metadata from the `externalImages` collection, used for displaying user photo journals in Campus Quest.
 
 #### Request
+
 - **Method**: GET
 - **URL**: `http://localhost:3000/external/photos`
 - **Headers**:
@@ -138,22 +160,26 @@ Retrieves a list of all photo metadata from the `externalImages` collection, use
 - **Body**: None
 
 #### Example Request
+
 Using cURL:
+
 ```bash
 curl http://localhost:3000/external/photos -H "x-api-key: my-unique-secret-key-123"
 ```
 
 Using JavaScript (Fetch):
+
 ```javascript
 fetch('http://localhost:3000/external/photos', {
-  headers: { 'x-api-key': 'my-unique-secret-key-123' }
+  headers: { 'x-api-key': 'my-unique-secret-key-123' },
 })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error));
 ```
 
 #### Response
+
 - **Status**: `200 OK` on success, `500 Internal Server Error` on failure.
 - **Body**: JSON array of image objects.
   - `imageId`: Cloudinary public ID.
@@ -161,6 +187,7 @@ fetch('http://localhost:3000/external/photos', {
   - `createdAt`: Firestore timestamp of when the image was uploaded.
 
 #### Example Response
+
 ```json
 [
   {
@@ -173,11 +200,14 @@ fetch('http://localhost:3000/external/photos', {
 ```
 
 #### Error Responses
+
 - Invalid API key: `{ "error": "Invalid or missing API key" }` (401)
 - Fetch failure: `{ "error": "Failed to fetch images", "details": "Error message here" }` (500)
 
 ## Integration with Campus Quest
+
 ### Purpose
+
 - **Stores API (`GET /external/stores`)**:
   - Use store data to create quest locations (e.g., visit a thrift store to complete a quest).
   - Display thrift stores as advertisements or points of interest, increasing their exposure to Campus Quest users.
@@ -188,17 +218,21 @@ fetch('http://localhost:3000/external/photos', {
   - Example: A user uploads a photo of a vintage jacket found at a thrift store, which is stored in Cloudinary and linked in the `externalImages` collection.
 
 ### Recommendations
+
 - **Stores**: Cache store data locally in Campus Quest to reduce API calls, as store data changes infrequently.
 - **Photos**: Use the `imageURL` from responses to display images directly in the Campus Quest app. Ensure the API key is securely stored (e.g., not hardcoded in client-side code).
 - **Error Handling**: Handle `401`, `400`, and `500` errors gracefully in the Campus Quest UI, informing users if authentication fails or the server is unavailable.
 
 ## Testing
+
 ### Prerequisites
+
 - Ensure the ThriftFinder server is running: `node index.js`.
 - Obtain the API key from the ThriftFinder team for `/external/upload` and `/external/photos`.
 - Use tools like Postman, cURL, or a custom client for testing.
 
 ### Testing Tools
+
 - **Postman**:
   - Create requests as described above.
   - For `/external/upload`, use the `form-data` body to upload files.
@@ -211,6 +245,7 @@ fetch('http://localhost:3000/external/photos', {
   - For `/external/photos`, include the API key in a custom client or use Postman/cURL.
 
 ### Test Cases
+
 1. **GET /external/stores**:
    - Verify you receive a list of stores with fields like `storeId`, `storeName`, and `location`.
    - Test with no stores in the database (should return `[]`).
@@ -224,6 +259,7 @@ fetch('http://localhost:3000/external/photos', {
    - Test with no images uploaded (should return `[]`).
 
 ## Notes
+
 - **Security**: The API key for photos endpoints must be kept confidential. Contact the ThriftFinder team to rotate or regenerate keys if needed.
 - **Rate Limits**: Currently, no rate limits are enforced, but avoid excessive requests. Discuss with the ThriftFinder team for production scaling.
 - **Production URL**: Replace `http://localhost:3000` with the production URL when deployed.

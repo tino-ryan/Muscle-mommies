@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/User');
 
 // Mock ../config/firebase to prevent loading dependencies
 jest.mock('../config/firebase', () => ({

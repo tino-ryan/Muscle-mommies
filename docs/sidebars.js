@@ -26,8 +26,8 @@ const sidebars = {
     'development-plan',
     'project-management',
     'third-party-code',
-    'api-documentation',
-    'database-documentation',
+    'api_documentation',
+    'database_documentation',
     'user-feedback',
   ],
 };
