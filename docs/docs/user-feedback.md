@@ -22,8 +22,7 @@ To gather user feedback for our project, we used the following method:
 - To validate and refine our concept before development progresses further.
 
 ### 4. Data Collection
-
-- watch this space
+[User Feedback for Sprint 2](/pdf/tf.pdf)
 
 ## Why this method?
 
