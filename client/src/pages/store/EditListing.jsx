@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
 import HamburgerMenu from '../../components/HamburgerMenu';
 import './EditListing.css';
-import { API_URL } from '../../api'; // Import API_URL from api.js
+import { API_URL } from '../../api';
+
+// ... rest of the file remains unchanged ...
 
 export default function EditListing() {
   const [item, setItem] = useState({
@@ -29,15 +31,19 @@ export default function EditListing() {
       if (user) {
         try {
           const token = await user.getIdToken();
-          const response = await axios.get(
-            `${API_URL}/api/stores/items/${itemId}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
+          const response = await axios.get(`${API_URL}/api/items/${itemId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           setItem(response.data);
         } catch (error) {
-          setError('Failed to fetch item: ' + error.message);
+          console.error(
+            'Fetch item error:',
+            error.response?.data || error.message
+          );
+          setError(
+            'Failed to fetch item: ' +
+              (error.response?.data?.error || error.message)
+          );
           if (
             error.response?.status === 400 ||
             error.response?.status === 404
@@ -71,28 +77,76 @@ export default function EditListing() {
     }
     try {
       const token = await auth.currentUser?.getIdToken();
-      const formData = new FormData();
-      formData.append('name', item.name);
-      formData.append('description', item.description);
-      formData.append('category', item.category);
-      formData.append('size', item.size);
-      formData.append('price', item.price);
-      formData.append('quantity', item.quantity);
-      formData.append('status', item.status);
-      formData.append('department', item.department);
-      formData.append('style', item.style);
+      let response;
+      let url = `${API_URL}/api/stores/items/${itemId}`;
+      if (newImages.length > 0) {
+        // Use FormData and the /images route for uploads (handles multipart parsing)
+        url += '/images'; // Change to /api/stores/items/${itemId}/images
+        const formData = new FormData();
+        formData.append('name', String(item.name));
+        formData.append('description', String(item.description || ''));
+        formData.append('category', String(item.category || ''));
+        formData.append('size', String(item.size || ''));
+        formData.append('price', String(item.price));
+        formData.append('quantity', String(item.quantity));
+        formData.append('status', String(item.status));
+        formData.append('department', String(item.department || ''));
+        formData.append('style', String(item.style || ''));
+        newImages.forEach((image) => formData.append('images', image));
 
-      newImages.forEach((image) => formData.append('images', image));
-      await axios.put(`${API_URL}/api/stores/items/${itemId}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+        // Log FormData contents
+        console.log('FormData contents:');
+        for (let [key, value] of formData.entries()) {
+          console.log(
+            `${key}: ${typeof value === 'object' ? '[File]' : value}`
+          );
+        }
+
+        response = await axios.put(url, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      } else {
+        // Use JSON and the main route for text-only updates
+        const payload = {
+          name: item.name,
+          description: item.description || '',
+          category: item.category || '',
+          size: item.size || '',
+          price: parseFloat(item.price),
+          quantity: parseInt(item.quantity, 10),
+          status: item.status,
+          department: item.department || '',
+          style: item.style || '',
+        };
+        console.log('JSON payload:', payload);
+        response = await axios.put(url, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+      console.log('Server response:', response.data);
       alert('Item updated successfully!');
       navigate('/store/listings');
     } catch (error) {
-      setError('Failed to update item: ' + error.message);
+      console.error('Update error:', error.response?.data || error.message);
+      setError(
+        'Failed to update item: ' +
+          (error.response?.data?.error || error.message)
+      );
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      setError('Failed to log out: ' + error.message);
     }
   };
 
@@ -104,8 +158,8 @@ export default function EditListing() {
           <div className="sidebar-item" onClick={() => navigate('/store/home')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -119,8 +173,8 @@ export default function EditListing() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -128,26 +182,14 @@ export default function EditListing() {
             </svg>
             <p>Listings</p>
           </div>
-          <div className="sidebar-item" onClick={() => navigate('/analytics')}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-            </svg>
-            <p>Analytics</p>
-          </div>
           <div
             className="sidebar-item"
             onClick={() => navigate('/store/reservations')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -157,18 +199,45 @@ export default function EditListing() {
           </div>
           <div
             className="sidebar-item"
+            onClick={() => navigate('/store/chats')}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
+            </svg>
+            <p>Chats</p>
+          </div>
+          <div
+            className="sidebar-item"
             onClick={() => navigate('/store/profile')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
               <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
             </svg>
             <p>Store Profile</p>
+          </div>
+          <div className="sidebar-item" onClick={handleLogout}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M120,216a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H48V208h64A8,8,0,0,1,120,216Zm108.56-96.56-48-48A8,8,0,0,0,174.93,80H104a8,8,0,0,0,0,16h50.64l35.2,35.2a8,8,0,0,0,11.32,0l48-48A8,8,0,0,0,228.56,119.44Z"></path>
+            </svg>
+            <p>Logout</p>
           </div>
         </div>
         <div className="content">

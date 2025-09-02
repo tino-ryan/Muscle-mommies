@@ -2,27 +2,21 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const admin = require('./config/firebase');
-// Firebase Admin SDK
 const authRoutes = require('./routes/authRoutes');
 const storeRoutes = require('./routes/storeRoutes');
+const externalRoutes = require('./routes/externalRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors()); // allow all origins (adjust for production)
+app.use(cors());
 app.use(express.json());
 
 // Root route
 app.get('/', (req, res) => {
   res.send('Backend is live!');
 });
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/stores', storeRoutes);
-
-// (Optional) Users route - dev/admin use only
 app.get('/api/users', async (req, res) => {
   try {
     const snapshot = await admin.firestore().collection('users').get();
@@ -32,6 +26,11 @@ app.get('/api/users', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api', storeRoutes);
+app.use('/external', externalRoutes);
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -10,4 +10,6 @@ router.post('/signup/google', authController.googleSignup);
 // New route for getting user role
 router.post('/getRole', authController.getRole);
 
+router.get('/auth/user', authController.getRole1);
+
 module.exports = router;

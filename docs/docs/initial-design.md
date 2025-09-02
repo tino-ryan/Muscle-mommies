@@ -46,23 +46,23 @@ Login -> Dashboard -> Manage Users -> Block or activate users
 _Palette (2000s Cyber Space):_
 
 - Primary: (Denim Gradient for forms)
-  - #4a4f87
-  - #d6e6fd
+  - '#4a4f87'
+  - '#d6e6fd'
 - Secondary: (Neon Accents)
-  - #d6f74c
-  - #8c9eff
-  - #f06038
-  - #e22797
-  - #a88cea
+  - '#d6f74c'
+  - '#8c9eff'
+  - '#f06038'
+  - '#e22797'
+  - '#a88cea'
 - Background: (Grey Chrome Gradient)
-  - #f5f5f5
-  - #cccccc
-  - #999999
-  - #555555
-  - #cccccc
-  - #f5f5f5
+  - '#f5f5f5'
+  - '#cccccc'
+  - '#999999'
+  - '#555555'
+  - '#cccccc'
+  - '#f5f5f5'
 - Text: (Neutral Dark Navy):
-  - #0d0d55
+  - '#0d0d55'
 
 ---
 

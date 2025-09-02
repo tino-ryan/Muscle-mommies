@@ -1,10 +1,93 @@
+// pages/store/Chats.jsx
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase';
+import axios from 'axios';
 import HamburgerMenu from '../../components/HamburgerMenu';
+import { API_URL } from '../../api';
 import './Chats.css';
-//import { API_URL } from '../../api'; // Import API_URL from api.js
 
 export default function Chats() {
+  const [chats, setChats] = useState([]);
+  const [error, setError] = useState('');
+  const auth = getAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          const q = query(
+            collection(db, 'chats'),
+            where('participants', 'array-contains', user.uid)
+          );
+          const unsubscribeSnapshot = onSnapshot(
+            q,
+            async (snapshot) => {
+              const chatData = snapshot.docs.map((doc) => ({
+                chatId: doc.id,
+                ...doc.data(),
+              }));
+              console.log('Fetched chats:', chatData);
+              const chatsWithNames = await Promise.all(
+                chatData.map(async (chat) => {
+                  const otherId = chat.participants.find(
+                    (id) => id !== user.uid
+                  );
+                  try {
+                    const userResponse = await axios.get(
+                      `${API_URL}/api/stores/users/${otherId}`,
+                      {
+                        headers: { Authorization: `Bearer ${token}` },
+                      }
+                    );
+                    return {
+                      ...chat,
+                      otherName:
+                        userResponse.data.displayName ||
+                        userResponse.data.email ||
+                        'Unknown User',
+                    };
+                  } catch (err) {
+                    console.error(
+                      `Failed to fetch user ${otherId}:`,
+                      err.message
+                    );
+                    return { ...chat, otherName: 'Unknown User' };
+                  }
+                })
+              );
+              chatsWithNames.sort(
+                (a, b) =>
+                  (b.lastTimestamp?.seconds || 0) -
+                  (a.lastTimestamp?.seconds || 0)
+              );
+              setChats(chatsWithNames);
+            },
+            (err) => {
+              console.error('Firestore error:', err.code, err.message);
+              setError('Failed to fetch chats: ' + err.message);
+            }
+          );
+          return () => unsubscribeSnapshot();
+        } catch (error) {
+          console.error('Error in chat fetch:', error);
+          setError('Failed to fetch chats: ' + error.message);
+        }
+      } else {
+        setError('Please log in.');
+        navigate('/login');
+      }
+    });
+    return () => unsubscribeAuth();
+  }, [auth, navigate]);
+
+  const handleOpenChat = (chatId) => {
+    navigate(`/store/chats/${chatId}`);
+  };
 
   return (
     <div className="chats">
@@ -46,7 +129,7 @@ export default function Chats() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
+              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29L40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
             </svg>
             <p>Analytics</p>
           </div>
@@ -65,10 +148,7 @@ export default function Chats() {
             </svg>
             <p>Reservations</p>
           </div>
-          <div
-            className="sidebar-item active"
-            onClick={() => navigate('/store/profile')}
-          >
+          <div className="sidebar-item active">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -76,12 +156,12 @@ export default function Chats() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
             </svg>
             <p>Chats</p>
           </div>
           <div
-            className="sidebar-item active"
+            className="sidebar-item"
             onClick={() => navigate('/store/profile')}
           >
             <svg
@@ -96,28 +176,27 @@ export default function Chats() {
             <p>Store Profile</p>
           </div>
         </div>
-        {/* Main Content */}
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '2rem',
-            textAlign: 'center',
-          }}
-        >
-          <h1
-            style={{
-              fontSize: '4rem',
-              fontWeight: 'bold',
-              marginBottom: '1rem',
-            }}
-          >
-            Chats
-          </h1>
-          <p style={{ fontSize: '1.5rem', color: '#666' }}>ummh... chats?</p>
+        <div className="content">
+          <h1>My Chats</h1>
+          {error && <div className="error">{error}</div>}
+          <ul className="chat-list">
+            {chats.map((chat) => (
+              <li
+                key={chat.chatId}
+                onClick={() => handleOpenChat(chat.chatId)}
+                className="chat-item"
+              >
+                <strong>{chat.otherName}</strong>
+                <p>Last: {chat.lastMessage || 'No messages yet'}</p>
+              </li>
+            ))}
+            {chats.length === 0 && (
+              <p>
+                No chats available. Customers will start conversations from item
+                pages.
+              </p>
+            )}
+          </ul>
         </div>
       </div>
     </div>

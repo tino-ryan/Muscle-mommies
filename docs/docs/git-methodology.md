@@ -64,7 +64,7 @@ git checkout -b feature/add-chat-interface
 - Make small, frequent commits.
 - Follow **Conventional Commit** format:
 
-```
+```json
 feat(scope): short description
 fix(scope): short description
 ```

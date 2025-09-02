@@ -6,7 +6,9 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 
 // Customer pages
 import CustomerHome from './pages/customer/Home';
-import ItemDetail from './pages/customer/ItemDetail'; // New import
+import Store from './pages/customer/Store';
+import Search from './pages/customer/Search';
+import CusReservations from './pages/customer/Reservations'; // Adjust path
 
 // Store owner pages
 import StoreHome from './pages/store/StoreHome';
@@ -14,13 +16,14 @@ import StoreProfile from './pages/store/StoreProfile';
 import StoreListings from './pages/store/StoreListings';
 import AddListing from './pages/store/AddListing';
 import EditListing from './pages/store/EditListing';
-import Reservations from './pages/store/Reservations';
+import StoreReservations from './pages/store/Reservations';
 import Chats from './pages/store/Chats.jsx';
 import Analytics from './pages/store/Analytics.jsx';
 
 //customer pages
 import UserChats from './pages/customer/UserChats.jsx';
 import ChatWindow from './pages/ChatWindow.jsx';
+
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard.jsx';
 
@@ -42,7 +45,7 @@ function App() {
       <Route path="/store/listings" element={<StoreListings />} />
       <Route path="/store/listings/add" element={<AddListing />} />
       <Route path="/store/listings/edit/:itemId" element={<EditListing />} />
-      <Route path="/store/reservations" element={<Reservations />} />
+      <Route path="/store/reservations" element={<StoreReservations />} />
       <Route path="/store/chats" element={<Chats />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -50,9 +53,13 @@ function App() {
       <Route path="/user/chats" element={<UserChats />} />
       <Route path="/user/chats/:chatId" element={<ChatWindow />} />
       <Route path="/store/chats/:chatId" element={<ChatWindow />} />
+      <Route path="/store/home" element={<StoreHome />} />
+      <Route path="/customer/home" element={<CustomerHome />} />
+      <Route path="/customer/reservations" element={<CusReservations />} />
 
       {/* New Item Detail page for testing */}
-      <Route path="/item/:itemId" element={<ItemDetail />} />
+      <Route path="/store/:id" element={<Store />} />
+      <Route path="/search" element={<Search />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

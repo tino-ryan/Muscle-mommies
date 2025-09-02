@@ -144,6 +144,106 @@ We added **email/password login** in addition to Google OAuth because it makes *
 - Requires Firebase Admin setup and proper credential management.
 - Slight complexity for synchronizing Auth and Firestore data.
 
+### . User Home & Store Discovery
+
+- Users can view closest stores on a map interface with distance filtering.
+- Backend calculates distances based on store locations and user coordinates.
+- Frontend displays live map markers and updates dynamically as filters change.
+
+**Pros:**
+
+- Improves discoverability for users.
+- Intuitive UI with map visualisation.
+- Distance filtering enhances user experience.
+
+**Cons:**
+
+- Requires handling geolocation permissions.
+- Map rendering and live updates can be performance-heavy at times, especially on low-end devices.
+
+### . Search & Filtering
+
+- Users can search stores or items by name, size, catergory, or other attributes.
+- Dynamic filters update results in real-time using backend queries.
+
+**Pro:**
+
+- Fast and relevant results
+- Allows users to narrow down options quickly.
+- Extensible for future filters (price, availability, ratings).
+
+**Cons:**
+
+- Backend queries must be optimised to avoid excessive reads in Firestore
+
+### . Store Fronts & Item Details
+
+- Store fronts display all items in a store.
+- Item detail page includes:
+  - IEnlarged image and full item description.
+  - Reservation button to reserve the item.
+  - Equiry feature for contacting the store directly where users can enquire about:
+    - In-store collection (valid for one week).
+    - Delivery
+
+**Pros:**
+
+- Clear, user-friendly item browsing.
+- Reservation workflow increases engagement.
+- Flexible options for item pickup/delivery.
+
+**Cons:**
+
+- Requires synchronisation of the item availability across reservations.
+- Backend must handle multiple reservation states and user notifications.
+
+### . Reserved Items
+
+- Users can view items they have reserved.
+- Includes quick links to item details and reservation status.
+
+**Pros:**
+
+- Easy tracking of reserved items
+
+**Cons:**
+
+- Needs proper state management between frontend and backend.
+
+### . Chat Interface
+
+- Real-time chat interface for user-store communication.
+- Allows for users to ask questions about items, reservations, or deliveries.
+
+**Pros:**
+
+- Enhances communication between users and store owners.
+- Supports reservations and enquiries seamlessly.
+
+**Cons:**
+
+- requires backend Websocket or real-time database integration for live updates.
+
+### . Store Ownner Dashboard
+
+- User dashboard/store managemnet
+  - Manage store items and inventory.
+  - Manage reservations and orders.
+  - Update item availabiltiy and basic store information.
+
+**Pros:**
+
+- Centralised control for inventory and reservations.
+- Allows store owners to manage their store effectively.
+- Improves operational efficiency and reduces manual tracking.
+- Provides a foundation for future analytics and reporting features.
+
+**Cons:**
+
+- Lacks analytics and insights in this sprint (data-driven decisions not available yet).
+- Requires careful role-based access control to prevent unauthorized changes.
+- Any reporting or insights will need to be added in future sprints.
+
 ---
 
 ## Summary
@@ -153,6 +253,13 @@ We added **email/password login** in addition to Google OAuth because it makes *
 - ✅ Backend structured with MVC for scalability.
 - ✅ Frontend integrated with backend using axios.
 - ✅ Firebase hosting used for deployment.
+- ✅ Main features implemented:
+  - User home & closest stores with live map.
+  - Search & filtering by size, category, etc.
+  - Store fronts & detailed item pages with reservation/enquiry.
+  - Reserved items management.
+  - Chat interface.
+  - Store owner dashboard
 
 **Next Steps:**
 
@@ -160,3 +267,5 @@ We added **email/password login** in addition to Google OAuth because it makes *
 - Add user profile editing.
 - Expand database for additional features (events, orders, etc.).
 - Improve testing coverage for frontend and backend.
+- Optimize Firestore queries and map rendering for performance.
+- Implement analytics for stores and admin

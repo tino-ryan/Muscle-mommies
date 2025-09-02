@@ -59,6 +59,7 @@ const ItemImage = {
   },
 };
 
+// Define the structure for the 'chats' collection
 const Chat = {
   collection: 'chats',
   fields: {
@@ -71,6 +72,7 @@ const Chat = {
   },
 };
 
+// Define the structure for the 'messages' collection
 const Message = {
   collection: 'messages',
   fields: {
@@ -81,7 +83,22 @@ const Message = {
     message: String,
     timestamp: Object,
     read: Boolean, // For read receipts
+    itemId: String, // Optional: Linked item
+    storeId: String, // Optional: Linked store
   },
 };
 
-module.exports = { Store, Item, ItemImage, Chat, Message };
+// Define the structure for the 'Reservations' collection
+const Reservation = {
+  collection: 'Reservations',
+  fields: {
+    reservationId: String, // UUID for the reservation
+    itemId: String, // Reference to items.itemId
+    userId: String, // Firebase UID of the user
+    storeId: String, // Reference to stores.storeId
+    status: String, // ENUM: 'Pending', 'Confirmed', 'Cancelled', 'Completed'
+    reservedAt: Object, // Firestore Timestamp
+  },
+};
+
+module.exports = { Store, Item, ItemImage, Chat, Message, Reservation };

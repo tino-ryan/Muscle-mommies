@@ -81,3 +81,17 @@ exports.getRole = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.getRole1 = async (req, res) => {
+  const uid = req.user.uid; // From authMiddleware
+  try {
+    const userData = await User.getByUid(uid);
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ role: userData.role });
+  } catch (err) {
+    console.error('Get role error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

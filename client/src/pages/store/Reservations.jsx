@@ -1,38 +1,141 @@
 import { useState, useEffect } from 'react';
+import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import HamburgerMenu from '../../components/HamburgerMenu';
-import './Reservations.css';
+import axios from 'axios';
+import { API_URL } from '../../api';
+import './StoreReservations.css';
 
-export default function Reservations() {
+export default function StoreReservations() {
+  const [reservations, setReservations] = useState([]);
+  const [role, setRole] = useState('');
   const [error, setError] = useState('');
+  const [items, setItems] = useState({});
+  const [users, setUsers] = useState({});
+  const [stores, setStores] = useState({});
   const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setError('Please log in.');
-        navigate('/login');
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, navigate]);
+    const user = auth.currentUser;
+    if (!user) {
+      navigate('/login');
+      return;
+    }
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+    const fetchRoleAndReservations = async () => {
+      try {
+        const token = await user.getIdToken();
+        const roleResponse = await axios.post(
+          `${API_URL}/api/auth/getRole`,
+          { uid: user.uid },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const userRole = roleResponse.data.role || 'customer';
+        setRole(userRole);
+
+        const resResponse = await axios.get(
+          `${API_URL}/api/stores/reservations`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const resData = resResponse.data;
+        setReservations(resData);
+
+        if (resData.length === 0) return;
+
+        const itemPromises = resData.map((res) =>
+          axios
+            .get(`${API_URL}/api/items/${res.itemId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .catch(() => ({ data: { name: 'Unknown Item' } }))
+        );
+        const itemResponses = await Promise.all(itemPromises);
+        const itemMap = {};
+        itemResponses.forEach((resp, idx) => {
+          itemMap[resData[idx].itemId] = resp.data;
+        });
+        setItems(itemMap);
+
+        if (userRole === 'storeOwner') {
+          const userPromises = resData.map((res) =>
+            axios
+              .get(`${API_URL}/api/stores/users/${res.userId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .catch(() => ({ data: { displayName: 'Unknown User' } }))
+          );
+          const userResponses = await Promise.all(userPromises);
+          const userMap = {};
+          userResponses.forEach((resp, idx) => {
+            userMap[resData[idx].userId] = resp.data;
+          });
+          setUsers(userMap);
+        } else {
+          const storePromises = resData.map((res) =>
+            axios
+              .get(`${API_URL}/api/stores/${res.storeId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .catch(() => ({ data: { storeName: 'Unknown Store' } }))
+          );
+          const storeResponses = await Promise.all(storePromises);
+          const storeMap = {};
+          storeResponses.forEach((resp, idx) => {
+            storeMap[resData[idx].storeId] = resp.data;
+          });
+          setStores(storeMap);
+        }
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+        setError(
+          'Failed to load reservations: ' +
+            (err.response?.data?.error || err.message)
+        );
+      }
+    };
+
+    fetchRoleAndReservations();
+  }, [navigate]);
+
+  const handleUpdateStatus = async (reservationId, newStatus) => {
+    if (role !== 'storeOwner') return;
+    try {
+      const token = await auth.currentUser.getIdToken();
+      await axios.put(
+        `${API_URL}/api/stores/reservations/${reservationId}`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReservations((prev) =>
+        prev.map((res) =>
+          res.reservationId === reservationId
+            ? { ...res, status: newStatus }
+            : res
+        )
+      );
+    } catch (err) {
+      setError('Failed to update status: ' + err.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      setError('Failed to log out: ' + error.message);
+    }
+  };
 
   return (
-    <div className="reservations">
-      <HamburgerMenu />
+    <div className="store-reservations">
       <div className="layout-container">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => navigate('/store/home')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -46,8 +149,8 @@ export default function Reservations() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -55,26 +158,14 @@ export default function Reservations() {
             </svg>
             <p>Listings</p>
           </div>
-          <div className="sidebar-item" onClick={() => navigate('/analytics')}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-            </svg>
-            <p>Analytics</p>
-          </div>
           <div
             className="sidebar-item active"
             onClick={() => navigate('/store/reservations')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -84,12 +175,27 @@ export default function Reservations() {
           </div>
           <div
             className="sidebar-item"
+            onClick={() => navigate('/store/chats')}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
+            </svg>
+            <p>Chats</p>
+          </div>
+          <div
+            className="sidebar-item"
             onClick={() => navigate('/store/profile')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -97,31 +203,83 @@ export default function Reservations() {
             </svg>
             <p>Store Profile</p>
           </div>
+          <div className="sidebar-item" onClick={handleLogout}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M120,216a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H48V208h64A8,8,0,0,1,120,216Zm108.56-96.56-48-48A8,8,0,0,0,174.93,80H104a8,8,0,0,0,0,16h50.64l35.2,35.2a8,8,0,0,0,11.32,0l48-48A8,8,0,0,0,228.56,119.44Z"></path>
+            </svg>
+            <p>Logout</p>
+          </div>
         </div>
-        {/* Main Content */}
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '2rem',
-            textAlign: 'center',
-          }}
-        >
-          <h1
-            style={{
-              fontSize: '4rem',
-              fontWeight: 'bold',
-              marginBottom: '1rem',
-            }}
-          >
-            RESERVATIONS
-          </h1>
-          <p style={{ fontSize: '1.5rem', color: '#666' }}>
-            coming soon (promise)
-          </p>
+        <div className="content">
+          <h2>
+            {role === 'storeOwner' ? 'Store Reservations' : 'My Reservations'}
+          </h2>
+          {error && <div className="error">{error}</div>}
+          {reservations.length === 0 ? (
+            <p>
+              No reservations found.{' '}
+              {role === 'storeOwner'
+                ? 'Create a store to start receiving reservations.'
+                : 'Browse items to make a reservation.'}
+            </p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  {role === 'storeOwner' ? <th>Customer</th> : <th>Store</th>}
+                  <th>Status</th>
+                  <th>Reserved At</th>
+                  {role === 'storeOwner' && <th>Actions</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {reservations.map((res) => (
+                  <tr key={res.reservationId}>
+                    <td>{items[res.itemId]?.name || 'Loading...'}</td>
+                    {role === 'storeOwner' ? (
+                      <td>{users[res.userId]?.displayName || 'Loading...'}</td>
+                    ) : (
+                      <td>{stores[res.storeId]?.storeName || 'Loading...'}</td>
+                    )}
+                    <td>{res.status}</td>
+                    <td>
+                      {res.reservedAt
+                        ? new Date(
+                            res.reservedAt._seconds * 1000 +
+                              res.reservedAt._nanoseconds / 1e6
+                          ).toLocaleString()
+                        : 'N/A'}
+                    </td>
+                    {role === 'storeOwner' && (
+                      <td>
+                        <select
+                          value={res.status}
+                          onChange={(e) =>
+                            handleUpdateStatus(
+                              res.reservationId,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Confirmed">Confirmed</option>
+                          <option value="Cancelled">Cancelled</option>
+                          <option value="Completed">Completed</option>
+                        </select>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
-import HamburgerMenu from '../../components/HamburgerMenu';
+import { API_URL } from '../../api';
 import './StoreListings.css';
-import { API_URL } from '../../api'; // Import API_URL from api.js
 
 export default function StoreListings() {
   const [items, setItems] = useState([]);
@@ -18,14 +17,24 @@ export default function StoreListings() {
       if (user) {
         try {
           const token = await user.getIdToken();
-          const response = await axios.get(`${API_URL}/api/stores/items`, {
+          const storeResponse = await axios.get(`${API_URL}/api/my-store`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+          const storeId = storeResponse.data.storeId;
+          const response = await axios.get(
+            `${API_URL}/api/stores/${storeId}/items`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
           setItems(response.data);
         } catch (error) {
-          setError('Failed to fetch listings: ' + error.message);
-          if (error.response?.status === 400) {
+          console.error('Error fetching items:', error);
+          if (error.response?.status === 404) {
+            setError('No items found for this store.');
+          } else if (error.response?.status === 400) {
+            setError('Store profile not found. Please create a store.');
             navigate('/store/profile');
+          } else {
+            setError('Failed to fetch listings: ' + error.message);
           }
         }
       } else {
@@ -46,20 +55,28 @@ export default function StoreListings() {
     navigate(`/store/listings/edit/${itemId}`);
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      setError('Failed to log out: ' + error.message);
+    }
+  };
+
   if (error) {
     return <div className="error">{error}</div>;
   }
 
   return (
     <div className="store-listings">
-      <HamburgerMenu />
       <div className="layout-container">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => navigate('/store/home')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -73,8 +90,8 @@ export default function StoreListings() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -82,26 +99,14 @@ export default function StoreListings() {
             </svg>
             <p>Listings</p>
           </div>
-          <div className="sidebar-item" onClick={() => navigate('/analytics')}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-            </svg>
-            <p>Analytics</p>
-          </div>
           <div
             className="sidebar-item"
-            onClick={() => navigate('/reservations')}
+            onClick={() => navigate('/store/reservations')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -111,18 +116,45 @@ export default function StoreListings() {
           </div>
           <div
             className="sidebar-item"
+            onClick={() => navigate('/store/chats')}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
+            </svg>
+            <p>Chats</p>
+          </div>
+          <div
+            className="sidebar-item"
             onClick={() => navigate('/store/profile')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
               <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
             </svg>
             <p>Store Profile</p>
+          </div>
+          <div className="sidebar-item" onClick={handleLogout}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M120,216a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H48V208h64A8,8,0,0,1,120,216Zm108.56-96.56-48-48A8,8,0,0,0,174.93,80H104a8,8,0,0,0,0,16h50.64l35.2,35.2a8,8,0,0,0,11.32,0l48-48A8,8,0,0,0,228.56,119.44Z"></path>
+            </svg>
+            <p>Logout</p>
           </div>
         </div>
         <div className="content">
@@ -135,8 +167,8 @@ export default function StoreListings() {
           <label className="search-bar">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -153,9 +185,9 @@ export default function StoreListings() {
               <thead>
                 <tr>
                   <th>Item</th>
-                  <th>Department</th> {/* Added */}
+                  <th>Department</th>
                   <th>Category</th>
-                  <th>Style</th> {/* Added */}
+                  <th>Style</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -171,9 +203,9 @@ export default function StoreListings() {
                         <div className="no-image">No Image</div>
                       )}
                     </td>
-                    <td>{item.department || 'N/A'}</td> {/* Added */}
+                    <td>{item.department || 'N/A'}</td>
                     <td>{item.category || 'N/A'}</td>
-                    <td>{item.style || 'N/A'}</td> {/* Added */}
+                    <td>{item.style || 'N/A'}</td>
                     <td>{`R${Number(item.price).toFixed(2)}`}</td>
                     <td>
                       <button className="status-button">{item.status}</button>

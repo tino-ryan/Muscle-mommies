@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import React, { useState, useEffect } from 'react';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
-import HamburgerMenu from '../../components/HamburgerMenu';
-import './StoreProfile.css';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../api';
+import './StoreProfile.css';
 
 export default function StoreProfile() {
   const [store, setStore] = useState({
@@ -17,6 +17,8 @@ export default function StoreProfile() {
   const [newContact, setNewContact] = useState({ type: 'email', value: '' });
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true); // Add loading state
+  // eslint-disable-next-line no-unused-vars
   const [storeId, setStoreId] = useState(null);
   const [addressSearch, setAddressSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -24,41 +26,60 @@ export default function StoreProfile() {
   const [profileImage, setProfileImage] = useState(null);
   const auth = getAuth();
   const navigate = useNavigate();
-  const API_URL = 'http://localhost:3000';
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
+          setLoading(true);
           const token = await user.getIdToken();
-          const storeResponse = await axios.get(
-            `${API_URL}/api/stores/my-store`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
+          const storeResponse = await axios.get(`${API_URL}/api/my-store`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           if (storeResponse.data.storeId) {
             setStoreId(storeResponse.data.storeId);
-            setStore(storeResponse.data);
-            const contactResponse = await axios.get(
-              `${API_URL}/api/stores/contact-infos`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-            setContactInfos(contactResponse.data);
+            setStore({
+              storeName: storeResponse.data.storeName || '',
+              description: storeResponse.data.description || '',
+              address: storeResponse.data.address || '',
+              location: storeResponse.data.location || { lat: '', lng: '' },
+              profileImageURL: storeResponse.data.profileImageURL || '',
+            });
+            setEditing(false);
+            setError('');
+            try {
+              const contactResponse = await axios.get(
+                `${API_URL}/api/stores/contact-infos`,
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+              setContactInfos(contactResponse.data || []);
+            } catch (contactError) {
+              console.error('Fetch contact infos error:', contactError.message);
+              setContactInfos([]);
+            }
           } else {
-            setEditing(true); // Prompt setup if no store
+            setEditing(true);
+            setError('No store found. Please create your store profile.');
           }
         } catch (error) {
           console.error(
             'Fetch store error:',
             error.response?.data || error.message
           );
-          setError(
-            'Failed to fetch store: ' +
-              (error.response?.data?.error || error.message)
-          );
+          if (
+            error.response?.status === 400 &&
+            error.response?.data?.error === 'Store not found'
+          ) {
+            setEditing(true);
+            setError('No store found. Please create your store profile.');
+          } else {
+            setError(
+              'Failed to fetch store: ' +
+                (error.response?.data?.error || error.message)
+            );
+          }
+        } finally {
+          setLoading(false);
         }
       } else {
         setError('Please log in to view your store.');
@@ -79,9 +100,7 @@ export default function StoreProfile() {
 
   const handleAddressSearch = async () => {
     if (!addressSearch.trim()) {
-      setError(
-        'Please enter house number, street name, suburb, and city (e.g., 123 Main St, Rondebosch, Cape Town).'
-      );
+      setError('Please enter house number, street name, suburb, and city.');
       return;
     }
     setIsSearching(true);
@@ -98,19 +117,15 @@ export default function StoreProfile() {
             limit: 5,
             countrycodes: 'ZA',
           },
-          headers: {
-            'User-Agent': 'MuscleMommies/1.0 (contact@example.com)',
-          },
+          headers: { 'User-Agent': 'MuscleMommies/1.0 (contact@example.com)' },
         }
       );
       if (response.data.length > 0) {
         const options = response.data.map((result) => ({
           display: `${
             result.address.house_number ? result.address.house_number + ' ' : ''
-          }${result.address.road || result.address.street || 'Unknown Street'}, ${
-            result.address.suburb ||
-            result.address.neighbourhood ||
-            'Unknown Suburb'
+          }${result.address.road || 'Unknown Street'}, ${
+            result.address.suburb || 'Unknown Suburb'
           }, ${result.address.city || result.address.town || 'Unknown City'}`,
           fullAddress: result.display_name,
           lat: result.lat,
@@ -121,10 +136,6 @@ export default function StoreProfile() {
         setError('No results found for the address. Please try again.');
       }
     } catch (error) {
-      console.error(
-        'Address search error:',
-        error.response?.data || error.message
-      );
       setError(
         'Failed to search address: ' +
           (error.response?.data?.error || error.message)
@@ -168,10 +179,6 @@ export default function StoreProfile() {
       setContactInfos([...contactInfos, response.data]);
       setNewContact({ type: 'email', value: '' });
     } catch (error) {
-      console.error(
-        'Add contact error:',
-        error.response?.data || error.message
-      );
       setError(
         'Failed to add contact: ' +
           (error.response?.data?.error || error.message)
@@ -189,10 +196,6 @@ export default function StoreProfile() {
         contactInfos.filter((contact) => contact.id !== contactId)
       );
     } catch (error) {
-      console.error(
-        'Delete contact error:',
-        error.response?.data || error.message
-      );
       setError(
         'Failed to delete contact: ' +
           (error.response?.data?.error || error.message)
@@ -224,6 +227,7 @@ export default function StoreProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
     if (!store.storeName.trim()) {
       setError('Store name is required.');
       return;
@@ -236,13 +240,16 @@ export default function StoreProfile() {
       setError('Please search and select an address to set location.');
       return;
     }
+
     try {
+      setLoading(true);
       const token = await auth.currentUser?.getIdToken();
       let profileImageURL = store.profileImageURL;
+
       if (profileImage) {
         const formData = new FormData();
         formData.append('profileImage', profileImage);
-        const response = await axios.post(
+        const uploadResponse = await axios.post(
           `${API_URL}/api/stores/upload-image`,
           formData,
           {
@@ -252,50 +259,70 @@ export default function StoreProfile() {
             },
           }
         );
-        profileImageURL = response.data.imageURL;
+        profileImageURL = uploadResponse.data.imageURL;
       }
+
       const storeData = {
         storeName: store.storeName,
-        description: store.description,
-        address: store.address,
-        location: JSON.stringify(store.location), // Send as JSON string
-        profileImageURL,
+        description: store.description || '',
+        address: store.address || '',
+        location: JSON.stringify(store.location),
+        profileImageURL: profileImageURL || '',
       };
+
       const storeResponse = await axios.post(
         `${API_URL}/api/stores`,
         storeData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setStoreId(storeResponse.data.storeId);
-      setStore(storeResponse.data);
+      setStore({
+        storeName: storeResponse.data.storeName,
+        description: storeResponse.data.description,
+        address: storeResponse.data.address,
+        location: storeResponse.data.location,
+        profileImageURL: storeResponse.data.profileImageURL,
+      });
+
       if (newContact.value) await addContact();
       setEditing(false);
-      alert('Store updated successfully!');
+      setProfileImage(null);
+      setError('');
+      alert('Store created successfully!');
     } catch (error) {
       console.error('Submit error:', error.response?.data || error.message);
       setError(
-        'Failed to update store: ' +
+        'Failed to create store: ' +
           (error.response?.data?.error || error.message)
       );
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (error) {
-    return <div className="error">{error}</div>;
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      setError('Failed to log out: ' + error.message);
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
   }
 
   return (
     <div className="store-profile">
-      <HamburgerMenu />
       <div className="layout-container">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => navigate('/store/home')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -309,8 +336,8 @@ export default function StoreProfile() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -318,26 +345,14 @@ export default function StoreProfile() {
             </svg>
             <p>Listings</p>
           </div>
-          <div className="sidebar-item" onClick={() => navigate('/analytics')}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-            </svg>
-            <p>Analytics</p>
-          </div>
           <div
             className="sidebar-item"
             onClick={() => navigate('/store/reservations')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -346,13 +361,28 @@ export default function StoreProfile() {
             <p>Reservations</p>
           </div>
           <div
+            className="sidebar-item"
+            onClick={() => navigate('/store/chats')}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
+            </svg>
+            <p>Chats</p>
+          </div>
+          <div
             className="sidebar-item active"
             onClick={() => navigate('/store/profile')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
+              width="24"
+              height="24"
               fill="currentColor"
               viewBox="0 0 256 256"
             >
@@ -360,11 +390,24 @@ export default function StoreProfile() {
             </svg>
             <p>Store Profile</p>
           </div>
+          <div className="sidebar-item" onClick={handleLogout}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M120,216a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H48V208h64A8,8,0,0,1,120,216Zm108.56-96.56-48-48A8,8,0,0,0,174.93,80H104a8,8,0,0,0,0,16h50.64l35.2,35.2a8,8,0,0,0,11.32,0l48-48A8,8,0,0,0,228.56,119.44Z"></path>
+            </svg>
+            <p>Logout</p>
+          </div>
         </div>
         <div className="content">
+          {error && <div className="error">{error}</div>}
           {editing ? (
             <form onSubmit={handleSubmit} className="store-form">
-              <h2>{storeId ? 'Edit Store' : 'Create Store'}</h2>
+              <h2>Create Store</h2>
               <input
                 type="text"
                 name="storeName"
@@ -467,7 +510,9 @@ export default function StoreProfile() {
                   Add
                 </button>
               </div>
-              <button type="submit">Save</button>
+              <button type="submit" disabled={loading}>
+                {loading ? 'Saving...' : 'Save'}
+              </button>
             </form>
           ) : (
             <div className="store-display">

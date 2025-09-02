@@ -1,0 +1,193 @@
+/* src/pages/customer/home/home.css */
+.customer-home {
+  display: flex;
+  background-color: #fcf8f8;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.content-container {
+  margin-left: 150px; /* Match sidebar width */
+  padding: 20px;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1b0e0e;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.controls {
+  background-color: #f3e7e8;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.location-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-indicator.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-indicator.loading {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-indicator.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.distance-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.distance-selector label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1b0e0e;
+}
+
+.distance-selector select {
+  padding: 6px 12px;
+  background-color: white;
+  border: 1px solid #e7d0d1;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.main-layout {
+  display: flex;
+  gap: 20px;
+  height: 60vh;
+}
+
+.map-container {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e7d0d1;
+}
+
+.store-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #e7d0d1;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.store-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #e7d0d1;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.store-card:hover {
+  background-color: #f3e7e8;
+}
+
+.store-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.store-info {
+  flex: 1;
+}
+
+.store-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1b0e0e;
+}
+
+.address {
+  font-size: 14px;
+  color: #994d51;
+}
+
+.description {
+  font-size: 12px;
+  color: #1b0e0e;
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.distance {
+  font-size: 14px;
+  font-weight: 500;
+  color: #994d51;
+  margin-top: 4px;
+  display: block;
+}
+
+.no-stores {
+  padding: 20px;
+  color: #994d51;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    margin-left: 0;
+    padding: 10px;
+  }
+  .main-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  .map-container {
+    height: 300px;
+  }
+  .store-list {
+    max-height: none;
+  }
+}

@@ -1,42 +1,106 @@
 .store-home {
+  display: flex;
+  flex-direction: column;
+  background-color: #fcf8f8;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  min-height: 100vh;
   padding: 20px;
+  align-items: center;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  max-width: 960px;
+  width: 100%;
   text-align: center;
 }
 
-.options {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1b0e0e;
+  margin-bottom: 30px;
 }
 
-.options button {
-  padding: 15px 30px;
+p {
+  font-size: 16px;
+  color: #1b0e0e;
+  margin-bottom: 20px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e7d0d1;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card svg {
+  width: 32px;
+  height: 32px;
+  color: #994d51;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1b0e0e;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #666;
+}
+
+button {
+  padding: 10px 20px;
   background-color: #2E86DE;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
 }
 
-.store-setup-prompt {
-  padding: 40px;
+button:hover {
+  background-color: #2567b8;
+}
+
+.error {
+  padding: 20px;
+  color: #994d51;
   text-align: center;
 }
 
-.store-setup-prompt button {
-  padding: 15px 30px;
-  background-color: #2E86DE;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.loading, .error {
+.loading {
   padding: 20px;
   text-align: center;
-  font-size: 18px;
+  color: #1b0e0e;
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
 }

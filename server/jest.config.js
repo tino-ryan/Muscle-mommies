@@ -1,11 +1,12 @@
 module.exports = {
   testEnvironment: 'node',
   collectCoverageFrom: [
-    '**/*.js', // all JS files in the server folder
-    '!index.js', // ignore entry point if needed
-    '!**/__tests__/**', // ignore test files
+    '**/*.js',
+    '!index.js',
+    '!**/__tests__/**',
+    '!**/__mocks__/**',
   ],
-  coverageDirectory: './coverage', // optional, default
+  coverageDirectory: './coverage',
   coverageThreshold: {
     global: {
       branches: 0,
@@ -13,5 +14,8 @@ module.exports = {
       lines: 0,
       statements: 0,
     },
+  },
+  moduleNameMapper: {
+    '^firebase-admin$': '<rootDir>/__mocks__/firebase.js',
   },
 };

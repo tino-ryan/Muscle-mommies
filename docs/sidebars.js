@@ -25,6 +25,10 @@ const sidebars = {
     'initial-design',
     'development-plan',
     'project-management',
+    'third-party-code',
+    'api-documentation',
+    'database-documentation',
+    'user-feedback',
   ],
 };
 

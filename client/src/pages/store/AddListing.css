@@ -1,5 +1,6 @@
 .add-listing {
   display: flex;
+  flex-direction: column;
   background-color: #fcf8f8;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
@@ -8,81 +9,100 @@
 .layout-container {
   display: flex;
   flex: 1;
-  padding: 20px;
 }
 
 .sidebar {
   width: 250px;
-  padding: 20px;
+  background-color: #ffffff;
   border-right: 1px solid #e7d0d1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
+  gap: 10px;
+  padding: 10px;
   cursor: pointer;
-  color: #1b0e0e;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: #f4e8e9;
 }
 
 .sidebar-item.active {
-  background-color: #f3e7e8;
-  border-radius: 8px;
+  background-color: #e7d0d1;
+  color: #994d51;
 }
 
 .sidebar-item svg {
   width: 24px;
   height: 24px;
+  color: #994d51;
 }
 
 .sidebar-item p {
-  font-size: 14px;
-  font-weight: 500;
+  margin: 0;
+  font-size: 16px;
+  color: #1b0e0e;
 }
 
 .content {
   flex: 1;
   padding: 20px;
   max-width: 960px;
+  width: 100%;
 }
 
-.item-form {
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1b0e0e;
+  margin-bottom: 20px;
+}
+
+.add-listing-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 600px;
-  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #e7d0d1;
+  border-radius: 8px;
 }
 
-.item-form h2 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1b0e0e;
-}
-
-.item-form input,
-.item-form textarea,
-.item-form select {
+.add-listing-form input,
+.add-listing-form textarea,
+.add-listing-form select {
   padding: 10px;
   border: 1px solid #e7d0d1;
   border-radius: 8px;
   font-size: 16px;
-  color: #1b0e0e;
 }
 
-.item-form textarea {
+.add-listing-form textarea {
+  resize: vertical;
   min-height: 100px;
 }
 
-.item-form button {
-  padding: 10px;
+.add-listing-form button {
+  padding: 10px 20px;
   background-color: #2E86DE;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 500;
+}
+
+.add-listing-form button:hover {
+  background-color: #2567b8;
 }
 
 .error {
@@ -100,9 +120,5 @@
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #e7d0d1;
-  }
-
-  .content {
-    width: 100%;
   }
 }

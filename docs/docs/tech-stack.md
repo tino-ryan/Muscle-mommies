@@ -1,4 +1,4 @@
-# Tech Stack and Setup
+# Tech Stack
 
 Our application uses the following technologies:
 
@@ -25,14 +25,3 @@ Our application uses the following technologies:
   - We use Jest for unit and integration testing to make sure our code works as expected.
   - It’s easy to set up with JavaScript and gives quick feedback when tests fail.
   - **Resources**: [Jest Documentation](https://jestjs.io/docs/getting-started)
-
-## Local Setup
-
-To run the app locally:
-
-```bash
-git clone https://github.com/your-org/your-repo
-cd your-repo
-npm install
-npm start
-```

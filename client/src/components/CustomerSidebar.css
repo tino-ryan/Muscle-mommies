@@ -1,0 +1,45 @@
+/* src/components/CustomerSidebar.css */
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  border-right: 1px solid #e7d0d1;
+  background-color: #fcf8f8;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #1b0e0e;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: #f3e7e8;
+  border-radius: 8px;
+}
+
+.sidebar-item.active {
+  background-color: #f3e7e8;
+  border-radius: 8px;
+  color: #1b88e5;
+}
+
+.sidebar-item svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sidebar-item p {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
