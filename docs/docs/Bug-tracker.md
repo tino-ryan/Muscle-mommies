@@ -25,7 +25,7 @@ The ThriftFinder project began with the adoption of Notion as our primary bug tr
 | Update item stop working  | High         | Tino     | Aimee       | 25/08/2025   | 27/08/2025   | Update item functionality is unresponsive | Store Creation | Production |
 | Items wasn't working      | Medium       | Laaiqah  | Mosey       | 28/08/2025   | 30/08/2025   | Items page fails to load any listings    | Item Detail   | Locally    |
 | Firebase auth token mismatch | High      | Aimee    | Yuri        | 30/08/2025   | 01/09/2025   | Token mismatch causing login failures    | Authentication | Production |
-| Map is not loading        | High         | Aimee    | Yuri        | 30/09/2025   | 30/09/2025   | The map for finding store is not loading when I run it on my side | Customer/Home | Locally    |
+| Map is not loading        | High         | Aimee    | Yuri        | 30/08/2025   | 30/08/2025   | The map for finding store is not loading when I run it on my side | Customer/Home | Locally    |
 | sidebar chat overlap       | Medium       | Mosey    | Tino        | 01/08/2025   | 01/08/2025   | siderbar drawer overlaps with the chat page on the customers side | Cart Drawer | Production |
 | Store profile not uploading | Medium       | Tino     | Mosey       | 01/09/2025   |  01/09/2025 | Name says it all                        | Store Creation | Locally    |
 | Some filters not working  | Low          | Laaiqah  | Mosey       | 02/09/2025   |   02/09/2025  | Filters not working consistently         | Customer/Store | Locally    |
