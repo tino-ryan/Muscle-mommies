@@ -19,7 +19,8 @@ To gather user feedback for our project, we used the following method:
 - To validate and refine our concept before development progresses further.
 
 ### 4. Data Collection
-- watch this space
+- You can find the user feedback for this sprint below
+[Sprint 2 User Feedback](\pdf\Thriftfinder - User Feedback (Responses).pdf)
 
 ## Why this method?
 - Quick and cost-effective way to gather early feedback.
