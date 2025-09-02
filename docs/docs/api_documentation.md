@@ -7,7 +7,7 @@ The ThriftFinder External API provides access to thrift store data and photo jou
 - Retrieve thrift store details to use as quest locations or advertisements, exposing thrift stores to a broader audience.
 - Manage user photo journals by uploading and retrieving photos, stored via Cloudinary and tracked in Firestore.
 
-The API is hosted at `http://localhost:3000/external` (update to production URL when deployed). It includes two main endpoint groups: **Stores** and **Photos**.
+The API is hosted at `https://muscle-mommies-server.onrender.com/external` (update to production URL when deployed). It includes two main endpoint groups: **Stores** and **Photos**.
 
 ## Authentication
 
@@ -29,7 +29,7 @@ Retrieves a list of all thrift stores from the ThriftFinder database. This can b
 #### Request
 
 - **Method**: GET
-- **URL**: `http://localhost:3000/external/stores`
+- **URL**: `https://muscle-mommies-server.onrender.com/external/stores`
 - **Headers**: None
 - **Query Parameters**: None
 - **Body**: None
@@ -39,13 +39,13 @@ Retrieves a list of all thrift stores from the ThriftFinder database. This can b
 Using cURL:
 
 ```bash
-curl http://localhost:3000/external/stores
+curl https://muscle-mommies-server.onrender.com/external/stores
 ```
 
 Using JavaScript (Fetch):
 
 ```javascript
-fetch('http://localhost:3000/external/stores')
+fetch('https://muscle-mommies-server.onrender.com/external/stores')
   .then((response) => response.json())
   .then((data) => console.log(data))
   .catch((error) => console.error(error));
@@ -99,7 +99,7 @@ Uploads a photo to Cloudinary for use in Campus Quest’s user photo journals (e
 #### Request
 
 - **Method**: POST
-- **URL**: `http://localhost:3000/external/upload`
+- **URL**: `https://muscle-mommies-server.onrender.com/external/upload`
 - **Headers**:
   - `x-api-key: your-secure-api-key` (required)
   - `Content-Type: multipart/form-data`
@@ -112,14 +112,14 @@ Uploads a photo to Cloudinary for use in Campus Quest’s user photo journals (e
 Using cURL:
 
 ```bash
-curl -X POST http://localhost:3000/external/upload \
+curl -X POST https://muscle-mommies-server.onrender.com/external/upload \
   -H "x-api-key: my-unique-secret-key-123" \
   -F "image=@/path/to/your/image.jpg"
 ```
 
 Using Postman:
 
-1. Set request type to POST and URL to `http://localhost:3000/external/upload`.
+1. Set request type to POST and URL to `https://muscle-mommies-server.onrender.com/external/upload`.
 2. In "Headers", add `x-api-key: my-unique-secret-key-123`.
 3. In "Body", select `form-data`, add key `image` (type: File), and select an image file.
 4. Send the request.
@@ -153,7 +153,7 @@ Retrieves a list of all photo metadata from the `externalImages` collection, use
 #### Request
 
 - **Method**: GET
-- **URL**: `http://localhost:3000/external/photos`
+- **URL**: `http://muscle-mommies-server.onrender.com/external/photos`
 - **Headers**:
   - `x-api-key: your-secure-api-key` (required)
 - **Query Parameters**: None
@@ -164,13 +164,13 @@ Retrieves a list of all photo metadata from the `externalImages` collection, use
 Using cURL:
 
 ```bash
-curl http://localhost:3000/external/photos -H "x-api-key: my-unique-secret-key-123"
+curl http://muscle-mommies-server.onrender.com/external/photos -H "x-api-key: my-unique-secret-key-123"
 ```
 
 Using JavaScript (Fetch):
 
 ```javascript
-fetch('http://localhost:3000/external/photos', {
+fetch('http://muscle-mommies-server.onrender.com/external/photos', {
   headers: { 'x-api-key': 'my-unique-secret-key-123' },
 })
   .then((response) => response.json())
@@ -241,7 +241,7 @@ fetch('http://localhost:3000/external/photos', {
   - Use the example commands provided.
   - Ensure the correct file path for uploads (e.g., `/path/to/your/image.jpg`).
 - **Browser** (for GET requests):
-  - Visit `http://localhost:3000/external/stores` directly (no API key needed).
+  - Visit `http://muscle-mommies-server.onrender.com/external/stores` directly (no API key needed).
   - For `/external/photos`, include the API key in a custom client or use Postman/cURL.
 
 ### Test Cases
@@ -262,5 +262,5 @@ fetch('http://localhost:3000/external/photos', {
 
 - **Security**: The API key for photos endpoints must be kept confidential. Contact the ThriftFinder team to rotate or regenerate keys if needed.
 - **Rate Limits**: Currently, no rate limits are enforced, but avoid excessive requests. Discuss with the ThriftFinder team for production scaling.
-- **Production URL**: Replace `http://localhost:3000` with the production URL when deployed.
+- **Production URL**: Replace `http://muscle-mommies-server.onrender.com` with the production URL when deployed.
 - **Contact**: For issues or additional features (e.g., filtering stores by location, linking photos to specific quests), reach out to the ThriftFinder team.
