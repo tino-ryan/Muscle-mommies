@@ -1,8 +1,18 @@
 const admin = require('firebase-admin');
+const uuid = require('uuid');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 const Item = require('../models/itemModel');
 
 const db = admin.firestore();
 const itemsRef = db.collection('items');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // GET all items
 const getItems = async (req, res) => {
@@ -10,7 +20,6 @@ const getItems = async (req, res) => {
     const snapshot = await itemsRef.get();
     const items = snapshot.docs.map((doc) => {
       const data = doc.data();
-
       return new Item({
         itemId: data.itemId || doc.id,
         name: data.name,
@@ -28,7 +37,6 @@ const getItems = async (req, res) => {
         updatedAt: data.updatedAt,
       });
     });
-
     res.json(items);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -128,39 +136,111 @@ const searchItems = async (req, res) => {
 // POST new item
 const createItem = async (req, res) => {
   try {
+    const userId = req.user.uid; // From authMiddleware
     const {
       name,
-      storeId,
+      description,
       category,
-      style,
       department,
+      style,
+      size,
       price,
       quantity,
-      size,
-      description,
-      images,
-    } = req.body;
+      status,
+    } = req.body; // Fields from FormData
+    const images = req.files || []; // Files from multer
 
-    const newItem = {
-      name,
+    // Validate required fields
+    if (!name || !price || !quantity) {
+      return res
+        .status(400)
+        .json({ error: 'Missing required fields: name, price, quantity' });
+    }
+
+    // Validate store ownership
+    const storeRef = db.collection('stores').where('ownerId', '==', userId);
+    const storeSnapshot = await storeRef.get();
+    if (storeSnapshot.empty) {
+      return res.status(400).json({ error: 'Store not found' });
+    }
+    const storeId = storeSnapshot.docs[0].id;
+
+    // Parse and validate numeric fields
+    const parsedPrice = parseFloat(price);
+    const parsedQuantity = parseInt(quantity);
+    if (isNaN(parsedPrice) || isNaN(parsedQuantity)) {
+      return res
+        .status(400)
+        .json({ error: 'Price and quantity must be valid numbers' });
+    }
+
+    // Handle image uploads to Cloudinary
+    const imageURLs = [];
+    for (const file of images) {
+      try {
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: 'muscle-mommies',
+        });
+        const imageId = uuid.v4();
+        await db
+          .collection('itemImages')
+          .doc(imageId)
+          .set({
+            imageId,
+            itemId: null, // Will be updated after item creation
+            imageURL: result.secure_url,
+            isPrimary: imageURLs.length === 0, // Set first image as primary
+          });
+        imageURLs.push({
+          imageId,
+          imageURL: result.secure_url,
+          isPrimary: imageURLs.length === 0,
+        });
+        fs.unlinkSync(file.path); // Clean up temporary file
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({
+          error: 'Failed to upload image',
+          details: uploadError.message,
+        });
+      }
+    }
+
+    // Create new item
+    const itemData = {
+      itemId: uuid.v4(), // Generate unique itemId
       storeId,
-      category,
-      style,
-      department,
-      price: parseFloat(price),
-      quantity: parseInt(quantity),
-      size,
-      status: 'Available',
-      description,
-      images: images || [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      name,
+      description: description || '',
+      category: category || '',
+      department: department || '',
+      style: style || '',
+      size: size || '',
+      price: parsedPrice,
+      quantity: parsedQuantity,
+      status: status || 'Available',
+      images: imageURLs,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
-    const docRef = await itemsRef.add(newItem);
-    res.status(201).json({ itemId: docRef.id, ...newItem });
+    // Save item to Firestore
+    // eslint-disable-next-line no-unused-vars
+    const docRef = await itemsRef.doc(itemData.itemId).set(itemData);
+
+    // Update itemId in itemImages collection
+    for (const image of imageURLs) {
+      await db.collection('itemImages').doc(image.imageId).update({
+        itemId: itemData.itemId,
+      });
+    }
+
+    res.status(201).json({ itemId: itemData.itemId, ...itemData });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error creating item:', err);
+    res
+      .status(500)
+      .json({ error: 'Failed to create item', details: err.message });
   }
 };
 
@@ -169,5 +249,4 @@ module.exports = {
   getItemsByStore,
   searchItems,
   createItem,
-  // Removed: getItemById (moved to storeController)
 };

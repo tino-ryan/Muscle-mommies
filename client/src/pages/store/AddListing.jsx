@@ -34,6 +34,14 @@ export default function AddListing() {
 
   const handleItemChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'price' && value !== '' && parseFloat(value) <= 0) {
+      setError('Price must be a positive number.');
+      return;
+    }
+    if (name === 'quantity' && value !== '' && parseInt(value) <= 0) {
+      setError('Quantity must be a positive whole number.');
+      return;
+    }
     setItem((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -44,8 +52,22 @@ export default function AddListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!item.name || !item.price || !item.quantity) {
-      setError('Name, price, and quantity are required.');
+    if (
+      !item.name ||
+      !item.price ||
+      !item.quantity ||
+      !item.category ||
+      !item.department
+    ) {
+      setError('Name, price, quantity, category, and department are required.');
+      return;
+    }
+    if (parseFloat(item.price) <= 0) {
+      setError('Price must be a positive number.');
+      return;
+    }
+    if (parseInt(item.quantity) <= 0) {
+      setError('Quantity must be a positive whole number.');
       return;
     }
     try {
@@ -194,49 +216,76 @@ export default function AddListing() {
               onChange={handleItemChange}
               placeholder="Description"
             />
-            <input
-              type="text"
+            <select
               name="category"
               value={item.category}
               onChange={handleItemChange}
-              placeholder="Category (e.g., Dresses)"
-            />
-            <input
-              type="text"
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="tops">Tops</option>
+              <option value="shirts">Shirts</option>
+              <option value="pants">Pants</option>
+              <option value="dresses">Dresses</option>
+              <option value="footwear">Footwear</option>
+              <option value="skirts">Skirts</option>
+              <option value="accessories">Accessories</option>
+            </select>
+            <select
               name="department"
               value={item.department}
               onChange={handleItemChange}
-              placeholder="Department (e.g., Women's)"
-            />
+              required
+            >
+              <option value="">Select Department</option>
+              <option value="women's">Women&apos;s</option>
+              <option value="men's">Men&apos;s</option>
+              <option value="children">Children</option>
+              <option value="unisex">Unisex</option>
+            </select>
             <input
               type="text"
               name="style"
               value={item.style}
               onChange={handleItemChange}
-              placeholder="Style (e.g., Casual)"
+              placeholder="Style (e.g., y2k, grunge)"
             />
-            <input
-              type="text"
-              name="size"
-              value={item.size}
-              onChange={handleItemChange}
-              placeholder="Size (e.g., M, 8)"
-            />
-            <input
-              type="number"
-              name="price"
-              value={item.price}
-              onChange={handleItemChange}
-              placeholder="Price (e.g., 100)"
-              step="0.01"
-              required
-            />
+            <select name="size" value={item.size} onChange={handleItemChange}>
+              <option value="">Select Size (optional)</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+            </select>
+            <div className="price-input-container">
+              <span className="currency-label">R</span>
+              <input
+                type="number"
+                name="price"
+                value={item.price}
+                onChange={handleItemChange}
+                placeholder="Price"
+                step="0.01"
+                min="0.01"
+                required
+              />
+            </div>
             <input
               type="number"
               name="quantity"
               value={item.quantity}
               onChange={handleItemChange}
               placeholder="Quantity"
+              step="1"
+              min="1"
               required
             />
             <select

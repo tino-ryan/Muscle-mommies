@@ -30,7 +30,7 @@ const sidebars = {
     'database_documentation',
     'user-feedback',
     'Bug-tracker',
-   'TestingDocumentation'
+    'TestingDocumentation',
   ],
 };
 

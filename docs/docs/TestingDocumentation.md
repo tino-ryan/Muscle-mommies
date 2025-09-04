@@ -7,6 +7,7 @@ Our project employs a robust testing strategy to ensure the reliability and qual
 ## Test Structure
 
 ### Client-Side Tests
+
 - **Location**: `client/src/__tests__` and `client/src/components/__tests__`
 - **Purpose**: Validates the functionality and rendering of React components and UI interactions.
 - **Key Test Files**:
@@ -17,6 +18,7 @@ Our project employs a robust testing strategy to ensure the reliability and qual
 - **Coverage**: The client-side tests achieve an impressive 47.05% statement coverage in the `src` directory, with key files like `Button.jsx` and `admin/Dashboard.jsx` achieving 100% coverage. While some pages (e.g., `ChatWindow.jsx`, `Login.jsx`) are not fully covered due to their complexity, they are prioritized for future test expansion to maintain our high-quality standards.
 
 ### Server-Side Tests
+
 - **Location**: `server/__tests__`
 - **Purpose**: Validates API endpoints, controllers, models, and utility functions to ensure robust backend functionality.
 - **Key Test Files**:
@@ -29,13 +31,17 @@ Our project employs a robust testing strategy to ensure the reliability and qual
 - **Coverage**: The server-side tests achieve a solid 4.88% overall statement coverage, with critical files like `store.js`, `utils.js`, and `authRoutes.js` reaching 100% coverage. Some controllers (e.g., `storeController.js`) have lower coverage due to their extensive functionality, but these are strategically excluded from remote branches to avoid deployment blockers while maintaining core reliability.
 
 ## Running Tests
+
 Tests are executed using the following command in both `client` and `server` directories:
+
 ```bash
 npm run test:coverage
 ```
+
 This command runs Jest with coverage reporting, generating detailed coverage reports in `client/coverage/lcov.info` and `server/coverage/lcov.info`. The coverage data is automatically uploaded to Codecov for analysis, providing clear insights into tested and untested code paths.
 
 ## Continuous Integration
+
 Our testing pipeline is integrated with GitHub Actions, defined in the `.github/workflows/test.yml` workflow. Tests run automatically on every push or pull request to the `main` or `dev` branches, ensuring immediate feedback on code changes. The workflow includes:
 
 - **Frontend Tests**:
@@ -54,12 +60,15 @@ Our testing pipeline is integrated with GitHub Actions, defined in the `.github/
 The workflow ensures that all commits are rigorously tested, maintaining our commitment to code quality. Some tests (e.g., `storeRoutes.test.js`, `storeController.test.js`) are excluded from remote branches to prevent deployment blockers, as they cover complex functionality still under development. These tests are run locally to guide ongoing improvements without impacting production deployments.
 
 ## Test Quality and Benefits
+
 Our test suite is exceptionally reliable, achieving 100% coverage in critical areas like `Button.jsx`, `admin/Dashboard.jsx`, `store.js`, `utils.js`, and `authRoutes.js`. This ensures that core UI components, administrative interfaces, and authentication APIs are thoroughly validated, reducing the risk of regressions. The use of Jest’s robust mocking capabilities (e.g., for `firebase-admin`, `multer`, and controllers) isolates dependencies, making tests fast and deterministic. Codecov integration provides actionable insights, allowing us to prioritize uncovered areas like `storeController.js` and `ChatWindow.jsx` for future enhancements.
 
 By running tests automatically on every commit, we catch issues early, reducing debugging time and ensuring a seamless user experience. The strategic exclusion of certain tests from remote branches balances development speed with stability, allowing us to deploy confidently while iteratively improving test coverage.
 
 ## Local Development
+
 To run tests locally:
+
 1. Navigate to the `client` or `server` directory:
    ```bash
    cd client
@@ -74,10 +83,12 @@ To run tests locally:
    ```bash
    npm run test:coverage
    ```
-This generates coverage reports locally, mirroring the CI pipeline’s behavior.
+   This generates coverage reports locally, mirroring the CI pipeline’s behavior.
 
 ## Future Improvements
+
 While our test suite is outstanding, we plan to:
+
 - Increase coverage for complex components like `ChatWindow.jsx` and `storeController.js`.
 - Add end-to-end tests using tools like Cypress to complement Jest’s unit and integration tests.
 - Refine mocks for `multer` and `firebase-admin` to support more dynamic test scenarios.

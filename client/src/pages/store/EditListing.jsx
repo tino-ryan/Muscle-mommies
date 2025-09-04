@@ -6,8 +6,6 @@ import HamburgerMenu from '../../components/HamburgerMenu';
 import './EditListing.css';
 import { API_URL } from '../../api';
 
-// ... rest of the file remains unchanged ...
-
 export default function EditListing() {
   const [item, setItem] = useState({
     name: '',
@@ -61,6 +59,14 @@ export default function EditListing() {
 
   const handleItemChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'price' && value !== '' && parseFloat(value) <= 0) {
+      setError('Price must be a positive number.');
+      return;
+    }
+    if (name === 'quantity' && value !== '' && parseInt(value) <= 0) {
+      setError('Quantity must be a positive whole number.');
+      return;
+    }
     setItem((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -71,8 +77,22 @@ export default function EditListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!item.name || !item.price || !item.quantity) {
-      setError('Name, price, and quantity are required.');
+    if (
+      !item.name ||
+      !item.price ||
+      !item.quantity ||
+      !item.category ||
+      !item.department
+    ) {
+      setError('Name, price, quantity, category, and department are required.');
+      return;
+    }
+    if (parseFloat(item.price) <= 0) {
+      setError('Price must be a positive number.');
+      return;
+    }
+    if (parseInt(item.quantity) <= 0) {
+      setError('Quantity must be a positive whole number.');
       return;
     }
     try {
@@ -80,8 +100,7 @@ export default function EditListing() {
       let response;
       let url = `${API_URL}/api/stores/items/${itemId}`;
       if (newImages.length > 0) {
-        // Use FormData and the /images route for uploads (handles multipart parsing)
-        url += '/images'; // Change to /api/stores/items/${itemId}/images
+        url += '/images';
         const formData = new FormData();
         formData.append('name', String(item.name));
         formData.append('description', String(item.description || ''));
@@ -94,7 +113,6 @@ export default function EditListing() {
         formData.append('style', String(item.style || ''));
         newImages.forEach((image) => formData.append('images', image));
 
-        // Log FormData contents
         console.log('FormData contents:');
         for (let [key, value] of formData.entries()) {
           console.log(
@@ -109,7 +127,6 @@ export default function EditListing() {
           },
         });
       } else {
-        // Use JSON and the main route for text-only updates
         const payload = {
           name: item.name,
           description: item.description || '',
@@ -257,50 +274,76 @@ export default function EditListing() {
               onChange={handleItemChange}
               placeholder="Description"
             />
-            <input
-              type="text"
+            <select
               name="category"
               value={item.category}
               onChange={handleItemChange}
-              placeholder="Category"
-            />
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="tops">Tops</option>
+              <option value="shirts">Shirts</option>
+              <option value="pants">Pants</option>
+              <option value="dresses">Dresses</option>
+              <option value="footwear">Footwear</option>
+              <option value="skirts">Skirts</option>
+              <option value="accessories">Accessories</option>
+            </select>
             <select
               name="department"
               value={item.department}
               onChange={handleItemChange}
+              required
             >
               <option value="">Select Department</option>
-              <option value="mens">Men&apos;s</option>
-              <option value="womens">Women&apos;s</option>
+              <option value="women's">Women&apos;s</option>
+              <option value="men's">Men&apos;s</option>
+              <option value="children">Children</option>
+              <option value="unisex">Unisex</option>
             </select>
             <input
               type="text"
               name="style"
               value={item.style}
               onChange={handleItemChange}
-              placeholder="Style Tags (e.g., streetwear,casual)"
+              placeholder="Style Tags (e.g., y2k, grunge)"
             />
-            <input
-              type="text"
-              name="size"
-              value={item.size}
-              onChange={handleItemChange}
-              placeholder="Size"
-            />
-            <input
-              type="number"
-              name="price"
-              value={item.price}
-              onChange={handleItemChange}
-              placeholder="Price"
-              required
-            />
+            <select name="size" value={item.size} onChange={handleItemChange}>
+              <option value="">Select Size (optional)</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+            </select>
+            <div className="price-input-container">
+              <span className="currency-label">R</span>
+              <input
+                type="number"
+                name="price"
+                value={item.price}
+                onChange={handleItemChange}
+                placeholder="Price"
+                step="0.01"
+                min="0.01"
+                required
+              />
+            </div>
             <input
               type="number"
               name="quantity"
               value={item.quantity}
               onChange={handleItemChange}
               placeholder="Quantity"
+              step="1"
+              min="1"
               required
             />
             <select
@@ -318,7 +361,7 @@ export default function EditListing() {
                   <img
                     key={index}
                     src={image.imageURL}
-                    alt={`${item.name || 'Item'} ${index + 1}`} // Use item name or fallback
+                    alt={`${item.name || 'Item'} ${index + 1}`}
                     style={{ width: '100px', margin: '5px' }}
                   />
                 ))
