@@ -9,6 +9,7 @@ import CustomerHome from './pages/customer/Home';
 import Store from './pages/customer/Store';
 import Search from './pages/customer/Search';
 import CusReservations from './pages/customer/Reservations'; // Adjust path
+import MyCloset from './pages/customer/MyCloset.jsx';
 
 // Store owner pages
 import StoreHome from './pages/store/StoreHome';
@@ -56,6 +57,7 @@ function App() {
       <Route path="/store/home" element={<StoreHome />} />
       <Route path="/customer/home" element={<CustomerHome />} />
       <Route path="/customer/reservations" element={<CusReservations />} />
+      <Route path="/customer/closet" element={<MyCloset />} />
 
       {/* New Item Detail page for testing */}
       <Route path="/store/:id" element={<Store />} />

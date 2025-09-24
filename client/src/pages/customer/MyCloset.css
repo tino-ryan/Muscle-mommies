@@ -1,0 +1,83 @@
+.closet {
+  display: flex;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #fcf8f8;
+}
+
+.content-container {
+  margin-left: 250px; /* Match sidebar width */
+  padding: 20px;
+  flex: 1;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1b0e0e;
+  margin-bottom: 20px;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #994d51;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Closet-specific layout */
+.closet-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.closet-item {
+  background-color: white;
+  border: 1px solid #e7d0d1;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.closet-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.closet-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.closet-item h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1b0e0e;
+  margin: 8px 0;
+}
+
+.closet-item p {
+  font-size: 14px;
+  color: #994d51;
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    margin-left: 0;
+    padding: 10px;
+  }
+}

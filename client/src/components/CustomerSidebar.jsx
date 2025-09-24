@@ -79,6 +79,21 @@ export default function CustomerSidebar({ activePage }) {
         </svg>
         <p>Reservations</p>
       </div>
+    <div
+      className={`sidebar-item ${activePage === 'closet' ? 'active' : ''}`}
+      onClick={() => navigate('/customer/closet')}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24px"
+        height="24px"
+        fill="currentColor"
+        viewBox="0 0 256 256"
+      >
+        <path d="M208,48H48A16,16,0,0,0,32,64V192a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V64A16,16,0,0,0,208,48Zm0,16V96H48V64ZM48,192V112H208v80Z"></path>
+      </svg>
+      <p>My Closet</p>
+    </div>
       <div className="sidebar-item" onClick={handleLogout}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
