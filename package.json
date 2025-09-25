@@ -41,5 +41,8 @@
     "*.{json,md}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.6.0"
   }
 }

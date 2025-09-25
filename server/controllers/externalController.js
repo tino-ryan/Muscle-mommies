@@ -51,25 +51,33 @@ const uploadPhoto = async (req, res) => {
       return res.status(400).json({ error: 'No image provided' });
     }
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'muscle-mommies/external', // Separate folder for external uploads
+      folder: 'muscle-mommies/external', // Updated to project-specific folder
     });
     try {
       fs.unlinkSync(req.file.path);
     } catch (cleanupError) {
       console.warn('Failed to clean up temporary file:', cleanupError.message);
     }
-    // Store image metadata in Firestore
-    const imageId = result.public_id;
+    // Extract unique ID and store folder
+    const fullId = result.public_id;
+    const imageId = fullId.split('/').pop(); // e.g., 'jhpxqkuo6paeefnbh29d'
     const imageData = {
       imageId,
       imageURL: result.secure_url,
+      folder: fullId.split('/').slice(0, -1).join('/'), // e.g., 'thriftfinder/external'
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
+    console.log('Attempting to save to Firestore:', {
+      collection: 'externalImages',
+      doc: imageId,
+      data: imageData,
+    });
     await admin
       .firestore()
       .collection('externalImages')
       .doc(imageId)
       .set(imageData);
+    console.log('Successfully saved to Firestore:', imageId);
     res.json({ imageId, imageURL: result.secure_url });
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -80,13 +88,18 @@ const uploadPhoto = async (req, res) => {
 };
 
 // Get all uploaded photos
+// Get all uploaded photos
 const getPhotos = async (req, res) => {
   try {
     const snapshot = await admin.firestore().collection('externalImages').get();
-    const images = snapshot.docs.map((doc) => ({
-      imageId: doc.id,
-      ...doc.data(),
-    }));
+    const images = snapshot.docs.map((doc) => {
+      console.log('Found doc:', doc.id, doc.data()); // Debug each doc
+      return {
+        imageId: doc.id, // Full path like 'muscle-mommies/external/...'
+        ...doc.data(),
+      };
+    });
+    console.log('Total images fetched:', images.length); // Debug total
     res.json(images);
   } catch (error) {
     console.error('Error fetching images:', error);

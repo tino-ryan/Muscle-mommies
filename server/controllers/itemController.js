@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const uuid = require('uuid');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const streamifier = require('streamifier');
 const Item = require('../models/itemModel');
 
 const db = admin.firestore();
@@ -13,6 +13,20 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// Stream upload to Cloudinary
+const uploadToCloudinary = (file) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'muscle-mommies' },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    streamifier.createReadStream(file.buffer).pipe(stream);
+  });
+};
 
 // GET all items
 const getItems = async (req, res) => {
@@ -136,7 +150,7 @@ const searchItems = async (req, res) => {
 // POST new item
 const createItem = async (req, res) => {
   try {
-    const userId = req.user.uid; // From authMiddleware
+    const userId = req.user.uid;
     const {
       name,
       description,
@@ -147,8 +161,10 @@ const createItem = async (req, res) => {
       price,
       quantity,
       status,
-    } = req.body; // Fields from FormData
-    const images = req.files || []; // Files from multer
+    } = req.body;
+    const images = req.files || [];
+
+    console.log('Uploaded files:', images); // Log to verify files
 
     // Validate required fields
     if (!name || !price || !quantity) {
@@ -178,25 +194,22 @@ const createItem = async (req, res) => {
     const imageURLs = [];
     for (const file of images) {
       try {
-        const result = await cloudinary.uploader.upload(file.path, {
-          folder: 'muscle-mommies',
-        });
+        const result = await uploadToCloudinary(file);
         const imageId = uuid.v4();
         await db
           .collection('itemImages')
           .doc(imageId)
           .set({
             imageId,
-            itemId: null, // Will be updated after item creation
+            itemId: null,
             imageURL: result.secure_url,
-            isPrimary: imageURLs.length === 0, // Set first image as primary
+            isPrimary: imageURLs.length === 0,
           });
         imageURLs.push({
           imageId,
           imageURL: result.secure_url,
           isPrimary: imageURLs.length === 0,
         });
-        fs.unlinkSync(file.path); // Clean up temporary file
       } catch (uploadError) {
         console.error('Cloudinary upload error:', uploadError);
         return res.status(500).json({
@@ -208,7 +221,7 @@ const createItem = async (req, res) => {
 
     // Create new item
     const itemData = {
-      itemId: uuid.v4(), // Generate unique itemId
+      itemId: uuid.v4(),
       storeId,
       name,
       description: description || '',
@@ -225,8 +238,7 @@ const createItem = async (req, res) => {
     };
 
     // Save item to Firestore
-    // eslint-disable-next-line no-unused-vars
-    const docRef = await itemsRef.doc(itemData.itemId).set(itemData);
+    await itemsRef.doc(itemData.itemId).set(itemData);
 
     // Update itemId in itemImages collection
     for (const image of imageURLs) {

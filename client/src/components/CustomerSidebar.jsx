@@ -7,10 +7,14 @@ import './CustomerSidebar.css';
 export default function CustomerSidebar({ activePage }) {
   const navigate = useNavigate();
   const auth = getAuth();
-
+  function eraseCookie(name) {
+    document.cookie =
+      name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      eraseCookie(`thriftRole_${auth.currentUser?.uid}`); // Clear the role cookie
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);

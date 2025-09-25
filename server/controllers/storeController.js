@@ -1,15 +1,8 @@
 const admin = require('../config/firebase');
 const uuid = require('uuid');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
-const path = require('path');
+const streamifier = require('streamifier');
 const { Store, Chat, Message } = require('../models/store');
-
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
 
 // Configure Cloudinary
 cloudinary.config({
@@ -17,6 +10,20 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// Stream upload to Cloudinary
+const uploadToCloudinary = (file) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'muscle-mommies' },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    streamifier.createReadStream(file.buffer).pipe(stream);
+  });
+};
 
 // Get store details
 const getStore = async (req, res) => {
@@ -93,18 +100,8 @@ const createOrUpdateStore = async (req, res) => {
     let imageURL = profileImageURL || '';
     if (req.file) {
       try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'muscle-mommies',
-        });
+        const result = await uploadToCloudinary(req.file);
         imageURL = result.secure_url;
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch (cleanupError) {
-          console.warn(
-            'Failed to clean up temporary file:',
-            cleanupError.message
-          );
-        }
       } catch (uploadError) {
         console.error('Cloudinary upload error:', uploadError);
         return res.status(500).json({
@@ -166,14 +163,7 @@ const uploadImage = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No image provided' });
     }
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'muscle-mommies',
-    });
-    try {
-      fs.unlinkSync(req.file.path);
-    } catch (cleanupError) {
-      console.warn('Failed to clean up temporary file:', cleanupError.message);
-    }
+    const result = await uploadToCloudinary(req.file);
     res.json({ imageURL: result.secure_url });
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -396,12 +386,7 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// In storeController.js
-
-// ... existing imports and functions ...
-
-// Add otherId to chats for client-side filtering consistency
-// Update item (optimized for partial updates)
+// Update item
 const updateItem = async (req, res) => {
   try {
     const userId = req.user.uid;
@@ -445,7 +430,7 @@ const updateItem = async (req, res) => {
     }
 
     const existingData = itemDoc.data();
-    console.log('Received updateItem request body:', req.body); // Debug log
+    console.log('Received updateItem request body:', req.body);
 
     // Only validate if full update is attempted
     if (name !== undefined || price !== undefined || quantity !== undefined) {
@@ -459,9 +444,15 @@ const updateItem = async (req, res) => {
     const newImageURLs = [];
     if (images.length > 0) {
       for (const file of images) {
-        const result = await cloudinary.uploader.upload(file.path, {
-          folder: 'muscle-mommies',
-        });
+        if (!file.mimetype.startsWith('image/')) {
+          return res
+            .status(400)
+            .json({ error: 'Only image files are allowed' });
+        }
+        const result = await uploadToCloudinary(file);
+        if (!result.secure_url) {
+          throw new Error('Cloudinary upload did not return a valid URL');
+        }
         const imageId = uuid.v4();
         await admin.firestore().collection('itemImages').doc(imageId).set({
           imageId,
@@ -474,7 +465,6 @@ const updateItem = async (req, res) => {
           imageURL: result.secure_url,
           isPrimary: false,
         });
-        fs.unlinkSync(file.path); // Error handling already present
       }
     }
 

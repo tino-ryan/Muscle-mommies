@@ -31,22 +31,17 @@ const {
 const authMiddleware = require('../middleware/authMiddleware');
 const multer = require('multer');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './Uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
+// Use memory storage for all file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB file size limit
 });
-
-const upload = multer({ storage });
 
 // User and reservation routes
 router.get('/stores/users/:userId', authMiddleware, getUserById);
 router.put('/stores/reserve/:itemId', authMiddleware, customerReserve);
 
-// Contact info routes (specific routes before parametric)
+// Contact info routes
 router.get('/stores/contact-infos', authMiddleware, getContactInfos);
 router.post('/stores/contact-infos', authMiddleware, addContactInfo);
 router.delete(
@@ -55,7 +50,7 @@ router.delete(
   deleteContactInfo
 );
 
-// Chat routes (moved up: specific before parametric)
+// Chat routes
 router.get('/stores/chats', authMiddleware, getChats);
 router.get(
   '/stores/chats/:chatId/messages',
@@ -66,7 +61,7 @@ router.post('/stores/messages', authMiddleware, sendMessage);
 router.put('/stores/chats/:chatId/read', authMiddleware, markAsRead);
 router.post('/stores/chats', authMiddleware, createChat);
 
-// Reservation routes (moved up: specific before parametric)
+// Reservation routes
 router.get('/stores/reservations', authMiddleware, getReservations);
 router.post('/stores/reservations', authMiddleware, createReservation);
 router.put(
@@ -75,7 +70,7 @@ router.put(
   updateReservation
 );
 
-// Store routes (parametric :storeId comes after specifics)
+// Store routes
 router.get('/my-store', authMiddleware, getStore);
 router.get('/stores', getStores);
 router.get('/stores/:storeId', authMiddleware, getStoreById);
@@ -103,7 +98,12 @@ router.post(
   upload.array('images', 5),
   createItem
 );
-router.put('/stores/items/:itemId', authMiddleware, updateItem);
+router.put(
+  '/stores/items/:itemId',
+  authMiddleware,
+  upload.array('images', 5),
+  updateItem
+);
 router.put(
   '/stores/items/:itemId/images',
   authMiddleware,
