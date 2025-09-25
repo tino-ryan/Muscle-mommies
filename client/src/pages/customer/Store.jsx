@@ -477,7 +477,7 @@ export default function Store() {
             <p>Logout</p>
           </div>
         </div>
-        <div className="content">
+        <div className={`content ${store.theme}`}>
           <button onClick={() => navigate(-1)} className="store-back-button">
             ← Back
           </button>
@@ -558,7 +558,7 @@ export default function Store() {
               </div>
             </div>
           </div>
-          <div className="store-content">
+          <div className={`store-content ${store.theme || 'theme-default'}`}>
             <div className="items-section">
               <h2 className="section-title">
                 <span className="section-icon">👕</span>

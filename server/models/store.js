@@ -12,6 +12,7 @@ const Store = {
       lng: String,
     },
     profileImageURL: String,
+    theme: String,
     createdAt: Object, // Firestore Timestamp
     updatedAt: Object, // Firestore Timestamp
   },

@@ -12,6 +12,7 @@ export default function StoreProfile() {
     address: '',
     location: { lat: '', lng: '' },
     profileImageURL: '',
+    theme: '',
   });
   const [contactInfos, setContactInfos] = useState([]);
   const [newContact, setNewContact] = useState({ type: 'email', value: '' });
@@ -44,6 +45,7 @@ export default function StoreProfile() {
               address: storeResponse.data.address || '',
               location: storeResponse.data.location || { lat: '', lng: '' },
               profileImageURL: storeResponse.data.profileImageURL || '',
+              theme: storeResponse.data.theme,
             });
             setEditing(false);
             setError('');
@@ -268,7 +270,9 @@ export default function StoreProfile() {
         address: store.address || '',
         location: JSON.stringify(store.location),
         profileImageURL: profileImageURL || '',
+        theme: store.theme || 'theme-default',
       };
+      
 
       const storeResponse = await axios.post(
         `${API_URL}/api/stores`,
@@ -283,6 +287,7 @@ export default function StoreProfile() {
         address: storeResponse.data.address,
         location: storeResponse.data.location,
         profileImageURL: storeResponse.data.profileImageURL,
+        theme: storeResponse.data.theme,
       });
 
       if (newContact.value) await addContact();
@@ -315,7 +320,7 @@ export default function StoreProfile() {
   }
 
   return (
-    <div className="store-profile">
+    <div className={`store-profile ${store.theme}`}>
       <div className="layout-container">
         <div className="sidebar">
           <div className="sidebar-item" onClick={() => navigate('/store/home')}>
@@ -403,7 +408,7 @@ export default function StoreProfile() {
             <p>Logout</p>
           </div>
         </div>
-        <div className="content">
+        <div className={`content ${store.theme}`}>
           {error && <div className="error">{error}</div>}
           {editing ? (
             <form onSubmit={handleSubmit} className="store-form">
@@ -471,6 +476,15 @@ export default function StoreProfile() {
                 accept="image/*"
                 onChange={handleProfileImageChange}
               />
+              <h3>Choose Theme</h3>
+              <select name="theme"
+              value={store.theme}
+              onChange={handleStoreChange}>
+                <option value="theme-default">Default</option>
+                <option value="theme-vintage">Vintage</option>
+                <option value="theme-y2k">y2k</option>
+                <option value="theme-minimal">Minimal</option>
+              </select>
               <h3>Contact Info</h3>
               {contactInfos.map((contact) => (
                 <div key={contact.id} className="contact-item">
@@ -515,7 +529,7 @@ export default function StoreProfile() {
               </button>
             </form>
           ) : (
-            <div className="store-display">
+            <div className={`store-display ${store.theme}`}>
               {store.profileImageURL ? (
                 <img src={store.profileImageURL} alt={store.storeName} />
               ) : (

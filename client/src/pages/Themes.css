@@ -1,19 +1,48 @@
 
 :root{
-    --primary: #f9f9f9;
-    --secondry: #e7d0d1;
-    --accent: #994d51;
+    --color-bg: #ffffff;
+    --color-text: #0f172a;
+    --color-primary: #f9f9f9;
+    --color-accent: #994d51;
+    --color-muted: #e7d0d1;
 }
 
-.theme-retro {
-  --primary: #f5a623;
-  --secondary: #fef3c7;
-  --accent: #1f2937;
+
+/* Default theme */
+.theme-default {
+    --color-bg: #ffffff;
+    --color-text: #0f172a;
+    --color-primary: #f9f9f9;
+    --color-accent: #994d51;
+    --color-muted: #e7d0d1;
 }
 
-/* theme: cool */
-.theme-cool {
-  --primary: #2563eb;
-  --secondary: #dbeafe;
-  --accent: #1e40af;
+
+/* Y2K / retro vibe */
+.theme-y2k {
+--color-bg: #fff8ff;
+--color-text: blue;
+--color-primary: #ff66cc;
+--color-accent: #00c2ff;
+--color-muted: #7b61ff;
+}
+
+
+/* Minimal */
+.theme-minimal {
+--color-bg: #dddde7;
+--color-text: black;
+--color-primary: #4d4d4d;
+--color-accent: #363b5c;
+--color-muted: #6b7280;
+}
+
+
+/* Vintage / earthy */
+.theme-vintage {
+--color-bg: #fffaf0;
+--color-text: #24312a;
+--color-primary: #2f855a;
+--color-accent: #d69e2e;
+--color-muted: #6b705b;
 }

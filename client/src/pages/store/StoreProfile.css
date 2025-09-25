@@ -1,6 +1,6 @@
 .store-profile {
   display: flex;
-  background-color: #fcf8f8;
+  background-color: var(--color-bg);
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
 }
@@ -171,7 +171,7 @@
 
 .contact-item button {
   padding: 8px;
-  background-color: #994d51;
+  background-color: var(--color-accent);
   color: white;
   border: none;
   border-radius: 8px;

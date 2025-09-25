@@ -66,8 +66,7 @@ const getStores = async (req, res) => {
 const createOrUpdateStore = async (req, res) => {
   try {
     const userId = req.user.uid;
-    const { storeName, description, address, location, profileImageURL } =
-      req.body;
+    const { storeName, description, address, location, profileImageURL, theme } = req.body;
     if (!userId) {
       return res.status(401).json({ error: 'User ID not provided' });
     }
@@ -129,6 +128,7 @@ const createOrUpdateStore = async (req, res) => {
         lng: parseFloat(parsedLocation.lng),
       },
       profileImageURL: imageURL,
+      theme: theme || 'theme-default',
       createdAt: snapshot.empty
         ? admin.firestore.FieldValue.serverTimestamp()
         : snapshot.docs[0].data().createdAt,
