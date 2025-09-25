@@ -1,0 +1,19 @@
+
+:root{
+    --primary: #f9f9f9;
+    --secondry: #e7d0d1;
+    --accent: #994d51;
+}
+
+.theme-retro {
+  --primary: #f5a623;
+  --secondary: #fef3c7;
+  --accent: #1f2937;
+}
+
+/* theme: cool */
+.theme-cool {
+  --primary: #2563eb;
+  --secondary: #dbeafe;
+  --accent: #1e40af;
+}
