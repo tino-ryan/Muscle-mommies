@@ -150,8 +150,7 @@ export default function Dashboard() {
 
       typeText();
     }
-  }, [loading, role, navigate]);
-
+  }, [loading, role, navigate, messages]); // Add 'messages' to the dependency array
   const handleManualNav = (path) => {
     setShowMessage(false);
     setSwiping(true);
