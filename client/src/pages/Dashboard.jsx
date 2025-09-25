@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Dashboard.css';
 import { API_URL } from '../api';
+import { useCallback } from 'react';
 
 // Cookie helpers
 function setCookie(name, value, days) {
@@ -59,37 +60,38 @@ export default function Dashboard() {
   const typingSpeed = 50;
   const fadeOutDelay = 2500;
 
-  const getRoleAndRedirect = async (uid) => {
-    try {
-      const res = await axios.post(`${API_URL}/api/auth/getRole`, { uid });
-      const fetchedRole = res.data.role;
-      setCookie(`thriftRole_${uid}`, fetchedRole, 7);
-      setRole(fetchedRole);
+  const getRoleAndRedirect = useCallback(
+    async (uid) => {
+      try {
+        const res = await axios.post(`${API_URL}/api/auth/getRole`, { uid });
+        const fetchedRole = res.data.role;
+        setCookie(`thriftRole_${uid}`, fetchedRole, 7);
+        setRole(fetchedRole);
 
-      setTimeout(() => {
-        setSwiping(true);
         setTimeout(() => {
-          if (fetchedRole === 'customer') navigate('/customer/home');
-          else if (fetchedRole === 'storeOwner') navigate('/store/home');
-          else if (fetchedRole === 'admin') navigate('/admin/dashboard');
-          else {
-            eraseAllRoleCookies();
-            navigate('/login');
-          }
-        }, 1200);
-      }, 200);
-    } catch (err) {
-      console.error('Error fetching role:', err);
-      eraseAllRoleCookies();
-      setSwiping(true);
-      setTimeout(() => navigate('/login'), 1200);
-    }
-  };
+          setSwiping(true);
+          setTimeout(() => {
+            if (fetchedRole === 'customer') navigate('/customer/home');
+            else if (fetchedRole === 'storeOwner') navigate('/store/home');
+            else if (fetchedRole === 'admin') navigate('/admin/dashboard');
+            else {
+              eraseAllRoleCookies();
+              navigate('/login');
+            }
+          }, 1200);
+        }, 200);
+      } catch (err) {
+        console.error('Error fetching role:', err);
+        eraseAllRoleCookies();
+        setSwiping(true);
+        setTimeout(() => navigate('/login'), 1200);
+      }
+    },
+    [navigate] // ← dependency of the callback
+  );
 
   // Auto login check
   useEffect(() => {
-    axios.get(API_URL); // ping server
-
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         setRole('guest');
@@ -122,7 +124,7 @@ export default function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, getRoleAndRedirect]); // ✅ clean dependency list
 
   // Typing intro + fallback login redirect
   useEffect(() => {

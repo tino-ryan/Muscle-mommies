@@ -149,9 +149,10 @@ function SignupPage({ role }) {
       setCurrentTheme(theme.name);
       setCurrentImage(randomImage);
       setCurrentTagline(randomTagline);
-    }, 6000); // 6 seconds
+    }, 6000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [themes]);
 
   // Mobile detection
   useEffect(() => {
