@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react'; // Add useMemo import
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -47,15 +47,18 @@ export default function Dashboard() {
   const [showMessage, setShowMessage] = useState(true);
   const [swiping, setSwiping] = useState(false);
 
-  const messages = [
-    'Initializing thrift engine...',
-    'Welcome, style scavenger.',
-    "You're entering the vintage vault.",
-    'Loading gems from the past...',
-    'Hold on, rewinding time to prime thrift era.',
-    'Get set for timeless treasures.',
-    'Welcome to ThriftFinder!',
-  ];
+  const messages = useMemo(
+    () => [
+      'Initializing thrift engine...',
+      'Welcome, style scavenger.',
+      "You're entering the vintage vault.",
+      'Loading gems from the past...',
+      'Hold on, rewinding time to prime thrift era.',
+      'Get set for timeless treasures.',
+      'Welcome to ThriftFinder!',
+    ],
+    []
+  ); // Empty dependency array since messages is static
 
   const typingSpeed = 50;
   const fadeOutDelay = 2500;
@@ -87,7 +90,7 @@ export default function Dashboard() {
         setTimeout(() => navigate('/login'), 1200);
       }
     },
-    [navigate] // ← dependency of the callback
+    [navigate]
   );
 
   // Auto login check
@@ -124,7 +127,7 @@ export default function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, [navigate, getRoleAndRedirect]); // ✅ clean dependency list
+  }, [navigate, getRoleAndRedirect]);
 
   // Typing intro + fallback login redirect
   useEffect(() => {
@@ -150,7 +153,8 @@ export default function Dashboard() {
 
       typeText();
     }
-  }, [loading, role, navigate, messages]); // Add 'messages' to the dependency array
+  }, [loading, role, navigate, messages]);
+
   const handleManualNav = (path) => {
     setShowMessage(false);
     setSwiping(true);
