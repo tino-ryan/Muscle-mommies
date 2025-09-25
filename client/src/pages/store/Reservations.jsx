@@ -112,6 +112,7 @@ export default function StoreReservations() {
             : res
         )
       );
+      
     } catch (err) {
       setError('Failed to update status: ' + err.message);
     }
@@ -138,7 +139,7 @@ export default function StoreReservations() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11a16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.10Z"></path>
             </svg>
             <p>Home</p>
           </div>
@@ -168,7 +169,7 @@ export default function StoreReservations() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
+              <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136A23.76,23.76,0,0,1,171.16,150.45Z"></path>
             </svg>
             <p>Reservations</p>
           </div>
@@ -221,12 +222,15 @@ export default function StoreReservations() {
           </h2>
           {error && <div className="error">{error}</div>}
           {reservations.length === 0 ? (
-            <p>
-              No reservations found.{' '}
-              {role === 'storeOwner'
-                ? 'Create a store to start receiving reservations.'
-                : 'Browse items to make a reservation.'}
-            </p>
+            <div className="no-reservations">
+              <p>
+                No active reservations found.{' '}
+                {role === 'storeOwner'
+                  ? 'Create a store to start receiving reservations.'
+                  : 'Browse items to make a reservation.'}
+              </p>
+              <small>Note: Completed reservations are not shown here.</small>
+            </div>
           ) : (
             <table>
               <thead>
@@ -241,7 +245,14 @@ export default function StoreReservations() {
               <tbody>
                 {reservations.map((res) => (
                   <tr key={res.reservationId}>
-                    <td>{items[res.itemId]?.name || 'Loading...'}</td>
+                    <td>
+                      <div className="item-info">
+                        <strong>{items[res.itemId]?.name || 'Loading...'}</strong>
+                        {items[res.itemId]?.price && (
+                          <div className="item-price">R{items[res.itemId].price}</div>
+                        )}
+                      </div>
+                    </td>
                     {role === 'storeOwner' ? (
                       <td>{users[res.userId]?.displayName || 'Loading...'}</td>
                     ) : (
@@ -270,7 +281,7 @@ export default function StoreReservations() {
                           <option value="Pending">Pending</option>
                           <option value="Confirmed">Confirmed</option>
                           <option value="Cancelled">Cancelled</option>
-                          <option value="Completed">Completed</option>
+                          <option value="Sold">Sold</option>
                         </select>
                       </td>
                     )}

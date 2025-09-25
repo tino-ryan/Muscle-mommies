@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import StarRating from '../../components/StarRating';
+import ReviewsModal from '../../components/ReviewsModal';
 import { API_URL } from '../../api';
 import './StoreProfile.css';
 
@@ -12,18 +14,20 @@ export default function StoreProfile() {
     address: '',
     location: { lat: '', lng: '' },
     profileImageURL: '',
+    averageRating: 0,
+    reviewCount: 0,
   });
   const [contactInfos, setContactInfos] = useState([]);
   const [newContact, setNewContact] = useState({ type: 'email', value: '' });
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true); // Add loading state
-  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading] = useState(true);
   const [storeId, setStoreId] = useState(null);
   const [addressSearch, setAddressSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [addressOptions, setAddressOptions] = useState([]);
   const [profileImage, setProfileImage] = useState(null);
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -44,6 +48,8 @@ export default function StoreProfile() {
               address: storeResponse.data.address || '',
               location: storeResponse.data.location || { lat: '', lng: '' },
               profileImageURL: storeResponse.data.profileImageURL || '',
+              averageRating: storeResponse.data.averageRating || 0,
+              reviewCount: storeResponse.data.reviewCount || 0,
             });
             setEditing(false);
             setError('');
@@ -224,6 +230,10 @@ export default function StoreProfile() {
     window.open(url, '_blank');
   };
 
+  const handleViewReviews = () => {
+    setShowReviewsModal(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -283,6 +293,8 @@ export default function StoreProfile() {
         address: storeResponse.data.address,
         location: storeResponse.data.location,
         profileImageURL: storeResponse.data.profileImageURL,
+        averageRating: storeResponse.data.averageRating || 0,
+        reviewCount: storeResponse.data.reviewCount || 0,
       });
 
       if (newContact.value) await addContact();
@@ -326,7 +338,7 @@ export default function StoreProfile() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11a16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.10Z"></path>
             </svg>
             <p>Home</p>
           </div>
@@ -516,35 +528,75 @@ export default function StoreProfile() {
             </form>
           ) : (
             <div className="store-display">
-              {store.profileImageURL ? (
-                <img src={store.profileImageURL} alt={store.storeName} />
-              ) : (
-                <div className="no-image">No Image</div>
-              )}
-              <h1>{store.storeName || 'Your Store'}</h1>
-              <p>{store.description || 'No description provided.'}</p>
-              <p>{store.address || 'No address provided.'}</p>
-              <h3>Contact</h3>
-              {contactInfos.length > 0 ? (
-                contactInfos.map((contact) => (
-                  <p
-                    key={contact.id}
-                    onClick={() => openContact(contact.type, contact.value)}
-                    className="contact-link"
-                  >
-                    {contact.type.charAt(0).toUpperCase() +
-                      contact.type.slice(1)}
-                    : {contact.value}
-                  </p>
-                ))
-              ) : (
-                <p>No contact info provided.</p>
-              )}
-              <button onClick={() => setEditing(true)}>Edit Profile</button>
+              <div className="store-header-section">
+                {store.profileImageURL ? (
+                  <img src={store.profileImageURL} alt={store.storeName} className="store-profile-image" />
+                ) : (
+                  <div className="no-image">No Image</div>
+                )}
+                <div className="store-info-section">
+                  <h1>{store.storeName || 'Your Store'}</h1>
+                  <p className="store-description">{store.description || 'No description provided.'}</p>
+                  <p className="store-address">{store.address || 'No address provided.'}</p>
+                  
+                  <div className="store-rating-section">
+                    <StarRating 
+                      rating={store.averageRating} 
+                      reviewCount={store.reviewCount}
+                      size="medium"
+                    />
+                    {store.reviewCount > 0 && (
+                      <button 
+                        className="view-reviews-btn"
+                        onClick={handleViewReviews}
+                      >
+                        View All Reviews
+                      </button>
+                    )}
+                    {store.reviewCount === 0 && (
+                      <p className="no-reviews-text">No reviews yet</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="contact-section">
+                <h3>Contact Information</h3>
+                {contactInfos.length > 0 ? (
+                  <div className="contact-list">
+                    {contactInfos.map((contact) => (
+                      <p
+                        key={contact.id}
+                        onClick={() => openContact(contact.type, contact.value)}
+                        className="contact-link"
+                      >
+                        {contact.type.charAt(0).toUpperCase() +
+                          contact.type.slice(1)}
+                        : {contact.value}
+                      </p>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="no-contact">No contact info provided.</p>
+                )}
+              </div>
+              
+              <button className="edit-profile-btn" onClick={() => setEditing(true)}>
+                Edit Profile
+              </button>
             </div>
           )}
         </div>
       </div>
+
+      {showReviewsModal && storeId && (
+        <ReviewsModal
+          storeId={storeId}
+          storeName={store.storeName}
+          isOpen={showReviewsModal}
+          onClose={() => setShowReviewsModal(false)}
+        />
+      )}
     </div>
   );
 }

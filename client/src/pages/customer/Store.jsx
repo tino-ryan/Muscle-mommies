@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomerSidebar from '../../components/CustomerSidebar';
+import StarRating from '../../components/StarRating';
+import ReviewsModal from '../../components/ReviewsModal';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
 //import { v4 as uuidv4 } from 'uuid';
@@ -17,6 +19,7 @@ export default function Store() {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
 
   // Filter states
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -64,7 +67,8 @@ export default function Store() {
     const inCategory = selectedCategory
       ? item.category === selectedCategory
       : true;
-    return inPrice && inSize && inStyle && inCategory;
+    const isAvailable = item.status !== 'Sold';
+    return inPrice && inSize && inStyle && inCategory && isAvailable;
   });
 
   const handleReserve = async (itemId) => {
@@ -161,6 +165,10 @@ export default function Store() {
   };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const handleViewReviews = () => {
+    setShowReviewsModal(true);
+  };
 
   if (loading) {
     return (
@@ -293,7 +301,7 @@ export default function Store() {
                 fill="currentColor"
                 viewBox="0 0 256 256"
               >
-                <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+                <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11a16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.10Z"></path>
               </svg>
               <p>Home</p>
             </div>
@@ -406,7 +414,7 @@ export default function Store() {
               fill="currentColor"
               viewBox="0 0 256 256"
             >
-              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11a16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.10Z"></path>
             </svg>
             <p>Home</p>
           </div>
@@ -487,13 +495,28 @@ export default function Store() {
                 store.profileImageURL ||
                 'https://via.placeholder.com/64x64?text=Store'
               }
-              alt={store.name}
+              alt={store.storeName}
               className="store-image"
             />
             <div className="store-info">
-              <h1 className="store-title">{store.name}</h1>
+              <h1 className="store-title">{store.storeName}</h1>
               <p className="store-address">{store.address}</p>
               <p className="store-description">{store.description}</p>
+              <div className="store-rating-section">
+                <StarRating 
+                  rating={store.averageRating || 0} 
+                  reviewCount={store.reviewCount || 0}
+                  size="medium"
+                />
+                {store.reviewCount > 0 && (
+                  <button 
+                    className="view-reviews-btn"
+                    onClick={handleViewReviews}
+                  >
+                    Read Reviews
+                  </button>
+                )}
+              </div>
             </div>
           </div>
           <div className="search-controls">
@@ -688,6 +711,15 @@ export default function Store() {
                 </div>
               </div>
             </div>
+          )}
+
+          {showReviewsModal && (
+            <ReviewsModal
+              storeId={store.storeId}
+              storeName={store.storeName}
+              isOpen={showReviewsModal}
+              onClose={() => setShowReviewsModal(false)}
+            />
           )}
         </div>
       </div>

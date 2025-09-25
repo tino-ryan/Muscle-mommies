@@ -20,7 +20,10 @@ const {
   getUserById,
   customerReserve,
   getItemById,
-  updateReservation,
+  updateReservationStatus, // Updated name
+  createReview,           // New function
+  confirmReservation,     // New function
+  getStoreReviews,
 } = require('../controllers/storeController');
 const {
   getItems: getAllItems,
@@ -66,13 +69,22 @@ router.post('/stores/messages', authMiddleware, sendMessage);
 router.put('/stores/chats/:chatId/read', authMiddleware, markAsRead);
 router.post('/stores/chats', authMiddleware, createChat);
 
+// Review routes (NEW)
+router.post('/stores/reviews', authMiddleware, createReview);
+router.get('/stores/:storeId/reviews', getStoreReviews);
+
 // Reservation routes (moved up: specific before parametric)
 router.get('/stores/reservations', authMiddleware, getReservations);
 router.post('/stores/reservations', authMiddleware, createReservation);
 router.put(
   '/stores/reservations/:reservationId',
   authMiddleware,
-  updateReservation
+  updateReservationStatus // Updated function name
+);
+router.put(
+  '/stores/reservations/:reservationId/confirm',
+  authMiddleware,
+  confirmReservation // NEW endpoint
 );
 
 // Store routes (parametric :storeId comes after specifics)

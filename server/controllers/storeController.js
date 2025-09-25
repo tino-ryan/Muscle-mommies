@@ -711,11 +711,15 @@ const getReservations = async (req, res) => {
         .collection('Reservations')
         .where('userId', '==', userId);
     }
+    
     const snapshot = await query.get();
-    const reservations = snapshot.docs.map((doc) => ({
-      reservationId: doc.id,
-      ...doc.data(),
-    }));
+    const reservations = snapshot.docs
+      .map((doc) => ({
+        reservationId: doc.id,
+        ...doc.data(),
+      }))
+      .filter(reservation => reservation.status !== 'Completed'); // Filter out completed reservations
+    
     res.json(reservations);
   } catch (error) {
     console.error('Error fetching reservations:', error);
@@ -835,13 +839,14 @@ const getItemById = async (req, res) => {
       .json({ error: 'Failed to fetch item', details: err.message });
   }
 };
-const updateReservation = async (req, res) => {
+// Update the existing updateReservation function to handle the 'Sold' status
+const updateReservationStatus = async (req, res) => {
   try {
     const userId = req.user.uid;
     const { reservationId } = req.params;
     const { status } = req.body;
 
-    if (!['Pending', 'Confirmed', 'Cancelled', 'Completed'].includes(status)) {
+    if (!['Pending', 'Confirmed', 'Cancelled', 'Sold'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
@@ -871,17 +876,296 @@ const updateReservation = async (req, res) => {
         .json({ error: 'Unauthorized to update this reservation' });
     }
 
-    await reservationRef.update({
+    const reservationData = reservationDoc.data();
+    const updateData = {
       status,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    };
 
-    res.json({ reservationId, status });
+    // If marking as sold, add soldAt timestamp and update item status
+    if (status === 'Sold') {
+      updateData.soldAt = admin.firestore.FieldValue.serverTimestamp();
+      
+      // Find the item document by itemId field (not document ID)
+      try {
+        console.log(`Attempting to find and update item with itemId: ${reservationData.itemId}`);
+        
+        const itemQuery = admin
+          .firestore()
+          .collection('items')
+          .where('itemId', '==', reservationData.itemId);
+        
+        const itemSnapshot = await itemQuery.get();
+        
+        if (itemSnapshot.empty) {
+          console.error(`Item with itemId ${reservationData.itemId} not found`);
+          return res.status(404).json({ error: 'Item not found' });
+        }
+        
+        const itemDocId = itemSnapshot.docs[0].id;
+        console.log(`Found item document ID: ${itemDocId}`);
+        
+        await admin
+          .firestore()
+          .collection('items')
+          .doc(itemDocId)
+          .update({
+            status: 'Sold',
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          });
+        
+        console.log(`Successfully updated item ${reservationData.itemId} status to Sold`);
+      } catch (itemError) {
+        console.error('Error updating item status to Sold:', itemError);
+        return res.status(500).json({ 
+          error: 'Failed to update item status', 
+          details: itemError.message 
+        });
+      }
+    }
+
+    // If cancelling reservation, set item back to Available
+    if (status === 'Cancelled') {
+      try {
+        console.log(`Attempting to find and update item with itemId: ${reservationData.itemId}`);
+        
+        const itemQuery = admin
+          .firestore()
+          .collection('items')
+          .where('itemId', '==', reservationData.itemId);
+        
+        const itemSnapshot = await itemQuery.get();
+        
+        if (!itemSnapshot.empty) {
+          const itemDocId = itemSnapshot.docs[0].id;
+          await admin
+            .firestore()
+            .collection('items')
+            .doc(itemDocId)
+            .update({
+              status: 'Available',
+              updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+          console.log(`Successfully updated item ${reservationData.itemId} status to Available`);
+        }
+      } catch (itemError) {
+        console.error('Error updating item status to Available:', itemError);
+        // Continue with reservation update even if item update fails
+      }
+    }
+
+    // Update reservation status
+    await reservationRef.update(updateData);
+    console.log(`Reservation ${reservationId} status updated to ${status}`);
+
+    res.json({ reservationId, status, message: 'Status updated successfully' });
   } catch (error) {
     console.error('Error updating reservation:', error);
     res
       .status(500)
       .json({ error: 'Failed to update reservation', details: error.message });
+  }
+};
+
+
+
+// Create review and confirm reservation
+const createReview = async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { reservationId, itemId, storeId, rating, review } = req.body;
+    
+    if (!reservationId || !itemId || !storeId || !rating) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+    }
+
+    // Verify reservation exists and belongs to user
+    const reservationRef = admin
+      .firestore()
+      .collection('Reservations')
+      .doc(reservationId);
+    const reservationDoc = await reservationRef.get();
+    
+    if (!reservationDoc.exists) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+    
+    const reservationData = reservationDoc.data();
+    if (reservationData.userId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to review this reservation' });
+    }
+    
+    if (reservationData.status !== 'Sold') {
+      return res.status(400).json({ error: 'Can only review sold items' });
+    }
+
+    // Create review document
+    const reviewData = {
+      reservationId,
+      itemId,
+      storeId,
+      userId,
+      rating: parseInt(rating),
+      review: review || '',
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    // FIXED: Use 'Reviews' (uppercase) to match your DB
+    await admin.firestore().collection('Reviews').add(reviewData);
+
+    res.json({ message: 'Review created successfully', review: reviewData });
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res.status(500).json({ error: 'Failed to create review', details: error.message });
+  }
+};
+
+// Confirm reservation (customer confirms receipt)
+const confirmReservation = async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { reservationId } = req.params;
+
+    // Verify reservation exists and belongs to user
+    const reservationRef = admin
+      .firestore()
+      .collection('Reservations')
+      .doc(reservationId);
+    const reservationDoc = await reservationRef.get();
+    
+    if (!reservationDoc.exists) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+    
+    const reservationData = reservationDoc.data();
+    if (reservationData.userId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to confirm this reservation' });
+    }
+    
+    if (reservationData.status !== 'Sold') {
+      return res.status(400).json({ error: 'Can only confirm sold items' });
+    }
+
+    // Update reservation status to Completed
+    await reservationRef.update({
+      status: 'Completed',
+      completedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Update store's average rating
+    await updateStoreRating(reservationData.storeId);
+
+    res.json({ message: 'Reservation confirmed successfully' });
+  } catch (error) {
+    console.error('Error confirming reservation:', error);
+    res.status(500).json({ error: 'Failed to confirm reservation', details: error.message });
+  }
+};
+
+// Helper function to update store's average rating
+const updateStoreRating = async (storeId) => {
+  try {
+    // FIXED: Use 'Reviews' (uppercase) to match your DB
+    const reviewsSnapshot = await admin
+      .firestore()
+      .collection('Reviews')
+      .where('storeId', '==', storeId)
+      .get();
+
+    if (reviewsSnapshot.empty) return;
+
+    const reviews = reviewsSnapshot.docs.map(doc => doc.data());
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / reviews.length;
+
+    // Update store document
+    await admin
+      .firestore()
+      .collection('stores')
+      .doc(storeId)
+      .update({
+        averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
+        reviewCount: reviews.length,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+  } catch (error) {
+    console.error('Error updating store rating:', error);
+  }
+};
+
+const getStoreReviews = async (req, res) => {
+  try {
+    const { storeId } = req.params;
+
+    // Get all reviews for this store (without orderBy to avoid index requirement)
+    const reviewsSnapshot = await admin
+      .firestore()
+      .collection('Reviews')
+      .where('storeId', '==', storeId)
+      .get(); // Removed .orderBy('createdAt', 'desc')
+
+    if (reviewsSnapshot.empty) {
+      return res.json([]);
+    }
+
+    const reviews = [];
+    for (const doc of reviewsSnapshot.docs) {
+      const reviewData = doc.data();
+      
+      // Get user information for each review
+      try {
+        const userRecord = await admin.auth().getUser(reviewData.userId);
+        const userDoc = await admin
+          .firestore()
+          .collection('users')
+          .doc(reviewData.userId)
+          .get();
+        
+        const userData = userDoc.exists ? userDoc.data() : {};
+        
+        // Get item information
+        const itemDoc = await admin
+          .firestore()
+          .collection('items')
+          .doc(reviewData.itemId)
+          .get();
+        
+        const itemData = itemDoc.exists ? itemDoc.data() : { name: 'Unknown Item' };
+
+        reviews.push({
+          reviewId: doc.id,
+          ...reviewData,
+          userName: userRecord.displayName || userData.displayName || 'Anonymous',
+          itemName: itemData.name,
+          createdAt: reviewData.createdAt
+        });
+      } catch (userError) {
+        // If we can't get user info, still include the review
+        reviews.push({
+          reviewId: doc.id,
+          ...reviewData,
+          userName: 'Anonymous',
+          itemName: 'Unknown Item'
+        });
+      }
+    }
+
+    // Sort reviews manually by creation date (most recent first)
+    reviews.sort((a, b) => {
+      const aTime = a.createdAt?._seconds || 0;
+      const bTime = b.createdAt?._seconds || 0;
+      return bTime - aTime;
+    });
+
+    res.json(reviews);
+  } catch (error) {
+    console.error('Error fetching store reviews:', error);
+    res.status(500).json({ error: 'Failed to fetch store reviews', details: error.message });
   }
 };
 
@@ -905,5 +1189,8 @@ module.exports = {
   getReservations,
   getUserById,
   getItemById,
-  updateReservation,
+  createReview,
+  confirmReservation,
+  updateReservationStatus,
+  getStoreReviews,
 };
