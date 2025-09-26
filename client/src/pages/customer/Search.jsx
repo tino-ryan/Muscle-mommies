@@ -19,6 +19,7 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const getPrimaryImageURL = (item) => {
     if (!item.images || item.images.length === 0) {
@@ -27,6 +28,23 @@ export default function SearchPage() {
     const primaryImage =
       item.images.find((img) => img.isPrimary) || item.images[0];
     return primaryImage.imageURL;
+  };
+
+  const getStoreName = (storeId) => {
+    const store = stores.find((s) => s.storeId === storeId);
+    return store ? store.storeName : 'Unknown Store';
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? (selectedItem.images?.length || 1) - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === (selectedItem.images?.length || 1) - 1 ? 0 : prev + 1
+    );
   };
 
   useEffect(() => {
@@ -343,6 +361,7 @@ export default function SearchPage() {
                     </div>
                     <div className="item-content">
                       <h3 className="item-title">{item.name}</h3>
+                      <span className="store-name">{getStoreName(item.storeId)}</span>
                       <div className="item-tags">
                         <span className="item-tag category">
                           {item.category}
@@ -420,27 +439,75 @@ export default function SearchPage() {
                   &times;
                 </button>
                 <div className="modal-body">
-                  <img
-                    src={getPrimaryImageURL(selectedItem)}
-                    alt={selectedItem.name}
-                    className="modal-image"
-                    onError={(e) => {
-                      e.target.src =
-                        'https://via.placeholder.com/200x200?text=No+Image';
-                    }}
-                  />
+                  <div className="modal-image-carousel">
+                    <img
+                      src={
+                        selectedItem.images && selectedItem.images.length > 0
+                          ? selectedItem.images[currentImageIndex]?.imageURL ||
+                            'https://via.placeholder.com/250x250?text=No+Image'
+                          : 'https://via.placeholder.com/250x250?text=No+Image'
+                      }
+                      alt={selectedItem.name}
+                      className="modal-image"
+                      onError={(e) => {
+                        e.target.src =
+                          'https://via.placeholder.com/250x250?text=No+Image';
+                      }}
+                    />
+                    {selectedItem.images && selectedItem.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={handlePrevImage}
+                          className="carousel-button prev"
+                        >
+                          &larr;
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="carousel-button next"
+                        >
+                          &rarr;
+                        </button>
+                      </>
+                    )}
+                  </div>
                   <div className="modal-info">
                     <h2 className="modal-title">{selectedItem.name}</h2>
-                    <p className="modal-description">
-                      {selectedItem.description || 'No description available'}
-                    </p>
-                    <p className="modal-category">
-                      Category: {selectedItem.category}
-                    </p>
-                    <p className="modal-size">
-                      Size: {selectedItem.size || 'N/A'}
-                    </p>
-                    <p className="modal-price">R{selectedItem.price}</p>
+                    <div className="modal-description-section">
+                      <h3 className="modal-section-title">Description</h3>
+                      <p className="modal-description">
+                        {selectedItem.description || 'No description available'}
+                      </p>
+                    </div>
+                    <div className="modal-details-section">
+                      <h3 className="modal-section-title">Details</h3>
+                      <div className="modal-details-grid">
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">label</span>
+                          <span>Category: {selectedItem.category}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">straighten</span>
+                          <span>Size: {selectedItem.size || 'N/A'}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">group</span>
+                          <span>Department: {selectedItem.department}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">currency_exchange</span>
+                          <span>Price: R{selectedItem.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {selectedItem.measurements && (
+                      <div className="modal-measurements-section">
+                        <h3 className="modal-section-title">Measurements</h3>
+                        <p className="modal-measurements">
+                          {selectedItem.measurements}
+                        </p>
+                      </div>
+                    )}
                     {selectedItem.status === 'Reserved' && (
                       <p className="modal-reserved">This item is reserved</p>
                     )}
