@@ -111,4 +111,11 @@ router.put(
   updateItem
 );
 
+const {saveOutfit, getUserOutfits} = require('../controllers/outfitController');
+
+// Outfit routes
+router.post('/outfits', authMiddleware, saveOutfit);
+router.get('/outfits', authMiddleware, getUserOutfits);
+
+
 module.exports = router;
