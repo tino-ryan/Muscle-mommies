@@ -7,7 +7,7 @@ import {
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CustomLoading from '../../components/CustomLoading';
+import LoadingScreen from '../../components/LoadingScreen'; // Import your loading screen component
 import { API_URL } from '../../api';
 import '../../styles/login.css';
 
@@ -183,12 +183,18 @@ export default function Login() {
       const fetchedRole = res.data.role;
       setCookie(`thriftRole_${uid}`, fetchedRole, 7);
       setRole(fetchedRole);
-      if (fetchedRole === 'customer') navigate('/customer/home');
-      else if (fetchedRole === 'storeOwner') navigate('/store/home');
-      else if (fetchedRole === 'admin') navigate('/admin/dashboard');
+      
+      // Add a small delay to show the loading screen
+      setTimeout(() => {
+        if (fetchedRole === 'customer') navigate('/customer/home');
+        else if (fetchedRole === 'storeOwner') navigate('/store/home');
+        else if (fetchedRole === 'admin') navigate('/admin/dashboard');
+      }, 2000); // 2 second delay to show loading animation
+      
     } catch (err) {
       console.error(err);
       setError('Error fetching role.');
+      setLoading(false); // Stop loading on error
     }
   };
 
@@ -208,8 +214,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
       setError('Login failed.');
-    } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading on error
     }
   };
 
@@ -225,8 +230,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
       setError('Google login failed.');
-    } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading on error
     }
   };
 
@@ -244,16 +248,12 @@ export default function Login() {
         fontFamily: themeData.font,
       }}
     >
-      {loading && (
-        <div className="login-overlay">
-          <CustomLoading
-            userName={userName}
-            onComplete={() =>
-              navigate(role ? `/${role.toLowerCase()}/home` : '/')
-            }
-          />
-        </div>
-      )}
+      {/* Replace the old loading overlay with the new LoadingScreen component */}
+      <LoadingScreen 
+        isLoading={loading}
+        //logoText="THRIFT"
+        logoSrc="/logo.png" 
+      />
 
       <div className={`left-scroll ${isMobile ? 'hidden' : ''}`}>
         {themes.map((theme) =>
