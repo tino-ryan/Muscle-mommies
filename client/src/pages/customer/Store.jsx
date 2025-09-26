@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import axios from 'axios';
-//import { v4 as uuidv4 } from 'uuid';
 import './store.css';
 import { API_URL } from '../../api';
 
@@ -17,6 +16,7 @@ export default function Store() {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Filter states
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -28,6 +28,18 @@ export default function Store() {
   const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
   const styleOptions = ['Vintage', 'Casual', 'Formal', 'Streetwear'];
   const categoryOptions = ['Tops', 'Pants', 'Dresses', 'Shoes', 'Accessories'];
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? (selectedItem.images?.length || 1) - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === (selectedItem.images?.length || 1) - 1 ? 0 : prev + 1
+    );
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -632,7 +644,6 @@ export default function Store() {
               </div>
             </div>
           </div>
-
           {selectedItem && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -643,29 +654,75 @@ export default function Store() {
                   &times;
                 </button>
                 <div className="modal-body">
-                  <img
-                    src={
-                      selectedItem.images && selectedItem.images.length > 0
-                        ? selectedItem.images[0].imageURL
-                        : 'https://via.placeholder.com/200x200?text=No+Image'
-                    }
-                    alt={selectedItem.name}
-                    className="modal-image"
-                    onError={(e) => {
-                      e.target.src =
-                        'https://via.placeholder.com/200x200?text=No+Image';
-                    }}
-                  />
+                  <div className="modal-image-carousel">
+                    <img
+                      src={
+                        selectedItem.images && selectedItem.images.length > 0
+                          ? selectedItem.images[currentImageIndex]?.imageURL ||
+                            'https://via.placeholder.com/250x250?text=No+Image'
+                          : 'https://via.placeholder.com/250x250?text=No+Image'
+                      }
+                      alt={selectedItem.name}
+                      className="modal-image"
+                      onError={(e) => {
+                        e.target.src =
+                          'https://via.placeholder.com/250x250?text=No+Image';
+                      }}
+                    />
+                    {selectedItem.images && selectedItem.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={handlePrevImage}
+                          className="carousel-button prev"
+                        >
+                          &larr;
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="carousel-button next"
+                        >
+                          &rarr;
+                        </button>
+                      </>
+                    )}
+                  </div>
                   <div className="modal-info">
                     <h2 className="modal-title">{selectedItem.name}</h2>
-                    <p className="modal-description">
-                      {selectedItem.description}
-                    </p>
-                    <p className="modal-category">
-                      Category: {selectedItem.category}
-                    </p>
-                    <p className="modal-size">Size: {selectedItem.size}</p>
-                    <p className="modal-price">R{selectedItem.price}</p>
+                    <div className="modal-description-section">
+                      <h3 className="modal-section-title">Description</h3>
+                      <p className="modal-description">
+                        {selectedItem.description || 'No description available'}
+                      </p>
+                    </div>
+                    <div className="modal-details-section">
+                      <h3 className="modal-section-title">Details</h3>
+                      <div className="modal-details-grid">
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">label</span>
+                          <span>Category: {selectedItem.category}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">straighten</span>
+                          <span>Size: {selectedItem.size || 'N/A'}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">group</span>
+                          <span>Department: {selectedItem.department}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">currency_exchange</span>
+                          <span>Price: R{selectedItem.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {selectedItem.measurements && (
+                      <div className="modal-measurements-section">
+                        <h3 className="modal-section-title">Measurements</h3>
+                        <p className="modal-measurements">
+                          {selectedItem.measurements}
+                        </p>
+                      </div>
+                    )}
                     {selectedItem.status === 'Reserved' && (
                       <p className="modal-reserved">This item is reserved</p>
                     )}
