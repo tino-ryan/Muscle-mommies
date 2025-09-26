@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react'; // Add useMemo import
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -58,79 +58,82 @@ export default function Login() {
   const [swipeIn, setSwipeIn] = useState(true);
   const navigate = useNavigate();
 
-  const themes = [
-    {
-      name: 'vintage',
-      bg: '#faf0e6',
-      text: '#4b3621',
-      buttonBg: '#8b5e3c',
-      buttonHover: '#6b4a2e',
-      font: "'Playfair Display', serif",
-      inputBorder: '#a67c00',
-      themeIcon: 'fa-camera-retro',
-      images: ['/images/themes/vintage.jpg'],
-      taglines: [
-        'Retro vibes, timeless finds.',
-        'Classic looks for modern days.',
-      ],
-    },
-    {
-      name: 'goth',
-      bg: '#0f0f0f',
-      text: '#f0f0f0', // Changed from #ffffff to light gray for better readability
-      buttonBg: '#1c2526',
-      buttonHover: '#2e3b3e',
-      font: "'Cinzel', serif",
-      inputBorder: '#e600ac',
-      themeIcon: 'fa-skull',
-      images: ['/images/themes/goth.jpg'],
-      taglines: ['Dark style, bold attitude.', 'Mystery meets fashion.'],
-      taglineBg: 'rgba(255, 255, 255, 0.3)', // Changed to semi-transparent white for contrast
-    },
-    {
-      name: 'y2k',
-      bg: '#e0bbff',
-      text: '#3f0071',
-      buttonBg: '#ff00ff',
-      buttonHover: '#cc00cc',
-      font: "'Orbitron', sans-serif",
-      inputBorder: '#3f0071',
-      themeIcon: 'fa-radio',
-      images: ['/images/themes/y2k.jpg', '/images/themes/y2k2.jpg'],
-      taglines: [
-        'Y2K flair, neon everywhere.',
-        'Turn back the millennial clock.',
-      ],
-    },
-    {
-      name: 'hiphop',
-      bg: '#fef6e4',
-      text: '#1f2937',
-      buttonBg: '#1f2937',
-      buttonHover: '#374151',
-      font: "'Bebas Neue', sans-serif",
-      inputBorder: '#1f2937',
-      themeIcon: 'fa-microphone',
-      images: [
-        '/images/themes/hiphop1.jpg',
-        '/images/themes/hiphop2.jpg',
-        '/images/themes/hiphop3.jpg',
-      ],
-      taglines: ['Street beats, fresh fits.', 'Urban culture, urban style.'],
-    },
-    {
-      name: 'sporty',
-      bg: '#e3f2fd',
-      text: '#1e88e5',
-      buttonBg: '#1e88e5',
-      buttonHover: '#1565c0',
-      font: "'Montserrat', sans-serif",
-      inputBorder: '#1e88e5',
-      themeIcon: 'fa-dumbbell',
-      images: ['/images/themes/sporty.jpg', '/images/themes/sporty2.jpg'],
-      taglines: ['Active life, stylish gear.', 'Run, play, slay.'],
-    },
-  ];
+  const themes = useMemo(
+    () => [
+      {
+        name: 'vintage',
+        bg: '#faf0e6',
+        text: '#4b3621',
+        buttonBg: '#8b5e3c',
+        buttonHover: '#6b4a2e',
+        font: "'Playfair Display', serif",
+        inputBorder: '#a67c00',
+        themeIcon: 'fa-camera-retro',
+        images: ['/images/themes/vintage.jpg'],
+        taglines: [
+          'Retro vibes, timeless finds.',
+          'Classic looks for modern days.',
+        ],
+      },
+      {
+        name: 'goth',
+        bg: '#0f0f0f',
+        text: '#f0f0f0',
+        buttonBg: '#1c2526',
+        buttonHover: '#2e3b3e',
+        font: "'Cinzel', serif",
+        inputBorder: '#e600ac',
+        themeIcon: 'fa-skull',
+        images: ['/images/themes/goth.jpg'],
+        taglines: ['Dark style, bold attitude.', 'Mystery meets fashion.'],
+        taglineBg: 'rgba(255, 255, 255, 0.3)',
+      },
+      {
+        name: 'y2k',
+        bg: '#e0bbff',
+        text: '#3f0071',
+        buttonBg: '#ff00ff',
+        buttonHover: '#cc00cc',
+        font: "'Orbitron', sans-serif",
+        inputBorder: '#3f0071',
+        themeIcon: 'fa-radio',
+        images: ['/images/themes/y2k.jpg', '/images/themes/y2k2.jpg'],
+        taglines: [
+          'Y2K flair, neon everywhere.',
+          'Turn back the millennial clock.',
+        ],
+      },
+      {
+        name: 'hiphop',
+        bg: '#fef6e4',
+        text: '#1f2937',
+        buttonBg: '#1f2937',
+        buttonHover: '#374151',
+        font: "'Bebas Neue', sans-serif",
+        inputBorder: '#1f2937',
+        themeIcon: 'fa-microphone',
+        images: [
+          '/images/themes/hiphop1.jpg',
+          '/images/themes/hiphop2.jpg',
+          '/images/themes/hiphop3.jpg',
+        ],
+        taglines: ['Street beats, fresh fits.', 'Urban culture, urban style.'],
+      },
+      {
+        name: 'sporty',
+        bg: '#e3f2fd',
+        text: '#1e88e5',
+        buttonBg: '#1e88e5',
+        buttonHover: '#1565c0',
+        font: "'Montserrat', sans-serif",
+        inputBorder: '#1e88e5',
+        themeIcon: 'fa-dumbbell',
+        images: ['/images/themes/sporty.jpg', '/images/themes/sporty2.jpg'],
+        taglines: ['Active life, stylish gear.', 'Run, play, slay.'],
+      },
+    ],
+    []
+  );
 
   // Preload all images
   useEffect(() => {
@@ -140,7 +143,7 @@ export default function Login() {
         img.src = image;
       });
     });
-  }, []);
+  }, [themes]); // Add 'themes' to the dependency array
 
   // Theme cycling with random image and tagline
   useEffect(() => {
@@ -155,9 +158,10 @@ export default function Login() {
       setCurrentTheme(theme.name);
       setCurrentImage(randomImage);
       setCurrentTagline(randomTagline);
-    }, 6000); // 6 seconds
+    }, 6000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [themes]);
 
   // Mobile detection
   useEffect(() => {

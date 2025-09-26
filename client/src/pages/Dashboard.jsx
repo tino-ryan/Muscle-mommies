@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react'; // Add useMemo import
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Dashboard.css';
 import { API_URL } from '../api';
+import { useCallback } from 'react';
 
 // Cookie helpers
 function setCookie(name, value, days) {
@@ -46,50 +47,54 @@ export default function Dashboard() {
   const [showMessage, setShowMessage] = useState(true);
   const [swiping, setSwiping] = useState(false);
 
-  const messages = [
-    'Initializing thrift engine...',
-    'Welcome, style scavenger.',
-    "You're entering the vintage vault.",
-    'Loading gems from the past...',
-    'Hold on, rewinding time to prime thrift era.',
-    'Get set for timeless treasures.',
-    'Welcome to ThriftFinder!',
-  ];
+  const messages = useMemo(
+    () => [
+      'Initializing thrift engine...',
+      'Welcome, style scavenger.',
+      "You're entering the vintage vault.",
+      'Loading gems from the past...',
+      'Hold on, rewinding time to prime thrift era.',
+      'Get set for timeless treasures.',
+      'Welcome to ThriftFinder!',
+    ],
+    []
+  ); // Empty dependency array since messages is static
 
   const typingSpeed = 50;
   const fadeOutDelay = 2500;
 
-  const getRoleAndRedirect = async (uid) => {
-    try {
-      const res = await axios.post(`${API_URL}/api/auth/getRole`, { uid });
-      const fetchedRole = res.data.role;
-      setCookie(`thriftRole_${uid}`, fetchedRole, 7);
-      setRole(fetchedRole);
+  const getRoleAndRedirect = useCallback(
+    async (uid) => {
+      try {
+        const res = await axios.post(`${API_URL}/api/auth/getRole`, { uid });
+        const fetchedRole = res.data.role;
+        setCookie(`thriftRole_${uid}`, fetchedRole, 7);
+        setRole(fetchedRole);
 
-      setTimeout(() => {
-        setSwiping(true);
         setTimeout(() => {
-          if (fetchedRole === 'customer') navigate('/customer/home');
-          else if (fetchedRole === 'storeOwner') navigate('/store/home');
-          else if (fetchedRole === 'admin') navigate('/admin/dashboard');
-          else {
-            eraseAllRoleCookies();
-            navigate('/login');
-          }
-        }, 1200);
-      }, 200);
-    } catch (err) {
-      console.error('Error fetching role:', err);
-      eraseAllRoleCookies();
-      setSwiping(true);
-      setTimeout(() => navigate('/login'), 1200);
-    }
-  };
+          setSwiping(true);
+          setTimeout(() => {
+            if (fetchedRole === 'customer') navigate('/customer/home');
+            else if (fetchedRole === 'storeOwner') navigate('/store/home');
+            else if (fetchedRole === 'admin') navigate('/admin/dashboard');
+            else {
+              eraseAllRoleCookies();
+              navigate('/login');
+            }
+          }, 1200);
+        }, 200);
+      } catch (err) {
+        console.error('Error fetching role:', err);
+        eraseAllRoleCookies();
+        setSwiping(true);
+        setTimeout(() => navigate('/login'), 1200);
+      }
+    },
+    [navigate]
+  );
 
   // Auto login check
   useEffect(() => {
-    axios.get(API_URL); // ping server
-
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         setRole('guest');
@@ -122,7 +127,7 @@ export default function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, getRoleAndRedirect]);
 
   // Typing intro + fallback login redirect
   useEffect(() => {
@@ -148,7 +153,7 @@ export default function Dashboard() {
 
       typeText();
     }
-  }, [loading, role, navigate]);
+  }, [loading, role, navigate, messages]);
 
   const handleManualNav = (path) => {
     setShowMessage(false);
