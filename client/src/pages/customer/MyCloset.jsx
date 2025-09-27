@@ -11,6 +11,7 @@ export default function MyCloset() {
   const [items, setItems] = useState({});
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [outfit, setOutfit] = useState(Array(9).fill(null)); // 9 slots
+  const [outfits, setOutfits] = useState([]); // saved outfits from db
   const [error, setError] = useState("");
   const auth = getAuth();
   const navigate = useNavigate();
@@ -31,36 +32,42 @@ export default function MyCloset() {
         });
         const resData = resResponse.data;
 
-        // ✅ filter only completed reservations
-        const completed = resData.filter((r) => r.status === "Completed" || r.status === "Confirmed");
+        // ✅ filter only completed/confirmed
+        const completed = resData.filter(
+          (r) => r.status === "Completed" || r.status === "Confirmed"
+        );
         setReservations(completed);
 
-        if (completed.length === 0) return;
+        if (completed.length > 0) {
+          // fetch item details
+          const itemPromises = completed.map((res) =>
+            axios
+              .get(`${API_URL}/api/items/${res.itemId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .catch(() => ({
+                data: {
+                  images: [
+                    { imageURL: "https://via.placeholder.com/200x200?text=No+Image" },
+                  ],
+                },
+              }))
+          );
 
-        // fetch item details
-        const itemPromises = completed.map((res) =>
-          axios
-            .get(`${API_URL}/api/items/${res.itemId}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .catch(() => ({
-              data: {
-                images: [
-                  {
-                    imageURL:
-                      "https://via.placeholder.com/200x200?text=No+Image",
-                  },
-                ],
-              },
-            }))
-        );
+          const itemResponses = await Promise.all(itemPromises);
+          const itemMap = {};
+          itemResponses.forEach((resp, idx) => {
+            itemMap[completed[idx].itemId] = resp.data;
+          });
+          setItems(itemMap);
+        }
 
-        const itemResponses = await Promise.all(itemPromises);
-        const itemMap = {};
-        itemResponses.forEach((resp, idx) => {
-          itemMap[completed[idx].itemId] = resp.data;
+        // fetch saved outfits
+        const outfitRes = await axios.get(`${API_URL}/api/outfits`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setItems(itemMap);
+        setOutfits(outfitRes.data);
+
       } catch (err) {
         setError("Failed to load closet: " + (err.response?.data?.error || err.message));
       }
@@ -84,9 +91,9 @@ export default function MyCloset() {
 
   const handleRemoveItem = () => {
     const newOutfit = [...outfit];
-    newOutfit[selectedSlot] = null; // clear the slot
+    newOutfit[selectedSlot] = null;
     setOutfit(newOutfit);
-    setSelectedSlot(null); // close popup
+    setSelectedSlot(null);
   };
 
   // Save outfit → send to backend
@@ -97,13 +104,18 @@ export default function MyCloset() {
 
       await axios.post(
         `${API_URL}/api/outfits`,
-        {
-          slots: outfit, // array of itemIds/null
-        },
+        { slots: outfit },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       alert("Outfit saved!");
+
+      // reload outfits after saving
+      const outfitRes = await axios.get(`${API_URL}/api/outfits`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOutfits(outfitRes.data);
+
     } catch (err) {
       console.error(err);
       alert("Failed to save outfit");
@@ -117,40 +129,79 @@ export default function MyCloset() {
         <h2>My Closet</h2>
         {error && <div className="error">{error}</div>}
 
-        {/* 9 slot grid */}
-        <div className="closet-grid">
-          {outfit.map((itemId, index) => {
-            const item = items[itemId];
-            const itemImages = item?.images || [];
+        {/* Create new outfit section */}
+        <div className="create-outfit-section">
+          <h3>Create New Outfit</h3>
+          <div className="closet-grid">
+            {outfit.map((itemId, index) => {
+              const item = items[itemId];
+              const itemImages = item?.images || [];
 
-            return (
-              <div
-                key={index}
-                className="closet-slot"
-                onClick={() => handleSlotClick(index)}
-              >
-                {itemId && itemImages.length > 0 ? (
-                  <img
-                    src={itemImages[0].imageURL}
-                    alt={item?.name || "Closet item"}
-                    className="closet-slot-image"
-                    onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/200x200?text=No+Image";
-                    }}
-                  />
-                ) : (
-                  <span>+</span>
-                )}
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={index}
+                  className="closet-slot"
+                  onClick={() => handleSlotClick(index)}
+                >
+                  {itemId && itemImages.length > 0 ? (
+                    <img
+                      src={itemImages[0].imageURL}
+                      alt={item?.name || "Closet item"}
+                      className="closet-slot-image"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://via.placeholder.com/200x200?text=No+Image";
+                      }}
+                    />
+                  ) : (
+                    <span>+</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <button className="save-button" onClick={handleSave}>
+            Save Outfit
+          </button>
         </div>
 
-        {/* Save button */}
-        <button className="save-button" onClick={handleSave}>
-          Save Outfit
-        </button>
+        {/* My outfits section */}
+        <div className="my-outfits-section">
+          <h3>My Outfits</h3>
+          {outfits.length === 0 ? (
+            <p>You haven’t saved any outfits yet.</p>
+          ) : (
+            <div className="outfits-list">
+              {outfits.map((outfitDoc, idx) => (
+                <div key={idx} className="outfit-card">
+                  {outfitDoc.slots.map((itemId, slotIdx) => {
+                    if (!itemId) return <div key={slotIdx} className="outfit-slot empty"></div>;
+                    const item = items[itemId];
+                    const itemImages = item?.images || [];
+                    return (
+                      <div key={slotIdx} className="outfit-slot">
+                        {itemImages.length > 0 ? (
+                          <img
+                            src={itemImages[0].imageURL}
+                            alt={item?.name || "Closet item"}
+                            className="outfit-slot-image"
+                          />
+                        ) : (
+                          <img
+                            src="https://via.placeholder.com/200x200?text=No+Image"
+                            alt="No item available"
+                            className="outfit-slot-image"
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Popup for item selection */}
         {selectedSlot !== null && (
@@ -175,10 +226,6 @@ export default function MyCloset() {
                             src={img.imageURL}
                             alt={item?.name || "Closet item"}
                             className="popup-item"
-                            onError={(e) => {
-                              e.target.src =
-                                "https://via.placeholder.com/200x200?text=No+Image";
-                            }}
                           />
                         ))
                       ) : (

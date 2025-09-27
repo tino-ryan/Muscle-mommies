@@ -1,4 +1,5 @@
 const express = require('express');
+const { saveOutfit, getUserOutfits } = require('../controllers/outfitController');
 const router = express.Router();
 const {
   getStore,
@@ -111,11 +112,7 @@ router.put(
   updateItem
 );
 
-const {saveOutfit, getUserOutfits} = require('../controllers/outfitController');
-
-// Outfit routes
 router.post('/outfits', authMiddleware, saveOutfit);
-router.get('/outfits', authMiddleware, getUserOutfits);
-
+router.get("/outfits", authMiddleware, getUserOutfits);
 
 module.exports = router;
