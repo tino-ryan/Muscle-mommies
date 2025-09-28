@@ -9,6 +9,22 @@ const ReviewsModal = ({ storeId, storeName, isOpen, onClose }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/stores/${storeId}/reviews`
+        );
+        setReviews(response.data);
+        setError('');
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
+        setError('Failed to load reviews');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (isOpen && storeId) {
       fetchReviews();
     }

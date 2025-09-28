@@ -60,7 +60,14 @@ export default defineConfig([
   },
 
   // Ignore CSS files completely
+  // Ignore CSS + test files
   {
-    ignores: ['**/*.css'],
+    ignores: [
+      '**/*.css',
+      '**/*.test.js',
+      '**/*.test.jsx',
+      '**/*.spec.js',
+      '**/*.spec.jsx',
+    ],
   },
 ]);
