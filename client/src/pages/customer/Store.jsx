@@ -3,9 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import StarRating from '../../components/StarRating';
 import ReviewsModal from '../../components/ReviewsModal';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
-//import { v4 as uuidv4 } from 'uuid';
 import './store.css';
 import { API_URL } from '../../api';
 
@@ -18,7 +17,7 @@ export default function Store() {
   const [clothes, setClothes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showReviewsModal, setShowReviewsModal] = useState(false);
 
   // Filter states
@@ -31,6 +30,18 @@ export default function Store() {
   const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
   const styleOptions = ['Vintage', 'Casual', 'Formal', 'Streetwear'];
   const categoryOptions = ['Tops', 'Pants', 'Dresses', 'Shoes', 'Accessories'];
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? (selectedItem.images?.length || 1) - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === (selectedItem.images?.length || 1) - 1 ? 0 : prev + 1
+    );
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -155,15 +166,6 @@ export default function Store() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
   const handleViewReviews = () => {
     setShowReviewsModal(true);
   };
@@ -171,99 +173,9 @@ export default function Store() {
   if (loading) {
     return (
       <div className="store-home">
-        <CustomerSidebar />
-        <div className="layout-container">
-          <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-            <div
-              className="sidebar-item"
-              onClick={() => {
-                navigate('/customer/home');
-                setSidebarOpen(false);
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24px"
-                height="24px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
-              </svg>
-              <p>Home</p>
-            </div>
-            <div
-              className="sidebar-item"
-              onClick={() => {
-                navigate('/search');
-                setSidebarOpen(false);
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24px"
-                height="24px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-              </svg>
-              <p>Search</p>
-            </div>
-            <div
-              className="sidebar-item"
-              onClick={() => {
-                navigate('/user/chats');
-                setSidebarOpen(false);
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24px"
-                height="24px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V168.45l-26.88-23.8a16,16,0,0,0-21.81.75L147.47,168H40V56Z M40,184V179.47l25.19-25.18a16,16,0,0,0,21.93-.58L107.47,176H194.12l26.88,23.8a8,8,0,0,0-.12-15.55Z"></path>
-              </svg>
-              <p>Chats</p>
-            </div>
-            <div
-              className="sidebar-item"
-              onClick={() => {
-                navigate('/customer/profile');
-                setSidebarOpen(false);
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24px"
-                height="24px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
-              </svg>
-              <p>Profile</p>
-            </div>
-            <div className="sidebar-item" onClick={handleLogout}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24px"
-                height="24px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d="M208,32H72A24,24,0,0,0,48,56V88a8,8,0,0,0,16,0V56a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8V200a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8v-32a8,8,0,0,0-16,0v32a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V56A24,24,0,0,0,208,32Zm-56,88a8,8,0,0,0-8,8v16a8,8,0,0,0,16,0V128A8,8,0,0,0,152,120Zm40-32H104a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16Zm0,64H104a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM83.52,74.34l-32,32a8,8,0,0,0,0,11.32l32,32a8,8,0,0,0,11.32-11.32L67.66,128l27.18-27.16a8,8,0,0,0-11.32-11.32Z"></path>
-              </svg>
-              <p>Logout</p>
-            </div>
-          </div>
-
-          <div className="loading-container">
-            <div className="spinner" data-testid="spinner"></div>
-            <div className="loading-text">Loading store...</div>
-          </div>
+        <div className="loading-container">
+          <div className="spinner" data-testid="spinner"></div>
+          <div className="loading-text">Loading store...</div>
         </div>
       </div>
     );
@@ -442,7 +354,6 @@ export default function Store() {
               </div>
             </div>
           </div>
-
           {selectedItem && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -453,29 +364,83 @@ export default function Store() {
                   &times;
                 </button>
                 <div className="modal-body">
-                  <img
-                    src={
-                      selectedItem.images && selectedItem.images.length > 0
-                        ? selectedItem.images[0].imageURL
-                        : 'https://via.placeholder.com/200x200?text=No+Image'
-                    }
-                    alt={selectedItem.name}
-                    className="modal-image"
-                    onError={(e) => {
-                      e.target.src =
-                        'https://via.placeholder.com/200x200?text=No+Image';
-                    }}
-                  />
+                  <div className="modal-image-carousel">
+                    <img
+                      src={
+                        selectedItem.images && selectedItem.images.length > 0
+                          ? selectedItem.images[currentImageIndex]?.imageURL ||
+                            'https://via.placeholder.com/250x250?text=No+Image'
+                          : 'https://via.placeholder.com/250x250?text=No+Image'
+                      }
+                      alt={selectedItem.name}
+                      className="modal-image"
+                      onError={(e) => {
+                        e.target.src =
+                          'https://via.placeholder.com/250x250?text=No+Image';
+                      }}
+                    />
+                    {selectedItem.images && selectedItem.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={handlePrevImage}
+                          className="carousel-button prev"
+                        >
+                          &larr;
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="carousel-button next"
+                        >
+                          &rarr;
+                        </button>
+                      </>
+                    )}
+                  </div>
                   <div className="modal-info">
                     <h2 className="modal-title">{selectedItem.name}</h2>
-                    <p className="modal-description">
-                      {selectedItem.description}
-                    </p>
-                    <p className="modal-category">
-                      Category: {selectedItem.category}
-                    </p>
-                    <p className="modal-size">Size: {selectedItem.size}</p>
-                    <p className="modal-price">R{selectedItem.price}</p>
+                    <div className="modal-description-section">
+                      <h3 className="modal-section-title">Description</h3>
+                      <p className="modal-description">
+                        {selectedItem.description || 'No description available'}
+                      </p>
+                    </div>
+                    <div className="modal-details-section">
+                      <h3 className="modal-section-title">Details</h3>
+                      <div className="modal-details-grid">
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">
+                            label
+                          </span>
+                          <span>Category: {selectedItem.category}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">
+                            straighten
+                          </span>
+                          <span>Size: {selectedItem.size || 'N/A'}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">
+                            group
+                          </span>
+                          <span>Department: {selectedItem.department}</span>
+                        </div>
+                        <div className="modal-detail-item">
+                          <span className="material-symbols-outlined modal-icon">
+                            currency_exchange
+                          </span>
+                          <span>Price: R{selectedItem.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {selectedItem.measurements && (
+                      <div className="modal-measurements-section">
+                        <h3 className="modal-section-title">Measurements</h3>
+                        <p className="modal-measurements">
+                          {selectedItem.measurements}
+                        </p>
+                      </div>
+                    )}
                     {selectedItem.status === 'Reserved' && (
                       <p className="modal-reserved">This item is reserved</p>
                     )}

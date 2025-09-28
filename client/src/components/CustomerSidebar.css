@@ -1,7 +1,6 @@
-/* src/components/CustomerSidebar.css */
 .sidebar {
   width: 250px;
-  padding: 20px;
+  padding: 10px;
   border-right: 1px solid #e7d0d1;
   background-color: #fcf8f8;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
