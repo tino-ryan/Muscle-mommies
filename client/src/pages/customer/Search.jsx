@@ -473,6 +473,10 @@ export default function SearchPage() {
                   </div>
                   <div className="modal-info">
                     <h2 className="modal-title">{selectedItem.name}</h2>
+                    <p className="modal-store-name">
+                      <span className="material-symbols-outlined modal-icon">store</span>
+                      {getStoreName(selectedItem.storeId)}
+                    </p>
                     <div className="modal-description-section">
                       <h3 className="modal-section-title">Description</h3>
                       <p className="modal-description">
