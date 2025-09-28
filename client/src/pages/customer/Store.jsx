@@ -378,7 +378,7 @@ export default function Store() {
   }
 
   return (
-    <div className="store-home">
+    <div className={`store-home ${store.theme || 'theme-default'}`}>
       <button className="hamburger-menu" onClick={toggleSidebar}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

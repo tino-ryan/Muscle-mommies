@@ -1,48 +1,58 @@
 
 :root{
-    --color-bg: #ffffff;
-    --color-text: #0f172a;
-    --color-primary: #f9f9f9;
-    --color-accent: #994d51;
-    --color-muted: #e7d0d1;
+    --color-base: #0d0d55;
+    --color-text: #000;
+    --color-bg: #fc07be;
+    --color-filter: #8c9eff;
+    --color-btn: #d3f44b;
+    --color-clear: #1b88e5;
+
 }
 
 
 /* Default theme */
 .theme-default {
-    --color-bg: #ffffff;
-    --color-text: #0f172a;
-    --color-primary: #f9f9f9;
-    --color-accent: #994d51;
-    --color-muted: #e7d0d1;
+    --color-base: #0d0d55;
+    --color-text: #000;
+    --color-bg: #fc07be;
+    --color-filter: #8c9eff;
+    --color-btn: #d3f44b;
+    --color-clear: #1b88e5;
+    --color-accent: #0d00ff;
 }
 
 
 /* Y2K / retro vibe */
 .theme-y2k {
---color-bg: #fff8ff;
---color-text: blue;
---color-primary: #ff66cc;
---color-accent: #00c2ff;
---color-muted: #7b61ff;
+--color-base: #0d0d55;
+    --color-text: #000;
+    --color-bg: #fc07be;
+    --color-filter: #8c9eff;
+    --color-btn: #d3f44b;
+    --color-clear: #1b88e5;
+    --color-accent: #0d00ff;
 }
 
 
 /* Minimal */
 .theme-minimal {
---color-bg: #dddde7;
---color-text: black;
---color-primary: #4d4d4d;
---color-accent: #363b5c;
---color-muted: #6b7280;
+    --color-base: #eeeeee;
+    --color-text: #000;
+    --color-bg: #f7f7f7;
+    --color-filter: #c3c3c3;
+    --color-btn: #c73a3c;
+    --color-clear: #c73a3c;
+    --color-accent: #8b0002;
 }
 
 
 /* Vintage / earthy */
 .theme-vintage {
---color-bg: #fffaf0;
---color-text: #24312a;
---color-primary: #2f855a;
---color-accent: #d69e2e;
---color-muted: #6b705b;
+    --color-base: #f3a99e;
+    --color-text: #000;
+    --color-bg: #f4c8bf;
+    --color-filter: #aab8db;
+    --color-btn: #fee6ce;
+    --color-clear: #6a88be;
+    --color-accent: #305593;
 }
