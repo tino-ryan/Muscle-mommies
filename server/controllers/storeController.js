@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
 const { Store, Chat, Message } = require('../models/store');
+//const { use } = require('react');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -24,8 +25,46 @@ const uploadToCloudinary = (file) => {
     streamifier.createReadStream(file.buffer).pipe(stream);
   });
 };
+const defaultHours = {
+  Monday: { open: false, start: '09:00', end: '17:00' },
+  Tuesday: { open: false, start: '09:00', end: '17:00' },
+  Wednesday: { open: false, start: '09:00', end: '17:00' },
+  Thursday: { open: false, start: '09:00', end: '17:00' },
+  Friday: { open: false, start: '09:00', end: '17:00' },
+  Saturday: { open: false, start: '09:00', end: '17:00' },
+  Sunday: { open: false, start: '09:00', end: '17:00' },
+};
+// Get store by ID
+const getStoreById = async (req, res) => {
+  try {
+    const { storeId } = req.params;
+    if (!storeId) {
+      return res.status(400).json({ error: 'Store ID is required' });
+    }
+    const storeDoc = await admin
+      .firestore()
+      .collection(Store.collection)
+      .doc(storeId)
+      .get();
+    if (!storeDoc.exists) {
+      return res.status(404).json({ error: 'Store not found' });
+    }
+    const storeData = {
+      storeId: storeDoc.id,
+      ...storeDoc.data(),
+      theme: storeDoc.data().theme || 'theme-default',
+      hours: storeDoc.data().hours || defaultHours,
+    };
+    res.json(storeData);
+  } catch (error) {
+    console.error('Error fetching store:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch store', details: error.message });
+  }
+};
 
-// Get store details
+// Get store by owner
 const getStore = async (req, res) => {
   try {
     const userId = req.user.uid;
@@ -42,8 +81,14 @@ const getStore = async (req, res) => {
         .status(400)
         .json({ error: 'Store not found. Please create a store.' });
     }
-    const storeData = snapshot.docs[0].data();
-    res.json({ storeId: snapshot.docs[0].id, ...storeData });
+    const storeDoc = snapshot.docs[0];
+    const storeData = {
+      storeId: storeDoc.id,
+      ...storeDoc.data(),
+      theme: storeDoc.data().theme || 'theme-default',
+      hours: storeDoc.data().hours || defaultHours,
+    };
+    res.json(storeData);
   } catch (error) {
     console.error('Error fetching store:', error);
     res
@@ -59,6 +104,8 @@ const getStores = async (req, res) => {
     const stores = snapshot.docs.map((doc) => ({
       storeId: doc.id,
       ...doc.data(),
+      theme: doc.data().theme || 'theme-default',
+      hours: doc.data().hours || defaultHours,
     }));
     res.json(stores);
   } catch (error) {
@@ -69,12 +116,20 @@ const getStores = async (req, res) => {
   }
 };
 
+// Create or update store (from previous context, included for completeness)
 // Create or update store
 const createOrUpdateStore = async (req, res) => {
   try {
     const userId = req.user.uid;
-    const { storeName, description, address, location, profileImageURL } =
-      req.body;
+    const {
+      storeName,
+      description,
+      address,
+      location,
+      profileImageURL,
+      theme,
+      hours,
+    } = req.body;
     if (!userId) {
       return res.status(401).json({ error: 'User ID not provided' });
     }
@@ -96,6 +151,53 @@ const createOrUpdateStore = async (req, res) => {
         .status(400)
         .json({ error: 'Failed to parse location', details: error.message });
     }
+
+    let parsedHours;
+    try {
+      parsedHours =
+        typeof hours === 'string' ? JSON.parse(hours) : hours || defaultHours;
+      const days = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ];
+      const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+      for (const day of days) {
+        if (!parsedHours[day] || typeof parsedHours[day].open !== 'boolean') {
+          parsedHours[day] = defaultHours[day]; // Fallback to default for missing or invalid day
+        }
+        if (parsedHours[day].open) {
+          if (
+            !parsedHours[day].start ||
+            !parsedHours[day].end ||
+            !timeRegex.test(parsedHours[day].start) ||
+            !timeRegex.test(parsedHours[day].end)
+          ) {
+            return res
+              .status(400)
+              .json({ error: `Invalid time format for ${day}` });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing hours:', error);
+      parsedHours = defaultHours; // Use default hours if parsing fails
+    }
+
+    // Validate theme
+    const validThemes = [
+      'theme-default',
+      'theme-fashion',
+      'theme-vintage',
+      'theme-streetwear',
+    ];
+    const validatedTheme = validThemes.includes(theme)
+      ? theme
+      : 'theme-default';
 
     let imageURL = profileImageURL || '';
     if (req.file) {
@@ -126,6 +228,8 @@ const createOrUpdateStore = async (req, res) => {
         lng: parseFloat(parsedLocation.lng),
       },
       profileImageURL: imageURL,
+      theme: validatedTheme,
+      hours: parsedHours, // Always include hours
       createdAt: snapshot.empty
         ? admin.firestore.FieldValue.serverTimestamp()
         : snapshot.docs[0].data().createdAt,
@@ -274,29 +378,6 @@ const deleteContactInfo = async (req, res) => {
       .json({ error: 'Failed to delete contact info', details: error.message });
   }
 };
-
-// Get store by ID
-const getStoreById = async (req, res) => {
-  try {
-    const { storeId } = req.params;
-    const storeDoc = await admin
-      .firestore()
-      .collection(Store.collection)
-      .doc(storeId)
-      .get();
-    if (!storeDoc.exists) {
-      return res.status(404).json({ error: 'Store not found' });
-    }
-    res.json({ storeId, ...storeDoc.data() });
-  } catch (error) {
-    console.error('Error fetching store:', error);
-    res
-      .status(500)
-      .json({ error: 'Failed to fetch store', details: error.message });
-  }
-};
-
-// Update item (modified for storeController.js)
 
 // Get messages for a specific chatId
 const getMessagesForChat = async (req, res) => {
@@ -825,13 +906,15 @@ const getItemById = async (req, res) => {
       .json({ error: 'Failed to fetch item', details: err.message });
   }
 };
-const updateReservation = async (req, res) => {
+
+// Update the existing updateReservation function to handle the 'Sold' status
+const updateReservationStatus = async (req, res) => {
   try {
     const userId = req.user.uid;
     const { reservationId } = req.params;
     const { status } = req.body;
 
-    if (!['Pending', 'Confirmed', 'Cancelled', 'Completed'].includes(status)) {
+    if (!['Pending', 'Confirmed', 'Cancelled', 'Sold'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
@@ -861,17 +944,308 @@ const updateReservation = async (req, res) => {
         .json({ error: 'Unauthorized to update this reservation' });
     }
 
-    await reservationRef.update({
+    const reservationData = reservationDoc.data();
+    const updateData = {
       status,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
+    };
 
-    res.json({ reservationId, status });
+    // If marking as sold, add soldAt timestamp and update item status
+    if (status === 'Sold') {
+      updateData.soldAt = admin.firestore.FieldValue.serverTimestamp();
+
+      // Find the item document by itemId field (not document ID)
+      try {
+        console.log(
+          `Attempting to find and update item with itemId: ${reservationData.itemId}`
+        );
+
+        const itemQuery = admin
+          .firestore()
+          .collection('items')
+          .where('itemId', '==', reservationData.itemId);
+
+        const itemSnapshot = await itemQuery.get();
+
+        if (itemSnapshot.empty) {
+          console.error(`Item with itemId ${reservationData.itemId} not found`);
+          return res.status(404).json({ error: 'Item not found' });
+        }
+
+        const itemDocId = itemSnapshot.docs[0].id;
+        console.log(`Found item document ID: ${itemDocId}`);
+
+        await admin.firestore().collection('items').doc(itemDocId).update({
+          status: 'Sold',
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        console.log(
+          `Successfully updated item ${reservationData.itemId} status to Sold`
+        );
+      } catch (itemError) {
+        console.error('Error updating item status to Sold:', itemError);
+        return res.status(500).json({
+          error: 'Failed to update item status',
+          details: itemError.message,
+        });
+      }
+    }
+
+    // If cancelling reservation, set item back to Available
+    if (status === 'Cancelled') {
+      try {
+        console.log(
+          `Attempting to find and update item with itemId: ${reservationData.itemId}`
+        );
+
+        const itemQuery = admin
+          .firestore()
+          .collection('items')
+          .where('itemId', '==', reservationData.itemId);
+
+        const itemSnapshot = await itemQuery.get();
+
+        if (!itemSnapshot.empty) {
+          const itemDocId = itemSnapshot.docs[0].id;
+          await admin.firestore().collection('items').doc(itemDocId).update({
+            status: 'Available',
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+          console.log(
+            `Successfully updated item ${reservationData.itemId} status to Available`
+          );
+        }
+      } catch (itemError) {
+        console.error('Error updating item status to Available:', itemError);
+        // Continue with reservation update even if item update fails
+      }
+    }
+
+    // Update reservation status
+    await reservationRef.update(updateData);
+    console.log(`Reservation ${reservationId} status updated to ${status}`);
+
+    res.json({ reservationId, status, message: 'Status updated successfully' });
   } catch (error) {
     console.error('Error updating reservation:', error);
     res
       .status(500)
       .json({ error: 'Failed to update reservation', details: error.message });
+  }
+};
+
+// Create review and confirm reservation
+const createReview = async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { reservationId, itemId, storeId, rating, review } = req.body;
+
+    if (!reservationId || !itemId || !storeId || !rating) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+    }
+
+    // Verify reservation exists and belongs to user
+    const reservationRef = admin
+      .firestore()
+      .collection('Reservations')
+      .doc(reservationId);
+    const reservationDoc = await reservationRef.get();
+
+    if (!reservationDoc.exists) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+
+    const reservationData = reservationDoc.data();
+    if (reservationData.userId !== userId) {
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized to review this reservation' });
+    }
+
+    if (reservationData.status !== 'Sold') {
+      return res.status(400).json({ error: 'Can only review sold items' });
+    }
+
+    // Create review document
+    const reviewData = {
+      reservationId,
+      itemId,
+      storeId,
+      userId,
+      rating: parseInt(rating),
+      review: review || '',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    // FIXED: Use 'Reviews' (uppercase) to match your DB
+    await admin.firestore().collection('Reviews').add(reviewData);
+
+    res.json({ message: 'Review created successfully', review: reviewData });
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to create review', details: error.message });
+  }
+};
+
+// Confirm reservation (customer confirms receipt)
+const confirmReservation = async (req, res) => {
+  try {
+    const userId = req.user.uid;
+    const { reservationId } = req.params;
+
+    // Verify reservation exists and belongs to user
+    const reservationRef = admin
+      .firestore()
+      .collection('Reservations')
+      .doc(reservationId);
+    const reservationDoc = await reservationRef.get();
+
+    if (!reservationDoc.exists) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+
+    const reservationData = reservationDoc.data();
+    if (reservationData.userId !== userId) {
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized to confirm this reservation' });
+    }
+
+    if (reservationData.status !== 'Sold') {
+      return res.status(400).json({ error: 'Can only confirm sold items' });
+    }
+
+    // Update reservation status to Completed
+    await reservationRef.update({
+      status: 'Completed',
+      completedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // Update store's average rating
+    await updateStoreRating(reservationData.storeId);
+
+    res.json({ message: 'Reservation confirmed successfully' });
+  } catch (error) {
+    console.error('Error confirming reservation:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to confirm reservation', details: error.message });
+  }
+};
+
+// Helper function to update store's average rating
+const updateStoreRating = async (storeId) => {
+  try {
+    // FIXED: Use 'Reviews' (uppercase) to match your DB
+    const reviewsSnapshot = await admin
+      .firestore()
+      .collection('Reviews')
+      .where('storeId', '==', storeId)
+      .get();
+
+    if (reviewsSnapshot.empty) return;
+
+    const reviews = reviewsSnapshot.docs.map((doc) => doc.data());
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / reviews.length;
+
+    // Update store document
+    await admin
+      .firestore()
+      .collection('stores')
+      .doc(storeId)
+      .update({
+        averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
+        reviewCount: reviews.length,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+  } catch (error) {
+    console.error('Error updating store rating:', error);
+  }
+};
+
+const getStoreReviews = async (req, res) => {
+  try {
+    const { storeId } = req.params;
+
+    // Get all reviews for this store (without orderBy to avoid index requirement)
+    const reviewsSnapshot = await admin
+      .firestore()
+      .collection('Reviews')
+      .where('storeId', '==', storeId)
+      .get(); // Removed .orderBy('createdAt', 'desc')
+
+    if (reviewsSnapshot.empty) {
+      return res.json([]);
+    }
+
+    const reviews = [];
+    for (const doc of reviewsSnapshot.docs) {
+      const reviewData = doc.data();
+
+      // Get user information for each review
+      try {
+        const userRecord = await admin.auth().getUser(reviewData.userId);
+        const userDoc = await admin
+          .firestore()
+          .collection('users')
+          .doc(reviewData.userId)
+          .get();
+
+        const userData = userDoc.exists ? userDoc.data() : {};
+
+        // Get item information
+        const itemDoc = await admin
+          .firestore()
+          .collection('items')
+          .doc(reviewData.itemId)
+          .get();
+
+        const itemData = itemDoc.exists
+          ? itemDoc.data()
+          : { name: 'Unknown Item' };
+
+        reviews.push({
+          reviewId: doc.id,
+          ...reviewData,
+          userName:
+            userRecord.displayName || userData.displayName || 'Anonymous',
+          itemName: itemData.name,
+          createdAt: reviewData.createdAt,
+        });
+      } catch (userError) {
+        // If we can't get user info, still include the review
+        console.error(userError);
+        reviews.push({
+          reviewId: doc.id,
+          ...reviewData,
+          userName: 'Anonymous',
+          itemName: 'Unknown Item',
+        });
+      }
+    }
+
+    // Sort reviews manually by creation date (most recent first)
+    reviews.sort((a, b) => {
+      const aTime = a.createdAt?._seconds || 0;
+      const bTime = b.createdAt?._seconds || 0;
+      return bTime - aTime;
+    });
+
+    res.json(reviews);
+  } catch (error) {
+    console.error('Error fetching store reviews:', error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch store reviews', details: error.message });
   }
 };
 
@@ -895,5 +1269,8 @@ module.exports = {
   getReservations,
   getUserById,
   getItemById,
-  updateReservation,
+  confirmReservation,
+  updateReservationStatus,
+  getStoreReviews,
+  createReview,
 };

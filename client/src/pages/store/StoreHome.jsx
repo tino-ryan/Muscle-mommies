@@ -115,18 +115,7 @@ export default function StoreHome() {
           </div>
           <div
             className="card"
-            onClick={async () => {
-              try {
-                const uid = auth.currentUser?.uid;
-                if (uid) {
-                  document.cookie = `thriftRole_${uid}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
-                }
-                await auth.signOut();
-                navigate('/login');
-              } catch (err) {
-                console.error('Logout error:', err);
-              }
-            }}
+            onClick={() => auth.signOut().then(() => navigate('/login'))}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

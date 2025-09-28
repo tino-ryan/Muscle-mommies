@@ -15,6 +15,108 @@ import {
 import axios from 'axios';
 import './ChatWindow.css';
 
+// Function to group days with identical hours (from StoreProfile)
+const days = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+const dayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+const groupHours = (hours) => {
+  const grouped = [];
+  const daysChecked = new Set();
+
+  days.forEach((day, index) => {
+    if (daysChecked.has(day)) return;
+
+    const currentHours = hours[day];
+    if (!currentHours) return;
+
+    const sameHoursDays = [dayShortNames[index]];
+    daysChecked.add(day);
+
+    for (let i = index + 1; i < days.length; i++) {
+      const otherDay = days[i];
+      if (daysChecked.has(otherDay)) continue;
+
+      const otherHours = hours[otherDay];
+      if (
+        otherHours &&
+        otherHours.open === currentHours.open &&
+        (!currentHours.open ||
+          (otherHours.start === currentHours.start &&
+            otherHours.end === currentHours.end))
+      ) {
+        sameHoursDays.push(dayShortNames[i]);
+        daysChecked.add(otherDay);
+      }
+    }
+
+    if (sameHoursDays.length > 1) {
+      grouped.push({
+        days:
+          sameHoursDays.join('–') === 'Mon–Tue–Wed–Thu–Fri'
+            ? 'Mon–Fri'
+            : sameHoursDays.join(', '),
+        hours: currentHours.open
+          ? `${currentHours.start}–${currentHours.end}`
+          : 'Closed',
+      });
+    } else {
+      grouped.push({
+        days: sameHoursDays[0],
+        hours: currentHours.open
+          ? `${currentHours.start}–${currentHours.end}`
+          : 'Closed',
+      });
+    }
+  });
+
+  return grouped;
+};
+
+// Function to format message timestamps
+const formatMessageDate = (timestamp) => {
+  if (!timestamp) return 'N/A';
+  const date = timestamp.toDate();
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const messageDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const timeStr = date.toLocaleTimeString('en-ZA', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Africa/Johannesburg',
+  });
+
+  const diffDays = Math.floor((today - messageDate) / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) {
+    return `Today, ${timeStr}`;
+  } else if (diffDays === 1) {
+    return `Yesterday, ${timeStr}`;
+  } else {
+    return (
+      date.toLocaleDateString('en-ZA', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'Africa/Johannesburg',
+      }) + `, ${timeStr}`
+    );
+  }
+};
+
 export default function ChatWindow() {
   const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
@@ -42,6 +144,27 @@ export default function ChatWindow() {
     'Condition is excellent.',
     'Reserved! See you soon.',
   ];
+
+  const openContact = (type, value) => {
+    let url;
+    switch (type) {
+      case 'email':
+        url = `mailto:${value}`;
+        break;
+      case 'phone':
+        url = `tel:${value}`;
+        break;
+      case 'instagram':
+        url = `https://instagram.com/${value.replace('@', '')}`;
+        break;
+      case 'facebook':
+        url = `https://facebook.com/${value.replace('@', '')}`;
+        break;
+      default:
+        return;
+    }
+    window.open(url, '_blank');
+  };
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -199,7 +322,14 @@ export default function ChatWindow() {
               `${API_URL}/api/stores/${data.storeId}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
-            setStore(storeResponse.data);
+            const contactResponse = await axios.get(
+              `${API_URL}/api/stores/contact-infos?storeId=${data.storeId}`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setStore({
+              ...storeResponse.data,
+              contactInfos: contactResponse.data || [],
+            });
           } catch (err) {
             console.error(
               'Store fetch error:',
@@ -279,11 +409,16 @@ export default function ChatWindow() {
                 } ${msg.read ? 'read' : 'unread'}`}
               >
                 {msg.message}
-                <span className="timestamp">
-                  {msg.timestamp?.toDate().toLocaleString('en-ZA', {
-                    timeZone: 'Africa/Johannesburg',
-                  })}
-                </span>
+                <div className="message-footer">
+                  <span className="timestamp">
+                    {formatMessageDate(msg.timestamp)}
+                  </span>
+                  {msg.senderId === auth.currentUser?.uid && (
+                    <span className="read-indicator">
+                      {msg.read ? '✓✓' : '✓'}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -314,36 +449,95 @@ export default function ChatWindow() {
         <div className={`drawer ${drawerOpen ? '' : 'hidden'}`}>
           <h3>Chat Details</h3>
           {item ? (
-            <div>
-              <h4>Linked Item</h4>
-              <img
-                src={
-                  item.images?.[0]?.imageURL ||
-                  'https://via.placeholder.com/150?text=No+Image'
-                }
-                alt={item.name || 'Item'}
-                className="drawer-image"
-              />
-              <p>
-                {item.name} - R{item.price} ({item.status})
+            <div className="info-card item-info-card">
+              <h4 className="card-title">
+                <i className="fas fa-tag"></i> Item Details
+              </h4>
+              <div className="item-image-container">
+                <img
+                  src={
+                    item.images?.[0]?.imageURL ||
+                    'https://via.placeholder.com/150?text=No+Image'
+                  }
+                  alt={item.name || 'Item'}
+                  className="item-image"
+                />
+              </div>
+              <p className="item-name">
+                {item.name} - R
+                {item.price ? Number(item.price).toFixed(2) : 'N/A'} (
+                {item.status})
+              </p>
+              <p className="item-detail">
+                <strong>Description:</strong>{' '}
+                {item.description || 'No description available.'}
+              </p>
+              <p className="item-detail">
+                <strong>Department:</strong> {item.category || 'Uncategorized'}
+              </p>
+              <p className="item-detail">
+                <strong>Size:</strong> {item.size || 'Not specified'}
               </p>
             </div>
           ) : (
             <p>No linked item available or item no longer exists.</p>
           )}
           {store ? (
-            <div>
-              <h4>Store Info</h4>
-              <p>{store.storeName}</p>
-              <p>Address: {store.address}</p>
-              <img
-                src={
-                  store.profileImageURL ||
-                  'https://via.placeholder.com/150?text=No+Image'
+            <div className="info-card store-info-card">
+              <h4 className="card-title">
+                <i className="fas fa-store"></i> Store Info
+              </h4>
+              <div className="store-image-container">
+                <img
+                  src={
+                    store.profileImageURL ||
+                    'https://via.placeholder.com/150?text=No+Image'
+                  }
+                  alt={store.storeName || 'Store'}
+                  className="store-image"
+                />
+              </div>
+              <p className="store-name">{store.storeName}</p>
+              <p className="store-address">
+                {store.address || 'No address provided.'}
+              </p>
+              <button
+                className="btn-map"
+                onClick={() =>
+                  window.open(
+                    `https://www.google.com/maps/search/?api=1&query=${store.location.lat},${store.location.lng}`,
+                    '_blank'
+                  )
                 }
-                alt="Store Profile"
-                className="drawer-image"
-              />
+                disabled={!store.location?.lat}
+              >
+                Get Directions
+              </button>
+              <h5>Operating Hours</h5>
+              <div className="hours-list">
+                {groupHours(store.hours || {}).map((group, index) => (
+                  <div key={index} className="hour-item">
+                    <strong>{group.days}:</strong> <span>{group.hours}</span>
+                  </div>
+                ))}
+              </div>
+              <h5>Contact Info</h5>
+              {store.contactInfos?.length > 0 ? (
+                <div className="contact-list">
+                  {store.contactInfos.map((contact) => (
+                    <p
+                      key={contact.id}
+                      onClick={() => openContact(contact.type, contact.value)}
+                      className="contact-link"
+                    >
+                      <i className={`fab fa-${contact.type} contact-icon`}></i>
+                      {contact.value}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-contact">No contact info provided.</p>
+              )}
             </div>
           ) : (
             <p>No store information available.</p>

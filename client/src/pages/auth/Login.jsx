@@ -7,7 +7,7 @@ import {
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CustomLoading from '../../components/CustomLoading';
+import LoadingScreen from '../../components/LoadingScreen'; // Import your loading screen component
 import { API_URL } from '../../api';
 import '../../styles/login.css';
 
@@ -21,7 +21,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [userName, setUserName] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [role, setRole] = useState('');
   const [currentTheme, setCurrentTheme] = useState('vintage');
   const [currentImage, setCurrentImage] = useState(() => {
@@ -244,16 +246,12 @@ export default function Login() {
         fontFamily: themeData.font,
       }}
     >
-      {loading && (
-        <div className="login-overlay">
-          <CustomLoading
-            userName={userName}
-            onComplete={() =>
-              navigate(role ? `/${role.toLowerCase()}/home` : '/')
-            }
-          />
-        </div>
-      )}
+      {/* Replace the old loading overlay with the new LoadingScreen component */}
+      <LoadingScreen
+        isLoading={loading}
+        //logoText="THRIFT"
+        logoSrc="/logo.png"
+      />
 
       <div className={`left-scroll ${isMobile ? 'hidden' : ''}`}>
         {themes.map((theme) =>

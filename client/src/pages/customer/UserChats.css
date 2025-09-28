@@ -18,9 +18,8 @@
 /* Layout container for content */
 .layout-container {
   display: flex;
-  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+
 }
 
 /* Sidebar (for CustomerSidebar component) */

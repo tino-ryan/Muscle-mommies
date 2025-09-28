@@ -157,104 +157,115 @@ export default function ThriftFinderHome() {
   return (
     <div className="customer-home">
       <CustomerSidebar activePage="home" />
-      <div className="content-container">
-        <div className="header">
-          <h1>Find Nearby Thrift Stores</h1>
-        </div>
-        {error && <div className="error">{error}</div>}
-        <div className="controls">
-          <div className="location-status">
-            <span
-              className={`status-indicator ${
-                loadingLocation ? 'loading' : userLocation ? 'success' : 'error'
-              }`}
-            >
-              {loadingLocation
-                ? 'Getting your location...'
-                : userLocation
-                  ? 'Location detected'
-                  : 'Location unavailable'}
-            </span>
+      <div className="layout-container">
+        <div className="content">
+          <div className="header">
+            <h1>Find Nearby Thrift Stores</h1>
           </div>
-          <div className="distance-selector">
-            <label>Max Distance:</label>
-            <select
-              value={maxDistance}
-              onChange={(e) => setMaxDistance(Number(e.target.value))}
-            >
-              <option value={10}>10 km</option>
-              <option value={20}>20 km</option>
-              <option value={30}>30 km</option>
-              <option value={40}>40 km</option>
-              <option value={50}>50 km</option>
-            </select>
-          </div>
-        </div>
-        <div className="main-layout">
-          <div className="map-container">
-            <MapContainer
-              center={userLocation || [-26.2041, 28.0473]}
-              zoom={13}
-              style={{ height: '100%', width: '100%' }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {userLocation && (
-                <Marker
-                  position={[userLocation.lat, userLocation.lng]}
-                  icon={redUserIcon}
-                >
-                  <Popup>You are here</Popup>
-                </Marker>
-              )}
-              {filteredStores.map((store) => (
-                <Marker
-                  key={store.id}
-                  position={[store.location.lat, store.location.lng]}
-                >
-                  <Popup>
-                    <strong>{store.name}</strong>
-                    <br />
-                    {store.address}
-                    <br />
-                    {store.distance === null
-                      ? 'Distance: —'
-                      : `${store.distance.toFixed(1)} km away`}
-                  </Popup>
-                </Marker>
-              ))}
-              <FitBounds userLocation={userLocation} stores={filteredStores} />
-            </MapContainer>
-          </div>
-          <div className="store-list">
-            {sortedStores.map((store) => (
-              <div
-                key={store.id}
-                className="store-card"
-                onClick={() => navigate(`/store/${store.id}`)}
+          {error && <div className="error">{error}</div>}
+          <div className="controls">
+            <div className="location-status">
+              <span
+                className={`status-indicator ${
+                  loadingLocation
+                    ? 'loading'
+                    : userLocation
+                      ? 'success'
+                      : 'error'
+                }`}
               >
-                <img
-                  src={store.profileImageURL}
-                  alt={store.name}
-                  className="store-image"
+                {loadingLocation
+                  ? 'Getting your location...'
+                  : userLocation
+                    ? 'Location detected'
+                    : 'Location unavailable'}
+              </span>
+            </div>
+            <div className="distance-selector">
+              <label>Max Distance:</label>
+              <select
+                value={maxDistance}
+                onChange={(e) => setMaxDistance(Number(e.target.value))}
+              >
+                <option value={10}>10 km</option>
+                <option value={20}>20 km</option>
+                <option value={30}>30 km</option>
+                <option value={40}>40 km</option>
+                <option value={50}>50 km</option>
+              </select>
+            </div>
+          </div>
+          <div className="main-layout">
+            <div className="map-container">
+              <MapContainer
+                center={userLocation || [-26.2041, 28.0473]}
+                zoom={13}
+                style={{ height: '100%', width: '100%' }}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <div className="store-info">
-                  <h3>{store.name}</h3>
-                  <p className="address">{store.address}</p>
-                  <p className="description">{store.description}</p>
-                  <span className="distance">
-                    {store.distance === null
-                      ? 'Distance: —'
-                      : `${store.distance.toFixed(1)} km away`}
-                  </span>
+                {userLocation && (
+                  <Marker
+                    position={[userLocation.lat, userLocation.lng]}
+                    icon={redUserIcon}
+                  >
+                    <Popup>You are here</Popup>
+                  </Marker>
+                )}
+                {filteredStores.map((store) => (
+                  <Marker
+                    key={store.id}
+                    position={[store.location.lat, store.location.lng]}
+                  >
+                    <Popup>
+                      <strong>{store.name}</strong>
+                      <br />
+                      {store.address}
+                      <br />
+                      {store.distance === null
+                        ? 'Distance: —'
+                        : `${store.distance.toFixed(1)} km away`}
+                    </Popup>
+                  </Marker>
+                ))}
+                <FitBounds
+                  userLocation={userLocation}
+                  stores={filteredStores}
+                />
+              </MapContainer>
+            </div>
+            <div className="store-list">
+              {sortedStores.map((store) => (
+                <div
+                  key={store.id}
+                  className="store-card"
+                  onClick={() => navigate(`/store/${store.id}`)}
+                >
+                  <div className="store-card-image-wrapper">
+                    <img
+                      src={store.profileImageURL}
+                      alt={store.name}
+                      className="store-image"
+                    />
+                  </div>
+                  <div className="store-info">
+                    <h3>{store.name}</h3>
+                    <p className="address">{store.address}</p>
+                    <p className="description">{store.description}</p>
+                    <span className="distance">
+                      {store.distance === null
+                        ? 'Distance: —'
+                        : `${store.distance.toFixed(1)} km away`}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-            {sortedStores.length === 0 && (
-              <p className="no-stores">No stores match the current filter.</p>
-            )}
+              ))}
+              {sortedStores.length === 0 && (
+                <p className="no-stores">No stores match the current filter.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

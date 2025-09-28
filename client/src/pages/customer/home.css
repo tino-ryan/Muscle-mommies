@@ -7,11 +7,7 @@
   width: 100vw;
 }
 
-.content-container {
-  margin-left: 150px; /* Match sidebar width */
-  padding: 20px;
-  flex: 1;
-}
+
 
 .header {
   display: flex;
@@ -129,11 +125,23 @@ h1 {
   background-color: #f3e7e8;
 }
 
-.store-image {
+.store-image  {
   width: 60px;
   height: 60px;
   object-fit: cover;
   border-radius: 8px;
+}
+/* Add a wrapper for the image to control layout */
+.store-card-image-wrapper {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f3e7e8; /* Fallback background for loading or broken images */
 }
 
 .store-info {
