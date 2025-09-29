@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
     branches: [main, dev]
-  pull_request_target: # allows secrets for PRs
+  pull_request_target:
     branches: [main, dev]
 
 jobs:
@@ -12,11 +12,9 @@ jobs:
     name: Frontend Tests
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -30,16 +28,20 @@ jobs:
         working-directory: ./client
         run: npm run test:coverage
 
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-coverage
+          path: ./client/coverage/lcov.info
+
   test-backend:
     runs-on: ubuntu-latest
     name: Backend Tests
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -53,21 +55,37 @@ jobs:
         working-directory: ./server
         run: npm run test:coverage
 
+      - name: Upload backend coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-coverage
+          path: ./server/coverage/lcov.info
+
   upload-coverage:
     runs-on: ubuntu-latest
     needs: [test-frontend, test-backend]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Download frontend coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-coverage
+          path: ./client/coverage
+
+      - name: Download backend coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-coverage
+          path: ./server/coverage
 
       - name: Upload combined coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: | 
-            ./client/coverage/lcov.info 
+          files: |
+            ./client/coverage/lcov.info
             ./server/coverage/lcov.info
           flags: frontend,backend,combined
           fail_ci_if_error: false
-
