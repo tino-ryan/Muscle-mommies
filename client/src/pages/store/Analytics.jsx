@@ -1,115 +1,424 @@
+import React, { useState, useEffect } from 'react';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../../components/HamburgerMenu';
+import axios from 'axios';
+import StoreSidebar from '../../components/StoreSidebar';
+import { API_URL } from '../../api';
 import './Analytics.css';
-//import { API_URL } from '../../api'; // Import API_URL from api.js
 
+// Inline SVG Icons (reused from the provided file)
+const ShoppingBag = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </svg>
+);
+
+const Users = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
+
+const Package = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12.89 2.07l.08.14a2 2 0 0 0 2.45.69l.13-.07a2 2 0 0 1 2.15.42l.14.16a2 2 0 0 0 2.21 2.21l.16.14a2 2 0 0 1 .42 2.15l-.07.13a2 2 0 0 0 .69 2.45l.14.08a2 2 0 0 1 0 3.3l-.14.08a2 2 0 0 0-.69 2.45l.07.13a2 2 0 0 1-.42 2.15l-.16.14a2 2 0 0 0-2.21 2.21l-.14.16a2 2 0 0 1-2.15.42l-.13-.07a2 2 0 0 0-2.45.69l-.08.14a2 2 0 0 1-3.3 0l-.08-.14a2 2 0 0 0-2.45-.69l-.13.07a2 2 0 0 1-2.15-.42l-.14-.16a2 2 0 0 0-2.21-2.21l-.16-.14a2 2 0 0 1-.42-2.15l.07-.13a2 2 0 0 0-.69-2.45l-.14-.08a2 2 0 0 1 0-3.3l.14-.08a2 2 0 0 0 .69-2.45l-.07-.13a2 2 0 0 1 .42-2.15l.16-.14a2 2 0 0 0 2.21-2.21l.14-.16a2 2 0 0 1 2.15-.42l.13.07a2 2 0 0 0 2.45-.69z" />
+    <circle cx="12" cy="12" r="7" />
+  </svg>
+);
+
+const Clock = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
+  </svg>
+);
+
+const MessageCircle = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.42 8.42 0 0 1 8.5 8.5z" />
+  </svg>
+);
+
+// Metric Card Component
+const MetricCard = ({ title, value, unit, icon: Icon, colorClass }) => (
+  <div className="form-card">
+    <div className="flex items-center justify-between mb-4">
+      <Icon className={`w-8 h-8 ${colorClass}`} />
+      <span className="text-sm font-semibold text-gray-500">{title}</span>
+    </div>
+    <p className="text-4xl font-extrabold text-gray-900 leading-none">
+      {value}
+      {unit && (
+        <span className="text-xl font-medium text-gray-600 ml-1">{unit}</span>
+      )}
+    </p>
+  </div>
+);
+
+// Inventory Snapshot Table Component
+const InventorySnapshot = ({ inventory }) => (
+  <div className="form-card overflow-x-auto">
+    <h3 className="card-title">Inventory Snapshot & Alerts</h3>
+    <table className="inventory-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th className="text-center">Reserved</th>
+          <th className="text-center">Stock</th>
+          <th className="text-center">Alert</th>
+        </tr>
+      </thead>
+      <tbody>
+        {inventory.map((item) => {
+          const isLowStock = item.quantity <= 2 && item.quantity > 0;
+          const isSoldOut = item.quantity === 0;
+          const alertClass = isSoldOut
+            ? 'bg-red-100 text-red-800'
+            : isLowStock
+              ? 'bg-yellow-100 text-yellow-800'
+              : 'bg-gray-100 text-gray-600';
+
+          return (
+            <tr key={item.id} className="hover:bg-gray-50">
+              <td>{item.name}</td>
+              <td>R{item.price.toFixed(2)}</td>
+              <td className="text-center">{item.reserved || 0}</td>
+              <td className="text-center">{item.quantity}</td>
+              <td className="text-center">
+                <span className={`alert-tag ${alertClass}`}>
+                  {isSoldOut
+                    ? 'SOLD OUT'
+                    : isLowStock
+                      ? 'Re-stock soon'
+                      : 'Healthy'}
+                </span>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+);
+
+// Recent Activity Feed Component
+const RecentActivity = ({ activity }) => (
+  <div className="form-card">
+    <h3 className="card-title">Recent Activity</h3>
+    <ul className="activity-list">
+      {activity.map((a) => (
+        <li key={a.id} className="activity-item">
+          <div className="flex-shrink-0">
+            {a.type.includes('Sale') && (
+              <ShoppingBag className="w-5 h-5 text-green-500" />
+            )}
+            {a.type.includes('Reserved') && (
+              <Package className="w-5 h-5 text-blue-500" />
+            )}
+            {a.type.includes('Chat') && (
+              <MessageCircle className="w-5 h-5 text-purple-500" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {a.type}
+              {a.item && (
+                <span className="text-gray-600 font-normal ml-1">
+                  {' '}
+                  - {a.item}
+                </span>
+              )}
+            </p>
+            <p className="text-xs text-gray-500">
+              {a.user && `User: ${a.user} | `}
+              {a.amount && `+ R${a.amount.toFixed(2)}`}
+            </p>
+          </div>
+          <time className="text-xs text-gray-400 flex-shrink-0">{a.time}</time>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+// Main Analytics Component
 export default function Analytics() {
+  const [store, setStore] = useState({ storeName: '', storeId: '' });
+  const [salesData, setSalesData] = useState([]);
+  const [inventory, setInventory] = useState([]);
+  const [activity, setActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const auth = getAuth();
   const navigate = useNavigate();
+
+  // Fetch store and analytics data
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          setLoading(true);
+          const token = await user.getIdToken();
+
+          // Fetch store details
+          const storeResponse = await axios.get(`${API_URL}/api/my-store`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!storeResponse.data.storeId) {
+            setError('No store found. Please set up your store profile.');
+            navigate('/store-profile');
+            return;
+          }
+          setStore({
+            storeName: storeResponse.data.storeName || 'Your Store',
+            storeId: storeResponse.data.storeId || '',
+          });
+
+          // Fetch sales data
+          const salesResponse = await axios.get(
+            `${API_URL}/api/stores/${storeResponse.data.storeId}/analytics/sales`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setSalesData(
+            salesResponse.data.length > 0
+              ? salesResponse.data
+              : [
+                  { week: 'Wk 1', sales: 0, reservations: 0 },
+                  { week: 'Wk 2', sales: 0, reservations: 0 },
+                  { week: 'Wk 3', sales: 0, reservations: 0 },
+                  { week: 'Wk 4', sales: 0, reservations: 0 },
+                ]
+          );
+
+          // Fetch inventory data
+          const inventoryResponse = await axios.get(
+            `${API_URL}/api/stores/${storeResponse.data.storeId}/inventory`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setInventory(inventoryResponse.data || []);
+
+          // Fetch recent activity
+          const activityResponse = await axios.get(
+            `${API_URL}/api/stores/${storeResponse.data.storeId}/activity`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setActivity(activityResponse.data || []);
+
+          setError('');
+        } catch (error) {
+          console.error(
+            'Fetch analytics error:',
+            error.response?.data || error.message
+          );
+          setError(
+            'Failed to load analytics: ' +
+              (error.response?.data?.error || error.message)
+          );
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setError('Please log in to view analytics.');
+        navigate('/login');
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, navigate]);
+
+  // Calculate Key Metrics
+  const totalSalesValue = salesData.reduce((sum, d) => sum + (d.sales || 0), 0);
+  const totalItemsReserved = inventory.reduce(
+    (sum, item) => sum + (item.reserved || 0),
+    0
+  );
+  const totalItemsInStock = inventory.reduce(
+    (sum, item) => sum + (item.quantity || 0),
+    0
+  );
+  const avgResponseTime = 'N/A'; // Placeholder, as no chat data is provided
+
+  // Handle Logout
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      setError('Failed to log out: ' + error.message);
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <div className="analytics">
-      <HamburgerMenu />
       <div className="layout-container">
-        <div className="sidebar">
-          <div className="sidebar-item" onClick={() => navigate('/store/home')}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
-            </svg>
-            <p>Home</p>
-          </div>
-          <div
-            className="sidebar-item"
-            onClick={() => navigate('/store/listings')}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M56,128a16,16,0,1,1-16-16A16,16,0,0,1,56,128ZM40,48A16,16,0,1,0,56,64,16,16,0,0,0,40,48Zm0,128a16,16,0,1,0,16,16A16,16,0,0,0,40,176Zm176-64H88a8,8,0,0,0-8,8v16a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V120A8,8,0,0,0,216,112Zm0-64H88a8,8,0,0,0-8,8V72a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V56A8,8,0,0,0,216,48Zm0,128H88a8,8,0,0,0-8,8v16a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V184A8,8,0,0,0,216,176Z"></path>
-            </svg>
-            <p>Listings</p>
-          </div>
-          <div
-            className="sidebar-item active"
-            onClick={() => navigate('/analytics')}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-            </svg>
-            <p>Analytics</p>
-          </div>
-          <div
-            className="sidebar-item"
-            onClick={() => navigate('/store/reservations')}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
-            </svg>
-            <p>Reservations</p>
-          </div>
-          <div
-            className="sidebar-item"
-            onClick={() => navigate('/store/profile')}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24px"
-              height="24px"
-              fill="currentColor"
-              viewBox="0 0 256 256"
-            >
-              <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
-            </svg>
-            <p>Store Profile</p>
-          </div>
-        </div>
-        {/* Main Content */}
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '2rem',
-            textAlign: 'center',
-          }}
-        >
-          <h1
-            style={{
-              fontSize: '4rem',
-              fontWeight: 'bold',
-              marginBottom: '1rem',
-            }}
-          >
-            Analytics
-          </h1>
-          <p style={{ fontSize: '1.5rem', color: '#666' }}>
-            Mosey will cook it up soon (promise)
-          </p>
+        <StoreSidebar currentPage="Analytics" onLogout={handleLogout} />
+        <div className="content">
+          {error && (
+            <div className="error-box">
+              <i className="fas fa-exclamation-circle"></i>
+              <p>{error}</p>
+            </div>
+          )}
+          <header className="header">
+            <h1 className="page-title">
+              <ShoppingBag className="w-6 h-6 mr-2 text-primary" />
+              {store.storeName} Analytics
+            </h1>
+            <div className="store-id">
+              Store ID: <span className="font-mono">{store.storeId}</span>
+            </div>
+          </header>
+          <main className="main-content">
+            <div className="kpi-grid">
+              <MetricCard
+                title="Total Sales (Monthly)"
+                value={`R${totalSalesValue.toLocaleString()}`}
+                icon={ShoppingBag}
+                colorClass="text-green-500"
+              />
+              <MetricCard
+                title="Items Reserved"
+                value={totalItemsReserved}
+                icon={Users}
+                colorClass="text-blue-500"
+              />
+              <MetricCard
+                title="Inventory Items"
+                value={totalItemsInStock}
+                icon={Package}
+                colorClass="text-yellow-500"
+              />
+              <MetricCard
+                title="Avg. Chat Response"
+                value={avgResponseTime}
+                icon={Clock}
+                colorClass="text-purple-500"
+              />
+            </div>
+            <div className="charts-activity-grid">
+              <div className="form-card sales-chart">
+                <h3 className="card-title">Monthly Sales & Reservations</h3>
+                {/* ChartJS placeholder: Replace with your chart component */}
+                <div className="chart-placeholder">
+                  {/* You can integrate Chart.js or another chart library here */}
+                  <p>Chart goes here</p>
+                </div>
+                <div className="sales-trend">
+                  <h4>Sales Trend (vs. Last Week)</h4>
+                  {salesData.length >= 2 ? (
+                    (() => {
+                      const latest = salesData[salesData.length - 1].sales || 0;
+                      const previous =
+                        salesData[salesData.length - 2].sales || 0;
+                      const difference = latest - previous;
+                      const percentage =
+                        previous !== 0
+                          ? ((difference / previous) * 100).toFixed(1)
+                          : 'N/A';
+                      const isPositive = difference >= 0;
+                      return (
+                        <div>
+                          <ShoppingBag
+                            className={`w-12 h-12 mb-3 ${isPositive ? 'text-green-500' : 'text-red-500'}`}
+                          />
+                          <p
+                            className={`text-5xl font-extrabold ${isPositive ? 'text-green-500' : 'text-red-500'}`}
+                          >
+                            {percentage !== 'N/A'
+                              ? `${isPositive ? '+' : ''}${percentage}%`
+                              : 'N/A'}
+                          </p>
+                          <p className="text-lg font-medium text-gray-500 mt-2">
+                            {percentage !== 'N/A'
+                              ? isPositive
+                                ? 'Increase'
+                                : 'Decrease'
+                              : 'No Data'}
+                          </p>
+                        </div>
+                      );
+                    })()
+                  ) : (
+                    <p className="text-gray-500">
+                      Not enough data to calculate trend.
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-400 mt-2">
+                    Calculated from confirmed sales.
+                  </p>
+                </div>
+              </div>
+              <InventorySnapshot inventory={inventory} />
+              <RecentActivity activity={activity} />
+            </div>
+          </main>
         </div>
       </div>
     </div>
   );
 }
+// ...existing code...
