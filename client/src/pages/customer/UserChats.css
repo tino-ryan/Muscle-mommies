@@ -8,7 +8,7 @@
 /* --- Global Layout --- */
 .chats {
   display: flex;
-  background-color: #fcf8f8;
+  background-color: #4c53fa;
   font-family: 'Plus Jakarta Sans', sans-serif;
   min-height: 100vh;
 }
@@ -16,14 +16,22 @@
 .layout-container {
   flex: 1;
   max-width: 100%;
-  margin: 0;
+  margin: 20px;
+  border-radius: 8px;
   padding: 0;
+  
+  
 }
 
-.content {
+.chats .content {
   flex: 1;
   padding: 20px;
   margin-left: 300px;
+  border-radius: 8px;
+  background-color: #fc07be !important;
+  border: #1b0e0e;
+  border-style: solid;
+  
 }
 
 .content h1 {
@@ -31,12 +39,15 @@
   font-weight: 700;
   color: #1b0e0e;
   margin-bottom: 25px;
+  margin: 30px;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
 }
 
 /* --- Search Bar --- */
 .search-bar-container {
   margin-bottom: 25px;
   position: relative;
+  margin: 30px;
 }
 
 .search-bar-container input {
@@ -45,7 +56,9 @@
   border: 1px solid #e7d0d1;
   border-radius: 25px;
   font-size: 16px;
-  background-color: white;
+  background-color: #d3f44b;
+  border: #1b0e0e;
+  border-style: solid;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -79,12 +92,16 @@
   border: 1px solid #e7d0d1;
   border-radius: 8px;
   overflow: hidden;
+  margin: 30px;
 }
 
 .chat-card {
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: #8c9eff;
+  border: 3px solid #000 !important;
+  border-color: #000;
+  
   padding: 12px; /* Reduced padding to decrease height */
   cursor: pointer;
   transition: background-color 0.2s, box-shadow 0.2s;
@@ -92,11 +109,11 @@
 }
 
 .chat-card:hover {
-  background-color: #f7f7f7;
+  background-color: #bfc9ff;
 }
 
 .chat-card.unread {
-  background-color: #fff9f9;
+  background-color: #7a90ff;
 }
 
 /* Avatar/Image */
@@ -152,14 +169,14 @@
 }
 
 .chat-name-preview h3 span {
-  color: #994d51; /* Item name in brackets uses primary color */
+  color: blue; /* Item name in brackets uses primary color */
   font-weight: 600; /* Slightly lighter than name */
   font-size: 16px; /* Slightly smaller than name */
 }
 
 .chat-preview {
   font-size: 13px;
-  color: #555;
+  color: #292929;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -168,7 +185,7 @@
 
 .chat-item-name {
   font-size: 14px; /* Slightly larger for clarity */
-  color: #994d51;
+  color: blue;
   font-weight: 600;
   margin: 0 0 2px 0;
   white-space: nowrap;
@@ -189,12 +206,12 @@
 
 .chat-timestamp {
   font-size: 12px;
-  color: #999;
+  color: #000;
   margin: 0;
 }
 
 .unread-badge {
-  background-color: #994d51;
+  background-color: #982329;
   color: white;
   border-radius: 50%;
   width: 20px;
