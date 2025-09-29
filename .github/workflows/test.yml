@@ -22,7 +22,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: client/package-lock.json
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         working-directory: ./client
         run: npm install
 
@@ -48,7 +48,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package-lock.json
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         working-directory: ./server
         run: npm install
 
@@ -59,21 +59,33 @@ jobs:
       - name: List backend coverage files
         run: ls -R ./server/coverage
 
-  upload-coverage:
+  merge-and-upload-coverage:
     runs-on: ubuntu-latest
     needs: [test-frontend, test-backend]
-    name: Upload Coverage to Codecov
+    name: Merge and Upload Coverage
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload coverage
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install lcov-result-merger
+        run: npm install -g lcov-result-merger
+
+      - name: Merge frontend and backend coverage
+        run: |
+          mkdir -p coverage
+          lcov-result-merger "client/coverage/lcov.info" "server/coverage/lcov.info" > coverage/lcov.info
+          echo "Merged coverage:"
+          cat coverage/lcov.info | head -n 20
+
+      - name: Upload merged coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: |
-            client/coverage/lcov.info
-            server/coverage/lcov.info
-          flags: frontend,backend
+          files: coverage/lcov.info
           verbose: true
           fail_ci_if_error: false
