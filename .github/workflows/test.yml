@@ -86,6 +86,7 @@ jobs:
       - name: Upload merged coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage/lcov.info
           verbose: true
           fail_ci_if_error: false
