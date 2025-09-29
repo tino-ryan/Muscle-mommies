@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import axios from "axios";
-import CustomerSidebar from "../../components/CustomerSidebar";
-import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../api";
-import "./MyCloset.css";
+import { useState, useEffect } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios';
+import CustomerSidebar from '../../components/CustomerSidebar';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../api';
+import './MyCloset.css';
 
 export default function MyCloset() {
   const [reservations, setReservations] = useState([]);
@@ -12,14 +12,14 @@ export default function MyCloset() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [outfit, setOutfit] = useState(Array(9).fill(null)); // 9 slots
   const [outfits, setOutfits] = useState([]); // saved outfits from db
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        navigate("/login");
+        navigate('/login');
         return;
       }
 
@@ -27,14 +27,17 @@ export default function MyCloset() {
         const token = await user.getIdToken();
 
         // fetch reservations
-        const resResponse = await axios.get(`${API_URL}/api/stores/reservations`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const resResponse = await axios.get(
+          `${API_URL}/api/stores/reservations`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const resData = resResponse.data;
 
         // ✅ filter only completed/confirmed
         const completed = resData.filter(
-          (r) => r.status === "Completed" || r.status === "Confirmed"
+          (r) => r.status === 'Completed' || r.status === 'Confirmed'
         );
         setReservations(completed);
 
@@ -48,7 +51,10 @@ export default function MyCloset() {
               .catch(() => ({
                 data: {
                   images: [
-                    { imageURL: "https://via.placeholder.com/200x200?text=No+Image" },
+                    {
+                      imageURL:
+                        'https://via.placeholder.com/200x200?text=No+Image',
+                    },
                   ],
                 },
               }))
@@ -67,9 +73,10 @@ export default function MyCloset() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOutfits(outfitRes.data);
-
       } catch (err) {
-        setError("Failed to load closet: " + (err.response?.data?.error || err.message));
+        setError(
+          'Failed to load closet: ' + (err.response?.data?.error || err.message)
+        );
       }
     });
 
@@ -108,17 +115,16 @@ export default function MyCloset() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert("Outfit saved!");
+      alert('Outfit saved!');
 
       // reload outfits after saving
       const outfitRes = await axios.get(`${API_URL}/api/outfits`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOutfits(outfitRes.data);
-
     } catch (err) {
       console.error(err);
-      alert("Failed to save outfit");
+      alert('Failed to save outfit');
     }
   };
 
@@ -146,11 +152,11 @@ export default function MyCloset() {
                   {itemId && itemImages.length > 0 ? (
                     <img
                       src={itemImages[0].imageURL}
-                      alt={item?.name || "Closet item"}
+                      alt={item?.name || 'Closet item'}
                       className="closet-slot-image"
                       onError={(e) => {
                         e.target.src =
-                          "https://via.placeholder.com/200x200?text=No+Image";
+                          'https://via.placeholder.com/200x200?text=No+Image';
                       }}
                     />
                   ) : (
@@ -176,7 +182,10 @@ export default function MyCloset() {
               {outfits.map((outfitDoc, idx) => (
                 <div key={idx} className="outfit-card">
                   {outfitDoc.slots.map((itemId, slotIdx) => {
-                    if (!itemId) return <div key={slotIdx} className="outfit-slot empty"></div>;
+                    if (!itemId)
+                      return (
+                        <div key={slotIdx} className="outfit-slot empty"></div>
+                      );
                     const item = items[itemId];
                     const itemImages = item?.images || [];
                     return (
@@ -184,7 +193,7 @@ export default function MyCloset() {
                         {itemImages.length > 0 ? (
                           <img
                             src={itemImages[0].imageURL}
-                            alt={item?.name || "Closet item"}
+                            alt={item?.name || 'Closet item'}
                             className="outfit-slot-image"
                           />
                         ) : (
@@ -224,7 +233,7 @@ export default function MyCloset() {
                           <img
                             key={idx}
                             src={img.imageURL}
-                            alt={item?.name || "Closet item"}
+                            alt={item?.name || 'Closet item'}
                             className="popup-item"
                           />
                         ))
