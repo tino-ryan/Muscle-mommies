@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import StarRating from '../../components/StarRating';
@@ -25,11 +25,6 @@ export default function Store() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-
-  // Example options
-  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
-  const styleOptions = ['Vintage', 'Casual', 'Formal', 'Streetwear'];
-  const categoryOptions = ['Tops', 'Pants', 'Dresses', 'Shoes', 'Accessories'];
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
@@ -70,7 +65,20 @@ export default function Store() {
     return () => unsubscribe();
   }, [id, auth, navigate]);
 
-  // Filtering logic
+  // --- Generate unique filter options from clothes ---
+  const categoryOptions = useMemo(() => {
+    return [...new Set(clothes.map((item) => item.category).filter(Boolean))];
+  }, [clothes]);
+
+  const styleOptions = useMemo(() => {
+    return [...new Set(clothes.map((item) => item.style).filter(Boolean))];
+  }, [clothes]);
+
+  const sizeOptions = useMemo(() => {
+    return [...new Set(clothes.map((item) => item.size).filter(Boolean))];
+  }, [clothes]);
+
+  // --- Filtering logic ---
   const filteredClothes = clothes.filter((item) => {
     const inPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
     const inSize = selectedSize ? item.size === selectedSize : true;
@@ -91,11 +99,8 @@ export default function Store() {
       }
       const token = await user.getIdToken();
       const item = clothes.find((i) => i.itemId === itemId);
-      if (!item) {
-        throw new Error('Item not found');
-      }
+      if (!item) throw new Error('Item not found');
 
-      // Call new reserve endpoint
       const reserveResponse = await axios.put(
         `${API_URL}/api/stores/reserve/${itemId}`,
         { storeId: store.storeId },
@@ -108,15 +113,14 @@ export default function Store() {
 
       // Update local state
       setClothes((prev) =>
-        prev.map((item) =>
-          item.itemId === itemId ? { ...item, status: 'Reserved' } : item
+        prev.map((i) =>
+          i.itemId === itemId ? { ...i, status: 'Reserved' } : i
         )
       );
       setSelectedItem((prev) =>
         prev ? { ...prev, status: 'Reserved' } : null
       );
 
-      // Navigate to the specific chat
       const chatId = [user.uid, store.ownerId].sort().join('_');
       navigate(`/user/chats/${chatId}`);
     } catch (error) {
@@ -134,13 +138,11 @@ export default function Store() {
       }
       const token = await user.getIdToken();
       const item = clothes.find((i) => i.itemId === itemId);
-      if (!item) {
-        throw new Error('Item not found');
-      }
+      if (!item) throw new Error('Item not found');
+
       const storeId = store.storeId;
       const ownerId = store.ownerId;
 
-      // Send enquiry message
       const messageResponse = await axios.post(
         `${API_URL}/api/stores/messages`,
         {
@@ -152,22 +154,16 @@ export default function Store() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Validate message response
       if (!messageResponse.data.messageId) {
         throw new Error('Failed to send enquiry message');
       }
 
-      // Navigate to the specific chat
       const chatId = [user.uid, ownerId].sort().join('_');
       navigate(`/user/chats/${chatId}`);
     } catch (error) {
       console.error('Error sending enquiry:', error);
       alert(`Failed to send enquiry: ${error.message}`);
     }
-  };
-
-  const handleViewReviews = () => {
-    setShowReviewsModal(true);
   };
 
   if (loading) {
@@ -180,6 +176,7 @@ export default function Store() {
       </div>
     );
   }
+
   return (
     <div className="store-home">
       <div className="layout-container">
@@ -188,16 +185,19 @@ export default function Store() {
           <button onClick={() => navigate(-1)} className="store-back-button">
             ← Back
           </button>
+
           <div className="store-header">
-            <img
-              src={
-                store.profileImageURL ||
-                'https://via.placeholder.com/64x64?text=Store'
-              }
-              alt={store.storeName}
-              className="store-image"
-            />
             <div className="store-info">
+              <div className="store-header-image-wrapper">
+                <img
+                  src={
+                    store.profileImageURL ||
+                    'https://via.placeholder.com/64x64?text=Store'
+                  }
+                  alt={store.storeName}
+                  className="store-image"
+                />
+              </div>
               <h1 className="store-title">{store.storeName}</h1>
               <p className="store-address">{store.address}</p>
               <p className="store-description">{store.description}</p>
@@ -210,7 +210,7 @@ export default function Store() {
                 {store.reviewCount > 0 && (
                   <button
                     className="view-reviews-btn"
-                    onClick={handleViewReviews}
+                    onClick={() => setShowReviewsModal(true)}
                   >
                     Read Reviews
                   </button>
@@ -218,6 +218,7 @@ export default function Store() {
               </div>
             </div>
           </div>
+
           <div className="search-controls">
             <div className="filters">
               <select
@@ -232,6 +233,7 @@ export default function Store() {
                   </option>
                 ))}
               </select>
+
               <select
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value)}
@@ -244,6 +246,7 @@ export default function Store() {
                   </option>
                 ))}
               </select>
+
               <select
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
@@ -256,6 +259,7 @@ export default function Store() {
                   </option>
                 ))}
               </select>
+
               <div className="price-range">
                 <span className="price-label">Price Range:</span>
                 <input
@@ -280,15 +284,17 @@ export default function Store() {
               </div>
             </div>
           </div>
+
           <div className="store-content">
             <div className="items-section">
               <h2 className="section-title">
-                <span className="section-icon">👕</span>
+                <span className="section-icon"></span>
                 Items
                 <span className="results-count">
                   ({filteredClothes.length} items)
                 </span>
               </h2>
+
               <div className="items-grid">
                 {filteredClothes.map((item) => (
                   <div
@@ -331,6 +337,7 @@ export default function Store() {
                     </div>
                   </div>
                 ))}
+
                 {filteredClothes.length === 0 && (
                   <div className="no-items">
                     <div className="no-items-icon">📦</div>
@@ -464,7 +471,6 @@ export default function Store() {
               </div>
             </div>
           )}
-
           {showReviewsModal && (
             <ReviewsModal
               storeId={store.storeId}

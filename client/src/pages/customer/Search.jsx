@@ -333,7 +333,7 @@ export default function SearchPage() {
           {filteredItems.length > 0 && (
             <div className="items-section">
               <h2 className="section-title">
-                <span className="section-icon">👕</span>
+                <span className="section-icon"></span>
                 {searchTerm || categoryFilter || styleFilter || departmentFilter
                   ? 'Search Results'
                   : 'All Items'}

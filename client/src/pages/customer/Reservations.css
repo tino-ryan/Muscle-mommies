@@ -1,23 +1,45 @@
 /* src/pages/customer/Reservations.css */
 .reservations {
   display: flex;
+  flex-direction: column;       /* stack heading + table nicely */
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
-  width: 100vw;
-  background-color: #fcf8f8;
-}
+  background-color: #4c53fa;
 
-.content-container {
-  margin-left: 250px; /* Match sidebar width */
+  /* instead of hard margins, respect the sidebar */
+  margin-left: 300px;           /* match your sidebar width */
+  margin-right: 20px;
   padding: 20px;
-  flex: 1;
+  box-sizing: border-box;       /* padding counts inside width */
 }
 
-h2 {
+body {
+  margin: 0;               /* Remove default body margin */
+  min-height: 100vh;       /* Ensure it covers full viewport */
+  background-color: #4c53fa; /* Your page background color */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.reservations .content {
+  max-width: 100%;              /* never spill past screen */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+   background-color: #fc07be !important;
+  border: #000;
+  border-style: solid;
+  border-radius: 8px;
+ 
+}
+
+.reservations h2 {
   font-size: 32px;
   font-weight: 700;
   color: #1b0e0e;
   margin-bottom: 20px;
+  font-family: 'Orbitron';
+  
 }
 
 .error {
@@ -28,29 +50,34 @@ h2 {
   margin-bottom: 20px;
 }
 
-table {
-  width: 100%;
+.reservations table {
+  width: 100%;                  /* fill available space */
+  table-layout: auto;           /* make column widths predictable */
   border-collapse: collapse;
   background-color: white;
-  border: 1px solid #e7d0d1;
-  border-radius: 8px;
+  border: #000 !important;
+  border: 3px solid #000;
   overflow: hidden;
+  
 }
 
-th,
-td {
+.reservations th,
+.reservations td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #e7d0d1;
+  border: 2px solid black;
+  white-space: normal;          /* wrap text */
+  word-break: break-word;       /* break long strings */
 }
 
-th {
-  background-color: #f3e7e8;
+.reservations th {
+  background-color: #d3f44b;
   font-weight: 600;
   color: #1b0e0e;
+  border: 2px solid black;
 }
 
-tr:hover {
+.reservations tr:hover {
   background-color: #f9f9f9;
 }
 
