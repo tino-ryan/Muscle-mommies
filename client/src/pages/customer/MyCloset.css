@@ -4,21 +4,37 @@
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
   width: 100vw;
-  background-color: #fcf8f8;
+  background-color: #0d0d55;
+  color: #000;
 }
 
 /* Push content to the right of the sidebar */
 .content-container {
-  margin-left: 250px; /* same width as your sidebar */
+  margin-left: 300px; /* same width as your sidebar */
   padding: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
   flex: 1;
+  background-color: #e22a98;
+  border-style: solid;
+  border-color: #000;
+  color: #000;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
 }
 
-h2 {
+.closet h2 {
   font-size: 32px;
   font-weight: 700;
-  color: #1b0e0e;
+  color: #000;
   margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.closet h3 {
+  margin-left: 20px;
+  margin-top: 20px;
 }
 
 .error {
@@ -55,14 +71,21 @@ h2 {
 .closet-grid {
   display: grid;
   grid-template-columns: repeat(3, 120px);
-  grid-gap: 15px;
+  grid-gap: 18px;
   margin-bottom: 20px;
+  margin-right: 770px;
+  margin-left: 20px;
+  background-color: #d3f44b;
+  border-radius: 8px;
+  padding: 30px;
+  border: #000;
+  border-style: solid;
 }
 
 .closet-slot {
   width: 120px;
   height: 120px;
-  border: 2px dashed #ccc;
+  border: 2px dashed #000;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -78,9 +101,10 @@ h2 {
 
 .save-button {
   padding: 10px 20px;
-  background: #994d51;
-  color: white;
-  border: none;
+  background: #8c9eff;
+  color: #000;
+  border: #000;
+  border-style: solid;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -102,6 +126,8 @@ h2 {
   background: white;
   padding: 20px;
   border-radius: 12px;
+  border-color: #000;
+  border-style: solid;
   max-width: 600px;
 }
 
@@ -130,7 +156,7 @@ h2 {
 }
 
 .outfit-card {
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 10px;
   padding: 8px;
   width: 300px; /* fits a 3x3 mini grid nicely */
@@ -162,6 +188,14 @@ h2 {
 
 .outfit-slot.empty {
   background-color: #f0f0f0;
+}
+
+.closet .popup-actions button{
+  background-color: #8c9eff;
+  color: #000;
+  border: #000;
+  border-style: solid;
+  margin-right: 10px;
 }
 
 

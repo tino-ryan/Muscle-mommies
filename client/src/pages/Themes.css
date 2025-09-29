@@ -24,13 +24,13 @@
 
 /* Y2K / retro vibe */
 .theme-y2k {
---color-base: #0d0d55;
+--color-base: #3e3e81;
     --color-text: #000;
-    --color-bg: #fc07be;
-    --color-filter: #8c9eff;
-    --color-btn: #d3f44b;
-    --color-clear: #1b88e5;
-    --color-accent: #0d00ff;
+    --color-bg: #e986d0;
+    --color-filter: #bbc6ff;
+    --color-btn: #ffeb8a;
+    --color-clear: #98cfff;
+    --color-accent: #60ff9a;
 }
 
 
