@@ -8,7 +8,8 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 import CustomerHome from './pages/customer/Home';
 import Store from './pages/customer/Store';
 import Search from './pages/customer/Search';
-import CusReservations from './pages/customer/Reservations'; // Adjust path
+import CusReservations from './pages/customer/Reservations';
+import BadgePage from './pages/customer/BadgePage'; // Add this
 
 // Store owner pages
 import StoreHome from './pages/store/StoreHome';
@@ -20,7 +21,7 @@ import StoreReservations from './pages/store/Reservations';
 import Chats from './pages/store/Chats.jsx';
 import Analytics from './pages/store/Analytics.jsx';
 
-//customer pages
+// Customer pages
 import UserChats from './pages/customer/UserChats.jsx';
 import ChatWindow from './pages/ChatWindow.jsx';
 
@@ -60,6 +61,9 @@ function App() {
       {/* New Item Detail page for testing */}
       <Route path="/store/:id" element={<Store />} />
       <Route path="/search" element={<Search />} />
+
+      {/* Badges page */}
+      <Route path="/badges" element={<BadgePage />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

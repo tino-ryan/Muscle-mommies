@@ -1,4 +1,3 @@
-// src/components/CustomerSidebar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
@@ -82,6 +81,21 @@ export default function CustomerSidebar({ activePage }) {
           <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h24A8,8,0,0,1,112,120Zm64,0a8,8,0,0,1-8,8H144a8,8,0,0,1,0-16h24A8,8,0,0,1,176,120Zm-64,40a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h24A8,8,0,0,1,112,160Zm64,0a8,8,0,0,1-8,8H144a8,8,0,0,1,0-16h24A8,8,0,0,1,176,160Z"></path>
         </svg>
         <p>Reservations</p>
+      </div>
+      <div
+        className={`sidebar-item ${activePage === 'badges' ? 'active' : ''}`}
+        onClick={() => navigate('/badges')}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24px"
+          height="24px"
+          fill="currentColor"
+          viewBox="0 0 256 256"
+        >
+          <path d="M216,96a56,56,0,1,0-80,50.46V208a8,8,0,0,0,8,8h32a8,8,0,0,0,8-8V146.46A56.07,56.07,0,0,0,216,96ZM88,96A40,40,0,1,1,128,136,40,40,0,0,1,88,96Zm80,104H144V146.46a56,56,0,0,0,32,0V200Zm-16-24a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,176Zm0-32a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,144Z"></path>
+        </svg>
+        <p>Badges</p>
       </div>
       <div className="sidebar-item" onClick={handleLogout}>
         <svg
