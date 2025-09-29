@@ -18,7 +18,7 @@ import AddListing from './pages/store/AddListing';
 import EditListing from './pages/store/EditListing';
 import StoreReservations from './pages/store/Reservations';
 import Chats from './pages/store/Chats.jsx';
-import Analytics from './pages/store/Analytics.jsx';
+
 
 //customer pages
 import UserChats from './pages/customer/UserChats.jsx';
@@ -47,7 +47,6 @@ function App() {
       <Route path="/store/listings/edit/:itemId" element={<EditListing />} />
       <Route path="/store/reservations" element={<StoreReservations />} />
       <Route path="/store/chats" element={<Chats />} />
-      <Route path="/analytics" element={<Analytics />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
       <Route path="/user/chats" element={<UserChats />} />

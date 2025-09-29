@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import StoreHome from '../pages/store/StoreHome';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -36,396 +36,110 @@ const renderStoreHome = () =>
     </BrowserRouter>
   );
 
-describe('StoreHome', () => {
-  const mockAuth = {
-    signOut: jest.fn(),
-  };
-
-  const mockUser = {
-    uid: 'user123',
-  };
+describe('StoreHome (new version)', () => {
+  const mockAuth = { signOut: jest.fn() };
+  const mockUser = { uid: 'user123' };
 
   beforeEach(() => {
     jest.clearAllMocks();
     getAuth.mockReturnValue(mockAuth);
-    mockAuth.signOut.mockResolvedValue();
   });
 
-  describe('Authentication', () => {
-    it('redirects to login when user is not authenticated', () => {
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(null); // No user
-        return jest.fn();
-      });
-
-      renderStoreHome();
-
-      expect(mockNavigate).toHaveBeenCalledWith('/login');
+  it('redirects to login when user is not authenticated', () => {
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(null); // No user
+      return jest.fn();
     });
 
-    it('checks store existence when user is authenticated', async () => {
-      const mockQuerySnapshot = { empty: false };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      collection.mockReturnValue({});
-      query.mockReturnValue({});
-      where.mockReturnValue({});
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(collection).toHaveBeenCalledWith({}, 'stores');
-        expect(where).toHaveBeenCalledWith('ownerId', '==', 'user123');
-        expect(getDocs).toHaveBeenCalled();
-      });
-    });
+    renderStoreHome();
+    expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 
-  describe('Loading State', () => {
-    it('shows loading message while checking store existence', () => {
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      // Don't resolve getDocs to keep loading state
-      getDocs.mockImplementation(() => new Promise(() => {}));
-
-      renderStoreHome();
-
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
-    });
+  it('shows loading state initially', () => {
+    onAuthStateChanged.mockImplementation(() => jest.fn());
+    renderStoreHome();
+    expect(screen.getByText('Loading analytics...')).toBeInTheDocument();
   });
 
-  describe('Store Setup Flow', () => {
-    it('shows setup message when store does not exist', async () => {
-      const mockQuerySnapshot = { empty: true };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Welcome, Store Owner!')).toBeInTheDocument();
-        expect(
-          screen.getByText(
-            "You don't have a store set up yet. Let's get started!"
-          )
-        ).toBeInTheDocument();
-      });
-
-      expect(screen.getByText('Set Up Store')).toBeInTheDocument();
+  it('renders error message when no store found', async () => {
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(mockUser);
+      return jest.fn();
     });
 
-    it('navigates to store profile when setup button is clicked', async () => {
-      const mockQuerySnapshot = { empty: true };
+    getDocs.mockResolvedValueOnce({ empty: true, docs: [] }); // store query result
 
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
+    renderStoreHome();
 
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Set Up Store')).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.getByText('Set Up Store'));
-
-      expect(mockNavigate).toHaveBeenCalledWith('/store/profile');
-    });
-  });
-
-  describe('Store Dashboard', () => {
-    beforeEach(async () => {
-      const mockQuerySnapshot = { empty: false };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-    });
-
-    it('shows dashboard when store exists', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Your Store Dashboard')).toBeInTheDocument();
-      });
-
-      expect(screen.getByText('Listings')).toBeInTheDocument();
-      expect(screen.getByText('Reservations')).toBeInTheDocument();
-      expect(screen.getByText('Chats')).toBeInTheDocument();
-      expect(screen.getByText('Store Profile')).toBeInTheDocument();
-      expect(screen.getByText('Logout')).toBeInTheDocument();
-    });
-
-    it('navigates to listings when listings card is clicked', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Listings')).toBeInTheDocument();
-      });
-
-      const listingsCard = screen.getByText('Listings').closest('.card');
-      fireEvent.click(listingsCard);
-
-      expect(mockNavigate).toHaveBeenCalledWith('/store/listings');
-    });
-
-    it('navigates to reservations when reservations card is clicked', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Reservations')).toBeInTheDocument();
-      });
-
-      const reservationsCard = screen
-        .getByText('Reservations')
-        .closest('.card');
-      fireEvent.click(reservationsCard);
-
-      expect(mockNavigate).toHaveBeenCalledWith('/store/reservations');
-    });
-
-    it('navigates to chats when chats card is clicked', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Chats')).toBeInTheDocument();
-      });
-
-      const chatsCard = screen.getByText('Chats').closest('.card');
-      fireEvent.click(chatsCard);
-
-      expect(mockNavigate).toHaveBeenCalledWith('/store/chats');
-    });
-
-    it('navigates to store profile when profile card is clicked', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Store Profile')).toBeInTheDocument();
-      });
-
-      const profileCard = screen.getByText('Store Profile').closest('.card');
-      fireEvent.click(profileCard);
-
-      expect(mockNavigate).toHaveBeenCalledWith('/store/profile');
-    });
-
-    it('handles logout when logout card is clicked', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Logout')).toBeInTheDocument();
-      });
-
-      const logoutCard = screen.getByText('Logout').closest('.card');
-      fireEvent.click(logoutCard);
-
-      await waitFor(() => {
-        expect(mockAuth.signOut).toHaveBeenCalled();
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
-      });
-    });
-
-    it('displays correct card descriptions', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Your Store Dashboard')).toBeInTheDocument();
-      });
-
+    await waitFor(() => {
       expect(
-        screen.getByText("Manage your store's inventory and listings")
+        screen.getByText(/No store found. Please set up your store./i)
       ).toBeInTheDocument();
-      expect(
-        screen.getByText('View and manage customer reservations')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Communicate with your customers')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Edit your store's details and contact info")
-      ).toBeInTheDocument();
-      expect(screen.getByText('Sign out of your account')).toBeInTheDocument();
-    });
-
-    it('renders all dashboard cards with proper structure', async () => {
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Your Store Dashboard')).toBeInTheDocument();
-      });
-
-      const cards = document.querySelectorAll('.card');
-      expect(cards).toHaveLength(5); // Listings, Reservations, Chats, Profile, Logout
-
-      // Check that each card has an SVG icon
-      cards.forEach((card) => {
-        const svg = card.querySelector('svg');
-        expect(svg).toBeInTheDocument();
-      });
     });
   });
 
-  describe('Error Handling', () => {
-    it('shows error message when Firestore query fails', async () => {
-      const errorMessage = 'Permission denied';
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockRejectedValue(new Error(errorMessage));
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(`Failed to check store existence: ${errorMessage}`)
-        ).toBeInTheDocument();
-      });
+  it('renders KPIs, categories and styles when store exists', async () => {
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(mockUser);
+      return jest.fn();
     });
 
-    it('handles authentication state changes properly', () => {
-      const unsubscribeMock = jest.fn();
+    // Mock Firestore results for store + KPIs + items
+    getDocs
+      .mockResolvedValueOnce({
+        empty: false,
+        docs: [{ id: 'store1', data: () => ({ storeName: 'Test Store' }) }],
+      }) // store
+      .mockResolvedValueOnce({
+        docs: [{ data: () => ({ amount: 100 }) }, { data: () => ({ amount: 50 }) }],
+      }) // sales
+      .mockResolvedValueOnce({ size: 2 }) // reservations
+      .mockResolvedValueOnce({ size: 3 }) // unread chats
+      .mockResolvedValueOnce({
+        docs: [
+          { data: () => ({ category: 'Shoes', style: 'Casual, Sporty' }) },
+          { data: () => ({ category: 'Shirts', style: 'Formal' }) },
+        ],
+      }); // items
 
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return unsubscribeMock;
-      });
+    renderStoreHome();
 
-      const { unmount } = renderStoreHome();
-      unmount();
-
-      expect(unsubscribeMock).toHaveBeenCalled();
+    // Store name
+    await waitFor(() => {
+      expect(screen.getByText('Test Store')).toBeInTheDocument();
     });
+
+    // KPIs
+    expect(screen.getByText(/Total Sales/i)).toBeInTheDocument();
+    expect(screen.getByText('R 150')).toBeInTheDocument();
+    expect(screen.getByText(/New Reservations/i)).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText(/Unread Chats/i)).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+
+    // Categories
+    expect(screen.getByText(/Shoes: 1 items/i)).toBeInTheDocument();
+    expect(screen.getByText(/Shirts: 1 items/i)).toBeInTheDocument();
+
+    // Styles
+    expect(screen.getByText(/Casual/i)).toBeInTheDocument();
+    expect(screen.getByText(/Formal/i)).toBeInTheDocument();
   });
 
-  describe('Component State Management', () => {
-    it('initializes with loading state', () => {
-      onAuthStateChanged.mockImplementation(() => jest.fn());
-
-      renderStoreHome();
-
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+  it('renders error when Firestore query fails', async () => {
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(mockUser);
+      return jest.fn();
     });
 
-    it('updates state correctly when store exists', async () => {
-      const mockQuerySnapshot = { empty: false };
+    getDocs.mockRejectedValue(new Error('Firestore failure'));
 
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
+    renderStoreHome();
 
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Your Store Dashboard')).toBeInTheDocument();
-      });
-
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    await waitFor(() => {
       expect(
-        screen.queryByText('Welcome, Store Owner!')
-      ).not.toBeInTheDocument();
-    });
-
-    it('updates state correctly when store does not exist', async () => {
-      const mockQuerySnapshot = { empty: true };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Welcome, Store Owner!')).toBeInTheDocument();
-      });
-
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      expect(
-        screen.queryByText('Your Store Dashboard')
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  describe('Firestore Integration', () => {
-    it('constructs correct Firestore query', async () => {
-      const mockQuerySnapshot = { empty: false };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(collection).toHaveBeenCalledWith({}, 'stores');
-        expect(where).toHaveBeenCalledWith('ownerId', '==', 'user123');
-        expect(query).toHaveBeenCalled();
-      });
-    });
-
-    it('handles empty query results correctly', async () => {
-      const mockQuerySnapshot = { empty: true };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Welcome, Store Owner!')).toBeInTheDocument();
-      });
-    });
-
-    it('handles non-empty query results correctly', async () => {
-      const mockQuerySnapshot = { empty: false };
-
-      onAuthStateChanged.mockImplementation((auth, callback) => {
-        callback(mockUser);
-        return jest.fn();
-      });
-
-      getDocs.mockResolvedValue(mockQuerySnapshot);
-
-      renderStoreHome();
-
-      await waitFor(() => {
-        expect(screen.getByText('Your Store Dashboard')).toBeInTheDocument();
-      });
+        screen.getByText(/Failed to fetch analytics/i)
+      ).toBeInTheDocument();
     });
   });
 });
