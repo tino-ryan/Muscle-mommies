@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
     branches: [main, dev]
-  pull_request_target:
+  pull_request:
     branches: [main, dev]
 
 jobs:
@@ -26,15 +26,12 @@ jobs:
         working-directory: ./client
         run: npm install
 
-      - name: Run tests with coverage
+      - name: Run frontend tests with coverage
         working-directory: ./client
         run: npm run test:coverage
 
-      - name: Upload frontend coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage
-          path: ./client/coverage/lcov.info
+      - name: List frontend coverage files
+        run: ls -R ./client/coverage
 
   test-backend:
     runs-on: ubuntu-latest
@@ -55,42 +52,28 @@ jobs:
         working-directory: ./server
         run: npm install
 
-      - name: Run tests with coverage
+      - name: Run backend tests with coverage
         working-directory: ./server
         run: npm run test:coverage
 
-      - name: Upload backend coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-coverage
-          path: ./server/coverage/lcov.info
+      - name: List backend coverage files
+        run: ls -R ./server/coverage
 
   upload-coverage:
     runs-on: ubuntu-latest
     needs: [test-frontend, test-backend]
+    name: Upload Coverage to Codecov
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download frontend coverage
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-coverage
-          path: ./client/coverage
-
-      - name: Download backend coverage
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-coverage
-          path: ./server/coverage
-
-      - name: Upload combined coverage to Codecov
+      - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            ./client/coverage/lcov.info
-            ./server/coverage/lcov.info
-          flags: frontend,backend,combined
+            client/coverage/lcov.info
+            server/coverage/lcov.info
+          flags: frontend,backend
+          verbose: true
           fail_ci_if_error: false
