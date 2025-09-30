@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import './Badge.css';
@@ -7,48 +6,43 @@ import './Badge.css';
 const QUEST_API_URL =
   'https://witsquest-hjggaxgwfgbeh0gk.brazilsouth-01.azurewebsites.net';
 
+// Fallback data for ThriftFinder Badge (moved outside component so it’s stable)
+const fallbackThriftBadge = {
+  id: 17,
+  createdAt: '2025-09-25T22:15:49+00:00',
+  name: 'ThriftFinder Badge',
+  description: 'Earn this badge by visiting one a nearby thrift store',
+  imageUrl:
+    'https://pnqidfbfwiwsieysgowz.supabase.co/storage/v1/object/sign/badges/Thrift.png?token=...',
+};
+
 export default function BadgePage() {
-  //  const navigate = useNavigate();
   const [thriftBadge, setThriftBadge] = useState(null);
   const [allBadges, setAllBadges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fallback data for ThriftFinder Badge
-  const fallbackThriftBadge = {
-    id: 17,
-    createdAt: '2025-09-25T22:15:49+00:00',
-    name: 'ThriftFinder Badge',
-    description: 'Earn this badge by visiting one a nearby thrift store',
-    imageUrl:
-      'https://pnqidfbfwiwsieysgowz.supabase.co/storage/v1/object/sign/badges/Thrift.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85N2Y5NTQ3Mi04ZTJiLTQ3MzItYjczZS0yMDhkZTA1MWM2ZjIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJiYWRnZXMvVGhyaWZ0LnBuZyIsImlhdCI6MTc1ODgzODY0OCwiZXhwIjoxNzkwMzc0NjQ4fQ.XW2TVUbqhyr7fFeJWEjVbI-gQSmJpADVFY2aBDtdnDo',
-  };
-
   useEffect(() => {
     const fetchBadges = async () => {
       setLoading(true);
       try {
-        // Fetch ThriftFinder Badge
-        const thriftResponse = await axios.get(
-          `${QUEST_API_URL}/collectibles/17`
-        );
+        const thriftResponse = await axios.get(`${QUEST_API_URL}/collectibles/17`);
         setThriftBadge(thriftResponse.data);
 
-        // Fetch all collectibles
         const allResponse = await axios.get(`${QUEST_API_URL}/collectibles`);
-        setAllBadges(allResponse.data.filter((badge) => badge.id !== 17)); // Exclude the featured one
+        setAllBadges(allResponse.data.filter((badge) => badge.id !== 17));
       } catch (err) {
         console.error('Error fetching badges:', err);
         setError('Failed to load badges. Please try again later.');
-        setThriftBadge(fallbackThriftBadge); // Use fallback for featured badge
-        setAllBadges([]); // Empty for others
+        setThriftBadge(fallbackThriftBadge); // stable reference now
+        setAllBadges([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBadges();
-  }, []);
+  }, [fallbackThriftBadge]); /
 
   if (loading) {
     return (
