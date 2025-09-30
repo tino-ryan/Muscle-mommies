@@ -546,4 +546,509 @@ describe('StoreProfile', () => {
       });
     });
   });
+
+  // Add these tests to the existing StoreProfile.test.jsx file
+
+  describe('Profile Image Upload', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Store Profile')).toBeInTheDocument();
+      });
+    });
+
+    it('uploads profile image and saves store', async () => {
+      const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+      const fileInput = screen.getByLabelText('Upload New Image');
+
+      // Mock image upload endpoint
+      axios.post.mockImplementation((url, data) => {
+        if (url.includes('/upload-image')) {
+          return Promise.resolve({
+            data: { imageURL: 'http://example.com/new-image.jpg' },
+          });
+        }
+        return Promise.resolve({
+          data: {
+            ...mockStoreData,
+            profileImageURL: 'http://example.com/new-image.jpg',
+          },
+        });
+      });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      const nameInput = screen.getByDisplayValue('Vintage Threads');
+      fireEvent.change(nameInput, { target: { value: 'Updated Store' } });
+
+      fireEvent.click(screen.getByText('Save Profile'));
+
+      await waitFor(() => {
+        expect(axios.post).toHaveBeenCalledWith(
+          expect.stringContaining('/upload-image'),
+          expect.any(FormData),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              Authorization: 'Bearer fake-token',
+              'Content-Type': 'multipart/form-data',
+            }),
+          })
+        );
+      });
+    });
+
+    it('handles image upload error', async () => {
+      const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+      const fileInput = screen.getByLabelText('Upload New Image');
+
+      axios.post.mockImplementation((url) => {
+        if (url.includes('/upload-image')) {
+          return Promise.reject({
+            response: { data: { error: 'Upload failed' } },
+          });
+        }
+        return Promise.resolve({ data: mockStoreData });
+      });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      fireEvent.click(screen.getByText('Save Profile'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Failed to save store profile: Upload failed')
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Form Validation', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Store Profile')).toBeInTheDocument();
+      });
+    });
+
+    it('validates store name is required', async () => {
+      const nameInput = screen.getByDisplayValue('Vintage Threads');
+      fireEvent.change(nameInput, { target: { value: '   ' } }); // Whitespace only
+
+      fireEvent.click(screen.getByText('Save Profile'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Store name is required.')).toBeInTheDocument();
+      });
+    });
+
+    it('validates address search input', async () => {
+      const searchInput = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(searchInput, { target: { value: '' } });
+
+      fireEvent.click(screen.getByText('Search'));
+
+      expect(
+        screen.getByText(
+          'Please enter house number, street name, suburb, and city.'
+        )
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('Address Search', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+    });
+
+    it('shows no results message when address search returns empty', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({ data: mockStoreData });
+        }
+        if (url.includes('nominatim')) {
+          return Promise.resolve({ data: [] });
+        }
+        return Promise.resolve({ data: mockContactData });
+      });
+
+      const searchInput = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(searchInput, { target: { value: '999 Fake St' } });
+      fireEvent.click(screen.getByText('Search'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'No results found for the address. Please try again.'
+          )
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('selects address from dropdown', async () => {
+      const searchInput = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(searchInput, { target: { value: '123 Test Street' } });
+      fireEvent.click(screen.getByText('Search'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Select an address')).toBeInTheDocument();
+      });
+
+      // Get the address dropdown specifically (not the theme dropdown)
+      const addressDropdown = screen.getByRole('combobox', { name: '' });
+      const dropdowns = screen.getAllByRole('combobox');
+      const addressSelect = dropdowns.find((dropdown) =>
+        dropdown.querySelector('option[value="0"]')
+      );
+
+      fireEvent.change(addressSelect, { target: { value: '0' } });
+
+      await waitFor(() => {
+        const addressInput = screen.getByDisplayValue(
+          /123 Test St, Test Suburb, Test City/
+        );
+        expect(addressInput).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Hours Modal', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Operating Hours')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Operating Hours'));
+    });
+
+    it('toggles day open/closed', () => {
+      const mondayCheckbox = screen
+        .getByText('Mon')
+        .parentElement.querySelector('input[type="checkbox"]');
+
+      expect(mondayCheckbox.checked).toBe(true);
+
+      fireEvent.click(mondayCheckbox);
+
+      expect(mondayCheckbox.checked).toBe(false);
+    });
+
+    it('changes opening time', () => {
+      const timeInputs = screen.getAllByDisplayValue('09:00');
+      const mondayStartTime = timeInputs[0];
+
+      fireEvent.change(mondayStartTime, { target: { value: '08:00' } });
+
+      expect(screen.getByDisplayValue('08:00')).toBeInTheDocument();
+    });
+
+    it('changes closing time', () => {
+      const timeInputs = screen.getAllByDisplayValue('17:00');
+      const mondayEndTime = timeInputs[0];
+
+      fireEvent.change(mondayEndTime, { target: { value: '18:00' } });
+
+      expect(screen.getByDisplayValue('18:00')).toBeInTheDocument();
+    });
+
+    it('handles hours save error', async () => {
+      axios.post.mockRejectedValue({
+        response: { data: { error: 'Failed to save hours' } },
+      });
+
+      fireEvent.click(screen.getByText('Save Hours'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Failed to save hours: Failed to save hours')
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Theme Selection', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+    });
+
+    it('changes theme selection', async () => {
+      const themeSelect = screen.getByLabelText('Theme');
+
+      fireEvent.change(themeSelect, { target: { value: 'theme-fashion' } });
+
+      expect(themeSelect.value).toBe('theme-fashion');
+    });
+
+    it('displays theme in view mode', async () => {
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('vintage')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Contact Information Management', () => {
+    beforeEach(async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Edit Profile')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Edit Profile'));
+    });
+
+    it('handles multiple contact types', async () => {
+      const emailInput = screen.getByDisplayValue('store@example.com');
+      const phoneInput = screen.getByDisplayValue('+27123456789');
+      const instagramInput = screen.getByDisplayValue('@vintagethreads');
+
+      fireEvent.change(emailInput, {
+        target: { value: 'newemail@example.com' },
+      });
+      fireEvent.change(phoneInput, { target: { value: '+27987654321' } });
+      fireEvent.change(instagramInput, { target: { value: '@newhandle' } });
+
+      expect(
+        screen.getByDisplayValue('newemail@example.com')
+      ).toBeInTheDocument();
+      expect(screen.getByDisplayValue('+27987654321')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('@newhandle')).toBeInTheDocument();
+    });
+
+    it('deletes existing contacts on save', async () => {
+      axios.delete.mockResolvedValue({});
+      axios.post.mockResolvedValue({ data: mockStoreData });
+
+      fireEvent.click(screen.getByText('Save Profile'));
+
+      await waitFor(() => {
+        expect(axios.delete).toHaveBeenCalledWith(
+          expect.stringContaining('/api/stores/contact-infos/1'),
+          expect.any(Object)
+        );
+        expect(axios.delete).toHaveBeenCalledWith(
+          expect.stringContaining('/api/stores/contact-infos/2'),
+          expect.any(Object)
+        );
+      });
+    });
+
+    it('handles contact deletion error gracefully', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      axios.delete.mockRejectedValue({
+        response: { data: { error: 'Delete failed' } },
+      });
+
+      fireEvent.click(screen.getByText('Save Profile'));
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalled();
+      });
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    beforeEach(() => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+        return jest.fn();
+      });
+    });
+
+    it('handles store with no contact infos', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({ data: mockStoreData });
+        }
+        if (url.includes('/api/stores/contact-infos')) {
+          return Promise.reject({
+            response: { data: { error: 'No contacts found' } },
+          });
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Vintage Threads')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText('No contact info provided.')).toBeInTheDocument();
+    });
+
+    it('displays placeholder when no profile image', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({
+            data: { ...mockStoreData, profileImageURL: '' },
+          });
+        }
+        return Promise.resolve({ data: mockContactData });
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Vintage Threads')).toBeInTheDocument();
+      });
+
+      // Check for placeholder URL in the background style
+      const headerBackground = document.querySelector(
+        '.profile-header-background'
+      );
+      expect(headerBackground.style.backgroundImage).toContain('placeholder');
+    });
+
+    it('handles missing hours data', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({
+            data: { ...mockStoreData, hours: null },
+          });
+        }
+        return Promise.resolve({ data: mockContactData });
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('Vintage Threads')).toBeInTheDocument();
+      });
+    });
+
+    it('disables directions button when no location', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({
+            data: { ...mockStoreData, location: { lat: '', lng: '' } },
+          });
+        }
+        return Promise.resolve({ data: mockContactData });
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        const directionsButton = screen.getByText('Get Directions');
+        expect(directionsButton).toBeDisabled();
+      });
+    });
+
+    it('handles facebook contact type', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/my-store')) {
+          return Promise.resolve({ data: mockStoreData });
+        }
+        if (url.includes('/api/stores/contact-infos')) {
+          return Promise.resolve({
+            data: [{ id: 4, type: 'facebook', value: '@storepage' }],
+          });
+        }
+        return Promise.reject(new Error('Not found'));
+      });
+
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('@storepage')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('@storepage'));
+
+      expect(global.open).toHaveBeenCalledWith(
+        'https://facebook.com/storepage',
+        '_blank'
+      );
+    });
+
+    it('closes reviews modal', async () => {
+      renderStoreProfile();
+
+      await waitFor(() => {
+        expect(screen.getByText('(12 reviews)')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('(12 reviews)'));
+
+      expect(screen.getByTestId('reviews-modal')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Close Reviews'));
+
+      expect(screen.queryByTestId('reviews-modal')).not.toBeInTheDocument();
+    });
+  });
 });
