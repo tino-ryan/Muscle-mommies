@@ -42,7 +42,7 @@ export default function BadgePage() {
     };
 
     fetchBadges();
-  }, [fallbackThriftBadge]); /
+  }, [fallbackThriftBadge]); 
 
   if (loading) {
     return (
