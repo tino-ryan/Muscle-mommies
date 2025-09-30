@@ -2,7 +2,6 @@
 
 ## structure
 
-![Deployment Diagram](/images/deployment-diagram.png)
 
 ### Database Structure
 
