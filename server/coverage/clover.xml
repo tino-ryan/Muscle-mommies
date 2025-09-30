@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759191326323" clover="3.2.0">
-  <project timestamp="1759191326323" name="All files">
-    <metrics statements="823" coveredstatements="690" conditionals="379" coveredconditionals="274" methods="78" coveredmethods="71" elements="1280" coveredelements="1035" complexity="0" loc="823" ncloc="823" packages="5" files="13" classes="13"/>
+<coverage generated="1759233955861" clover="3.2.0">
+  <project timestamp="1759233955862" name="All files">
+    <metrics statements="823" coveredstatements="691" conditionals="379" coveredconditionals="274" methods="78" coveredmethods="71" elements="1280" coveredelements="1036" complexity="0" loc="823" ncloc="823" packages="5" files="13" classes="13"/>
     <package name="server">
       <metrics statements="10" coveredstatements="10" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="3"/>
       <file name="utils.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\utils.js">
@@ -19,7 +19,7 @@
       </file>
     </package>
     <package name="server.controllers">
-      <metrics statements="702" coveredstatements="571" conditionals="355" coveredconditionals="251" methods="63" coveredmethods="58"/>
+      <metrics statements="702" coveredstatements="572" conditionals="355" coveredconditionals="251" methods="63" coveredmethods="58"/>
       <file name="authController.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\controllers\authController.js">
         <metrics statements="49" coveredstatements="49" conditionals="22" coveredconditionals="21" methods="4" coveredmethods="4"/>
         <line num="2" count="1" type="stmt"/>
@@ -73,7 +73,7 @@
         <line num="100" count="3" type="stmt"/>
       </file>
       <file name="externalController.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\controllers\externalController.js">
-        <metrics statements="49" coveredstatements="44" conditionals="8" coveredconditionals="3" methods="6" coveredmethods="5"/>
+        <metrics statements="49" coveredstatements="45" conditionals="8" coveredconditionals="3" methods="6" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -81,7 +81,7 @@
         <line num="6" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="11" count="0" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>

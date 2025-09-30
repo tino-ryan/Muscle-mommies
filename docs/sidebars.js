@@ -31,6 +31,7 @@ const sidebars = {
     'user-feedback',
     'Bug-tracker',
     'TestingDocumentation',
+    'API_internal',
   ],
 };
 
