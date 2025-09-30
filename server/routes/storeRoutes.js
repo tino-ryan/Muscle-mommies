@@ -1,4 +1,8 @@
 const express = require('express');
+const {
+  saveOutfit,
+  getUserOutfits,
+} = require('../controllers/outfitController');
 const router = express.Router();
 const {
   getStore,
@@ -100,10 +104,10 @@ router.post(
 );
 
 // Item routes
+router.get('/items/search', searchItems);
 router.get('/items', getAllItems);
 router.get('/items/:id', authMiddleware, getItemById);
 router.get('/stores/:storeId/items', authMiddleware, getItemsByStore);
-router.get('/items/search', searchItems);
 router.post(
   '/stores/items',
   authMiddleware,
@@ -122,5 +126,9 @@ router.put(
   upload.array('images', 5),
   updateItem
 );
+
+// Outfit routes (NEW)
+router.post('/outfits', authMiddleware, saveOutfit);
+router.get('/outfits', authMiddleware, getUserOutfits);
 
 module.exports = router;

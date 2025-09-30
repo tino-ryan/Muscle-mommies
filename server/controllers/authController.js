@@ -69,7 +69,10 @@ exports.googleSignup = async (req, res) => {
 
 // Get user role by UID
 exports.getRole = async (req, res) => {
-  const { uid } = req.body;
+  const { uid } = req.body || {};
+  if (!uid) {
+    return res.status(404).json({ message: 'User not found' });
+  }
   try {
     const userData = await User.getByUid(uid);
     if (!userData) {
@@ -83,9 +86,11 @@ exports.getRole = async (req, res) => {
 };
 
 exports.getRole1 = async (req, res) => {
-  const uid = req.user.uid; // From authMiddleware
   try {
-    const userData = await User.getByUid(uid);
+    if (!req.user || !req.user.uid) {
+      throw new Error('Missing uid');
+    }
+    const userData = await User.getByUid(req.user.uid);
     if (!userData) {
       return res.status(404).json({ message: 'User not found' });
     }

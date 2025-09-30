@@ -3,6 +3,10 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.js',
     '!index.js',
+    '!config/firebase.js', // purely config
+    '!testFirebase.js', // a test utility
+    '!coverage/**', // Exclude coverage reports
+    '!jest.config.js',
     '!**/__tests__/**',
     '!**/__mocks__/**',
   ],

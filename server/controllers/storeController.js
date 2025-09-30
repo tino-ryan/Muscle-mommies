@@ -889,6 +889,7 @@ const customerReserve = async (req, res) => {
 const getItemById = async (req, res) => {
   try {
     const itemId = req.params.id;
+    if (!itemId) return res.status(400).json({ error: 'Item ID is required' });
     console.log(`Attempting to fetch item with ID: ${itemId}`);
     const docRef = admin.firestore().collection('items').doc(itemId);
     const doc = await docRef.get();
@@ -1175,6 +1176,8 @@ const updateStoreRating = async (storeId) => {
 const getStoreReviews = async (req, res) => {
   try {
     const { storeId } = req.params;
+    if (!storeId)
+      return res.status(400).json({ error: 'Store ID is required' });
 
     // Get all reviews for this store (without orderBy to avoid index requirement)
     const reviewsSnapshot = await admin
@@ -1273,4 +1276,5 @@ module.exports = {
   updateReservationStatus,
   getStoreReviews,
   createReview,
+  updateStoreRating,
 };
