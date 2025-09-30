@@ -8,7 +8,9 @@ To gather user feedback for our project, we used the following method:
 
 - We created a Google Form with questions focused on understanding users' impressions of our product idea
 - Questions included general feedback, suggested improvements and feature preferences
-- [View the survey here](https://docs.google.com/forms/d/e/1FAIpQLSf0ihPCr1UGzcnIMiT2nzkEq5zqt0ezSRXEbI9rU2Ff0Ksefg/viewform)
+- [View sprint 2 survey here](https://docs.google.com/forms/d/e/1FAIpQLSf0ihPCr1UGzcnIMiT2nzkEq5zqt0ezSRXEbI9rU2Ff0Ksefg/viewform)
+- [View sprint 3 survey here](https://docs.google.com/forms/d/e/1FAIpQLSf_g6OuiSoine9kckVr94vn-e8f0Pdth0drJ_0fGaDo6Z694A/viewform?fbzx=-1017252036218515497
+)
 
 ### 2. Product Pitch Distribution
 
