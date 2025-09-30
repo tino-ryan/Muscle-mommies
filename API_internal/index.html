@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-API_internal" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">ThriftFinder API Documentation | Muscle Mommies Docs</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://tino-ryan.github.io/Muscle-mommies/API_internal"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="ThriftFinder API Documentation | Muscle Mommies Docs"><meta data-rh="true" name="description" content="Overview"><meta data-rh="true" property="og:description" content="Overview"><link data-rh="true" rel="icon" href="/Muscle-mommies/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://tino-ryan.github.io/Muscle-mommies/API_internal"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/API_internal" hreflang="en"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/API_internal" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/Muscle-mommies/blog/rss.xml" title="Muscle Mommies Docs RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/Muscle-mommies/blog/atom.xml" title="Muscle Mommies Docs Atom Feed"><link rel="stylesheet" href="/Muscle-mommies/assets/css/styles.4769c4bb.css">
+<script src="/Muscle-mommies/assets/js/runtime~main.4fa73f23.js" defer="defer"></script>
+<script src="/Muscle-mommies/assets/js/main.1d8616ce.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Muscle-mommies/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Muscle-mommies/"><div class="navbar__logo"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Muscle Mommies</b></a><a class="navbar__item navbar__link" href="/Muscle-mommies/intro">Docs</a><a class="navbar__item navbar__link" href="/Muscle-mommies/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>ThriftFinder API Documentation</h1></header>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="overview">Overview<a href="#overview" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview">​</a></h2>
+<p><strong>Base URL</strong>: <code>https://muscle-mommies-server.onrender.com</code></p>
+<p>This API powers <strong>ThriftFinder</strong>, a local thrifting app for connecting shops and shoppers.<br>
+<!-- -->It’s built with <strong>Express</strong>, <strong>Firebase Auth/Firestore</strong>, and <strong>Cloudinary</strong> for image handling.</p>
+<ul>
+<li><strong>Auth</strong>: Most endpoints require a Firebase JWT in the <code>Authorization</code> header (<code>Bearer &lt;token&gt;</code>).<br>
+<!-- -->Endpoints marked <em>&quot;No auth&quot;</em> are publicly accessible.</li>
+<li><strong>Models</strong>: Data models follow Firestore schema (e.g., <code>Item</code> has fields like <code>itemId</code>, <code>name</code>, <code>category</code>, <code>images</code> array).</li>
+<li><strong>File Uploads</strong>: Uses <code>multer</code> (memory storage, 5MB limit).</li>
+<li><strong>Errors</strong>: Typically returned as <code>{ error: &quot;message&quot; }</code> with appropriate 4xx or 5xx status codes.</li>
+<li><strong>Deployment</strong>: Hosted on Render.com. Server code is in <code>/server</code>. Start with <code>npm start</code>.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="external-api-use-cases">External API Use Cases<a href="#external-api-use-cases" class="hash-link" aria-label="Direct link to External API Use Cases" title="Direct link to External API Use Cases">​</a></h2>
+<ul>
+<li><strong>Campus Quest Location API</strong>: Show thrift shops or popup markets near a campus. Unlock deals by completing campus quests or visiting landmarks.</li>
+<li><strong>Event Planning GuestList API</strong>: RSVP/register for thrift-related events, sync with user profiles.</li>
+<li><strong>Virtual Pen Pals Message API</strong>: Connect users across regions to exchange thrift tips or swap items via delayed pen pal-style messaging.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="authentication">Authentication<a href="#authentication" class="hash-link" aria-label="Direct link to Authentication" title="Direct link to Authentication">​</a></h2>
+<p>Handled via Firebase. Protected routes use <code>authMiddleware</code>, which validates <code>req.user.uid</code>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="auth-endpoints">Auth Endpoints<a href="#auth-endpoints" class="hash-link" aria-label="Direct link to Auth Endpoints" title="Direct link to Auth Endpoints">​</a></h3>
+<ul>
+<li>
+<p><strong>POST <code>/signup</code></strong><br>
+<!-- -->Creates a user account.<br>
+<strong>Body</strong>: <code>{ email, password, name? }</code><br>
+<strong>Response</strong>: <code>{ uid, ... }</code><br>
+<em>No auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/signup/google</code></strong><br>
+<!-- -->Google OAuth signup.<br>
+<strong>Body</strong>: <code>{ idToken }</code> (Firebase token)<br>
+<strong>Response</strong>: <code>{ uid, ... }</code><br>
+<em>No auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/getRole</code></strong><br>
+<!-- -->Fetches user role (<code>shop_owner</code> or <code>shopper</code>).<br>
+<strong>Body</strong>: <code>{ uid? }</code> or token<br>
+<strong>Response</strong>: <code>{ role }</code><br>
+<em>May not require auth.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/auth/user</code></strong><br>
+<!-- -->Fetches user info/role.<br>
+<strong>Response</strong>: <code>{ role, ... }</code><br>
+<em>Alias for <code>/getRole</code>. Possibly public.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="users">Users<a href="#users" class="hash-link" aria-label="Direct link to Users" title="Direct link to Users">​</a></h2>
+<ul>
+<li><strong>GET <code>/stores/users/:userId</code></strong><br>
+<!-- -->Fetch user profile info.<br>
+<strong>Params</strong>: <code>:userId</code><br>
+<strong>Response</strong>: <code>{ userId, name, email, role, location, ... }</code><br>
+<em>Auth required.</em></li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="stores">Stores<a href="#stores" class="hash-link" aria-label="Direct link to Stores" title="Direct link to Stores">​</a></h2>
+<ul>
+<li>
+<p><strong>GET <code>/my-store</code></strong><br>
+<!-- -->Get store info for current owner.<br>
+<strong>Response</strong>: <code>{ storeId, storeName, description, location, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores</code></strong><br>
+<!-- -->Fetch all stores.<br>
+<strong>Response</strong>: <code>[ { storeId, storeName, ... } ]</code><br>
+<em>No auth.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores/:storeId</code></strong><br>
+<!-- -->Get store by ID.<br>
+<strong>Params</strong>: <code>:storeId</code><br>
+<strong>Response</strong>: <code>{ storeId, storeName, description, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores</code></strong><br>
+<!-- -->Create or update a store.<br>
+<strong>Body</strong>: <code>{ storeName, description, address, location: { lat, lng }, contactInfo, ... }</code><br>
+<strong>Files</strong>: <code>profileImage</code> (single file)<br>
+<strong>Response</strong>: <code>{ storeId, ... }</code><br>
+<em>Auth required (owner only).</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/upload-image</code></strong><br>
+<!-- -->Upload store image.<br>
+<strong>Files</strong>: <code>profileImage</code><br>
+<strong>Response</strong>: <code>{ imageURL }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores/contact-infos</code></strong><br>
+<!-- -->Get contact info for store.<br>
+<strong>Response</strong>: <code>[ { contactId, info, ... } ]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/contact-infos</code></strong><br>
+<!-- -->Add contact info.<br>
+<strong>Body</strong>: <code>{ info }</code><br>
+<strong>Response</strong>: <code>{ contactId, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>DELETE <code>/stores/contact-infos/:contactId</code></strong><br>
+<!-- -->Remove contact info.<br>
+<strong>Params</strong>: <code>:contactId</code><br>
+<strong>Response</strong>: <code>{ success: true }</code><br>
+<em>Auth required.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="items">Items<a href="#items" class="hash-link" aria-label="Direct link to Items" title="Direct link to Items">​</a></h2>
+<ul>
+<li>
+<p><strong>GET <code>/items</code></strong><br>
+<!-- -->Get all items.<br>
+<strong>Response</strong>: <code>[ { itemId, name, category, ..., images: [...] } ]</code><br>
+<em>No auth.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/items/:id</code></strong><br>
+<!-- -->Get item by ID.<br>
+<strong>Params</strong>: <code>:id</code><br>
+<strong>Response</strong>: <code>{ itemId, name, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores/:storeId/items</code></strong><br>
+<!-- -->Get store-specific items.<br>
+<strong>Params</strong>: <code>:storeId</code><br>
+<strong>Response</strong>: <code>[ { itemId, ... } ]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/items/search</code></strong><br>
+<!-- -->Search/filter items.<br>
+<strong>Query params</strong>:<br>
+<code>?searchTerm=</code>, <code>?category=</code>, <code>?style=</code>, <code>?department=</code>, <code>?minPrice=</code>, <code>?maxPrice=</code>, <code>?status=Available</code><br>
+<strong>Response</strong>: <code>[ { itemId, ... } ]</code><br>
+<em>No auth.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/items</code></strong><br>
+<!-- -->Create an item.<br>
+<strong>Body</strong>: <code>{ name, description, category, department, style, size, price, quantity, status }</code><br>
+<strong>Files</strong>: <code>images[]</code> (up to 5)<br>
+<strong>Response</strong>: <code>{ itemId, ..., images: [...] }</code><br>
+<em>Auth required (owner).</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/items/:itemId</code></strong><br>
+<!-- -->Update item and images.<br>
+<strong>Params</strong>: <code>:itemId</code><br>
+<strong>Body</strong>: Same as POST<br>
+<strong>Files</strong>: <code>images[]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/items/:itemId/images</code></strong><br>
+<!-- -->Update item images only.<br>
+<strong>Params</strong>: <code>:itemId</code><br>
+<strong>Files</strong>: <code>images[]</code><br>
+<em>Auth required.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="reservations">Reservations<a href="#reservations" class="hash-link" aria-label="Direct link to Reservations" title="Direct link to Reservations">​</a></h2>
+<ul>
+<li>
+<p><strong>GET <code>/stores/reservations</code></strong><br>
+<!-- -->Fetch user/store reservations.<br>
+<strong>Response</strong>: <code>[ { reservationId, itemId, status, ... } ]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/reservations</code></strong><br>
+<!-- -->Create reservation.<br>
+<strong>Body</strong>: <code>{ itemId, ... }</code><br>
+<strong>Response</strong>: <code>{ reservationId, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/reservations/:reservationId</code></strong><br>
+<!-- -->Update reservation.<br>
+<strong>Body</strong>: <code>{ status }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/reservations/:reservationId/confirm</code></strong><br>
+<!-- -->Confirm reservation.<br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/reserve/:itemId</code></strong><br>
+<!-- -->Reserve item directly.<br>
+<strong>Params</strong>: <code>:itemId</code><br>
+<em>Auth required.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="chats--messages">Chats / Messages<a href="#chats--messages" class="hash-link" aria-label="Direct link to Chats / Messages" title="Direct link to Chats / Messages">​</a></h2>
+<ul>
+<li>
+<p><strong>GET <code>/stores/chats</code></strong><br>
+<!-- -->Get user chats.<br>
+<strong>Response</strong>: <code>[ { chatId, ... } ]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores/chats/:chatId/messages</code></strong><br>
+<!-- -->Get messages in chat.<br>
+<strong>Params</strong>: <code>:chatId</code><br>
+<strong>Response</strong>: <code>[ { messageId, content, ... } ]</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/messages</code></strong><br>
+<!-- -->Send message.<br>
+<strong>Body</strong>: <code>{ chatId, content, receiverId?, itemId? }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>PUT <code>/stores/chats/:chatId/read</code></strong><br>
+<!-- -->Mark chat as read.<br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>POST <code>/stores/chats</code></strong><br>
+<!-- -->Create chat.<br>
+<strong>Body</strong>: <code>{ receiverId, itemId? }</code><br>
+<em>Auth required.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="reviews">Reviews<a href="#reviews" class="hash-link" aria-label="Direct link to Reviews" title="Direct link to Reviews">​</a></h2>
+<ul>
+<li>
+<p><strong>POST <code>/stores/reviews</code></strong><br>
+<!-- -->Leave a review.<br>
+<strong>Body</strong>: <code>{ storeId, rating, comment, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/stores/:storeId/reviews</code></strong><br>
+<!-- -->Get store reviews.<br>
+<em>No auth.</em></p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="outfits">Outfits<a href="#outfits" class="hash-link" aria-label="Direct link to Outfits" title="Direct link to Outfits">​</a></h2>
+<ul>
+<li>
+<p><strong>POST <code>/outfits</code></strong><br>
+<!-- -->Save an outfit.<br>
+<strong>Body</strong>: <code>{ items: [itemIds], name? }</code><br>
+<strong>Response</strong>: <code>{ outfitId, ... }</code><br>
+<em>Auth required.</em></p>
+</li>
+<li>
+<p><strong>GET <code>/outfits</code></strong><br>
+<!-- -->Get user’s outfits.<br>
+<em>Auth required.</em></p>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tino-ryan/Muscle-mommies/edit/gh-pages/docs/API_internal.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#overview" class="table-of-contents__link toc-highlight">Overview</a></li><li><a href="#external-api-use-cases" class="table-of-contents__link toc-highlight">External API Use Cases</a></li><li><a href="#authentication" class="table-of-contents__link toc-highlight">Authentication</a><ul><li><a href="#auth-endpoints" class="table-of-contents__link toc-highlight">Auth Endpoints</a></li></ul></li><li><a href="#users" class="table-of-contents__link toc-highlight">Users</a></li><li><a href="#stores" class="table-of-contents__link toc-highlight">Stores</a></li><li><a href="#items" class="table-of-contents__link toc-highlight">Items</a></li><li><a href="#reservations" class="table-of-contents__link toc-highlight">Reservations</a></li><li><a href="#chats--messages" class="table-of-contents__link toc-highlight">Chats / Messages</a></li><li><a href="#reviews" class="table-of-contents__link toc-highlight">Reviews</a></li><li><a href="#outfits" class="table-of-contents__link toc-highlight">Outfits</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/tech-stack">Tech Stack</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muscle Mommies.</div></div></div></footer></div>
+</body>
+</html>
