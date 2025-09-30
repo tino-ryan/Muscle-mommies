@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Development Plan | Muscle Mommies Docs</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://tino-ryan.github.io/Muscle-mommies/development-plan"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Development Plan | Muscle Mommies Docs"><meta data-rh="true" name="description" content="---"><meta data-rh="true" property="og:description" content="---"><link data-rh="true" rel="icon" href="/Muscle-mommies/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://tino-ryan.github.io/Muscle-mommies/development-plan"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/development-plan" hreflang="en"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/development-plan" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Development Plan","item":"https://tino-ryan.github.io/Muscle-mommies/development-plan"}]}</script><link rel="alternate" type="application/rss+xml" href="/Muscle-mommies/blog/rss.xml" title="Muscle Mommies Docs RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/Muscle-mommies/blog/atom.xml" title="Muscle Mommies Docs Atom Feed"><link rel="stylesheet" href="/Muscle-mommies/assets/css/styles.4769c4bb.css">
-<script src="/Muscle-mommies/assets/js/runtime~main.41382ed9.js" defer="defer"></script>
+<script src="/Muscle-mommies/assets/js/runtime~main.089d0bd9.js" defer="defer"></script>
 <script src="/Muscle-mommies/assets/js/main.dd00a2b4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -118,17 +118,81 @@
 </ul>
 <hr>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="8-sprint-roadmap-detailed">8. Sprint Roadmap (Detailed)<a href="#8-sprint-roadmap-detailed" class="hash-link" aria-label="Direct link to 8. Sprint Roadmap (Detailed)" title="Direct link to 8. Sprint Roadmap (Detailed)">​</a></h2>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sprint-1-foundations--authentication-weeks-12"><em>Sprint 1: Foundations &amp; Authentication (Weeks 1–2)</em><a href="#sprint-1-foundations--authentication-weeks-12" class="hash-link" aria-label="Direct link to sprint-1-foundations--authentication-weeks-12" title="Direct link to sprint-1-foundations--authentication-weeks-12">​</a></h3>
-<p><em>Objective:</em> Build infrastructure, authentication, and core DB models.<br>
-<em>Deliverables:</em></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sprint-1-foundations--documentation-weeks-12"><em>Sprint 1: Foundations &amp; Documentation (Weeks 1–2)</em><a href="#sprint-1-foundations--documentation-weeks-12" class="hash-link" aria-label="Direct link to sprint-1-foundations--documentation-weeks-12" title="Direct link to sprint-1-foundations--documentation-weeks-12">​</a></h3>
+<p><em>Objective:</em> Establish project foundations, version control, methodology, documentation, and initial setup.</p>
+<p><em>Deliverables:</em></p>
 <ul>
-<li>Auth API (Firebase Auth).</li>
-<li>User Profile API (shopper/store owner roles).</li>
-<li>DB Setup: Users, Stores, Items (skeleton).</li>
-<li>Cloud Storage for media uploads.</li>
-<li>Login/Sign-Up Screens + placeholder homepage.</li>
+<li>Version control: Git repo initialized, linters/formatters configured, README created, all members contributing commits.</li>
+<li>Documentation site: Build and deploy site with both trivial (links/resources) and non-trivial content.</li>
+<li>Work planning: Set up project management tool (Notion/Trello/GitHub Projects), add all Sprint 1 tasks, hold regular scrums.</li>
+<li>Development guides: Firestore emulator setup, Express API guide, React setup and environment variables.</li>
+<li>Git methodology: Document branching and commit strategy with resources explaining methodology.</li>
+<li>Project methodology: Document Scrum approach, task point system, assignment strategy, and provide resources.</li>
+<li>Tech stack: Document chosen stack with reasons and supporting resources.</li>
+<li>Stakeholder interaction: Meet client, gather requirements, document outcomes.</li>
+<li>Initial design &amp; plan: Wireframes/mockups for key pages, roadmap, and timeline.</li>
+<li>Implementation: Setup Firebase Auth with login/signup, configure environment variables.</li>
 </ul>
-<p><em>Success Criteria:</em> Users can sign up, log in, and create a profile/store.</p>
+<p><em>Success Criteria:</em> Project repo, documentation site, methodologies, and initial Firebase authentication setup are completed and functional.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sprint-2-storefronts-filtering--core-features-weeks-34"><em>Sprint 2: Storefronts, Filtering &amp; Core Features (Weeks 3–4)</em><a href="#sprint-2-storefronts-filtering--core-features-weeks-34" class="hash-link" aria-label="Direct link to sprint-2-storefronts-filtering--core-features-weeks-34" title="Direct link to sprint-2-storefronts-filtering--core-features-weeks-34">​</a></h3>
+<p><em>Objective:</em> Implement user-facing browsing, storefronts, and initial chat and dashboards.</p>
+<p><em>Deliverables:</em></p>
+<ul>
+<li>User home with closest stores displayed, distance filtering, and live map integration.</li>
+<li>Search and filtering by size, category, and keywords.</li>
+<li>Storefronts that display store items.</li>
+<li>Item detail page with enlarged view, reservation button, and enquiry options (collect within a week or request delivery).</li>
+<li>Closet and reserved items for users.</li>
+<li>Chat interface between users and store owners.</li>
+<li>Store owner dashboards for managing reservations and items.</li>
+<li>Store owner analytics dashboard with initial stats.</li>
+<li>Admin dashboard with visibility over users, stores, and stats.</li>
+<li>Automated testing for implemented features.</li>
+<li>Stakeholder reviews (at least three tutor meetings, feedback implemented).</li>
+<li>API integration: Firebase Auth, Map API, and page-related APIs for DB interactions.</li>
+<li>User feedback collection workflow via Google Form linked to spreadsheet.</li>
+<li>Project management methodology evidence documented.</li>
+<li>Bug tracker setup and usage (GitHub Issues).</li>
+<li>Database documentation (schema updates).</li>
+<li>Third-party code documentation (Firebase, Maps API, etc., with justifications).</li>
+<li>Testing documentation and evidence of user feedback integration.</li>
+</ul>
+<p><em>Success Criteria:</em> Users can browse and filter stores/items, view item details, reserve/enquire, and interact with storefront dashboards. APIs, testing, documentation, and tutor reviews are completed.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sprint-3-reservations-feedback--advanced-features-weeks-56"><em>Sprint 3: Reservations, Feedback &amp; Advanced Features (Weeks 5–6)</em><a href="#sprint-3-reservations-feedback--advanced-features-weeks-56" class="hash-link" aria-label="Direct link to sprint-3-reservations-feedback--advanced-features-weeks-56" title="Direct link to sprint-3-reservations-feedback--advanced-features-weeks-56">​</a></h3>
+<p><em>Objective:</em> Complete reservation workflows, integrate user feedback, expand dashboards, and improve app polish and testing coverage.</p>
+<p><em>Deliverables:</em></p>
+<ul>
+<li>User feedback collected, documented, and implemented from tutor, peers, and test users in multiple rounds.</li>
+<li>Testing coverage &gt;80% across frontend and backend.</li>
+<li>Closet feature with themed stores (owners select themes that reflect on storefronts).</li>
+<li>Store pages with full details, item search/filter, detailed modals for reservations and enquiries, and store ratings/reviews.</li>
+<li>Reservations page for both users and owners, including status updates, confirmations, and reviews.</li>
+<li>UI refinements including loading screens and consistent styling templates.</li>
+<li>Store owner dashboard with professional charts and sales stats.</li>
+<li>Settings pages for user and store preferences.</li>
+<li>Admin pages for managing users, stores, and reports.</li>
+<li>API endpoints implemented and tested across all features.</li>
+<li>Performance improvements validated with testing.</li>
+<li>Evidence of feedback-driven improvements (UI reskin, new features).</li>
+<li>Documentation updated with mockups, diagrams, schema changes, and testing workflows.</li>
+<li>Agile methodology evidenced in project logs, sprint reports, and version control practices.</li>
+<li>Bug tracker actively used with logged issues.</li>
+</ul>
+<p><em>Success Criteria:</em> Stores have themed storefronts, reservations and reviews are functional, dashboards and admin tools are operational, and the app shows evidence of improvement from feedback. Testing coverage exceeds 80% with updated documentation.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sprint-4-analytics-events--polishing-weeks-78"><em>Sprint 4: Analytics, Events &amp; Polishing (Weeks 7–8)</em><a href="#sprint-4-analytics-events--polishing-weeks-78" class="hash-link" aria-label="Direct link to sprint-4-analytics-events--polishing-weeks-78" title="Direct link to sprint-4-analytics-events--polishing-weeks-78">​</a></h3>
+<p><em>Objective:</em> Add analytics, event discovery, rewards, and polish UI.</p>
+<p><em>Deliverables:</em></p>
+<ul>
+<li>Analytics Dashboard: Most viewed items, popular categories, customer feedback.</li>
+<li>Rewards API: Eco-points for purchases, redeemable later.</li>
+<li>Event Discovery: Campus Quest + GuestList API integration.</li>
+<li>UI Polishing: Cart drawer, responsive design, improved feed UI.</li>
+<li>Database: <code>Analytics</code> collection, extended reservations with eco-points.</li>
+</ul>
+<p><em>Success Criteria:</em> Store owners can access analytics, users can discover events, and app is demo-ready.</p>
 <hr>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="final-deliverable">Final Deliverable<a href="#final-deliverable" class="hash-link" aria-label="Direct link to Final Deliverable" title="Direct link to Final Deliverable">​</a></h2>
 <p>A fully working MVP featuring:</p>
@@ -138,6 +202,6 @@
 <li>Notifications &amp; eco-points rewards</li>
 <li>Store analytics dashboard</li>
 <li>Event discovery integration</li>
-</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tino-ryan/Muscle-mommies/edit/gh-pages/docs/development-plan.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Muscle-mommies/initial-design"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Initial Design</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Muscle-mommies/project-management"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Project Management Methodology &amp; Setup</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-project-overview" class="table-of-contents__link toc-highlight">1. Project Overview</a></li><li><a href="#2-target-audience" class="table-of-contents__link toc-highlight">2. Target Audience</a></li><li><a href="#3-functional-requirements" class="table-of-contents__link toc-highlight">3. Functional Requirements</a></li><li><a href="#4-non-functional-requirements" class="table-of-contents__link toc-highlight">4. Non-Functional Requirements</a></li><li><a href="#5-technical-requirements" class="table-of-contents__link toc-highlight">5. Technical Requirements</a></li><li><a href="#6-design-requirements" class="table-of-contents__link toc-highlight">6. Design Requirements</a></li><li><a href="#7-development-plan-components" class="table-of-contents__link toc-highlight">7. Development Plan Components</a><ul><li><a href="#71-task-breakdown" class="table-of-contents__link toc-highlight">7.1 Task Breakdown</a></li><li><a href="#72-resource-allocation" class="table-of-contents__link toc-highlight">7.2 Resource Allocation</a></li><li><a href="#73-testing--quality-assurance" class="table-of-contents__link toc-highlight">7.3 Testing &amp; Quality Assurance</a></li><li><a href="#74-launch--deployment" class="table-of-contents__link toc-highlight">7.4 Launch &amp; Deployment</a></li><li><a href="#75-maintenance--updates" class="table-of-contents__link toc-highlight">7.5 Maintenance &amp; Updates</a></li></ul></li><li><a href="#8-sprint-roadmap-detailed" class="table-of-contents__link toc-highlight">8. Sprint Roadmap (Detailed)</a><ul><li><a href="#sprint-1-foundations--authentication-weeks-12" class="table-of-contents__link toc-highlight"><em>Sprint 1: Foundations &amp; Authentication (Weeks 1–2)</em></a></li></ul></li><li><a href="#final-deliverable" class="table-of-contents__link toc-highlight">Final Deliverable</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/tech-stack">Tech Stack</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muscle Mommies.</div></div></div></footer></div>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tino-ryan/Muscle-mommies/edit/gh-pages/docs/development-plan.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Muscle-mommies/initial-design"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Initial Design</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Muscle-mommies/project-management"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Project Management Methodology &amp; Setup</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-project-overview" class="table-of-contents__link toc-highlight">1. Project Overview</a></li><li><a href="#2-target-audience" class="table-of-contents__link toc-highlight">2. Target Audience</a></li><li><a href="#3-functional-requirements" class="table-of-contents__link toc-highlight">3. Functional Requirements</a></li><li><a href="#4-non-functional-requirements" class="table-of-contents__link toc-highlight">4. Non-Functional Requirements</a></li><li><a href="#5-technical-requirements" class="table-of-contents__link toc-highlight">5. Technical Requirements</a></li><li><a href="#6-design-requirements" class="table-of-contents__link toc-highlight">6. Design Requirements</a></li><li><a href="#7-development-plan-components" class="table-of-contents__link toc-highlight">7. Development Plan Components</a><ul><li><a href="#71-task-breakdown" class="table-of-contents__link toc-highlight">7.1 Task Breakdown</a></li><li><a href="#72-resource-allocation" class="table-of-contents__link toc-highlight">7.2 Resource Allocation</a></li><li><a href="#73-testing--quality-assurance" class="table-of-contents__link toc-highlight">7.3 Testing &amp; Quality Assurance</a></li><li><a href="#74-launch--deployment" class="table-of-contents__link toc-highlight">7.4 Launch &amp; Deployment</a></li><li><a href="#75-maintenance--updates" class="table-of-contents__link toc-highlight">7.5 Maintenance &amp; Updates</a></li></ul></li><li><a href="#8-sprint-roadmap-detailed" class="table-of-contents__link toc-highlight">8. Sprint Roadmap (Detailed)</a><ul><li><a href="#sprint-1-foundations--documentation-weeks-12" class="table-of-contents__link toc-highlight"><em>Sprint 1: Foundations &amp; Documentation (Weeks 1–2)</em></a></li><li><a href="#sprint-2-storefronts-filtering--core-features-weeks-34" class="table-of-contents__link toc-highlight"><em>Sprint 2: Storefronts, Filtering &amp; Core Features (Weeks 3–4)</em></a></li><li><a href="#sprint-3-reservations-feedback--advanced-features-weeks-56" class="table-of-contents__link toc-highlight"><em>Sprint 3: Reservations, Feedback &amp; Advanced Features (Weeks 5–6)</em></a></li><li><a href="#sprint-4-analytics-events--polishing-weeks-78" class="table-of-contents__link toc-highlight"><em>Sprint 4: Analytics, Events &amp; Polishing (Weeks 7–8)</em></a></li></ul></li><li><a href="#final-deliverable" class="table-of-contents__link toc-highlight">Final Deliverable</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/tech-stack">Tech Stack</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muscle Mommies.</div></div></div></footer></div>
 </body>
 </html>
