@@ -24,8 +24,8 @@ To gather user feedback for our project, we used the following method:
 - To validate and refine our concept before development progresses further.
 
 ### 4. Data Collection
-[User Feedback for Sprint 2](/pdf/tf.pdf)
-[User Feedback for Sprint 3](https://docs.google.com/spreadsheets/d/1nDlbpmBOeZT33PT88asfGHM5nBSil1oHtlEXkTxSEwU/edit?gid=860310904#gid=860310904)
+- [User Feedback for Sprint 2](/pdf/tf.pdf)
+- [User Feedback for Sprint 3](https://docs.google.com/spreadsheets/d/1nDlbpmBOeZT33PT88asfGHM5nBSil1oHtlEXkTxSEwU/edit?gid=860310904#gid=860310904)
 
 ## Why this method?
 
