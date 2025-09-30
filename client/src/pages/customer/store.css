@@ -12,56 +12,6 @@
   
 }
 
-.store-home .sidebar {
-  width: 250px;
-  padding: 20px;
-  border-right: 0px solid #000 !important;
-  background-color: var(--color-base) !important;
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-  
-  min-height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-.store-home .sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  cursor: pointer;
-  color: #1b0e0e;
-  background-color: var(--color-filter) !important;
-  border: #000;
-  border-style: solid;
-  
-}
-
-.store-home .sidebar-item:hover {
-  background-color: var(--color-btn) !important;
-  border-radius: 8px;
-}
-
-.store-home .sidebar-item.active {
-  border-radius: 8px;
-  background-color: var(--color-btn);
-}
-
-.store-home .sidebar-item svg {
-  width: 24px;
-  height: 24px;
-  color: #000 !important;
-  margin-left: 8px;
-}
-
-.store-home .sidebar-item p {
-  font-size: 14px;
-  font-weight: 600 !important;
-  margin: 0;
-}
-
 .store-home button {
   background-color: var(--color-btn);
   color:#000;
@@ -77,13 +27,10 @@
   height: 100%;
   padding: 20px;
   
-  
-  
-
 }
 
 .store-home .content {
-  margin-left: 0px;
+  margin-left: 300px;
   flex: 1;
   border: #000;
   border-color: #000;

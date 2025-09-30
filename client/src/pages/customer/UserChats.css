@@ -6,24 +6,24 @@
 */
 
 /* --- Global Layout --- */
-.chats {
+.Userchats {
   display: flex;
   background-color: #4c53fa;
   font-family: 'Plus Jakarta Sans', sans-serif;
   min-height: 100vh;
 }
 
-.layout-container {
+.chats-layout-container {
+  display: flex;
   flex: 1;
-  max-width: 100%;
-  margin: 20px;
-  border-radius: 8px;
-  padding: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
   
   
 }
 
-.chats .content {
+.Userchats .chats-content {
   flex: 1;
   padding: 20px;
   margin-left: 300px;
@@ -34,7 +34,7 @@
   
 }
 
-.content h1 {
+.chats-content h1 {
   font-size: 28px;
   font-weight: 700;
   color: #1b0e0e;
@@ -44,13 +44,13 @@
 }
 
 /* --- Search Bar --- */
-.search-bar-container {
+.csearch-bar-container {
   margin-bottom: 25px;
   position: relative;
   margin: 30px;
 }
 
-.search-bar-container input {
+.csearch-bar-container input {
   width: 100%;
   padding: 12px 15px;
   border: 1px solid #e7d0d1;
@@ -85,7 +85,7 @@
 }
 
 /* --- Chat List/Card Styles (Mobile-First) --- */
-.chat-list {
+.cchat-list {
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -95,7 +95,7 @@
   margin: 30px;
 }
 
-.chat-card {
+.cchat-card {
   display: flex;
   align-items: center;
   background-color: #8c9eff;
@@ -108,11 +108,11 @@
   min-height: 70px; /* Reduced height */
 }
 
-.chat-card:hover {
+.cchat-card:hover {
   background-color: #bfc9ff;
 }
 
-.chat-card.unread {
+.cchat-card.unread {
   background-color: #7a90ff;
 }
 
@@ -152,13 +152,13 @@
   min-width: 0;
 }
 
-.chat-name-preview {
+.cchat-name-preview {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.chat-name-preview h3 {
+.cchat-name-preview h3 {
   font-size: 18px; /* Larger font for name */
   font-weight: 700; /* Bolder for emphasis */
   color: #1b0e0e;
@@ -168,13 +168,13 @@
   text-overflow: ellipsis;
 }
 
-.chat-name-preview h3 span {
+.cchat-name-preview h3 span {
   color: blue; /* Item name in brackets uses primary color */
   font-weight: 600; /* Slightly lighter than name */
   font-size: 16px; /* Slightly smaller than name */
 }
 
-.chat-preview {
+.cchat-preview {
   font-size: 13px;
   color: #292929;
   margin: 0;
@@ -183,15 +183,7 @@
   white-space: nowrap;
 }
 
-.chat-item-name {
-  font-size: 14px; /* Slightly larger for clarity */
-  color: blue;
-  font-weight: 600;
-  margin: 0 0 2px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 
 
 
@@ -235,7 +227,7 @@
 
 /* --- Responsive Adjustments (Mobile) --- */
 @media (max-width: 768px) {
-  .chats > .store-sidebar {
+  .chats > .customerSidebar {
     display: none;
   }
   

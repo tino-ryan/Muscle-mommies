@@ -9,6 +9,8 @@ import CustomerHome from './pages/customer/Home';
 import Store from './pages/customer/Store';
 import Search from './pages/customer/Search';
 import CusReservations from './pages/customer/Reservations'; // Adjust path
+import BadgePage from './pages/customer/Badge';
+import MyCloset from './pages/customer/MyCloset.jsx';
 
 // Store owner pages
 import StoreHome from './pages/store/StoreHome';
@@ -18,7 +20,6 @@ import AddListing from './pages/store/AddListing';
 import EditListing from './pages/store/EditListing';
 import StoreReservations from './pages/store/Reservations';
 import Chats from './pages/store/Chats.jsx';
-import Analytics from './pages/store/Analytics.jsx';
 
 //customer pages
 import UserChats from './pages/customer/UserChats.jsx';
@@ -47,7 +48,6 @@ function App() {
       <Route path="/store/listings/edit/:itemId" element={<EditListing />} />
       <Route path="/store/reservations" element={<StoreReservations />} />
       <Route path="/store/chats" element={<Chats />} />
-      <Route path="/analytics" element={<Analytics />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
       <Route path="/user/chats" element={<UserChats />} />
@@ -56,10 +56,13 @@ function App() {
       <Route path="/store/home" element={<StoreHome />} />
       <Route path="/customer/home" element={<CustomerHome />} />
       <Route path="/customer/reservations" element={<CusReservations />} />
+      <Route path="/customer/closet" element={<MyCloset />} />
 
       {/* New Item Detail page for testing */}
       <Route path="/store/:id" element={<Store />} />
       <Route path="/search" element={<Search />} />
+      {/* Badges page */}
+      <Route path="/badges" element={<BadgePage />} />
 
       <Route path="/" element={<Dashboard />} />
     </Routes>

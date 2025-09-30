@@ -159,9 +159,77 @@ export default function ThriftFinderHome() {
       <CustomerSidebar activePage="home" />
       <div className="layout-container">
         <div className="content">
-          <div className="header">
+          <div
+            className="header"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+            }}
+          >
             <h1>Find Nearby Thrift Stores</h1>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={() => navigate('/customer/closet')}
+                style={{
+                  padding: '8px 16px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  borderRadius: '8px',
+                  border: '2px solid #000',
+                  backgroundColor: '#d3f44b',
+                  color: '#1b0e0e',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#994d51';
+                  e.currentTarget.style.color = '#fff';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d3f44b';
+                  e.currentTarget.style.color = '#1b0e0e';
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Closet
+              </button>
+
+              <button
+                onClick={() => navigate('/badges')}
+                style={{
+                  padding: '8px 16px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  borderRadius: '8px',
+                  border: '2px solid #000',
+                  backgroundColor: '#d3f44b',
+                  color: '#1b0e0e',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#994d51';
+                  e.currentTarget.style.color = '#fff';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d3f44b';
+                  e.currentTarget.style.color = '#1b0e0e';
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Badges
+              </button>
+            </div>
           </div>
+
           {error && <div className="error">{error}</div>}
           <div className="controls">
             <div className="location-status">

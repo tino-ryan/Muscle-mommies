@@ -7,18 +7,13 @@
   background-color: #4c53fa;
 
   /* instead of hard margins, respect the sidebar */
-  margin-left: 300px;           /* match your sidebar width */
+  margin-left: 290px;           /* match your sidebar width */
   margin-right: 20px;
   padding: 20px;
   box-sizing: border-box;       /* padding counts inside width */
 }
 
-body {
-  margin: 0;               /* Remove default body margin */
-  min-height: 100vh;       /* Ensure it covers full viewport */
-  background-color: #4c53fa; /* Your page background color */
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-}
+
 
 .reservations .content {
   max-width: 100%;              /* never spill past screen */
@@ -81,12 +76,7 @@ body {
   background-color: #f9f9f9;
 }
 
-p {
-  font-size: 16px;
-  color: #994d51;
-  text-align: center;
-  padding: 20px;
-}
+
 
 @media (max-width: 768px) {
   .content-container {

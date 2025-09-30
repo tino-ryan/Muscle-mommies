@@ -1,4 +1,4 @@
-// src/components/CustomerSidebar.jsx
+// src/components/CustomercSidebar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
@@ -7,14 +7,17 @@ import './CustomerSidebar.css';
 export default function CustomerSidebar({ activePage }) {
   const navigate = useNavigate();
   const auth = getAuth();
-  function eraseCookie(name) {
-    document.cookie =
-      name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-  }
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      eraseCookie(`thriftRole_${auth.currentUser?.uid}`); // Clear the role cookie
+
+      // Clear all cookies
+      document.cookie.split(';').forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, '')
+          .replace(/=.*/, `=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`);
+      });
+
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -22,9 +25,9 @@ export default function CustomerSidebar({ activePage }) {
   };
 
   return (
-    <div className="sidebar">
+    <div className="csidebar">
       <div
-        className={`sidebar-item ${activePage === 'home' ? 'active' : ''}`}
+        className={`csidebar-item ${activePage === 'home' ? 'active' : ''}`}
         onClick={() => navigate('/customer/home')}
       >
         <svg
@@ -39,7 +42,7 @@ export default function CustomerSidebar({ activePage }) {
         <p>Home</p>
       </div>
       <div
-        className={`sidebar-item ${activePage === 'search' ? 'active' : ''}`}
+        className={`csidebar-item ${activePage === 'search' ? 'active' : ''}`}
         onClick={() => navigate('/search')}
       >
         <svg
@@ -54,7 +57,7 @@ export default function CustomerSidebar({ activePage }) {
         <p>Search</p>
       </div>
       <div
-        className={`sidebar-item ${activePage === 'chats' ? 'active' : ''}`}
+        className={`csidebar-item ${activePage === 'chats' ? 'active' : ''}`}
         onClick={() => navigate('/user/chats')}
       >
         <svg
@@ -69,7 +72,7 @@ export default function CustomerSidebar({ activePage }) {
         <p>Chats</p>
       </div>
       <div
-        className={`sidebar-item ${activePage === 'reservations' ? 'active' : ''}`}
+        className={`csidebar-item ${activePage === 'reservations' ? 'active' : ''}`}
         onClick={() => navigate('/customer/reservations')}
       >
         <svg
@@ -83,7 +86,7 @@ export default function CustomerSidebar({ activePage }) {
         </svg>
         <p>Reservations</p>
       </div>
-      <div className="sidebar-item" onClick={handleLogout}>
+      <div className="csidebar-item" onClick={handleLogout}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24px"

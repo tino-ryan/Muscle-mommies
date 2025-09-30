@@ -250,3 +250,9 @@
     min-height: 300px;
   }
 }
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+

@@ -8,7 +8,7 @@ import axios from 'axios';
 import './UserChats.css';
 import { API_URL } from '../../api';
 
-export default function Chats() {
+export default function UserChats() {
   const [chats, setChats] = useState([]);
   const [error, setError] = useState('');
   const [items, setItems] = useState({});
@@ -190,13 +190,13 @@ export default function Chats() {
   }
 
   return (
-    <div className="chats">
-      <div className="layout-container">
+    <div className="Userchats">
+      <div className="chats-layout-container">
         <CustomerSidebar
           currentPage="Chats"
           onLogout={() => auth.signOut().then(() => navigate('/login'))}
         />
-        <div className="content">
+        <div className="chats-content">
           <div className="header">
             <h1>Chats</h1>
           </div>
@@ -204,7 +204,7 @@ export default function Chats() {
           {error && <div className="error">{error}</div>}
 
           {/* Search Bar - New */}
-          <div className="search-bar-container">
+          <div className="csearch-bar-container">
             <input
               type="text"
               placeholder="Search items or customers..."
@@ -224,7 +224,7 @@ export default function Chats() {
               No results found for &quot;{searchTerm}&quot;.
             </p>
           ) : (
-            <div className="chat-list">
+            <div className="cchat-list">
               {filteredChats.map((chat) => {
                 const item = items[chat.itemId];
                 const isUnread = chat.unreadCount > 0;
@@ -237,7 +237,7 @@ export default function Chats() {
                   <div
                     key={chat.chatId}
                     onClick={() => handleOpenChat(chat.chatId)}
-                    className={`chat-card ${isUnread ? 'unread' : ''}`}
+                    className={`cchat-card ${isUnread ? 'unread' : ''}`}
                   >
                     {/* LEFT SECTION: Avatar/Image */}
                     <div className="chat-avatar">
@@ -249,8 +249,8 @@ export default function Chats() {
                     </div>
 
                     {/* MIDDLE SECTION: Content */}
-                    <div className="chat-content">
-                      <div className="chat-name-preview">
+                    <div className="cchat-content">
+                      <div className="cchat-name-preview">
                         <h3 className={isUnread ? 'bold-text' : ''}>
                           {primaryName}
                           {chat.itemId && item?.name && (
@@ -258,7 +258,7 @@ export default function Chats() {
                           )}
                         </h3>
                         <p
-                          className={`chat-preview ${isUnread ? 'bold-text' : ''}`}
+                          className={`cchat-preview ${isUnread ? 'bold-text' : ''}`}
                         >
                           {chat.lastMessage || 'Start the conversation...'}
                         </p>
@@ -266,14 +266,16 @@ export default function Chats() {
                     </div>
 
                     {/* RIGHT SECTION: Time/Badge */}
-                    <div className="chat-right-info">
+                    <div className="cchat-right-info">
                       <p
                         className={`chat-timestamp ${isUnread ? 'bold-text' : ''}`}
                       >
                         {formatDate(chat.lastTimestamp)}
                       </p>
                       {isUnread && (
-                        <span className="unread-badge">{chat.unreadCount}</span>
+                        <span className="cunread-badge">
+                          {chat.unreadCount}
+                        </span>
                       )}
                     </div>
                   </div>

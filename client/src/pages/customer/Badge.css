@@ -1,0 +1,343 @@
+/* src/pages/customer/BadgePage.css */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+.badge-home {
+  display: flex;
+  background-color: #4c53f9; /* Vibrant blue from home.css */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto;
+}
+
+.content-container {
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 50px;
+  flex: 1;
+  background-color: #e22a98; /* Hot pink container */
+  border-radius: 10px;
+  border: 2px solid #000; /* Black border from home.css */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.header {
+  text-align: center;
+  color: #1b0e0e;
+}
+
+.badge-home .header h1 {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  background: black;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 8px 0;
+}
+
+.header p {
+  font-size: 16px;
+  margin: 0;
+  color: #d3f44b; /* Bright yellow-green */
+  font-weight: 500;
+}
+
+.featured-badge-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.badge-card.featured {
+  background-color: #d3f44b; /* Bright yellow-green background */
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.badge-card.featured:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.badge-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid #000;
+  margin-bottom: 16px;
+}
+
+.badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.badge-title {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1b0e0e;
+  margin: 0;
+}
+
+.badge-description {
+  font-size: 16px;
+  color: #1b0e0e;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.badge-date {
+  font-size: 14px;
+  color: #994d51;
+  font-weight: 500;
+  margin: 0;
+}
+
+.claim-button {
+  padding: 12px 24px;
+  background-color: #4c53f9; /* Blue button */
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 12px;
+}
+
+.claim-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 83, 249, 0.3);
+}
+
+.claim-note {
+  font-size: 14px;
+  color: #994d51;
+  font-style: italic;
+  margin: 8px 0 0 0;
+}
+
+.other-badges-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.section-title {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  background: black;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.badge-card {
+  background-color: #8c9eff; /* Lighter blue from store-card */
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.badge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.badge-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid #000;
+  margin-bottom: 12px;
+}
+
+.badge-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1b0e0e;
+  margin: 0 0 8px 0;
+}
+
+.badge-description {
+  font-size: 14px;
+  color: #1b0e0e;
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+}
+
+.badge-date {
+  font-size: 12px;
+  color: #994d51;
+  font-weight: 500;
+  margin: 0;
+}
+
+.view-more-button {
+  padding: 12px 24px;
+  background-color: #e22a98; /* Pink button */
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.view-more-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(226, 42, 152, 0.3);
+}
+
+.no-badges {
+  text-align: center;
+  padding: 40px;
+  color: #994d51;
+}
+
+.no-badges p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #d3f44b;
+  border-top: 4px solid #4c53f9;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 16px;
+  color: #1b0e0e;
+  font-weight: 500;
+}
+
+.error-container {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8d7da;
+  border-radius: 8px;
+  border: 2px solid #000;
+  color: #721c24;
+}
+
+.error-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.error-message {
+  font-size: 16px;
+  margin: 0 0 16px 0;
+}
+
+.retry-button {
+  padding: 12px 24px;
+  background-color: #4c53f9;
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 83, 249, 0.3);
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .badges-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .badge-card.featured {
+    padding: 20px;
+  }
+
+  .badge-image {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-container {
+    padding: 5px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+  }
+
+  .badge-card {
+    padding: 16px;
+  }
+
+  .badge-image {
+    width: 120px;
+    height: 120px;
+  }
+}

@@ -166,8 +166,8 @@ export default function Reservations() {
 
   return (
     <div className="reservations">
-      <CustomerSidebar activePage="reservations" />
       <div className="layout-container">
+        <CustomerSidebar activePage="reservations" />
         <div className="content">
           <h2>My Reservations</h2>
           {error && <div className="error">{error}</div>}
@@ -204,7 +204,6 @@ export default function Reservations() {
           )}
         </div>
       </div>
-
       {/* Confirmation Modal */}
       {showConfirmModal && selectedReservation && (
         <div className="modal-overlay">
