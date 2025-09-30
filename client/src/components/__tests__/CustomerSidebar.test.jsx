@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import CustomerSidebar from '../CustomerSidebar';
-import { useNavigate } from 'react-router-dom';
-import { getAuth, signOut } from 'firebase/auth';
+//import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 
 // Mock react-router navigate
 const mockNavigate = jest.fn();
