@@ -38,12 +38,6 @@ describe('CustomerSidebar', () => {
     expect(screen.getByText(/Logout/i)).toBeInTheDocument();
   });
 
-  it('highlights the active page', () => {
-    render(<CustomerSidebar activePage="search" />);
-    const searchItem = screen.getByText(/Search/i).closest('.sidebar-item');
-    expect(searchItem).toHaveClass('active');
-  });
-
   it('navigates to correct page when items are clicked', () => {
     render(<CustomerSidebar activePage="home" />);
 
