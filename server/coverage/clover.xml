@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759189263642" clover="3.2.0">
-  <project timestamp="1759189263642" name="All files">
-    <metrics statements="823" coveredstatements="692" conditionals="379" coveredconditionals="274" methods="78" coveredmethods="73" elements="1280" coveredelements="1039" complexity="0" loc="823" ncloc="823" packages="5" files="13" classes="13"/>
+<coverage generated="1759191326323" clover="3.2.0">
+  <project timestamp="1759191326323" name="All files">
+    <metrics statements="823" coveredstatements="690" conditionals="379" coveredconditionals="274" methods="78" coveredmethods="71" elements="1280" coveredelements="1035" complexity="0" loc="823" ncloc="823" packages="5" files="13" classes="13"/>
     <package name="server">
       <metrics statements="10" coveredstatements="10" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="3"/>
       <file name="utils.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\utils.js">
@@ -809,7 +809,7 @@
       </file>
     </package>
     <package name="server.routes">
-      <metrics statements="59" coveredstatements="59" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <metrics statements="59" coveredstatements="57" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="authRoutes.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\routes\authRoutes.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="1" type="stmt"/>
@@ -822,14 +822,14 @@
         <line num="15" count="1" type="stmt"/>
       </file>
       <file name="externalRoutes.js" path="C:\Users\tinog\Desktop\coding\Muscle-mommies\server\routes\externalRoutes.js">
-        <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="12" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>

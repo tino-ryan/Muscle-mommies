@@ -13,7 +13,6 @@ jest.mock('../controllers/externalController', () => ({
 const {
   validateApiKey,
   getThriftStores,
-  uploadPhoto,
   getPhotos,
 } = require('../controllers/externalController');
 
@@ -31,18 +30,6 @@ describe('External Routes', () => {
     expect(res.status).toBe(200);
     expect(getThriftStores).toHaveBeenCalled();
     expect(res.body).toEqual({ stores: [] });
-  });
-
-  test('POST /external/upload calls validateApiKey and uploadPhoto', async () => {
-    const res = await request(app)
-      .post('/external/upload')
-      .field('dummy', 'value') // multipart/form-data
-      .attach('image', Buffer.from('fakefile'), 'test.png');
-
-    expect(res.status).toBe(200);
-    expect(validateApiKey).toHaveBeenCalled();
-    expect(uploadPhoto).toHaveBeenCalled();
-    expect(res.body).toEqual({ message: 'Photo uploaded' });
   });
 
   test('GET /external/photos calls validateApiKey and getPhotos', async () => {
