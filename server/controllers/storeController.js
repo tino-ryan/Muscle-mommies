@@ -1042,40 +1042,29 @@ const createReview = async (req, res) => {
     const userId = req.user.uid;
     const { reservationId, itemId, storeId, rating, review } = req.body;
 
-    if (!reservationId || !itemId || !storeId || !rating) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!storeId || !rating) {
+      return res.status(400).json({ error: 'Missing required fields: storeId, rating' });
     }
 
     if (rating < 1 || rating > 5) {
       return res.status(400).json({ error: 'Rating must be between 1 and 5' });
     }
 
-    // Verify reservation exists and belongs to user
-    const reservationRef = admin
+    // Verify store exists
+    const storeDoc = await admin
       .firestore()
-      .collection('Reservations')
-      .doc(reservationId);
-    const reservationDoc = await reservationRef.get();
-
-    if (!reservationDoc.exists) {
-      return res.status(404).json({ error: 'Reservation not found' });
-    }
-
-    const reservationData = reservationDoc.data();
-    if (reservationData.userId !== userId) {
-      return res
-        .status(403)
-        .json({ error: 'Unauthorized to review this reservation' });
-    }
-
-    if (reservationData.status !== 'Sold') {
-      return res.status(400).json({ error: 'Can only review sold items' });
+      .collection('stores')
+      .doc(storeId)
+      .get();
+    
+    if (!storeDoc.exists) {
+      return res.status(404).json({ error: 'Store not found' });
     }
 
     // Create review document
     const reviewData = {
-      reservationId,
-      itemId,
+      reservationId: reservationId || null,
+      itemId: itemId || null,
       storeId,
       userId,
       rating: parseInt(rating),
@@ -1083,8 +1072,10 @@ const createReview = async (req, res) => {
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
-    // FIXED: Use 'Reviews' (uppercase) to match your DB
     await admin.firestore().collection('Reviews').add(reviewData);
+
+    // Update store's average rating
+    await updateStoreRating(storeId);
 
     res.json({ message: 'Review created successfully', review: reviewData });
   } catch (error) {
@@ -1184,7 +1175,7 @@ const getStoreReviews = async (req, res) => {
       .firestore()
       .collection('Reviews')
       .where('storeId', '==', storeId)
-      .get(); // Removed .orderBy('createdAt', 'desc')
+      .get();
 
     if (reviewsSnapshot.empty) {
       return res.json([]);
@@ -1205,16 +1196,24 @@ const getStoreReviews = async (req, res) => {
 
         const userData = userDoc.exists ? userDoc.data() : {};
 
-        // Get item information
-        const itemDoc = await admin
-          .firestore()
-          .collection('items')
-          .doc(reviewData.itemId)
-          .get();
+        // Get item information only if itemId exists
+        let itemData = { name: 'General Review' };
+        if (reviewData.itemId) {
+          try {
+            const itemDoc = await admin
+              .firestore()
+              .collection('items')
+              .doc(reviewData.itemId)
+              .get();
 
-        const itemData = itemDoc.exists
-          ? itemDoc.data()
-          : { name: 'Unknown Item' };
+            if (itemDoc.exists) {
+              itemData = itemDoc.data();
+            }
+          } catch (itemError) {
+            console.error('Error fetching item:', itemError);
+            // Keep default itemData
+          }
+        }
 
         reviews.push({
           reviewId: doc.id,
@@ -1226,12 +1225,12 @@ const getStoreReviews = async (req, res) => {
         });
       } catch (userError) {
         // If we can't get user info, still include the review
-        console.error(userError);
+        console.error('Error fetching user info:', userError);
         reviews.push({
           reviewId: doc.id,
           ...reviewData,
           userName: 'Anonymous',
-          itemName: 'Unknown Item',
+          itemName: reviewData.itemId ? 'Unknown Item' : 'General Review',
         });
       }
     }
