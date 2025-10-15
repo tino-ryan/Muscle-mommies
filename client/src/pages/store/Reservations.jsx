@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StoreSidebar from '../../components/StoreSidebar';
 import { API_URL } from '../../api';
+import '../../styles/theme.css';
 import './StoreReservations.css';
 
 // --- New Mobile Card Component ---

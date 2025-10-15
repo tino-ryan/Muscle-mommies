@@ -1,111 +1,193 @@
-.store-sidebar {
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-right: 1px solid #e7d0d1;
+/* Custom properties for smooth transitions */
+:root {
+  --transition-smooth: all 0.3s ease-in-out;
 }
 
+/* Top Navigation Bar Styles */
+.store-sidebar {
+  width: 100%;
+  background-color: var(--bg-primary);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: var(--transition-smooth);
+}
+
+/* Store name styling */
+.store-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
+}
+
+/* Navigation container */
+.sidebar-nav {
+  display: flex;
+  gap: 10px;
+}
+
+/* Theme-specific styles */
+.store-sidebar[data-theme="theme-default"] {
+  --sidebar-bg: #994d51;
+  --sidebar-text: #ffffff;
+}
+
+.store-sidebar[data-theme="theme-vintage"] {
+  --sidebar-bg: #8b5e3c;
+  --sidebar-text: #faf0e6;
+}
+
+.store-sidebar[data-theme="theme-fashion"] {
+  --sidebar-bg: #1c2526;
+  --sidebar-text: #f0f0f0;
+}
+
+.store-sidebar[data-theme="theme-streetwear"] {
+  --sidebar-bg: #ff00ff;
+  --sidebar-text: #3f0071;
+}
+
+.store-sidebar[data-theme="theme-sporty"] {
+  --sidebar-bg: #2a38ea;
+  --sidebar-text: #eeeeee;
+}
+
+/* Apply theme-specific background and text colors */
+.store-sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+}
+
+/* Sidebar item styles */
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
-  color: #1b0e0e;
-  transition: background-color 0.2s ease;
+  transition: var(--transition-smooth);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-family);
+  color: var(--sidebar-text);
+  text-decoration: none;
+  user-select: none;
 }
 
+/* Hover and active states */
 .sidebar-item:hover {
-  background-color: #f9f2f3;
+  background-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 .sidebar-item.active {
-  background-color: #f3e7e8;
-  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Theme-specific hover and active states */
+.store-sidebar[data-theme="theme-default"] .sidebar-item:hover,
+.store-sidebar[data-theme="theme-default"] .sidebar-item.active {
+  background-color: #7d3c40;
+}
+
+.store-sidebar[data-theme="theme-vintage"] .sidebar-item:hover,
+.store-sidebar[data-theme="theme-vintage"] .sidebar-item.active {
+  background-color: #6b4a2e;
+}
+
+.store-sidebar[data-theme="theme-fashion"] .sidebar-item:hover,
+.store-sidebar[data-theme="theme-fashion"] .sidebar-item.active {
+  background-color: #2e3b3e;
+}
+
+.store-sidebar[data-theme="theme-streetwear"] .sidebar-item:hover,
+.store-sidebar[data-theme="theme-streetwear"] .sidebar-item.active {
+  background-color: #cc00cc;
+}
+
+.store-sidebar[data-theme="theme-sporty"] .sidebar-item:hover,
+.store-sidebar[data-theme="theme-sporty"] .sidebar-item.active {
+  background-color: #1e2db4;
+}
+
+/* Icon wrapper */
 .icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
 
-.sidebar-item svg {
-  width: 24px;
-  height: 24px;
-  color: inherit;
+.icon-wrapper svg {
+  width: 20px;
+  height: 20px;
+  transition: var(--transition-smooth);
+  color: var(--sidebar-text);
 }
 
+.sidebar-item:hover .icon-wrapper svg {
+  transform: scale(1.1);
+}
+
+/* Label styling */
 .label {
-  font-size: 14px;
-  font-weight: 500;
   margin: 0;
-  white-space: nowrap;
 }
 
-@media (min-width: 1024px) {
-  .store-sidebar {
-    width: 220px;
-    padding: 16px 0; /* Reduced padding */
-  }
-  .sidebar-item {
-    margin: 0 8px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1023px) {
-  .store-sidebar {
-    width: 200px;
-    padding: 16px 0;
-  }
-  .sidebar-item {
-    margin: 0 8px;
-  }
-}
-
+/* Responsive design */
 @media (max-width: 768px) {
   .store-sidebar {
-    flex-direction: row;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding: 8px 0;
-    border-right: none;
-    border-top: 1px solid #e7d0d1;
-    background-color: white;
-    z-index: 1000;
-    justify-content: space-around;
+    padding: 8px 10px;
+    height: 50px;
+  }
+
+  .store-name {
+    font-size: 1.2rem;
   }
 
   .sidebar-item {
-    flex: 1;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .store-sidebar {
     flex-direction: column;
-    gap: 4px;
-    padding: 8px 4px;
-    max-width: 60px;
-    text-align: center;
-  }
-
-  .label {
-    display: none;
-  }
-
-  .icon-wrapper {
-    width: auto;
     height: auto;
+    padding: 8px;
+    top: 0;
+    align-items: flex-start;
   }
 
-  .sidebar-item.active {
-    background-color: transparent;
-    color: #994d51;
+  .sidebar-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 
-  .sidebar-item:hover {
-    background-color: transparent;
+  .sidebar-item {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .store-name {
+    font-size: 1rem;
+    margin-bottom: 8px;
   }
 }

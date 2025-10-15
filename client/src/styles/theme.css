@@ -1,0 +1,394 @@
+/* ======================================= */
+/* GLOBAL THEME SYSTEM */
+/* Import this file in any component that needs theming */
+/* ======================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cinzel:wght@400;600;700&family=Orbitron:wght@400;600;700;900&family=Bebas+Neue&family=Montserrat:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
+/* ======================================= */
+/* THEME: CLASSIC (DEFAULT) */
+/* ======================================= */
+[data-theme="theme-default"] {
+  --bg-primary: #f7f7f7;
+  --bg-secondary: #ffffff;
+  --bg-card: #fcfcfc;
+  --bg-overlay: rgba(153, 77, 81, 0.85);
+  --color-primary: #994d51;
+  --color-secondary: #7d3c40;
+  --color-text: #1b0e0e;
+  --color-text-light: #333;
+  --color-border: #e7d0d1;
+  --color-accent: rgba(153, 77, 81, 0.15);
+  --font-family: 'Plus Jakarta Sans', sans-serif;
+  
+  background-color: var(--bg-primary);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+/* ======================================= */
+/* THEME: VINTAGE */
+/* ======================================= */
+[data-theme="theme-vintage"] {
+  --bg-primary: #faf0e6;
+  --bg-secondary: #faf8f3;
+  --bg-card: #fdfbf7;
+  --bg-overlay: rgba(139, 94, 60, 0.9);
+  --color-primary: #8b5e3c;
+  --color-secondary: #6b4a2e;
+  --color-text: #4b3621;
+  --color-text-light: #4b3621;
+  --color-border: #d4af37;
+  --color-accent: rgba(212, 175, 55, 0.15);
+  --font-family: 'Playfair Display', serif;
+  
+  background: linear-gradient(135deg, #faf0e6 0%, #f5e6d3 100%);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+[data-theme="theme-vintage"] .form-card,
+[data-theme="theme-vintage"] .info-card {
+  background: linear-gradient(135deg, #fdfbf7, #f5f1ea);
+}
+
+[data-theme="theme-vintage"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(139, 94, 60, 0.9), rgba(107, 74, 46, 0.95));
+}
+
+[data-theme="theme-vintage"] .store-name {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+[data-theme="theme-vintage"] .btn-map,
+[data-theme="theme-vintage"] .edit-profile-btn,
+[data-theme="theme-vintage"] .form-actions button[type="submit"],
+[data-theme="theme-vintage"] .address-search button {
+  background: linear-gradient(135deg, #8b5e3c, #6b4a2e);
+  border: 2px solid #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+[data-theme="theme-vintage"] .btn-map:hover,
+[data-theme="theme-vintage"] .edit-profile-btn:hover,
+[data-theme="theme-vintage"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-vintage"] .address-search button:hover {
+  background: linear-gradient(135deg, #6b4a2e, #5a3d26);
+}
+
+/* ======================================= */
+/* THEME: HIGH FASHION */
+/* ======================================= */
+[data-theme="theme-fashion"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #0f0f0f;
+  --bg-card: #1a1a1a;
+  --bg-overlay: rgba(28, 37, 38, 0.95);
+  --color-primary: #e600ac;
+  --color-secondary: #cc0099;
+  --color-text: #f0f0f0;
+  --color-text-light: #d0d0d0;
+  --color-border: #333;
+  --color-accent: rgba(230, 0, 172, 0.15);
+  --font-family: 'Cinzel', serif;
+  
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+[data-theme="theme-fashion"] .form-card,
+[data-theme="theme-fashion"] .info-card {
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+  box-shadow: 0 4px 20px rgba(230, 0, 172, 0.1);
+}
+
+[data-theme="theme-fashion"] .form-card:hover,
+[data-theme="theme-fashion"] .info-card:hover {
+  box-shadow: 0 8px 40px rgba(230, 0, 172, 0.3);
+}
+
+[data-theme="theme-fashion"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(28, 37, 38, 0.95), rgba(15, 15, 15, 0.98));
+  border: 1px solid rgba(230, 0, 172, 0.3);
+  box-shadow: 0 4px 30px rgba(230, 0, 172, 0.3);
+}
+
+[data-theme="theme-fashion"] .store-name {
+  text-shadow: 0 0 20px rgba(230, 0, 172, 0.5);
+  letter-spacing: 3px;
+}
+
+[data-theme="theme-fashion"] .theme-tag,
+[data-theme="theme-fashion"] .status-badge {
+  box-shadow: 0 0 15px rgba(230, 0, 172, 0.3);
+}
+
+[data-theme="theme-fashion"] .btn-map,
+[data-theme="theme-fashion"] .edit-profile-btn,
+[data-theme="theme-fashion"] .form-actions button[type="submit"],
+[data-theme="theme-fashion"] .address-search button {
+  background: linear-gradient(135deg, #1c2526, #2e3b3e);
+  border: 2px solid #e600ac;
+  box-shadow: 0 0 20px rgba(230, 0, 172, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+[data-theme="theme-fashion"] .btn-map:hover,
+[data-theme="theme-fashion"] .edit-profile-btn:hover,
+[data-theme="theme-fashion"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-fashion"] .address-search button:hover {
+  background: linear-gradient(135deg, #2e3b3e, #3a4749);
+  box-shadow: 0 0 30px rgba(230, 0, 172, 0.5);
+  border-color: #ff00ff;
+}
+
+[data-theme="theme-fashion"] .form-group input,
+[data-theme="theme-fashion"] .form-group textarea,
+[data-theme="theme-fashion"] .form-group select {
+  background-color: #0a0a0a;
+  color: #f0f0f0;
+  border-color: #333;
+}
+
+[data-theme="theme-fashion"] .h2,
+[data-theme="theme-fashion"] .card-title,
+[data-theme="theme-fashion"] .form-card h3 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ======================================= */
+/* THEME: STREETWEAR (Y2K) */
+/* ======================================= */
+[data-theme="theme-streetwear"] {
+  --bg-primary: #e0bbff;
+  --bg-secondary: #f0e0ff;
+  --bg-card: #f8f0ff;
+  --bg-overlay: rgba(255, 0, 255, 0.85);
+  --color-primary: #ff00ff;
+  --color-secondary: #cc00cc;
+  --color-text: #3f0071;
+  --color-text-light: #3f0071;
+  --color-border: #ff00ff;
+  --color-accent: rgba(255, 0, 255, 0.15);
+  --font-family: 'Orbitron', sans-serif;
+  
+  background: linear-gradient(135deg, #e0bbff 0%, #d4a5ff 50%, #c890ff 100%);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+[data-theme="theme-streetwear"] .form-card,
+[data-theme="theme-streetwear"] .info-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 240, 255, 0.9));
+  border: 2px solid #ff00ff;
+  box-shadow: 0 4px 20px rgba(255, 0, 255, 0.2);
+}
+
+[data-theme="theme-streetwear"] .form-card:hover,
+[data-theme="theme-streetwear"] .info-card:hover {
+  box-shadow: 0 8px 40px rgba(255, 0, 255, 0.4);
+  transform: translateY(-6px) rotate(1deg);
+}
+
+[data-theme="theme-streetwear"] .store-display-v2 {
+  border: 3px solid #ff00ff;
+  box-shadow: 0 8px 40px rgba(255, 0, 255, 0.3);
+  animation: scaleIn 0.5s ease-out;
+}
+
+[data-theme="theme-streetwear"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(255, 0, 255, 0.85), rgba(204, 0, 204, 0.9));
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+[data-theme="theme-streetwear"] .store-name {
+  text-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.5);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+[data-theme="theme-streetwear"] .theme-tag,
+[data-theme="theme-streetwear"] .status-badge {
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+[data-theme="theme-streetwear"] .btn-map,
+[data-theme="theme-streetwear"] .edit-profile-btn,
+[data-theme="theme-streetwear"] .form-actions button[type="submit"],
+[data-theme="theme-streetwear"] .address-search button {
+  background: linear-gradient(135deg, #ff00ff, #cc00cc);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+[data-theme="theme-streetwear"] .btn-map:hover,
+[data-theme="theme-streetwear"] .edit-profile-btn:hover,
+[data-theme="theme-streetwear"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-streetwear"] .address-search button:hover {
+  background: linear-gradient(135deg, #cc00cc, #990099);
+  box-shadow: 0 0 40px rgba(255, 0, 255, 0.8);
+  transform: translateY(-4px) scale(1.05);
+}
+
+[data-theme="theme-streetwear"] .h2,
+[data-theme="theme-streetwear"] .card-title,
+[data-theme="theme-streetwear"] .form-card h3 {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+/* ======================================= */
+/* THEME: ATHLETIC (SPORTY) */
+/* ======================================= */
+[data-theme="theme-sporty"] {
+  --bg-primary: #EEEEEE;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #F8F8F8;
+  --bg-overlay: rgba(42, 56, 234, 0.95);
+  --color-primary: #2A38EA;
+  --color-secondary: #1e2db4;
+  --color-text: #010101;
+  --color-text-light: #010101;
+  --color-border: #2A38EA;
+  --color-accent: rgba(42, 56, 234, 0.15);
+  --font-family: 'Montserrat', sans-serif;
+  
+  background: linear-gradient(135deg, #EEEEEE 0%, #D8D8D8 100%);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+[data-theme="theme-sporty"] .form-card,
+[data-theme="theme-sporty"] .info-card {
+  background: linear-gradient(135deg, #FFFFFF, #F8F8F8);
+  border: 2px solid #2A38EA;
+  box-shadow: 0 6px 25px rgba(42, 56, 234, 0.1);
+}
+
+[data-theme="theme-sporty"] .form-card:hover,
+[data-theme="theme-sporty"] .info-card:hover {
+  box-shadow: 0 12px 45px rgba(42, 56, 234, 0.25);
+  border-color: #010101;
+}
+
+[data-theme="theme-sporty"] .store-display-v2 {
+  border: 2px solid #2A38EA;
+  box-shadow: 0 10px 50px rgba(42, 56, 234, 0.15);
+}
+
+[data-theme="theme-sporty"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(42, 56, 234, 0.95), rgba(30, 45, 180, 0.98));
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 40px rgba(42, 56, 234, 0.4);
+}
+
+[data-theme="theme-sporty"] .store-name {
+  text-shadow: 2px 2px 8px rgba(1, 1, 1, 0.6);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+[data-theme="theme-sporty"] .theme-tag,
+[data-theme="theme-sporty"] .status-badge {
+  box-shadow: 0 4px 15px rgba(42, 56, 234, 0.3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+[data-theme="theme-sporty"] .btn-map,
+[data-theme="theme-sporty"] .edit-profile-btn,
+[data-theme="theme-sporty"] .form-actions button[type="submit"],
+[data-theme="theme-sporty"] .address-search button {
+  background: linear-gradient(135deg, #2A38EA, #1e2db4);
+  border: 2px solid #EEEEEE;
+  box-shadow: 0 6px 20px rgba(42, 56, 234, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+[data-theme="theme-sporty"] .btn-map:hover,
+[data-theme="theme-sporty"] .edit-profile-btn:hover,
+[data-theme="theme-sporty"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-sporty"] .address-search button:hover {
+  background: linear-gradient(135deg, #1e2db4, #151f7a);
+  box-shadow: 0 10px 40px rgba(42, 56, 234, 0.6);
+  transform: translateY(-4px) scale(1.03);
+}
+
+[data-theme="theme-sporty"] .h2,
+[data-theme="theme-sporty"] .card-title,
+[data-theme="theme-sporty"] .form-card h3 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ======================================= */
+/* COMMON THEME UTILITIES */
+/* ======================================= */
+
+/* Smooth transitions for theme changes */
+[data-theme] {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme] * {
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme-aware text colors */
+[data-theme] .text-primary {
+  color: var(--color-primary);
+}
+
+[data-theme] .text-secondary {
+  color: var(--color-secondary);
+}
+
+[data-theme] .bg-primary {
+  background-color: var(--bg-primary);
+}
+
+[data-theme] .bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme] .bg-card {
+  background-color: var(--bg-card);
+}
+
+[data-theme] .border-primary {
+  border-color: var(--color-primary);
+}
+
+/* Theme-aware status badges */
+[data-theme] .open-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+[data-theme] .closed-badge {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* Theme-aware accent backgrounds */
+[data-theme] .accent-bg {
+  background-color: var(--color-accent);
+}

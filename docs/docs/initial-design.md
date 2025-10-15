@@ -14,6 +14,16 @@
   ![Customer Dashboard Wireframe](/images/custdb-wf.jpg)
 - Store Owner Dashboard:
   ![Store Owner Dashboard Wireframe](/images/sodb-wf.jpg)
+- Store Owner Profile:
+  ![Store Owner Dashboard Wireframe](/images/store-profile-wf.jpeg)
+- My Closet:
+  ![My Closet Wireframe](/images/closet-wf.jpeg)
+- Chats:
+  ![Chats Wireframe](/images/chat-wf.jpeg)
+- Storefront:
+  ![Storefront Wireframe](/images/store-user-wf.jpeg)
+- Store Finder:
+  ![Store Finder Wireframe](/images/store-finder-wf.jpeg)
 
 ---
 

@@ -115,18 +115,95 @@ _Goals:_
 
 ## 8. Sprint Roadmap (Detailed)
 
-### _Sprint 1: Foundations & Authentication (Weeks 1–2)_
+### _Sprint 1: Foundations & Documentation (Weeks 1–2)_
 
-_Objective:_ Build infrastructure, authentication, and core DB models.  
+_Objective:_ Establish project foundations, version control, methodology, documentation, and initial setup.
+
 _Deliverables:_
 
-- Auth API (Firebase Auth).
-- User Profile API (shopper/store owner roles).
-- DB Setup: Users, Stores, Items (skeleton).
-- Cloud Storage for media uploads.
-- Login/Sign-Up Screens + placeholder homepage.
+- Version control: Git repo initialized, linters/formatters configured, README created, all members contributing commits.
+- Documentation site: Build and deploy site with both trivial (links/resources) and non-trivial content.
+- Work planning: Set up project management tool (Notion/Trello/GitHub Projects), add all Sprint 1 tasks, hold regular scrums.
+- Development guides: Firestore emulator setup, Express API guide, React setup and environment variables.
+- Git methodology: Document branching and commit strategy with resources explaining methodology.
+- Project methodology: Document Scrum approach, task point system, assignment strategy, and provide resources.
+- Tech stack: Document chosen stack with reasons and supporting resources.
+- Stakeholder interaction: Meet client, gather requirements, document outcomes.
+- Initial design & plan: Wireframes/mockups for key pages, roadmap, and timeline.
+- Implementation: Setup Firebase Auth with login/signup, configure environment variables.
 
-_Success Criteria:_ Users can sign up, log in, and create a profile/store.
+_Success Criteria:_ Project repo, documentation site, methodologies, and initial Firebase authentication setup are completed and functional.
+
+---
+
+### _Sprint 2: Storefronts, Filtering & Core Features (Weeks 3–4)_
+
+_Objective:_ Implement user-facing browsing, storefronts, and initial chat and dashboards.
+
+_Deliverables:_
+
+- User home with closest stores displayed, distance filtering, and live map integration.
+- Search and filtering by size, category, and keywords.
+- Storefronts that display store items.
+- Item detail page with enlarged view, reservation button, and enquiry options (collect within a week or request delivery).
+- Closet and reserved items for users.
+- Chat interface between users and store owners.
+- Store owner dashboards for managing reservations and items.
+- Store owner analytics dashboard with initial stats.
+- Admin dashboard with visibility over users, stores, and stats.
+- Automated testing for implemented features.
+- Stakeholder reviews (at least three tutor meetings, feedback implemented).
+- API integration: Firebase Auth, Map API, and page-related APIs for DB interactions.
+- User feedback collection workflow via Google Form linked to spreadsheet.
+- Project management methodology evidence documented.
+- Bug tracker setup and usage (GitHub Issues).
+- Database documentation (schema updates).
+- Third-party code documentation (Firebase, Maps API, etc., with justifications).
+- Testing documentation and evidence of user feedback integration.
+
+_Success Criteria:_ Users can browse and filter stores/items, view item details, reserve/enquire, and interact with storefront dashboards. APIs, testing, documentation, and tutor reviews are completed.
+
+---
+
+### _Sprint 3: Reservations, Feedback & Advanced Features (Weeks 5–6)_
+
+_Objective:_ Complete reservation workflows, integrate user feedback, expand dashboards, and improve app polish and testing coverage.
+
+_Deliverables:_
+
+- User feedback collected, documented, and implemented from tutor, peers, and test users in multiple rounds.
+- Testing coverage >80% across frontend and backend.
+- Closet feature with themed stores (owners select themes that reflect on storefronts).
+- Store pages with full details, item search/filter, detailed modals for reservations and enquiries, and store ratings/reviews.
+- Reservations page for both users and owners, including status updates, confirmations, and reviews.
+- UI refinements including loading screens and consistent styling templates.
+- Store owner dashboard with professional charts and sales stats.
+- Settings pages for user and store preferences.
+- Admin pages for managing users, stores, and reports.
+- API endpoints implemented and tested across all features.
+- Performance improvements validated with testing.
+- Evidence of feedback-driven improvements (UI reskin, new features).
+- Documentation updated with mockups, diagrams, schema changes, and testing workflows.
+- Agile methodology evidenced in project logs, sprint reports, and version control practices.
+- Bug tracker actively used with logged issues.
+
+_Success Criteria:_ Stores have themed storefronts, reservations and reviews are functional, dashboards and admin tools are operational, and the app shows evidence of improvement from feedback. Testing coverage exceeds 80% with updated documentation.
+
+---
+
+### _Sprint 4: Analytics, Events & Polishing (Weeks 7–8)_
+
+_Objective:_ Add analytics, event discovery, rewards, and polish UI.
+
+_Deliverables:_
+
+- Analytics Dashboard: Most viewed items, popular categories, customer feedback.
+- Rewards API: Eco-points for purchases, redeemable later.
+- Event Discovery: Campus Quest + GuestList API integration.
+- UI Polishing: Cart drawer, responsive design, improved feed UI.
+- Database: `Analytics` collection, extended reservations with eco-points.
+
+_Success Criteria:_ Store owners can access analytics, users can discover events, and app is demo-ready.
 
 ---
 

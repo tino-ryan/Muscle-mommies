@@ -6,6 +6,7 @@ import StoreSidebar from '../../components/StoreSidebar';
 import StarRating from '../../components/StarRating';
 import ReviewsModal from '../../components/ReviewsModal';
 import { API_URL } from '../../api';
+import '../../styles/theme.css';
 import './StoreProfile.css';
 
 const days = [
@@ -22,6 +23,30 @@ const dayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const defaultHours = Object.fromEntries(
   days.map((day) => [day, { open: false, start: '09:00', end: '17:00' }])
 );
+
+// Theme configurations
+const themeConfig = {
+  'theme-default': {
+    name: 'Default',
+    icon: 'fa-store',
+  },
+  'theme-vintage': {
+    name: 'Vintage',
+    icon: 'fa-camera-retro',
+  },
+  'theme-fashion': {
+    name: 'Fashion',
+    icon: 'fa-skull',
+  },
+  'theme-streetwear': {
+    name: 'Streetwear',
+    icon: 'fa-radio',
+  },
+  'theme-sporty': {
+    name: 'Sporty',
+    icon: 'fa-bolt',
+  },
+};
 
 // Function to group days with identical hours
 const groupHours = (hours) => {
@@ -555,9 +580,13 @@ export default function StoreProfile() {
   }
 
   return (
-    <div className="store-profile">
+    <div className="store-profile" data-theme={store.theme}>
       <div className="layout-container">
-        <StoreSidebar currentPage="Store Profile" onLogout={handleLogout} />
+        <StoreSidebar
+          currentPage="Store Profile"
+          onLogout={handleLogout}
+          theme={store.theme}
+        />
         <div className="content">
           {error && (
             <div className="error-box">
@@ -595,10 +624,11 @@ export default function StoreProfile() {
                           value={store.theme || 'theme-default'}
                           onChange={handleStoreChange}
                         >
-                          <option value="theme-default">Default</option>
-                          <option value="theme-fashion">Fashion</option>
-                          <option value="theme-vintage">Vintage</option>
-                          <option value="theme-streetwear">Streetwear</option>
+                          {Object.entries(themeConfig).map(([key, config]) => (
+                            <option key={key} value={key}>
+                              {config.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -753,10 +783,15 @@ export default function StoreProfile() {
                 }}
               >
                 <div className="overlay-info-block">
+                  <h1 className="store-name">
+                    {store.storeName || 'Your Store Name'}
+                  </h1>
                   <div className="tag-rating-line">
                     <span className="theme-tag">
-                      <i className="fas fa-tag"></i>{' '}
-                      {(store.theme || 'theme-default').replace('theme-', '')}
+                      <i
+                        className={`fas ${themeConfig[store.theme]?.icon || 'fa-store'}`}
+                      ></i>{' '}
+                      {themeConfig[store.theme]?.name || 'Default'}
                     </span>
                     <StarRating rating={store.averageRating} />
                     {store.reviewCount > 0 && (
@@ -773,12 +808,9 @@ export default function StoreProfile() {
 
               {/* Main Content: Description and Cards */}
               <div className="profile-main-content">
-                <h1 className="store-name">
-                  {store.storeName || 'Your Store Name'}
-                </h1>
                 {/* Description */}
                 <div className="description-card">
-                  <h2 className="section-title">About Us</h2>
+                  <h2 className="h2">About Us</h2>
                   <p className="store-description">
                     {store.description ||
                       'No description provided. Tell your customers what makes your thrift store unique!'}

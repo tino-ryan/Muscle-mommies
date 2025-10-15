@@ -194,6 +194,7 @@ const createOrUpdateStore = async (req, res) => {
       'theme-fashion',
       'theme-vintage',
       'theme-streetwear',
+      'theme-sporty',
     ];
     const validatedTheme = validThemes.includes(theme)
       ? theme

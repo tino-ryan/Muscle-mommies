@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",
+    "lucide-react": "^0.545.0",
     "react-scripts": "^5.0.1"
   }
 }

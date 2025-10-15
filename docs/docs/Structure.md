@@ -2,8 +2,6 @@
 
 ## structure
 
-![Deployment Diagram](/images/deployment-diagram.png)
-
 ### Database Structure
 
 [Database Design PDF](/pdf/database.pdf)
