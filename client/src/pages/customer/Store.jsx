@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import StarRating from '../../components/StarRating';
 import ReviewsModal from '../../components/ReviewsModal';
+import StoreReviewModal from '../../components/WriteReviewModal';
+
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import './store.css';
@@ -19,6 +21,7 @@ export default function Store() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   // Filter states
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -166,6 +169,39 @@ export default function Store() {
     }
   };
 
+  const handleSubmitReview = async ({ rating, review }) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+
+      const token = await user.getIdToken();
+
+      await axios.post(
+        `${API_URL}/api/stores/reviews`,
+        {
+          storeId: store.storeId,
+          rating,
+          review,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Refresh store data to get updated rating
+      const storeResponse = await axios.get(`${API_URL}/api/stores/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setStore(storeResponse.data);
+
+      alert('Review submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      throw new Error(error.response?.data?.error || 'Failed to submit review');
+    }
+  };
+
   if (loading) {
     return (
       <div className="store-home">
@@ -215,6 +251,12 @@ export default function Store() {
                     Read Reviews
                   </button>
                 )}
+                <button
+                  className="write-review-btn"
+                  onClick={() => setShowReviewModal(true)}
+                >
+                  Write a Review
+                </button>
               </div>
             </div>
           </div>
@@ -477,6 +519,14 @@ export default function Store() {
               storeName={store.storeName}
               isOpen={showReviewsModal}
               onClose={() => setShowReviewsModal(false)}
+            />
+          )}
+          {showReviewModal && (
+            <StoreReviewModal
+              isOpen={showReviewModal}
+              onClose={() => setShowReviewModal(false)}
+              onSubmit={handleSubmitReview}
+              storeName={store.storeName}
             />
           )}
         </div>

@@ -7,7 +7,6 @@ import { API_URL } from '../../api';
 import '../../styles/theme.css';
 import './StoreReservations.css';
 
-// --- New Mobile Card Component ---
 const ReservationCard = ({
   reservation,
   item,
@@ -18,6 +17,7 @@ const ReservationCard = ({
 }) => {
   const statusClass = `status-${reservation.status.toLowerCase()}`;
   const isCompleted = reservation.status === 'Completed';
+  const isSold = reservation.status === 'Sold'; // ADDED THIS LINE
 
   const dateField =
     viewMode === 'sales' && reservation.soldAt
@@ -57,7 +57,8 @@ const ReservationCard = ({
           <i className="fas fa-tag"></i> R{item?.price || 'N/A'}
         </p>
       </div>
-      {!isCompleted && viewMode === 'active' && (
+      {/* Only show dropdown for active items that aren't sold or completed */}
+      {!isCompleted && !isSold && viewMode === 'active' && (
         <div className="card-actions" onClick={(e) => e.stopPropagation()}>
           <select
             value={reservation.status}
@@ -67,9 +68,15 @@ const ReservationCard = ({
           >
             <option value="Pending">Pending</option>
             <option value="Confirmed">Confirmed</option>
+            <option value="Sold">Sold</option>
             <option value="Cancelled">Cancelled</option>
-            <option value="Completed">Completed</option>
           </select>
+        </div>
+      )}
+      {/* Show "Sold" badge if sold but not completed */}
+      {isSold && !isCompleted && (
+        <div className="card-info">
+          <small>Awaiting customer confirmation</small>
         </div>
       )}
     </div>
@@ -472,21 +479,31 @@ export default function StoreReservations() {
                         )}
                         <td onClick={(e) => e.stopPropagation()}>
                           <div className="table-actions">
-                            {viewMode === 'active' && (
-                              <select
-                                value={res.status}
-                                onChange={(e) =>
-                                  handleUpdateStatus(
-                                    res.reservationId,
-                                    e.target.value
-                                  )
-                                }
-                              >
-                                <option value="Pending">Pending</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Cancelled">Cancelled</option>
-                                <option value="Completed">Completed</option>
-                              </select>
+                            {viewMode === 'active' &&
+                              res.status !== 'Sold' &&
+                              res.status !== 'Completed' && (
+                                <select
+                                  value={res.status}
+                                  onChange={(e) =>
+                                    handleUpdateStatus(
+                                      res.reservationId,
+                                      e.target.value
+                                    )
+                                  }
+                                >
+                                  <option value="Pending">Pending</option>
+                                  <option value="Confirmed">Confirmed</option>
+                                  <option value="Sold">Sold</option>
+                                  <option value="Cancelled">Cancelled</option>
+                                </select>
+                              )}
+                            {(res.status === 'Sold' ||
+                              res.status === 'Completed') && (
+                              <span className="status-note">
+                                {res.status === 'Sold'
+                                  ? 'Awaiting customer confirmation'
+                                  : 'Completed'}
+                              </span>
                             )}
                           </div>
                         </td>

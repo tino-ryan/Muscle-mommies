@@ -12,6 +12,8 @@ This project integrates several third-party libraries and APIs to power features
 
 ### 🔧 How Leaflet is Used
 
+### 🔧 How Leaflet is Used
+
 - **MapContainer** and **TileLayer** (from `react-leaflet`) display OpenStreetMap-based maps.
 - **Markers/Popups** show store locations with rich info.
 - **Custom Icons** distinguish user vs store markers.
