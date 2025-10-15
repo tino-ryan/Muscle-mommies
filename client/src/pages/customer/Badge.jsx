@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CustomerSidebar from '../../components/CustomerSidebar';
+import CustomerSidebar from '../../components/CustomerSidebar'; // Fixed typo from Customerbar to CustomerSidebar
 import './Badge.css';
 
 const QUEST_API_URL =
   'https://witsquest-hjggaxgwfgbeh0gk.brazilsouth-01.azurewebsites.net';
 
-// Fallback data for ThriftFinder Badge (moved outside component so it’s stable)
+// Fallback data for ThriftFinder Badge (stable outside component)
 const fallbackThriftBadge = {
   id: 17,
   createdAt: '2025-09-25T22:15:49+00:00',
@@ -22,27 +22,27 @@ export default function BadgePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-useEffect(() => {
-  const fetchBadges = async () => {
-    setLoading(true);
-    try {
-      const thriftResponse = await axios.get(`${QUEST_API_URL}/collectibles/17`);
-      setThriftBadge(thriftResponse.data);
+  useEffect(() => {
+    const fetchBadges = async () => {
+      setLoading(true);
+      try {
+        const thriftResponse = await axios.get(`${QUEST_API_URL}/collectibles/17`);
+        setThriftBadge(thriftResponse.data);
 
-      const allResponse = await axios.get(`${QUEST_API_URL}/collectibles`);
-      setAllBadges(allResponse.data.filter((badge) => badge.id !== 17));
-    } catch (err) {
-      console.error('Error fetching badges:', err);
-      setError('Failed to load badges. Please try again later.');
-      setThriftBadge(fallbackThriftBadge);
-      setAllBadges([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const allResponse = await axios.get(`${QUEST_API_URL}/collectibles`);
+        setAllBadges(allResponse.data.filter((badge) => badge.id !== 17));
+      } catch (err) {
+        console.error('Error fetching badges:', err);
+        setError('Failed to load badges. Please try again later.');
+        setThriftBadge(fallbackThriftBadge);
+        setAllBadges([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchBadges();
-}, []); 
+    fetchBadges();
+  }, []);
 
   if (loading) {
     return (

@@ -1,4 +1,3 @@
-// src/pages/customer/Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
@@ -169,63 +168,12 @@ export default function ThriftFinderHome() {
             }}
           >
             <h1>Find Nearby Thrift Stores</h1>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button
-                onClick={() => navigate('/customer/closet')}
-                style={{
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  border: '2px solid #000',
-                  backgroundColor: '#d3f44b',
-                  color: '#1b0e0e',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#994d51';
-                  e.currentTarget.style.color = '#fff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d3f44b';
-                  e.currentTarget.style.color = '#1b0e0e';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Closet
+            <div className="nav-buttons">
+              <button className="button pink">
+                <a onClick={() => navigate('/customer/closet')}>Closet</a>
               </button>
-
-              <button
-                onClick={() => navigate('/badges')}
-                style={{
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  border: '2px solid #000',
-                  backgroundColor: '#d3f44b',
-                  color: '#1b0e0e',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#994d51';
-                  e.currentTarget.style.color = '#fff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d3f44b';
-                  e.currentTarget.style.color = '#1b0e0e';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Badges
+              <button className="button green">
+                <a onClick={() => navigate('/badges')}>Badges</a>
               </button>
             </div>
           </div>
@@ -238,15 +186,15 @@ export default function ThriftFinderHome() {
                   loadingLocation
                     ? 'loading'
                     : userLocation
-                      ? 'success'
-                      : 'error'
+                    ? 'success'
+                    : 'error'
                 }`}
               >
                 {loadingLocation
                   ? 'Getting your location...'
                   : userLocation
-                    ? 'Location detected'
-                    : 'Location unavailable'}
+                  ? 'Location detected'
+                  : 'Location unavailable'}
               </span>
             </div>
             <div className="distance-selector">
@@ -298,10 +246,7 @@ export default function ThriftFinderHome() {
                     </Popup>
                   </Marker>
                 ))}
-                <FitBounds
-                  userLocation={userLocation}
-                  stores={filteredStores}
-                />
+                <FitBounds userLocation={userLocation} stores={filteredStores} />
               </MapContainer>
             </div>
             <div className="store-list">
@@ -310,6 +255,11 @@ export default function ThriftFinderHome() {
                   key={store.id}
                   className="store-card"
                   onClick={() => navigate(`/store/${store.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') navigate(`/store/${store.id}`);
+                  }}
                 >
                   <div className="store-card-image-wrapper">
                     <img
@@ -320,13 +270,16 @@ export default function ThriftFinderHome() {
                   </div>
                   <div className="store-info">
                     <h3>{store.name}</h3>
-                    <p className="address">{store.address}</p>
+                    <div className="address">
+                      <i className="fas fa-map-marker-alt"></i> {store.address}
+                    </div>
                     <p className="description">{store.description}</p>
-                    <span className="distance">
+                    <div className="distance">
+                      <i className="fas fa-location-arrow"></i>{' '}
                       {store.distance === null
                         ? 'Distance: —'
                         : `${store.distance.toFixed(1)} km away`}
-                    </span>
+                    </div>
                   </div>
                 </div>
               ))}
