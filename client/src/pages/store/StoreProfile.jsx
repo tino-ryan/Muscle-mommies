@@ -24,28 +24,15 @@ const defaultHours = Object.fromEntries(
   days.map((day) => [day, { open: false, start: '09:00', end: '17:00' }])
 );
 
-// Theme configurations
 const themeConfig = {
-  'theme-default': {
-    name: 'Default',
-    icon: 'fa-store',
-  },
-  'theme-vintage': {
-    name: 'Vintage',
-    icon: 'fa-camera-retro',
-  },
-  'theme-fashion': {
-    name: 'Fashion',
-    icon: 'fa-skull',
-  },
-  'theme-streetwear': {
-    name: 'Streetwear',
-    icon: 'fa-radio',
-  },
-  'theme-sporty': {
-    name: 'Sporty',
-    icon: 'fa-bolt',
-  },
+  'theme-default': { name: 'Default', icon: 'fa-store' },
+  'theme-vintage': { name: 'Vintage', icon: 'fa-camera-retro' },
+  'theme-70s-retro': { name: '70s Retro', icon: 'fa-retro' },
+  'theme-y2k': { name: 'Y2K', icon: 'fa-laptop' },
+  'theme-sporty': { name: 'Sporty', icon: 'fa-bolt' },
+  'theme-boho': { name: 'Boho', icon: 'fa-leaf' },
+  'theme-streetwear': { name: 'Streetwear', icon: 'fa-radio' },
+  'theme-grunge': { name: 'Grunge', icon: 'fa-skull' },
 };
 
 // Function to group days with identical hours
@@ -455,30 +442,17 @@ export default function StoreProfile() {
         hours: JSON.stringify(store.hours),
       };
 
-      const storeResponse = await axios.post(
-        `${API_URL}/api/stores`,
-        storeData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setStoreId(storeResponse.data.storeId);
-      setStore({
-        storeName: storeResponse.data.storeName,
-        description: storeResponse.data.description,
-        theme: storeResponse.data.theme || 'theme-default',
-        address: storeResponse.data.address,
-        location: storeResponse.data.location,
-        profileImageURL: storeResponse.data.profileImageURL,
-        averageRating: storeResponse.data.averageRating || 0,
-        reviewCount: storeResponse.data.reviewCount || 0,
-        hours: storeResponse.data.hours || defaultHours,
+      // POST store
+      await axios.post(`${API_URL}/api/stores`, storeData, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Update contacts
+      // Delete old contacts
       for (const contact of contactInfos) {
         await deleteContact(contact.id);
       }
 
+      // POST new contacts
       for (const [type, value] of Object.entries(contacts)) {
         if (value.trim()) {
           await axios.post(
@@ -489,10 +463,30 @@ export default function StoreProfile() {
         }
       }
 
+      // **REFETCH FULL STORE** to get updated ratings/reviews
+      const updatedStoreResponse = await axios.get(`${API_URL}/api/my-store`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setStoreId(updatedStoreResponse.data.storeId);
+      setStore({
+        storeName: updatedStoreResponse.data.storeName || '',
+        description: updatedStoreResponse.data.description || '',
+        theme: updatedStoreResponse.data.theme || 'theme-default',
+        address: updatedStoreResponse.data.address || '',
+        location: updatedStoreResponse.data.location || { lat: '', lng: '' },
+        profileImageURL: updatedStoreResponse.data.profileImageURL || '',
+        averageRating: updatedStoreResponse.data.averageRating || 0,
+        reviewCount: updatedStoreResponse.data.reviewCount || 0,
+        hours: updatedStoreResponse.data.hours || defaultHours,
+      });
+
       // Refetch contacts
       const contactResponse = await axios.get(
         `${API_URL}/api/stores/contact-infos`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       const contactData = contactResponse.data || [];
       setContactInfos(contactData);
@@ -503,7 +497,7 @@ export default function StoreProfile() {
         }, {})
       );
 
-      setEditing(false);
+      setEditing(false); // Switch to display AFTER refetch
       setProfileImage(null);
       setError('');
       alert('Store profile saved successfully!');
@@ -576,7 +570,90 @@ export default function StoreProfile() {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="store-profile" data-theme="theme-default">
+        <div className="layout-container">
+          <StoreSidebar
+            currentPage="Store Profile"
+            onLogout={handleLogout}
+            theme="theme-default"
+          />
+          <main className="content">
+            <div className="store-display skeleton-loading" aria-busy="true">
+              {/* Header Skeleton */}
+              <div
+                className="profile-header-background"
+                style={{ backgroundImage: 'none' }}
+              >
+                <div className="overlay-info-block">
+                  <div
+                    className="skeleton"
+                    style={{ height: '3rem', width: '70%' }}
+                  ></div>
+                  <div className="tag-rating-line">
+                    <div
+                      className="skeleton"
+                      style={{ height: '1.5rem', width: '8rem' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '1.5rem', width: '6rem' }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content Skeleton */}
+              <div className="profile-main-content">
+                <div className="description-card">
+                  <div
+                    className="skeleton"
+                    style={{ height: '1.5rem', width: '8rem' }}
+                  ></div>
+                  <div className="skeleton" style={{ height: '4rem' }}></div>
+                  <div className="skeleton" style={{ height: '4rem' }}></div>
+                </div>
+
+                <div className="info-cards-grid">
+                  <div className="info-card">
+                    <div
+                      className="skeleton"
+                      style={{ height: '1.25rem', width: '12rem' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '0.875rem', width: '100%' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '2rem', width: '80%' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '2.5rem' }}
+                    ></div>
+                  </div>
+                  <div className="info-card">
+                    <div
+                      className="skeleton"
+                      style={{ height: '1.25rem', width: '10rem' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '2rem', width: '70%' }}
+                    ></div>
+                    <div
+                      className="skeleton"
+                      style={{ height: '2rem', width: '70%' }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
   }
 
   return (

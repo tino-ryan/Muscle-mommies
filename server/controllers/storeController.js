@@ -49,11 +49,23 @@ const getStoreById = async (req, res) => {
     if (!storeDoc.exists) {
       return res.status(404).json({ error: 'Store not found' });
     }
+    // Fetch contactInfos subcollection
+    const contactSnapshot = await admin
+      .firestore()
+      .collection(Store.collection)
+      .doc(storeId)
+      .collection(Store.subcollections.contactInfos.collection)
+      .get();
+    const contactInfos = contactSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     const storeData = {
       storeId: storeDoc.id,
       ...storeDoc.data(),
       theme: storeDoc.data().theme || 'theme-default',
       hours: storeDoc.data().hours || defaultHours,
+      contactInfos, // Include contactInfos in the response
     };
     res.json(storeData);
   } catch (error) {
@@ -191,10 +203,13 @@ const createOrUpdateStore = async (req, res) => {
     // Validate theme
     const validThemes = [
       'theme-default',
-      'theme-fashion',
       'theme-vintage',
-      'theme-streetwear',
+      'theme-70s-retro',
+      'theme-y2k',
       'theme-sporty',
+      'theme-boho',
+      'theme-streetwear',
+      'theme-grunge',
     ];
     const validatedTheme = validThemes.includes(theme)
       ? theme

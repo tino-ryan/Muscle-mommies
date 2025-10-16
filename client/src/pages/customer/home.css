@@ -1,8 +1,8 @@
-/* src/pages/customer/home/home.css */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
 .customer-home {
   display: flex;
-  background-color: #4c53f9;
+  background-color: #EEEEEE; /* Changed from gradient to solid #EEEEEE */
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
   width: 100vw;
@@ -11,17 +11,15 @@
 }
 
 .customer-home .content {
-  margin-left: 300px; /* Match sidebar width */
-  margin-top: 20px;
+  margin-left: 0; /* Removed fixed margin to allow full screen */
+  margin-top: 60px; /* Adjusted for top navbar height */
   margin-bottom: 20px;
-  margin-right: 20px;
-  padding: 50px;
+  margin-right: 0;
+  padding: 20px; /* Reduced padding for full-screen feel */
   flex: 1;
-  background-color: #e22a98 !important;
+  background: transparent;
   border-radius: 10px;
-  border: #000;
-  border-color: #000;
-  border-style: solid ;
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
 }
 
 .header {
@@ -35,21 +33,22 @@
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
   font-size: 32px;
   font-weight: 700;
-  background: black;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  -webkit-text-fill-color: #000000; /* Changed from #1A2B6B to #000000 */
 }
 
 .error {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000; /* Changed from #1A2B6B to #000000 */
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 20px;
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .controls {
-  background-color: #d3f44b;;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 20px;
@@ -58,9 +57,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  border: #000;
-  border-color: #000;
-  border-style: solid;
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .location-status {
@@ -76,23 +74,19 @@
   font-weight: 550;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .status-indicator.success {
-  color: #000;
+  background: #D8FF6C;
 }
 
-.status-indicator.loading {
-  background: #fff3cd;
-  color: #856404;
-  box-shadow: 0 0 6px rgba(133, 100, 4, 0.3);
-}
-
+.status-indicator.loading,
 .status-indicator.error {
-  background: #f8d7da;
-  color: #721c24;
-  box-shadow: 0 0 6px rgba(114, 28, 36, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
 }
 
 .distance-selector {
@@ -104,39 +98,40 @@
 .distance-selector label {
   font-size: 14px;
   font-weight: 500;
-  color: #1b0e0e;
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  text-transform: uppercase;
 }
 
 .distance-selector select {
   padding: 6px 12px;
-  background-color: #d3f44b;
-  border: 1px solid #d3f44d;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
   border-radius: 8px;
   font-size: 14px;
+  color: #000000; /* Changed from #1A2B6B to #000000 */
   transition: border 0.2s, box-shadow 0.2s;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .distance-selector select:focus {
-  border-color: #000;
+  border-color: #000000; /* Changed from #1A2B6B to #000000 */
   outline: none;
 }
 
 .main-layout {
   display: flex;
   gap: 20px;
-  height: 60vh;
+  height: 100%; /* Changed to 100% to fill screen */
 }
 
 .map-container {
   flex: 1;
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, #fefefe, #f9f0f1);
-  border: #000;
-  border-color: #000;
-  border-style: solid ;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
 }
-
 
 .customer-home .store-list {
   display: flex;
@@ -144,96 +139,158 @@
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  border: #000;
-  border-color: #000;
-  border-style: solid;
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
   border-radius: 8px;
-  background-color: #4c53f9;
+  background: #FF9AE9;
   gap: 12px;
 }
 
-.customer-home .store-card {
-  display: flex;
+/* --- Improved 3D push-down button effect for store cards --- */
+.store-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  transform: translateY(0);
+  background: #FFFFFF;
+  border-radius: 10px;
+  border: 1px solid #000000; /* Changed from #3B4A8C to #000000 */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000; /* Changed from #3B4A8C to #000000 */
+  display: grid;
+  grid-template-columns: 150px 1fr;
   gap: 16px;
   padding: 12px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  background-color: #8c9eff;
-  border-radius: 8px;
-  border: #000;
-  border-color: #000;
-  border-style: solid;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  align-items: stretch; /* makes children stretch vertically */
+  align-items: center;
+  text-decoration: none;
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
-.customer-home .store-card:hover {
-  border: #994d51;
-  box-shadow: 0 4px 12px rgba(153, 77, 81, 0.15);
+.store-card:hover {
   transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.customer-home .store-image {
-  width: 160px; /* fixed square width */
-  height: 160px; /* match width for square */
+.store-card:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000; /* Changed from #3B4A8C to #000000 */
+  background: #F8F8F8;
+}
+
+.store-card-image-wrapper {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.store-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  flex-shrink: 0;
 }
 
-.customer-home .store-info {
+.store-info {
   flex: 1;
   display: flex;
-  flex-direction: column; /* spreads out text nicely */
-   /* vertically centers text next to image */
-  gap: 4px; /* small consistent spacing between elements */
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  padding-right: 12px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  align-items: flex-start;
 }
 
-.customer-home .store-info h3 {
-  margin: 0 0 4px 0;
+.store-info h3 {
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #1b0e0e;
-  margin: 0;
+  color: #000000; /* Changed from #1A2B6B to #000000 */
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  width: 100%;
 }
 
-
-
-.customer-home .store-info h3:hover {
-  color: #994d51;
-  text-shadow: 0 0 6px rgba(153, 77, 81, 0.4);
-  transition: all 0.2s;
+.store-info h3:hover {
+  color: #FF9AE9;
 }
 
-.customer-home .store-info .address {
-  margin: 0 0 0 0;
+.store-info .address,
+.store-info .description,
+.store-info .distance {
   font-size: 14px;
-  color: #994d51;
+  color: #000000; /* Changed from #3B4A8C to #000000 */
   margin: 0;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  width: 100%;
+  text-align: left;
 }
 
-.customer-home .store-info .description {
- font-size: 14px;
-  color: #1b0e0e;
-  margin: 0; /* slightly separates from address */
+.store-info .description {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.customer-home .store-info .distance {
-  font-size: 14px;
-  font-weight: 500;
-  color: #fefefe;
-  margin-top: 4px;
-  display: block;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .no-stores {
   padding: 20px;
-  color: #994d51;
+  color: #000000; /* Changed from #3B4A8C to #000000 */
   text-align: center;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+/* 3D Push-Down Button Effect for nav buttons */
+.button {
+  position: relative;
+  display: inline-block;
+  margin: 12px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.button a {
+  color: #000000; /* Changed from #3B4A8C to #000000 */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  padding: 8px 16px;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000; /* Changed from #1A2B6B to #000000 */
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.button a:hover {
+  color: white;
+}
+
+.button a:active {
+  top: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000; /* Changed from #1A2B6B to #000000 */
+}
+
+.button.pink a {
+  background-color: #FF9AE9;
+}
+
+.button.pink a:active {
+  background-color: #E88AD0;
+}
+
+.button.green a {
+  background-color: #D8FF6C;
+}
+
+.button.green a:active {
+  background-color: #BCE84D;
 }
 
 @media (max-width: 768px) {
@@ -244,15 +301,29 @@
   .main-layout {
     flex-direction: column;
   }
-
   .map-container,
   .customer-home .store-list {
     min-height: 300px;
   }
 }
+
 .nav-buttons {
   display: flex;
   gap: 12px;
 }
 
+/* Neutralize browser default button styling */
+button.button {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 
+button.button:focus,
+button.button:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
