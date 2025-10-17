@@ -3,7 +3,7 @@
 
 .badge-home {
   display: flex;
-  background-color: #4c53f9; /* Vibrant blue from home.css */
+  background-color: #EEEEEE;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   min-height: 100vh;
   width: 100vw;
@@ -11,128 +11,148 @@
   cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto;
 }
 
-.content-container {
-
-  margin-top: 20px;
+.badge-home .content {
+  margin-left: 0;
+  margin-top: 60px;
   margin-bottom: 20px;
-  margin-right: 20px;
-  padding: 50px;
+  margin-right: 0;
+  padding: 20px;
   flex: 1;
-  background-color: #e22a98; /* Hot pink container */
+  background: transparent;
   border-radius: 10px;
-  border: 2px solid #000; /* Black border from home.css */
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  border: 1px solid #000000;
 }
 
 .header {
-  text-align: center;
-  color: #1b0e0e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.badge-home .header h1 {
+.badge-home h1 {
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
   font-size: 32px;
   font-weight: 700;
-  background: black;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0 0 8px 0;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-transform: lowercase;
 }
 
-.header p {
-  font-size: 16px;
-  margin: 0;
-  color: #d3f44b; /* Bright yellow-green */
-  font-weight: 500;
+.error {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000 !important;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #000000;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.error-title {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #000000 !important;
+  text-transform: lowercase;
+}
+
+.error-message {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  margin: 0 0 20px 0;
+  color: #000000 !important;
 }
 
 .featured-badge-section {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .badge-card.featured {
-  background-color: #d3f44b; /* Bright yellow-green background */
-  border: 2px solid #000;
-  border-radius: 12px;
-  padding: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  transform: translateY(0);
+  background: #FFFFFF;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
+  padding: 12px;
+  align-items: center;
+  width: 100%;
   max-width: 600px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
 }
 
 .badge-card.featured:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.badge-card.featured:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+  background: #F8F8F8;
 }
 
 .badge-image {
   width: 200px;
   height: 200px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 8px;
-  border: 2px solid #000;
-  margin-bottom: 16px;
+  border: 1px solid #000000;
 }
 
 .badge-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  text-align: left;
+  padding-right: 12px;
 }
 
 .badge-title {
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #1b0e0e;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000 !important;
   margin: 0;
+  text-transform: lowercase;
 }
 
 .badge-description {
-  font-size: 16px;
-  color: #1b0e0e;
-  line-height: 1.5;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .badge-date {
-  font-size: 14px;
-  color: #994d51;
-  font-weight: 500;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   margin: 0;
 }
 
-.claim-button {
-  padding: 12px 24px;
-  background-color: #4c53f9; /* Blue button */
-  color: #fff;
-  border: 2px solid #000;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 12px;
-}
-
-.claim-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 83, 249, 0.3);
-}
-
 .claim-note {
-  font-size: 14px;
-  color: #994d51;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   font-style: italic;
-  margin: 8px 0 0 0;
+  margin: 0;
 }
 
 .other-badges-section {
@@ -140,16 +160,16 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .section-title {
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
   font-size: 24px;
   font-weight: 700;
-  background: black;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #000000 !important;
   margin: 0;
+  text-transform: lowercase;
 }
 
 .badges-grid {
@@ -157,79 +177,51 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .badge-card {
-  background-color: #8c9eff; /* Lighter blue from store-card */
-  border: 2px solid #000;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  transform: translateY(0);
+  background: #FFFFFF;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  padding: 12px;
+  align-items: center;
+  width: 100%;
 }
 
 .badge-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.badge-card:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+  background: #F8F8F8;
 }
 
 .badge-image {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 8px;
-  border: 2px solid #000;
-  margin-bottom: 12px;
-}
-
-.badge-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1b0e0e;
-  margin: 0 0 8px 0;
-}
-
-.badge-description {
-  font-size: 14px;
-  color: #1b0e0e;
-  line-height: 1.4;
-  margin: 0 0 8px 0;
-}
-
-.badge-date {
-  font-size: 12px;
-  color: #994d51;
-  font-weight: 500;
-  margin: 0;
-}
-
-.view-more-button {
-  padding: 12px 24px;
-  background-color: #e22a98; /* Pink button */
-  color: #fff;
-  border: 2px solid #000;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.view-more-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(226, 42, 152, 0.3);
+  border: 1px solid #000000;
 }
 
 .no-badges {
+  padding: 20px;
+  color: #000000 !important;
   text-align: center;
-  padding: 40px;
-  color: #994d51;
-}
-
-.no-badges p {
-  font-size: 16px;
-  margin: 0;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
 .loading-container {
@@ -243,8 +235,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #d3f44b;
-  border-top: 4px solid #4c53f9;
+  border: 4px solid #D8FF6C;
+  border-top: 4px solid #FF9AE9;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -256,65 +248,91 @@
 
 .loading-text {
   margin-top: 16px;
-  font-size: 16px;
-  color: #1b0e0e;
-  font-weight: 500;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
 }
 
-.error-container {
+/* 3D Push-Down Button Effect */
+.button {
+  position: relative;
+  display: inline-block;
+  margin: 12px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.button a {
+  color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  font-weight: 600 !important;
+  font-size: 16px !important;
   text-align: center;
-  padding: 40px;
-  background-color: #f8d7da;
-  border-radius: 8px;
-  border: 2px solid #000;
-  color: #721c24;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  padding: 8px 16px;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
-.error-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
+.button a:hover {
+  color: white !important;
 }
 
-.error-message {
-  font-size: 16px;
-  margin: 0 0 16px 0;
+.button a:active {
+  top: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
 }
 
-.retry-button {
-  padding: 12px 24px;
-  background-color: #4c53f9;
-  color: #fff;
-  border: 2px solid #000;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+.button.pink a {
+  background-color: #FF9AE9;
 }
 
-.retry-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 83, 249, 0.3);
+.button.pink a:active {
+  background-color: #E88AD0;
+}
+
+.button.green a {
+  background-color: #D8FF6C;
+}
+
+.button.green a:active {
+  background-color: #BCE84D;
+}
+
+/* Neutralize browser default button styling */
+button.button {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button.button:focus,
+button.button:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
 }
 
 @media (max-width: 768px) {
-  .content-container {
-    margin-left: 0;
+  .content {
+    margin-top: 60px;
     padding: 10px;
-  }
-
-  .header h1 {
-    font-size: 24px;
   }
 
   .badges-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 15px;
   }
 
   .badge-card.featured {
-    padding: 20px;
+    grid-template-columns: 150px 1fr;
+    padding: 10px;
   }
 
   .badge-image {
@@ -324,16 +342,14 @@
 }
 
 @media (max-width: 480px) {
-  .content-container {
+  .content {
+    margin-top: 60px;
     padding: 5px;
   }
 
-  .header h1 {
-    font-size: 20px;
-  }
-
   .badge-card {
-    padding: 16px;
+    grid-template-columns: 120px 1fr;
+    padding: 8px;
   }
 
   .badge-image {

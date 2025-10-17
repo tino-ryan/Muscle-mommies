@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CustomerSidebar from '../../components/CustomerSidebar'; // Fixed typo from Customerbar to CustomerSidebar
+import CustomerSidebar from '../../components/CustomerSidebar';
 import './Badge.css';
 
 const QUEST_API_URL =
@@ -48,7 +48,7 @@ export default function BadgePage() {
     return (
       <div className="badge-home">
         <CustomerSidebar activePage="badges" />
-        <div className="content-container">
+        <div className="content">
           <div className="loading-container">
             <div className="spinner"></div>
             <div className="loading-text">Loading badges...</div>
@@ -62,15 +62,12 @@ export default function BadgePage() {
     return (
       <div className="badge-home">
         <CustomerSidebar activePage="badges" />
-        <div className="content-container">
-          <div className="error-container">
+        <div className="content">
+          <div className="error">
             <h3 className="error-title">Oops! Something went wrong</h3>
             <p className="error-message">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="retry-button"
-            >
-              Try Again
+            <button className="button pink" onClick={() => window.location.reload()}>
+              <a>TRY AGAIN</a>
             </button>
           </div>
         </div>
@@ -81,16 +78,14 @@ export default function BadgePage() {
   return (
     <div className="badge-home">
       <CustomerSidebar activePage="badges" />
-      <div className="content-container">
+      <div className="content">
         <div className="header">
-          <h1>Earn Badges & Rewards</h1>
+          <h1>earn badges & rewards</h1>
           <p>
-            Visit nearby thrift stores and collect badges to unlock exclusive
-            rewards!
+            Discover exclusive badges by exploring thrift stores and unlock
+            special rewards!
           </p>
         </div>
-
-        {/* Featured ThriftFinder Badge */}
         <div className="featured-badge-section">
           <div className="badge-card featured">
             <img
@@ -106,7 +101,7 @@ export default function BadgePage() {
                 {new Date(thriftBadge.createdAt).toLocaleDateString()}
               </p>
               <button
-                className="claim-button"
+                className="button pink"
                 onClick={() =>
                   window.open(
                     'https://witsquest-hjggaxgwfgbeh0gk.brazilsouth-01.azurewebsites.net/',
@@ -114,7 +109,7 @@ export default function BadgePage() {
                   )
                 }
               >
-                Claim Badge & Sign Up
+                <a>CLAIM BADGE & SIGN UP</a>
               </button>
               <p className="claim-note">
                 To claim this reward, sign up for the Quest app and visit a
@@ -123,34 +118,31 @@ export default function BadgePage() {
             </div>
           </div>
         </div>
-
-        {/* Other Badges */}
-        {allBadges.length > 0 && (
-          <div className="other-badges-section">
-            <h2 className="section-title">More Badges to Collect</h2>
-            <div className="badges-grid">
-              {allBadges.slice(0, 6).map((badge) => (
-                <div key={badge.id} className="badge-card">
-                  <img
-                    src={badge.imageUrl}
-                    alt={badge.name}
-                    className="badge-image"
-                  />
-                  <h3 className="badge-title">{badge.name}</h3>
-                  <p className="badge-description">{badge.description}</p>
-                  <p className="badge-date">
-                    Available since{' '}
-                    {new Date(badge.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-            </div>
-            {allBadges.length > 6 && (
-              <button className="view-more-button">View All Badges</button>
-            )}
+        <div className="other-badges-section">
+          <h2 className="section-title">more badges to collect</h2>
+          <div className="badges-grid">
+            {allBadges.slice(0, 6).map((badge) => (
+              <div key={badge.id} className="badge-card">
+                <img
+                  src={badge.imageUrl}
+                  alt={badge.name}
+                  className="badge-image"
+                />
+                <h3 className="badge-title">{badge.name}</h3>
+                <p className="badge-description">{badge.description}</p>
+                <p className="badge-date">
+                  Available since{' '}
+                  {new Date(badge.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
           </div>
-        )}
-
+          {allBadges.length > 6 && (
+            <button className="button green">
+              <a>VIEW ALL BADGES</a>
+            </button>
+          )}
+        </div>
         {allBadges.length === 0 && (
           <div className="no-badges">
             <p>No other badges available yet. Check back soon!</p>

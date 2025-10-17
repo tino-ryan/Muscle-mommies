@@ -1,253 +1,272 @@
-/* src/pages/customer/Reservations.css */
-.reservations {
-  display: flex;
-  flex-direction: column;       /* stack heading + table nicely */
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-  min-height: 100vh;
-  background-color: #4c53fa;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
 
-  /* instead of hard margins, respect the sidebar */
-  margin-left: 290px;           /* match your sidebar width */
-  margin-right: 20px;
-  padding: 20px;
-  box-sizing: border-box;       /* padding counts inside width */
+.reservations {
+  display: flex !important;
+  flex-direction: column !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  min-height: 100vh !important;
+  background-color: #EEEEEE !important;
+  margin-right: 20px !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+  cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto !important;
+  color: #000000 !important;
+  width: 100% !important; /* Ensure full width */
 }
 
-
+.reservations .layout-container {
+  display: flex !important;
+  flex: 1 !important;
+  width: 100% !important; /* Ensure layout container takes full width */
+}
 
 .reservations .content {
-  max-width: 100%;              /* never spill past screen */
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-   background-color: #fc07be !important;
-  border: #000;
-  border-style: solid;
-  border-radius: 8px;
- 
+  max-width: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 8px !important;
+  padding: 60px 20px 20px !important; /* Increased top padding to avoid navbar overlap */
+  color: #000000 !important;
+  width: 100% !important; /* Ensure content takes full width */
 }
 
 .reservations h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1b0e0e;
-  margin-bottom: 20px;
-  font-family: 'Orbitron';
-  
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-bottom: 20px !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .error {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background-color: rgba(248, 215, 218, 0.8) !important;
+  color: #000000 !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+  margin-bottom: 20px !important;
 }
 
 .reservations table {
-  width: 100%;                  /* fill available space */
-  table-layout: auto;           /* make column widths predictable */
-  border-collapse: collapse;
-  background-color: white;
-  border: #000 !important;
-  border: 3px solid #000;
-  overflow: hidden;
-  
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+  background-color: #FFFFFF !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
 }
 
 .reservations th,
 .reservations td {
-  padding: 12px;
-  text-align: left;
-  border: 2px solid black;
-  white-space: normal;          /* wrap text */
-  word-break: break-word;       /* break long strings */
+  padding: 12px !important;
+  text-align: left !important;
+  border: 1px solid #000000 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  color: #000000 !important;
 }
 
 .reservations th {
-  background-color: #d3f44b;
-  font-weight: 600;
-  color: #1b0e0e;
-  border: 2px solid black;
+  background-color: #D8FF6C !important; /* Green header */
+  font-weight: 600 !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 .reservations tr:hover {
-  background-color: #f9f9f9;
+  background-color: #F9F9F9 !important;
 }
-
-
-
-@media (max-width: 768px) {
-  .content-container {
-    margin-left: 0;
-    padding: 10px;
-  }
-}
-
-/* Add these styles to your existing Reservations.css */
 
 .status-sold {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  align-items: flex-start !important;
 }
 
 .status-text {
-  font-weight: 500;
+  font-weight: 500 !important;
+  color: #000000 !important;
 }
 
 .confirm-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background-color 0.2s;
+  background-color: #D8FF6C !important; /* Green button */
+  color: #000000 !important;
+  border: 1px solid #FF9AE9 !important; /* Pink border */
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  transition: background-color 0.2s, box-shadow 0.2s !important;
 }
 
 .confirm-button:hover {
-  background-color: #0056b3;
+  background-color: #BCE84D !important; /* Darker green on hover */
+  color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
 }
 
 .confirm-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
+  color: #000000 !important;
+  cursor: not-allowed !important;
+  border-color: #000000 !important;
 }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000 !important;
 }
 
 .modal-content {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: #FFFFFF !important;
+  padding: 24px !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
 }
 
 .modal-content h3 {
-  margin-bottom: 16px;
-  color: #333;
+  margin-bottom: 16px !important;
+  color: #000000 !important;
 }
 
 .modal-content p {
-  margin-bottom: 20px;
-  color: #666;
-  line-height: 1.5;
+  margin-bottom: 20px !important;
+  color: #000000 !important;
+  line-height: 1.5 !important;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 20px !important;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+  display: block !important;
+  margin-bottom: 8px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
 }
 
 .star-rating {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 8px;
+  display: flex !important;
+  gap: 4px !important;
+  margin-bottom: 8px !important;
 }
 
 .star {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #ddd;
-  cursor: pointer;
-  transition: color 0.2s;
+  background: none !important;
+  border: none !important;
+  font-size: 24px !important;
+  color: #ddd !important;
+  cursor: pointer !important;
+  transition: color 0.2s !important;
 }
 
 .star.filled {
-  color: #ffc107;
+  color: #FF9AE9 !important; /* Pink stars when filled */
 }
 
 .star:hover {
-  color: #ffc107;
+  color: #FF9AE9 !important; /* Pink on hover */
 }
 
 .form-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: vertical;
-  font-family: inherit;
-  font-size: 14px;
+  width: 100% !important;
+  padding: 12px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 4px !important;
+  resize: vertical !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  font-size: 14px !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 
 .form-group textarea:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  outline: none !important;
+  border-color: #FF9AE9 !important;
+  box-shadow: 0 0 0 2px rgba(255, 154, 233, 0.25) !important;
 }
 
 .form-group small {
-  color: #666;
-  font-size: 12px;
+  color: #000000 !important;
+  font-size: 12px !important;
 }
 
 .modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
 }
 
 .cancel-button {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  background-color: #6c757d !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
 }
 
 .cancel-button:hover {
-  background-color: #545b62;
+  background-color: #545b62 !important;
+  color: #FFFFFF !important;
 }
 
 .cancel-button:disabled {
-  background-color: #adb5bd;
-  cursor: not-allowed;
+  background-color: #adb5bd !important;
+  cursor: not-allowed !important;
 }
 
 .confirm-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  background-color: #D8FF6C !important; /* Green button */
+  color: #000000 !important;
+  border: 1px solid #FF9AE9 !important; /* Pink border */
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s, box-shadow 0.2s !important;
 }
 
 .confirm-button:hover {
-  background-color: #1e7e34;
+  background-color: #BCE84D !important; /* Darker green on hover */
+  color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
 }
 
 .confirm-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
+  color: #000000 !important;
+  cursor: not-allowed !important;
+  border-color: #000000 !important;
+}
+
+@media (max-width: 768px) {
+  .reservations {
+    margin-left: 0 !important;
+    padding: 10px !important;
+  }
+  .reservations .content {
+    padding: 60px 10px 10px !important; /* Adjusted padding for mobile */
+  }
 }

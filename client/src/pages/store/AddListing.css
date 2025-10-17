@@ -1,335 +1,468 @@
-/* --- Base Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
+
 .add-listing {
-  display: flex;
-  background-color: #f7f7f7; /* Consistent lighter background */
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-  min-height: 100vh;
+  display: flex !important;
+  background-color: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
 }
 
 .layout-container {
-  display: flex;
-  flex: 1;
-  padding: 0;
-  max-width: 1400px;
-  margin: 0 auto;
+  display: flex !important;
+  flex: 1 !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-/* --- Sidebar Styling (KEEP your existing sidebar styles but ensure color consistency) --- */
-.sidebar {
-  width: 250px;
-  background-color: #ffffff;
-  border-right: 1px solid #e7d0d1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sidebar-item { /* ... existing styles ... */ }
-.sidebar-item:hover { background-color: #f4e8e9; }
-.sidebar-item.active {
-  background-color: #e7d0d1;
-  color: #994d51; /* Consistent primary color */
-}
-.sidebar-item svg { color: #994d51; }
-/* ... (rest of your sidebar styles) ... */
-
-/* --- Main Content Area --- */
 .content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
 
-.page-title { /* Changed h1 to .page-title for consistency */
-  font-size: 28px;
-  font-weight: 700;
-  color: #1b0e0e;
-  margin-bottom: 24px;
+.page-title {
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin: 0 0 48px 0 !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* --- Error Box (New consistent style) --- */
 .error-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background-color: #ffe6e6;
-  border: 1px solid #994d51;
-  border-radius: 8px;
-  color: #994d51;
-  font-size: 14px;
-  margin-bottom: 24px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
-.error-box svg { width: 20px; height: 20px; flex-shrink: 0; }
-.error { display: none; /* Hide the old simple .error div */ }
 
-/* --- New Layout Grid --- */
+.error-box svg {
+  width: 24px !important;
+  height: 24px !important;
+  color: #000000 !important;
+  flex-shrink: 0 !important;
+}
+
+.error-box p {
+  margin: 0 !important;
+}
+
 .item-form-new {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
 .form-content-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr; /* 2/3 for details, 1/3 for image */
-  gap: 20px;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important;
+  gap: 24px !important;
 }
 
 .details-pane {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
-/* --- Form Cards --- */
 .form-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  border: 1px solid #eee;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .form-card h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #994d51;
-  margin-top: 0;
-  margin-bottom: 20px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f0e6e6;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin: 0 0 20px 0 !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #D8FF6C !important;
 }
 
-/* --- Input Grids inside Cards --- */
 .form-grid-2-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
 }
 
 .form-grid-4-col {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
 }
 
-/* --- Form Group Styling --- */
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
 }
 
 .form-group label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
 }
 
 .required {
-  color: #994d51;
+  color: #FF9AE9 !important;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select,
-.add-listing-form input[type="file"] /* Target new file input location */
-{
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1b0e0e;
-  background-color: #fcfcfc;
-  transition: border-color 0.2s, box-shadow 0.2s;
+.input-field,
+.text-area,
+.select-menu,
+.file-upload {
+  padding: 14px 12px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.5 !important;
+  min-height: 48px !important;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus,
-.add-listing-form input[type="file"]:focus
-{
-  outline: none;
-  border-color: #994d51;
-  box-shadow: 0 0 0 3px rgba(153, 77, 81, 0.1);
+.input-field:hover,
+.text-area:hover,
+.select-menu:hover,
+.file-upload:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.form-group textarea {
-  min-height: 100px;
-  resize: vertical;
+.input-field:focus,
+.text-area:focus,
+.select-menu:focus,
+.file-upload:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
 }
 
-/* Price input refinement */
+.text-area {
+  min-height: 120px !important;
+  resize: vertical !important;
+  border-radius: 12px !important;
+}
+
+.select-menu {
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 16px center !important;
+  cursor: pointer !important;
+}
+
 .price-input-container {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fcfcfc;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  display: flex !important;
+  align-items: center !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+}
+
+.price-input-container:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .price-input-container:focus-within {
-  border-color: #994d51;
-  box-shadow: 0 0 0 3px rgba(153, 77, 81, 0.1);
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
 }
 
 .currency-label {
-  padding: 0 10px;
-  font-size: 14px;
-  color: #555;
-  font-weight: 600;
+  padding: 0 12px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
 }
 
-.price-input-container input {
-  flex-grow: 1;
-  border: none;
-  padding: 10px 12px;
-  background-color: transparent;
-  border-radius: 0 8px 8px 0;
+.price-input {
+  flex-grow: 1 !important;
+  border: none !important;
+  padding: 14px 12px !important;
+  background-color: transparent !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  line-height: 1.5 !important;
 }
 
-/* --- Image Pane Styling --- */
+.price-input:focus {
+  outline: none !important;
+}
+
 .image-pane {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
-.image-card {
-  position: sticky;
-  top: 30px; 
+.form-card.image-card {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .no-image-placeholder {
-  width: 100%;
-  aspect-ratio: 1 / 1; 
-  background-color: #f0f0f0;
-  border: 2px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 20px;
+  width: 100% !important;
+  height: 200px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.upload-group {
+  display: block !important;
+  margin-bottom: 16px !important;
 }
 
 .upload-note {
-  font-size: 12px;
-  color: #994d51;
-  margin-top: 4px;
+  font-size: 14px !important;
+  color: #000000 !important;
+  margin-top: 8px !important;
 }
 
-/* --- Form Actions (Consistent Buttons) --- */
 .form-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: flex-start;
-  padding: 12px 0;
+  display: flex !important;
+  gap: 16px !important;
+  justify-content: flex-start !important;
+  padding: 16px 0 !important;
 }
 
-.form-actions button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s, opacity 0.2s;
+.primary-button,
+.cancel-button {
+  padding: 12px 24px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+  box-sizing: border-box !important;
 }
 
-.form-actions .primary-button { /* Use a class for consistency instead of type="submit" */
-  background-color: #994d51;
-  color: white;
+.primary-button {
+  background-color: #FF9AE9 !important;
+  color: #000000 !important;
 }
 
-.form-actions .primary-button:hover {
-  background-color: #7d3c40;
+.primary-button:hover {
+  background-color: #FF9AE9 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.primary-button:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
 .cancel-button {
-  background-color: #e7e7e7;
-  color: #1b0e0e;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #000000 !important;
 }
 
 .cancel-button:hover {
-  background-color: #d8d8d8;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.cancel-button:active {
+  background-color: #F9F9F9 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+/* --- Sidebar Styling (assuming StoreSidebar is reused) --- */
+.sidebar-panel {
+  width: 250px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-right: 1px solid #000000 !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.sidebar-option {
+  color: #000000 !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.sidebar-option:hover {
+  background-color: #F9F9F9 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.sidebar-option.active {
+  background-color: #D8FF6C !important;
+  color: #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.sidebar-option svg {
+  color: #000000 !important;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 /* --- Responsiveness --- */
 @media (max-width: 1024px) {
   .form-content-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .content {
-    padding: 20px;
-  }
-  
-  .image-card {
-    position: static;
-    top: auto;
+    padding: 80px 12px 12px !important;
   }
 }
 
 @media (max-width: 768px) {
-  /* Keep your existing sidebar collapse logic */
   .layout-container {
-    flex-direction: column;
+    flex-direction: column !important;
+    padding: 12px !important;
   }
 
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #e7d0d1;
-    flex-direction: row; /* Horizontal sidebar on mobile */
-    overflow-x: auto;
-    padding: 10px;
+  .sidebar-panel {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #000000 !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding: 10px !important;
   }
-  
-  .sidebar-item {
-    flex-shrink: 0;
+
+  .sidebar-option p {
+    display: none !important;
   }
-  
-  .sidebar-item p {
-      display: none; /* Hide text to save space */
+
+  .sidebar-option {
+    padding: 8px !important;
+    font-size: 14px !important;
   }
 
   .content {
-    padding: 12px;
+    padding: 80px 12px 80px !important;
   }
 
   .page-title {
-    font-size: 24px;
-    margin-bottom: 16px;
+    font-size: 36px !important;
+    text-align: center !important;
   }
 
   .form-card {
-    padding: 16px;
+    padding: 16px !important;
   }
 
   .form-card h3 {
-    font-size: 16px;
-    margin-bottom: 16px;
+    font-size: 18px !important;
   }
-  
-  .form-grid-2-col, .form-grid-4-col {
-    grid-template-columns: 1fr;
-    gap: 12px;
+
+  .form-grid-2-col,
+  .form-grid-4-col {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
-  
+
+  .input-field,
+  .text-area,
+  .select-menu,
+  .file-upload,
+  .price-input-container {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+    min-height: 44px !important;
+  }
+
+  .price-input,
+  .currency-label {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+  }
+
   .no-image-placeholder {
-    aspect-ratio: 4 / 3;
-    height: auto;
+    height: 120px !important;
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
   }
-  
-  .form-actions button {
-    flex: 1;
-    padding: 10px;
-    font-size: 13px;
+
+  .upload-note {
+    font-size: 12px !important;
+  }
+
+  .form-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .primary-button,
+  .cancel-button {
+    padding: 10px !important;
+    font-size: 14px !important;
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout-container {
+    padding: 32px !important;
+  }
+
+  .content {
+    padding: 80px 32px 32px !important;
   }
 }
