@@ -800,7 +800,7 @@ export default function Store() {
   }
 
   return (
-    <div className="store-home" data-theme={store?.theme || 'theme-default'}>
+    <div className="store-home" data-theme="theme-grunge">
       <div className="layout-container">
         <CustomerSidebar activePage="home" />
         <div className="content">

@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'RetroDisplay';
+  src: url('../fonts/MarvinVisionsBig-Bold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BohoDisplay';
+  src: url('../fonts/soria-font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GrungeDisplay';
+  src: url('../fonts/CfLeftBehindRegular-01xd.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ======================================= */
 /* GLOBAL THEME SYSTEM - Enhanced with Vintage Theme */
 /* Import this file in any component that needs theming */
@@ -186,80 +210,282 @@
 }
 
 /* ======================================= */
-/* THEME: 70s RETRO (warm, earthy, playful) */
+/* THEME: RETRO (70s) */
 /* ======================================= */
-[data-theme="theme-70s-retro"] {
-  --bg-primary: #fff7ec;
-  --bg-secondary: #fff3e0;
-  --bg-card: #fffaf0;
-  --bg-overlay: rgba(112, 66, 20, 0.9);
-  --bg-hover: #ffeed9;
-  --color-primary: #d97b2b;
-  --color-secondary: #7b5a2a;
-  --color-text: #3a2f21;
-  --color-text-light: #70543e;
-  --color-text-muted: #9a7d60;
-  --color-border: #e8d8c4;
-  --color-accent: rgba(217,123,43,0.12);
-  --color-success: #8ba857;
-  --color-error: #d64545;
-  --color-warning: #e89b3c;
-  --color-info: #6b9ac4;
-  --shadow-sm: 0 2px 8px rgba(122,85,42,0.08);
-  --shadow-md: 0 8px 30px rgba(122,85,42,0.06);
-  --shadow-lg: 0 16px 48px rgba(122,85,42,0.08);
-  --font-family: 'Playfair Display', serif;
+[data-theme="theme-retro"] {
+  --bg-primary: #f6e5c7;
+  --bg-secondary: #fef0dc;
+  --bg-card: #ffefd5;
+  --bg-overlay: rgba(207, 83, 47, 0.85);
+  --bg-hover: #f0dab8;
+  --color-primary: #cf532f;
+  --color-secondary: #e66a45;
+  --color-text: #5D4037;
+  --color-text-light: #8B6F47;
+  --color-text-muted: #A0826D;
+  --color-border: #D2691E;
+  --color-accent: rgba(255, 210, 63, 0.15);
+  --color-success: #6BA368;
+  --color-error: #D94E3F;
+  --color-warning: #E8B44F;
+  --color-info: #7a9bb5;
+  --shadow-sm: 0 2px 8px rgba(139, 69, 19, 0.1);
+  --shadow-md: 0 8px 30px rgba(139, 69, 19, 0.06);
+  --shadow-lg: 0 16px 48px rgba(139, 69, 19, 0.08);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  background: linear-gradient(135deg, #fff7ec 0%, #f7ead6 100%);
+  background: linear-gradient(135deg, #f6e5c7 0%, #f0dab8 100%);
   font-family: var(--font-family);
   color: var(--color-text);
 }
 
-[data-theme="theme-70s-retro"] .form-card,
-[data-theme="theme-70s-retro"] .info-card,
-[data-theme="theme-70s-retro"] .card {
-  background: linear-gradient(180deg, #fffaf0, #f9efe1);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-md);
+/* ======================================= */
+/* CARDS & GENERAL ELEMENTS */
+/* ======================================= */
+[data-theme="theme-retro"] .form-card,
+[data-theme="theme-retro"] .info-card,
+[data-theme="theme-retro"] .card {
+  background: linear-gradient(135deg, #ffefd5, #fef0dc);
+  border: 3px solid var(--color-border);
+  box-shadow: 6px 6px 0px var(--color-secondary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-[data-theme="theme-70s-retro"] .store-name {
-  letter-spacing: 1px;
-  text-transform: none;
-  font-weight: 600;
+[data-theme="theme-retro"] .form-card:hover,
+[data-theme="theme-retro"] .info-card:hover,
+[data-theme="theme-retro"] .card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #FFD23F;
 }
 
-[data-theme="theme-70s-retro"] .btn-map,
-[data-theme="theme-70s-retro"] .edit-profile-btn,
-[data-theme="theme-70s-retro"] .form-actions button[type="submit"],
-[data-theme="theme-70s-retro"] .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border: 2px solid rgba(255,255,255,0.06);
+/* ======================================= */
+/* OVERLAY */
+/* ======================================= */
+[data-theme="theme-retro"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(207, 83, 47, 0.85), rgba(230, 106, 69, 0.9));
+  border: 3px solid rgba(255, 210, 63, 0.6);
+}
+
+/* ======================================= */
+/* STORE TITLE */
+/* ======================================= */
+[data-theme="theme-retro"] .store-title {
+  color: #cf532f !important;
+  font-family: 'RetroDisplay', 'Righteous', 'Cooper Black', sans-serif !important;
+  text-shadow: 3px 3px 0px rgba(207, 83, 47, 0.3);
+  letter-spacing: 2px;
+  font-weight: 900;
+}
+
+/* ======================================= */
+/* STORE BANNER WITH ANIMATED FLOWER IMAGES */
+/* ======================================= */
+[data-theme="theme-retro"] .store-banner {
+  border-bottom: 4px solid var(--color-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Replace SVG with your PNG image and add smooth animation */
+[data-theme="theme-retro"] .store-banner::after,
+[data-theme="theme-retro"] .store-banner::before {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  background-image: url('vecteezy_flower-icon-design_9266399.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: flower-rotate-bloom 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+[data-theme="theme-retro"] .store-banner::after {
+  width: 85px;
+  height: 85px;
+  right: 20px;
+  animation-delay: 0s;
+}
+
+[data-theme="theme-retro"] .store-banner::before {
+  width: 55px;
+  height: 55px;
+  right: 90px;
+  bottom: 15px;
+  animation-delay: 1.5s;
+}
+
+/* Animation: rotate + subtle bloom effect */
+@keyframes flower-rotate-bloom {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(20deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.05);
+  }
+}
+
+/* ======================================= */
+/* BUTTONS  */
+/* ======================================= */
+[data-theme="theme-retro"] .btn-map,
+[data-theme="theme-retro"] .edit-profile-btn,
+[data-theme="theme-retro"] .form-actions button[type="submit"],
+[data-theme="theme-retro"] .address-search button,
+[data-theme="theme-retro"] .btn-primary {
+  background: linear-gradient(135deg, #cf532f, #e66a45);
+  border: 3px solid #FFD23F;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0px rgba(139, 69, 19, 0.25);
+  font-weight: 700;
   color: #fff;
-  text-transform: none;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-theme="theme-70s-retro"] .btn-primary:hover {
-  background: linear-gradient(135deg, #e68938, #8d6735);
-  box-shadow: 0 6px 20px rgba(217,123,43,0.3);
+[data-theme="theme-retro"] .btn-map:hover,
+[data-theme="theme-retro"] .edit-profile-btn:hover,
+[data-theme="theme-retro"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-retro"] .address-search button:hover,
+[data-theme="theme-retro"] .btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px rgba(139, 69, 19, 0.3);
+  background: linear-gradient(135deg, #e66a45, #cf532f);
 }
 
-[data-theme="theme-70s-retro"] input,
-[data-theme="theme-70s-retro"] textarea,
-[data-theme="theme-70s-retro"] select {
+/* ======================================= */
+/* SECONDARY BUTTONS (View Hours, Contact Us, Review) */
+/* ======================================= */
+[data-theme="theme-retro"] .filter-button,
+[data-theme="theme-retro"] .review-button,
+[data-theme="theme-retro"] .view-hours-button,
+[data-theme="theme-retro"] .contact-us-button {
+  background: var(--bg-card);
+  border: 3px solid var(--color-border);
+  color: var(--color-border);
+  border-radius: 12px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  box-shadow: 2px 2px 0px rgba(139, 69, 19, 0.2);
+  transition: all 0.2s ease;
+}
+
+[data-theme="theme-retro"] .filter-button:hover,
+[data-theme="theme-retro"] .review-button:hover,
+[data-theme="theme-retro"] .view-hours-button:hover,
+[data-theme="theme-retro"] .contact-us-button:hover {
+  background: #cf532f;
+  color: #fff;
+  box-shadow: 4px 4px 0px rgba(139, 69, 19, 0.3);
+  transform: translate(-1px, -1px);
+}
+
+
+/* ======================================= */
+/* ITEM CARDS */
+/* ======================================= */
+[data-theme="theme-retro"] .item-card {
+  border: 3px solid var(--color-border);
+  box-shadow: 6px 6px 0px var(--color-secondary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="theme-retro"] .item-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #FFD23F;
+}
+
+/* ======================================= */
+/* TEXT & TYPOGRAPHY */
+/* ======================================= */
+[data-theme="theme-retro"] .theme-tag,
+[data-theme="theme-retro"] .status-badge {
+  background: #cf532f;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+[data-theme="theme-retro"] .reserved-badge {
+  background: linear-gradient(135deg, #E8B44F 0%, #FFD23F 100%);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+[data-theme="theme-retro"] .h2,
+[data-theme="theme-retro"] .card-title,
+[data-theme="theme-retro"] .form-card h3,
+[data-theme="theme-retro"] h2,
+[data-theme="theme-retro"] h3 {
+  color: #cf532f;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+[data-theme="theme-retro"] .content > div h2,
+[data-theme="theme-retro"] .results-title,
+[data-theme="theme-retro"] .item-title {
+  font-family: 'RetroDisplay', 'Righteous', 'Cooper Black', sans-serif;
+  color: #cf532f;
+}
+
+/* ======================================= */
+/* FORM ELEMENTS */
+/* ======================================= */
+[data-theme="theme-retro"] input,
+[data-theme="theme-retro"] textarea,
+[data-theme="theme-retro"] select {
   background: var(--bg-secondary);
   border: 2px solid var(--color-border);
   color: var(--color-text);
 }
 
-[data-theme="theme-70s-retro"] input:focus,
-[data-theme="theme-70s-retro"] textarea:focus,
-[data-theme="theme-70s-retro"] select:focus {
+[data-theme="theme-retro"] input:focus,
+[data-theme="theme-retro"] textarea:focus,
+[data-theme="theme-retro"] select:focus {
   border-color: var(--color-primary);
   background: #fffaf0;
-  box-shadow: 0 0 0 3px rgba(217,123,43,0.15);
+  box-shadow: 0 0 0 3px rgba(207, 83, 47, 0.15);
 }
+
+[data-theme="theme-retro"] label {
+  color: var(--color-text-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+}
+
+/* ======================================= */
+/* MISC */
+/* ======================================= */
+[data-theme="theme-retro"] .modal-title,
+[data-theme="theme-retro"] nav,
+[data-theme="theme-retro"] .navbar,
+[data-theme="theme-retro"] .navbar *,
+[data-theme="theme-retro"] p,
+[data-theme="theme-retro"] span,
+[data-theme="theme-retro"] div:not(.store-title):not(.item-title):not(.results-title),
+[data-theme="theme-retro"] a,
+[data-theme="theme-retro"] button,
+[data-theme="theme-retro"] .btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 
 /* ======================================= */
 /* THEME: Y2K (nostalgic-tech pop) */
@@ -419,78 +645,280 @@
 }
 
 /* ======================================= */
-/* THEME: BOHO (earthy, relaxed, artisanal) */
+/* THEME: BOHO (Bohemian, earthy) */
 /* ======================================= */
 [data-theme="theme-boho"] {
-  --bg-primary: #fffaf6;
-  --bg-secondary: #fff7f0;
-  --bg-card: #fffdf9;
-  --bg-overlay: rgba(89, 60, 38, 0.9);
-  --bg-hover: #fef3eb;
-  --color-primary: #b86b3b;
-  --color-secondary: #8a6a48;
-  --color-text: #402f28;
-  --color-text-light: #6b5246;
-  --color-text-muted: #9a8275;
-  --color-border: #efe6dd;
-  --color-accent: rgba(184,107,59,0.10);
-  --color-success: #7c9b6e;
-  --color-error: #c05555;
-  --color-warning: #d9a55f;
-  --color-info: #7a9bb5;
-  --shadow-sm: 0 2px 8px rgba(64,47,40,0.06);
-  --shadow-md: 0 8px 30px rgba(64,47,40,0.04);
-  --shadow-lg: 0 16px 50px rgba(64,47,40,0.06);
-  --font-family: 'Playfair Display', serif;
+  --bg-primary: #fff8ec;       /* lighter cream background */
+  --bg-secondary: #fff8ec;
+  --bg-card: #fffdf5;          /* lighter cream for filter/item cards */
+  --bg-overlay: rgba(162, 210, 207, 0.85);
+  --bg-hover: #f9e7d0;
 
-  background: linear-gradient(135deg, #fffaf6 0%, #fbefe6 100%);
+  --color-primary: #327179;    /* Teal */
+  --color-secondary: #a9d2cf;  /* Light teal */
+  --color-tertiary: #8B6F47;   /* Warm brown */
+  --color-text: #327179;
+  --color-text-light: #5f7d7f;
+  --color-text-muted: #7da3a3;
+  --color-border: #a9d2cf;
+  --color-accent: rgba(162, 210, 207, 0.2);
+  --color-success: #7b9a57;
+  --color-error: #c94f4f;
+  --color-warning: #e6b34d;
+  --color-info: #327179;
+
+  --shadow-sm: 0 2px 6px rgba(50, 113, 121, 0.1);
+  --shadow-md: 0 6px 20px rgba(50, 113, 121, 0.06);
+  --shadow-lg: 0 12px 36px rgba(50, 113, 121, 0.08);
+
+  --font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   font-family: var(--font-family);
   color: var(--color-text);
 }
 
+/* ======================================= */
+/* CARDS & GENERAL ELEMENTS */
+/* ======================================= */
 [data-theme="theme-boho"] .form-card,
 [data-theme="theme-boho"] .info-card,
 [data-theme="theme-boho"] .card {
-  background: linear-gradient(180deg, var(--bg-card), #fff6ef);
-  border: 1px dashed var(--color-border);
-  box-shadow: var(--shadow-md);
+  background: var(--bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px var(--color-accent);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-[data-theme="theme-boho"] .store-name {
-  font-style: italic;
-  letter-spacing: 1px;
+[data-theme="theme-boho"] .form-card:hover,
+[data-theme="theme-boho"] .info-card:hover,
+[data-theme="theme-boho"] .card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px rgba(162, 210, 207, 0.3);
 }
 
+/* Item cards with brown accent */
+[data-theme="theme-boho"] .item-card {
+  background: var(--bg-card);
+  border: 2px solid var(--color-tertiary);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px rgba(139, 111, 71, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="theme-boho"] .item-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px rgba(139, 111, 71, 0.3);
+  border-color: var(--color-secondary);
+}
+
+/* ======================================= */
+/* BUTTONS - ALL USE SIMPLE FONT */
+/* ======================================= */
 [data-theme="theme-boho"] .btn-map,
 [data-theme="theme-boho"] .edit-profile-btn,
 [data-theme="theme-boho"] .form-actions button[type="submit"],
+[data-theme="theme-boho"] .address-search button,
 [data-theme="theme-boho"] .btn-primary {
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 2px solid var(--color-accent);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0px rgba(50, 113, 121, 0.2);
+  font-weight: 700;
   color: #fff;
-  text-transform: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  text-transform: capitalize;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: var(--font-family);
 }
 
+[data-theme="theme-boho"] .btn-map:hover,
+[data-theme="theme-boho"] .edit-profile-btn:hover,
+[data-theme="theme-boho"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-boho"] .address-search button:hover,
 [data-theme="theme-boho"] .btn-primary:hover {
-  background: linear-gradient(135deg, #ca7a48, #9d7d5a);
-  box-shadow: 0 6px 24px rgba(184,107,59,0.25);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px rgba(50, 113, 121, 0.3);
 }
 
+/* All secondary buttons styled the same */
+[data-theme="theme-boho"] .filter-button,
+[data-theme="theme-boho"] .review-button,
+[data-theme="theme-boho"] .view-hours-button,
+[data-theme="theme-boho"] .contact-us-button {
+  background: var(--bg-card);
+  border: 2px solid var(--color-tertiary);
+  color: var(--color-tertiary);
+  border-radius: 12px;
+  font-weight: 600;
+  font-family: var(--font-family);
+  transition: all 0.2s ease;
+}
+
+[data-theme="theme-boho"] .filter-button:hover,
+[data-theme="theme-boho"] .review-button:hover,
+[data-theme="theme-boho"] .view-hours-button:hover,
+[data-theme="theme-boho"] .contact-us-button:hover {
+  background: var(--color-tertiary);
+  color: white;
+}
+
+/* ======================================= */
+/* TEXT & TYPOGRAPHY - CUSTOM FONT ONLY FOR TITLES */
+/* ======================================= */
+
+/* Store title */
+[data-theme="theme-boho"] .store-title {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive !important;
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+/* Description heading */
+[data-theme="theme-boho"] .content > div h2 {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive;
+  color: var(--color-tertiary);
+}
+
+/* Results title */
+[data-theme="theme-boho"] .results-title {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive;
+  color: var(--color-tertiary);
+}
+
+/* Item card titles only */
+[data-theme="theme-boho"] .item-title {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive;
+  color: var(--color-text);
+}
+
+/* Modal titles */
+[data-theme="theme-boho"] .modal-title,
+[data-theme="theme-boho"] .hours-modal-title,
+[data-theme="theme-boho"] .contact-modal-title,
+[data-theme="theme-boho"] .filter-modal-title {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive;
+  color: var(--color-primary);
+}
+
+/* All other text uses simple sans-serif */
+[data-theme="theme-boho"] p,
+[data-theme="theme-boho"] span,
+[data-theme="theme-boho"] div,
+[data-theme="theme-boho"] a,
+[data-theme="theme-boho"] button,
+[data-theme="theme-boho"] .item-price,
+[data-theme="theme-boho"] .item-category,
+[data-theme="theme-boho"] .item-size,
+[data-theme="theme-boho"] .item-style,
+[data-theme="theme-boho"] .pagination-info,
+[data-theme="theme-boho"] .address-text,
+[data-theme="theme-boho"] .hours-summary {
+  font-family: var(--font-family) !important;
+}
+
+/* Reserved badge - use brown, simple font */
+[data-theme="theme-boho"] .reserved-badge {
+  background: var(--color-tertiary);
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-family: var(--font-family) !important;
+}
+
+/* Vertical lace on right border of banner */
+[data-theme="theme-boho"] .store-banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;            /* increase this to make lace thicker — tweak as needed */
+  height: 100%;
+  background-image: url("boho_lace.png"); /* ensure this path is correct relative to the CSS file */
+  background-repeat: no-repeat;           /* IMPORTANT: do not repeat */
+  background-size: auto 100%;             /* scale lace to full height, keep aspect ratio */
+  background-position: right center;      /* align to right */
+  pointer-events: none;
+  opacity: 0.95;                          /* adjust transparency if you like */
+  z-index: 2;
+}
+
+/* ======================================= */
+/* FORM ELEMENTS */
+/* ======================================= */
 [data-theme="theme-boho"] input,
 [data-theme="theme-boho"] textarea,
 [data-theme="theme-boho"] select {
   background: var(--bg-secondary);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   color: var(--color-text);
+  border-radius: 8px;
+  padding: 0.5rem;
 }
 
 [data-theme="theme-boho"] input:focus,
 [data-theme="theme-boho"] textarea:focus,
 [data-theme="theme-boho"] select:focus {
   border-color: var(--color-primary);
-  background: #fffdf9;
-  box-shadow: 0 0 0 3px rgba(184,107,59,0.12);
+  box-shadow: 0 0 0 3px rgba(169, 210, 207, 0.15);
+  background: #fff9f0;
+}
+
+[data-theme="theme-boho"] label {
+  color: var(--color-text-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+/* ======================================= */
+/* STORE BANNER */
+/* ======================================= */
+[data-theme="theme-boho"] .store-banner {
+  border-bottom: 3px solid var(--color-secondary);
+  position: relative;
+}
+
+/* ======================================= */
+/* MODAL STYLING */
+/* ======================================= */
+[data-theme="theme-boho"] .modal-title {
+  font-family: 'BohoDisplay', 'Brush Script MT', cursive;
+  color: var(--color-primary);
+}
+
+[data-theme="theme-boho"] .filter-modal,
+[data-theme="theme-boho"] .hours-modal,
+[data-theme="theme-boho"] .contact-modal {
+  background: var(--bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(50, 113, 121, 0.15);
+}
+
+/* ======================================= */
+/* ENSURE SIDEBAR/NAV IS NOT AFFECTED */
+/* ======================================= */
+[data-theme="theme-boho"] .customer-sidebar,
+[data-theme="theme-boho"] .customer-sidebar *,
+[data-theme="theme-boho"] .sidebar,
+[data-theme="theme-boho"] .sidebar *,
+[data-theme="theme-boho"] nav,
+[data-theme="theme-boho"] nav * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Ensure FontAwesome icons work properly */
+[data-theme="theme-boho"] .customer-sidebar i,
+[data-theme="theme-boho"] .sidebar i,
+[data-theme="theme-boho"] nav i,
+[data-theme="theme-boho"] .fas,
+[data-theme="theme-boho"] .far,
+[data-theme="theme-boho"] .fab,
+[data-theme="theme-boho"] .fa {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'FontAwesome' !important;
+  font-weight: 900 !important;
 }
 
 /* ======================================= */
@@ -577,83 +1005,369 @@
 }
 
 /* ======================================= */
-/* THEME: GRUNGE (dark, textured, fashion-forward) */
+/* THEME: GRUNGE/PUNK */
 /* ======================================= */
 [data-theme="theme-grunge"] {
-  --bg-primary: #0b0b0b;
-  --bg-secondary: #121212;
-  --bg-card: #161616;
-  --bg-overlay: rgba(10, 10, 10, 0.92);
-  --bg-hover: #1a1a1a;
-  --color-primary: #d9d9d9;
-  --color-secondary: #8f8f8f;
-  --color-text: #e9e7e7;
-  --color-text-light: #bdbdbd;
-  --color-text-muted: #888888;
-  --color-border: #2a2a2a;
-  --color-accent: rgba(200,30,45,0.09);
-  --color-success: #4ade80;
-  --color-error: #f87171;
-  --color-warning: #fbbf24;
-  --color-info: #60a5fa;
-  --shadow-sm: 0 2px 10px rgba(0,0,0,0.5);
-  --shadow-md: 0 10px 40px rgba(0,0,0,0.6);
-  --shadow-lg: 0 20px 70px rgba(0,0,0,0.7);
-  --font-family: 'Montserrat', sans-serif;
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #252525;
+  --bg-card: #2a2a2a;
+  --bg-overlay: rgba(121, 86, 125, 0.85);
+  --bg-hover: #333333;
+  
+  --color-primary: #5a3f5e;      /* Dark Muted Purple */
+  --color-secondary: #79567d;    /* Mid Muted Purple */
+  --color-tertiary: #9b7fa0;     /* Light Muted Purple */
+  --color-text: #e0e0e0;
+  --color-text-light: #b0b0b0;
+  --color-text-muted: #808080;
+  --color-border: #5a3f5e;
+  --color-accent: rgba(90, 63, 94, 0.3);
+  --color-success: #7cb342;
+  --color-error: #e53935;
+  --color-warning: #ffa726;
+  --color-info: #29b6f6;
 
-  background: linear-gradient(180deg, #070707 0%, #121212 100%);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.7);
+
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
   font-family: var(--font-family);
   color: var(--color-text);
 }
 
+/* ======================================= */
+/* CARDS & GENERAL ELEMENTS */
+/* ======================================= */
 [data-theme="theme-grunge"] .form-card,
 [data-theme="theme-grunge"] .info-card,
 [data-theme="theme-grunge"] .card {
-  background: linear-gradient(180deg, #151515, #0f0f0f);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.02);
+  background: var(--bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: 
+    4px 4px 0px rgba(90, 63, 94, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
-[data-theme="theme-grunge"] .store-name {
-  letter-spacing: 1px;
-  text-transform: none;
-  font-weight: 700;
+[data-theme="theme-grunge"] .form-card::before,
+[data-theme="theme-grunge"] .info-card::before,
+[data-theme="theme-grunge"] .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.1) 2px,
+      rgba(0, 0, 0, 0.1) 4px
+    );
+  pointer-events: none;
+  opacity: 0.3;
 }
 
+[data-theme="theme-grunge"] .form-card:hover,
+[data-theme="theme-grunge"] .info-card:hover,
+[data-theme="theme-grunge"] .card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 
+    6px 6px 0px rgba(157, 78, 221, 0.5),
+    inset 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Item cards*/
+[data-theme="theme-grunge"] .item-card {
+  background: var(--bg-card);
+  border: 2px solid var(--color-secondary);
+  border-radius: 4px;
+  box-shadow: 
+    4px 4px 0px rgba(157, 78, 221, 0.3),
+    inset 0 0 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+[data-theme="theme-grunge"] .item-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 
+    6px 6px 0px rgba(199, 125, 255, 0.4),
+    inset 0 0 25px rgba(0, 0, 0, 0.5);
+  border-color: var(--color-tertiary);
+}
+
+/* ======================================= */
+/* BUTTONS */
+/* ======================================= */
 [data-theme="theme-grunge"] .btn-map,
 [data-theme="theme-grunge"] .edit-profile-btn,
 [data-theme="theme-grunge"] .form-actions button[type="submit"],
+[data-theme="theme-grunge"] .address-search button,
 [data-theme="theme-grunge"] .btn-primary {
-  background: linear-gradient(135deg, #2b2b2b, #1a1a1a);
-  border: 1px solid rgba(255,255,255,0.04);
-  color: var(--color-text);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border: 2px solid var(--color-tertiary);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: var(--font-family);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
+[data-theme="theme-grunge"] .btn-map:hover,
+[data-theme="theme-grunge"] .edit-profile-btn:hover,
+[data-theme="theme-grunge"] .form-actions button[type="submit"]:hover,
+[data-theme="theme-grunge"] .address-search button:hover,
 [data-theme="theme-grunge"] .btn-primary:hover {
-  background: linear-gradient(135deg, #353535, #222222);
-  box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-tertiary));
 }
 
+/* Secondary buttons */
+[data-theme="theme-grunge"] .filter-button,
+[data-theme="theme-grunge"] .review-button,
+[data-theme="theme-grunge"] .view-hours-button,
+[data-theme="theme-grunge"] .contact-us-button {
+  background: var(--bg-card);
+  border: 2px solid var(--color-primary);
+  color: var(--color-tertiary);
+  border-radius: 2px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="theme-grunge"] .filter-button:hover,
+[data-theme="theme-grunge"] .review-button:hover,
+[data-theme="theme-grunge"] .view-hours-button:hover,
+[data-theme="theme-grunge"] .contact-us-button:hover {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 0 15px rgba(90, 63, 94, 0.6);
+}
+
+/* ======================================= */
+/* TEXT & TYPOGRAPHY - CUSTOM FONT ONLY FOR TITLES */
+/* ======================================= */
+
+/* Store title */
+[data-theme="theme-grunge"] .store-title {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif !important;
+  color: var(--color-primary) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 
+    3px 3px 0px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(90, 63, 94, 0.6);
+}
+
+/* Description heading */
+[data-theme="theme-grunge"] .content > div h2 {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif;
+  color: var(--color-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Results title */
+[data-theme="theme-grunge"] .results-title {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif;
+  color: var(--color-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Item card titles only */
+[data-theme="theme-grunge"] .item-title {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Modal titles */
+[data-theme="theme-grunge"] .modal-title,
+[data-theme="theme-grunge"] .hours-modal-title,
+[data-theme="theme-grunge"] .contact-modal-title,
+[data-theme="theme-grunge"] .filter-modal-title {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* All other text uses simple sans-serif */
+[data-theme="theme-grunge"] p,
+[data-theme="theme-grunge"] span,
+[data-theme="theme-grunge"] div,
+[data-theme="theme-grunge"] a,
+[data-theme="theme-grunge"] button,
+[data-theme="theme-grunge"] .item-price,
+[data-theme="theme-grunge"] .item-category,
+[data-theme="theme-grunge"] .item-size,
+[data-theme="theme-grunge"] .item-style,
+[data-theme="theme-grunge"] .pagination-info,
+[data-theme="theme-grunge"] .address-text,
+[data-theme="theme-grunge"] .hours-summary {
+  font-family: var(--font-family) !important;
+}
+
+/* Reserved badge */
+[data-theme="theme-grunge"] .reserved-badge {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  font-weight: 900;
+  border-radius: 2px;
+  padding: 4px 8px;
+  font-family: var(--font-family) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.6);
+}
+
+/* ======================================= */
+/* FORM ELEMENTS */
+/* ======================================= */
 [data-theme="theme-grunge"] input,
 [data-theme="theme-grunge"] textarea,
 [data-theme="theme-grunge"] select {
   background: var(--bg-secondary);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-border);
   color: var(--color-text);
+  border-radius: 2px;
+  padding: 0.5rem;
 }
 
 [data-theme="theme-grunge"] input:focus,
 [data-theme="theme-grunge"] textarea:focus,
 [data-theme="theme-grunge"] select:focus {
-  border-color: var(--color-primary);
-  background: #1a1a1a;
-  box-shadow: 0 0 0 3px rgba(217,217,217,0.12);
+  border-color: var(--color-tertiary);
+  box-shadow: 0 0 10px rgba(90, 63, 94, 0.5);
+  background: var(--bg-card);
+  outline: none;
 }
 
-[data-theme="theme-grunge"] input::placeholder,
-[data-theme="theme-grunge"] textarea::placeholder {
-  color: var(--color-text-muted);
+[data-theme="theme-grunge"] label {
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ======================================= */
+/* STORE BANNER*/
+/* ======================================= */
+[data-theme="theme-grunge"] .store-banner {
+  border-bottom: 3px solid var(--color-secondary);
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Grunge star decoration */
+[data-theme="theme-grunge"] .store-banner::after {
+  content: '';
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  width: 110px;
+  height: 110px;
+  background-image: url('grunge_star.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: grunge-star-rotate 4s ease-in-out infinite;
+  opacity: 0.85;
+}
+
+@keyframes grunge-star-rotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(12deg);
+  }
+  75% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+/* ======================================= */
+/* MODAL STYLING */
+/* ======================================= */
+[data-theme="theme-grunge"] .modal-title {
+  font-family: 'GrungeDisplay', 'Impact', 'Arial Black', sans-serif;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+[data-theme="theme-grunge"] .filter-modal,
+[data-theme="theme-grunge"] .hours-modal,
+[data-theme="theme-grunge"] .contact-modal {
+  background: var(--bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+/* ======================================= */
+/* OVERLAY INFO BLOCK */
+/* ======================================= */
+[data-theme="theme-grunge"] .overlay-info-block {
+  background: linear-gradient(135deg, rgba(90, 63, 94, 0.9), rgba(121, 86, 125, 0.85));
+  border: 2px solid var(--color-tertiary);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+/* ======================================= */
+/* ENSURE SIDEBAR/NAV IS NOT AFFECTED */
+/* ======================================= */
+[data-theme="theme-grunge"] .customer-sidebar,
+[data-theme="theme-grunge"] .customer-sidebar *,
+[data-theme="theme-grunge"] .sidebar,
+[data-theme="theme-grunge"] .sidebar *,
+[data-theme="theme-grunge"] nav,
+[data-theme="theme-grunge"] nav * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Ensure FontAwesome icons work properly */
+[data-theme="theme-grunge"] .customer-sidebar i,
+[data-theme="theme-grunge"] .sidebar i,
+[data-theme="theme-grunge"] nav i,
+[data-theme="theme-grunge"] .fas,
+[data-theme="theme-grunge"] .far,
+[data-theme="theme-grunge"] .fab,
+[data-theme="theme-grunge"] .fa {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'FontAwesome' !important;
+  font-weight: 900 !important;
 }
 
 /* ======================================= */
