@@ -1,0 +1,826 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
+
+/* Targeted reset for elements to prevent spacing issues */
+.store-reservations h1,
+.store-reservations h2,
+.store-reservations h3,
+.store-reservations p,
+.store-reservations button,
+.store-reservations select {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.store-reservations {
+  display: flex !important;
+  background-color: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.store-reservations .layout-container {
+  display: flex !important;
+  flex: 1 !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .content {
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.store-reservations .header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 48px !important;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .header h1 {
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.store-reservations .view-mode-button {
+  padding: 14px 32px !important;
+  background-color: #FF9AE9 !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+  min-width: 160px !important;
+  text-align: center !important;
+}
+
+.store-reservations .view-mode-button:hover {
+  background-color: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .view-mode-button:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.store-reservations .error,
+.store-reservations .success-message {
+  padding: 16px !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  text-align: center !important;
+}
+
+.store-reservations .header-controls {
+  margin-bottom: 24px !important;
+}
+
+.store-reservations .mobile-filter-toggle {
+  display: none !important;
+  padding: 14px !important;
+  background-color: #FF9AE9 !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  text-align: center !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+  min-width: 160px !important;
+}
+
+.store-reservations .mobile-filter-toggle:hover {
+  background-color: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .mobile-filter-toggle:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.store-reservations .search-bar {
+  display: flex !important;
+  align-items: center !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  padding: 12px 16px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  margin-bottom: 24px !important;
+}
+
+.store-reservations .search-bar:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .search-bar input {
+  flex: 1 !important;
+  background: transparent !important;
+  padding: 8px !important;
+  font-size: 20px !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+  border: none !important;
+}
+
+.store-reservations .search-bar input:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+}
+
+.store-reservations .search-bar input::placeholder {
+  color: #666666 !important;
+  font-weight: 500 !important;
+}
+
+.store-reservations .filters {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 24px !important;
+  margin-bottom: 48px !important;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .filters.visible {
+  display: grid !important;
+}
+
+.store-reservations .filters select {
+  padding: 16px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 18px !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 16px center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.store-reservations .filters select:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .filters select:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+}
+
+.store-reservations .no-reservations {
+  padding: 40px 16px !important;
+  color: #000000 !important;
+  text-align: center !important;
+  font-size: 18px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 8px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .reservations-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  table-layout: auto !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  overflow-x: auto !important;
+  background-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .reservations-table th,
+.store-reservations .reservations-table td {
+  padding: 16px !important;
+  text-align: left !important;
+  color: #000000 !important;
+  font-size: 14px !important;
+  max-width: 150px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.store-reservations .reservations-table th {
+  font-weight: 600 !important;
+  background-color: #D8FF6C !important;
+}
+
+.store-reservations .reservations-table td {
+  border-top: 1px solid #FF9AE9 !important;
+}
+
+.store-reservations .item-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.store-reservations .item-price {
+  font-size: 12px !important;
+  color: #FF9AE9 !important;
+}
+
+.store-reservations .status-pending,
+.store-reservations .status-confirmed,
+.store-reservations .status-cancelled,
+.store-reservations .status-completed {
+  display: inline-block !important;
+  padding: 6px 12px !important;
+  border-radius: 9999px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.store-reservations .status-pending {
+  background-color: #FFECB3 !important;
+  color: #000000 !important;
+  border: 1px solid #FFA000 !important;
+}
+
+.store-reservations .status-confirmed {
+  background-color: #B3E5FC !important;
+  color: #000000 !important;
+  border: 1px solid #0288D1 !important;
+}
+
+.store-reservations .status-cancelled {
+  background-color: #FFCDD2 !important;
+  color: #000000 !important;
+  border: 1px solid #D32F2F !important;
+}
+
+.store-reservations .status-completed {
+  background-color: #C8E6C9 !important;
+  color: #000000 !important;
+  border: 1px solid #388E3C !important;
+}
+
+.store-reservations .table-actions select {
+  padding: 8px 16px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 14px !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.store-reservations .table-actions select:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .table-actions select:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+}
+
+.store-reservations .reservations-card-list {
+  display: none !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.store-reservations .reservation-card {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.store-reservations .reservation-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .card-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.store-reservations .card-image {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+}
+
+.store-reservations .card-item-name {
+  flex: 1 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+}
+
+.store-reservations .card-status {
+  padding: 6px 12px !important;
+  border-radius: 9999px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.store-reservations .card-status.status-pending {
+  background-color: #FFECB3 !important;
+  color: #000000 !important;
+  border: 1px solid #FFA000 !important;
+}
+
+.store-reservations .card-status.status-confirmed {
+  background-color: #B3E5FC !important;
+  color: #000000 !important;
+  border: 1px solid #0288D1 !important;
+}
+
+.store-reservations .card-status.status-cancelled {
+  background-color: #FFCDD2 !important;
+  color: #000000 !important;
+  border: 1px solid #D32F2F !important;
+}
+
+.store-reservations .card-status.status-completed {
+  background-color: #C8E6C9 !important;
+  color: #000000 !important;
+  border: 1px solid #388E3C !important;
+}
+
+.store-reservations .card-body {
+  margin-bottom: 12px !important;
+}
+
+.store-reservations .card-customer {
+  font-size: 14px !important;
+  color: #000000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.store-reservations .card-customer i {
+  margin-right: 8px !important;
+  color: #FF9AE9 !important;
+}
+
+.store-reservations .card-actions select {
+  padding: 8px 16px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 14px !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+}
+
+.store-reservations .card-actions select:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .card-actions select:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+}
+
+.store-reservations .modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 2000 !important;
+  padding: 16px !important;
+}
+
+.store-reservations .modal-content {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 12px !important;
+  max-width: 700px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  position: relative !important;
+  width: 100% !important;
+  border: 1px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .close-button {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  background: none !important;
+  border: none !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  color: #000000 !important;
+  z-index: 10 !important;
+}
+
+.store-reservations .modal-body {
+  display: flex !important;
+  gap: 24px !important;
+  padding: 32px !important;
+}
+
+.store-reservations .left-column {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  max-width: 350px !important;
+}
+
+.store-reservations .image-carousel {
+  position: relative !important;
+}
+
+.store-reservations .image-carousel img {
+  width: 100% !important;
+  height: 300px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .no-image-large {
+  width: 100% !important;
+  height: 300px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .carousel-controls {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+}
+
+.store-reservations .prev-btn,
+.store-reservations .next-btn {
+  background-color: #D8FF6C !important;
+  border: 1px solid #000000 !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 9999px !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+}
+
+.store-reservations .prev-btn:hover,
+.store-reservations .next-btn:hover {
+  background-color: #E6FF8C !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.store-reservations .prev-btn:active,
+.store-reservations .next-btn:active {
+  background-color: #BCE84D !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.store-reservations .image-counter {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  color: #FFFFFF !important;
+  padding: 6px 12px !important;
+  border-radius: 9999px !important;
+  font-size: 12px !important;
+}
+
+.store-reservations .price {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: #FF9AE9 !important;
+}
+
+.store-reservations .item-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.store-reservations .item-info h2 {
+  font-size: 28px !important;
+  color: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.store-reservations .status-tag-large {
+  display: inline-block !important;
+  padding: 8px 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #000000 !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+.store-reservations .info-box {
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.store-reservations .info-box h3 {
+  font-size: 18px !important;
+  margin: 0 0 12px 0 !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+.store-reservations .info-box p {
+  font-size: 14px !important;
+  margin: 8px 0 !important;
+  color: #000000 !important;
+}
+
+.store-reservations .loading-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  padding: 2rem !important;
+}
+
+.store-reservations .spinner {
+  border: 4px solid #F3F3F3 !important;
+  border-top: 4px solid #D8FF6C !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  animation: spin 1s linear infinite !important;
+  margin-bottom: 1rem !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg) !important; }
+  100% { transform: rotate(360deg) !important; }
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .store-reservations .layout-container {
+    flex-direction: column !important;
+    padding: 12px !important;
+  }
+
+  .store-reservations .content {
+    padding: 80px 12px 80px !important;
+    width: 100% !important;
+  }
+
+  .store-reservations .header {
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+    padding: 12px !important;
+  }
+
+  .store-reservations .header h1 {
+    font-size: 36px !important;
+    text-align: center !important;
+  }
+
+  .store-reservations .view-mode-button {
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+    min-width: 100% !important;
+  }
+
+  .store-reservations .mobile-filter-toggle {
+    display: block !important;
+  }
+
+  .store-reservations .filters {
+    display: none !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .store-reservations .filters.visible {
+    display: grid !important;
+  }
+
+  .store-reservations .filters select {
+    padding: 12px !important;
+    font-size: 16px !important;
+  }
+
+  .store-reservations .search-bar {
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .store-reservations .search-bar input {
+    font-size: 16px !important;
+    padding: 6px !important;
+  }
+
+  .store-reservations .reservations-table {
+    display: none !important;
+  }
+
+  .store-reservations .reservations-card-list {
+    display: flex !important;
+  }
+
+  .store-reservations .reservation-card {
+    padding: 12px !important;
+  }
+
+  .store-reservations .card-image {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .store-reservations .card-item-name {
+    font-size: 14px !important;
+  }
+
+  .store-reservations .card-status {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .store-reservations .card-customer {
+    font-size: 12px !important;
+  }
+
+  .store-reservations .card-customer i {
+    margin-right: 6px !important;
+  }
+
+  .store-reservations .card-actions select {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .store-reservations .no-reservations {
+    padding: 24px 12px !important;
+    font-size: 16px !important;
+  }
+
+  .store-reservations .modal-body {
+    flex-direction: column !important;
+    padding: 24px !important;
+  }
+
+  .store-reservations .left-column {
+    max-width: none !important;
+  }
+
+  .store-reservations .image-carousel img,
+  .store-reservations .no-image-large {
+    height: 200px !important;
+  }
+
+  .store-reservations .item-info h2 {
+    font-size: 24px !important;
+  }
+
+  .store-reservations .info-box {
+    padding: 16px !important;
+  }
+
+  .store-reservations .info-box h3 {
+    font-size: 16px !important;
+  }
+
+  .store-reservations .info-box p {
+    font-size: 12px !important;
+  }
+
+  .store-reservations .price {
+    font-size: 20px !important;
+  }
+
+  .store-reservations .status-tag-large {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .store-reservations .prev-btn,
+  .store-reservations .next-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+  }
+
+  .store-reservations .image-counter {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .store-reservations .layout-container {
+    padding: 32px !important;
+  }
+
+  .store-reservations .content {
+    padding: 80px 32px 32px !important;
+  }
+}
