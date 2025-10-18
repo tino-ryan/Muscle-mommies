@@ -1,3 +1,4 @@
+// server/middleware/authMiddleware.js
 const admin = require('../config/firebase');
 
 module.exports = async (req, res, next) => {

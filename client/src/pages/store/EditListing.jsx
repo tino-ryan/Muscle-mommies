@@ -71,10 +71,6 @@ export default function EditListing() {
       setError('Price must be a positive number.');
       return;
     }
-    if (name === 'quantity' && value !== '' && parseInt(value) <= 0) {
-      setError('Quantity must be a positive whole number.');
-      return;
-    }
     setItem((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -102,10 +98,6 @@ export default function EditListing() {
     }
     if (parseFloat(item.price) <= 0) {
       setError('Price must be a positive number.');
-      return;
-    }
-    if (parseInt(item.quantity) <= 0) {
-      setError('Quantity must be a positive whole number.');
       return;
     }
     try {
@@ -160,6 +152,24 @@ export default function EditListing() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      await axios.delete(`${API_URL}/api/stores/items/${itemId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert('Item deleted successfully!');
+      navigate('/store/listings');
+    } catch (error) {
+      console.error('Delete error:', error.response?.data || error.message);
+      setError(
+        'Failed to delete item: ' +
+          (error.response?.data?.error || error.message)
+      );
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -186,7 +196,6 @@ export default function EditListing() {
   return (
     <div className="edit-listing">
       <div className="layout-container">
-        {/* Assume StoreSidebar is handled and styled to collapse/hide on mobile */}
         <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
 
         <div className="content">
@@ -202,16 +211,11 @@ export default function EditListing() {
           )}
 
           <form onSubmit={handleSubmit} className="item-form-new">
-            {/* Main Content Grid: Image + Details */}
             <div className="form-content-grid">
-              {/* LEFT COLUMN / DETAILS */}
               <div className="details-pane">
-                {/* 1. Primary Details Card */}
                 <div className="form-card">
                   <h3>Item Details</h3>
                   <div className="form-grid-2-col">
-                    {' '}
-                    {/* Two-column grid for Name & Price */}
                     <div className="form-group">
                       <label htmlFor="name">
                         Item Name <span className="required">*</span>
@@ -258,12 +262,9 @@ export default function EditListing() {
                   </div>
                 </div>
 
-                {/* 2. Categorization Card */}
                 <div className="form-card">
                   <h3>Categorization</h3>
                   <div className="form-grid-4-col">
-                    {' '}
-                    {/* Flexible four-column grid */}
                     <div className="form-group">
                       <label htmlFor="category">
                         Category <span className="required">*</span>
@@ -276,7 +277,6 @@ export default function EditListing() {
                         required
                       >
                         <option value="">Select Category</option>
-                        {/* ... (Your category options) ... */}
                         <option value="tops">Tops</option>
                         <option value="shirts">Shirts</option>
                         <option value="pants">Pants</option>
@@ -297,7 +297,6 @@ export default function EditListing() {
                         required
                       >
                         <option value="">Select Department</option>
-                        {/* ... (Your department options) ... */}
                         <option value="women's">Women&apos;s</option>
                         <option value="men's">Men&apos;s</option>
                         <option value="children">Children</option>
@@ -347,12 +346,9 @@ export default function EditListing() {
                   </div>
                 </div>
 
-                {/* 3. Inventory Card */}
                 <div className="form-card">
                   <h3>Inventory & Status</h3>
                   <div className="form-grid-2-col">
-                    {' '}
-                    {/* Two-column grid for Inventory */}
                     <div className="form-group">
                       <label htmlFor="quantity">
                         Quantity <span className="required">*</span>
@@ -362,10 +358,8 @@ export default function EditListing() {
                         id="quantity"
                         name="quantity"
                         value={item.quantity}
-                        onChange={handleItemChange}
+                        readOnly
                         placeholder="1"
-                        step="1"
-                        min="1"
                         required
                       />
                     </div>
@@ -385,12 +379,9 @@ export default function EditListing() {
                 </div>
               </div>
 
-              {/* RIGHT COLUMN / IMAGES */}
               <div className="image-pane">
                 <div className="form-card image-card">
                   <h3>Product Images</h3>
-
-                  {/* Image Carousel (Enhanced) */}
                   {item.images?.length > 0 ? (
                     <div className="image-carousel-new">
                       <img
@@ -422,8 +413,6 @@ export default function EditListing() {
                   ) : (
                     <div className="no-image">No current images.</div>
                   )}
-
-                  {/* Image Upload */}
                   <div className="form-group upload-group">
                     <label htmlFor="images">Replace All Images (Max 5)</label>
                     <input
@@ -444,7 +433,6 @@ export default function EditListing() {
               </div>
             </div>
 
-            {/* Submit Actions */}
             <div className="form-actions">
               <button type="submit">Update Listing</button>
               <button
@@ -453,6 +441,13 @@ export default function EditListing() {
                 onClick={() => navigate('/store/listings')}
               >
                 Cancel
+              </button>
+              <button
+                type="button"
+                className="delete-button"
+                onClick={handleDelete}
+              >
+                Delete Item
               </button>
             </div>
           </form>

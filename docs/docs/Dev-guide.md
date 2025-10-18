@@ -1,140 +1,337 @@
-# Muscle-Mommies Development Guide
+# ThriftFinder Development Guide
 
-This guide documents how to set up the development environment for **Muscle-Mommies**, explaining how to run the application locally. It covers backend API, frontend React app, Firebase, environment variables, and local workflows.
+This guide provides detailed instructions for setting up the development environment for **ThriftFinder**, a thrifting platform connecting shops and shoppers. It covers the backend API (Express, Firebase), frontend React app, Firebase configuration, environment variables, local development workflows, and documentation updates. The project uses Visual Studio Code (VSCode) as the recommended IDE, and this guide includes steps for installing missing dependencies (e.g., Leaflet for map features) and updating documentation in the `docs` folder.
 
----
+## 1. Project Overview
 
-## 1. Setting Up Locally
+- **Backend**: Express.js server with Firebase Admin SDK, Firestore, and Cloudinary for image uploads. Hosted on Render.com (`https://muscle-mommies-server.onrender.com`).
+- **Frontend**: React app with Firebase Authentication, hosted on Firebase Hosting.
+- **Database**: Firestore, storing collections like `users`, `stores`, `items`, `Reservations`, `Reviews`, `chats`, `messages`, `outfits`, and `externalImages`.
+- **Directory Structure**:
+  - `/server`: Backend code (`index.js`, `controllers/`, `routes/`, `models/`, `middleware/`).
+  - `/client`: React frontend (`src/pages/` for pages, organized by user roles and shared components).
+  - `/docs`: Documentation site (Docusaurus-based), with source files in `docs/docs/` and sidebar configuration in `docs/sidebars.js`.
+
+## 2. Setting Up Locally
 
 ### Prerequisites
 
-- Node.js (v16+ recommended)
-- npm or yarn
-- Firebase CLI: `npm install -g firebase-tools`
-- Access to Firebase project or create a new one
+- **Node.js**: Version 16+ (LTS recommended). Install from [nodejs.org](https://nodejs.org).
+- **npm**: Included with Node.js, or use `yarn` if preferred.
+- **Firebase CLI**: Install globally with `npm install -g firebase-tools`.
+- **VSCode**: Recommended IDE. Install from [code.visualstudio.com](https://code.visualstudio.com).
+- **Firebase Project**: Access to the ThriftFinder Firebase project or create a new one at [console.firebase.google.com](https://console.firebase.google.com).
+- **Cloudinary Account**: For image uploads. Obtain credentials from [cloudinary.com](https://cloudinary.com).
+- **Git**: For cloning the repository.
 
----
+### 2.1 Backend Setup
 
-### 1.1 Backend Setup
+1. **Clone the Repository**
 
-1. **Navigate to server folder**
+   ```bash
+   git clone <repository-url>
+   cd server
+   ```
 
-```bash
-cd server
-```
+2. **Install Dependencies**
 
-2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install
-```
+   If missing modules are detected (e.g., `express`, `firebase-admin`, `cloudinary`, `multer`), VSCode will prompt to install them. Alternatively, install manually:
 
-3. **Create `.env` file**
-   Add **only sensitive information**:
+   ```bash
+   npm install express firebase-admin cloudinary multer dotenv cors
+   ```
 
-```env
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<YOUR_KEY>\n-----END PRIVATE KEY-----\n"
-FIREBASE_CLIENT_EMAIL=your-service-account-email@project.iam.gserviceaccount.com
-```
+3. **Create `.env` File**
+   In the `/server` directory, create a `.env` file with sensitive credentials:
 
-**Why we chose these variables:**
+   ```env
+   FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<your-private-key>\n-----END PRIVATE KEY-----\n"
+   FIREBASE_CLIENT_EMAIL=<your-service-account-email@project.iam.gserviceaccount.com>
+   FIREBASE_PROJECT_ID=<your-project-id>
+   CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+   CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+   CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+   ALLOWED_ORIGINS=http://localhost:3001,https://muscle-mommies.web.app
+   PORT=3000
+   ```
 
-- `FIREBASE_PRIVATE_KEY` and `FIREBASE_CLIENT_EMAIL` are sensitive credentials required to authenticate the backend server with Firebase Admin SDK.
-- Other Firebase configuration fields are public and do not need to be secret, so we hardcode them for simplicity.
-- This separation ensures sensitive credentials are never pushed to GitHub.
+   **Why these variables?**
+   - `FIREBASE_PRIVATE_KEY`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PROJECT_ID`: Sensitive credentials for Firebase Admin SDK to access Firestore and Authentication.
+   - `CLOUDINARY_*`: Credentials for Cloudinary image uploads (used in `itemController.js` and `storeController.js`).
+   - `ALLOWED_ORIGINS`: Restricts CORS to trusted domains (local and production frontend).
+   - `PORT`: Specifies the backend port (default: 3000).
+   - Sensitive credentials are kept in `.env` to avoid exposure in GitHub.
 
-4. **Run the backend**
+4. **Run the Backend**
+   ```bash
+   node index.js
+   ```
 
-```bash
-node index.js
-```
+   - The server runs on `http://localhost:3000`.
+   - Test with `curl http://localhost:3000` (returns "Backend is live!") or use Postman to hit endpoints like `GET /api/stores`.
 
-- Backend should run on `http://localhost:3000` by default.
-- Test endpoints with Postman or curl (`GET /api/users`).
+### 2.2 Frontend Setup
 
----
+1. **Navigate to Client Folder**
 
-### 1.2 Frontend Setup
+   ```bash
+   cd client
+   ```
 
-1. **Navigate to client folder**
+2. **Install Dependencies**
 
-```bash
-cd client
-```
+   ```bash
+   npm install
+   ```
 
-2. **Install dependencies**
+   The frontend uses React and dependencies like `react-router-dom`, `firebase` (for Authentication), and `axios` (for API calls). If map features are used (e.g., store locations), install Leaflet:
 
-```bash
-npm install
-```
+   ```bash
+   npm install leaflet react-leaflet
+   ```
 
-3. **Create `.env` file**
-   Add Firebase public keys and API URL:
+   In VSCode, missing modules will trigger a prompt to install them. Ensure `node_modules` includes `leaflet` and `react-leaflet` for map components in pages like `StoreMap.js`.
 
-```env
-REACT_APP_FIREBASE_API_KEY=<your-public-key>
-REACT_APP_API_URL=http://localhost:3000
-```
+3. **Create `.env` File**
+   In the `/client` directory, create a `.env` file with public Firebase keys and API URL:
 
-**Why we chose these variables:**
+   ```env
+   REACT_APP_FIREBASE_API_KEY=<your-public-api-key>
+   REACT_APP_FIREBASE_AUTH_DOMAIN=<your-project-id>.firebaseapp.com
+   REACT_APP_FIREBASE_PROJECT_ID=<your-project-id>
+   REACT_APP_FIREBASE_STORAGE_BUCKET=<your-project-id>.appspot.com
+   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<your-messaging-sender-id>
+   REACT_APP_FIREBASE_APP_ID=<your-app-id>
+   REACT_APP_API_URL=http://localhost:3000
+   ```
 
-- `REACT_APP_FIREBASE_API_KEY` is safe to expose in the frontend and is required to initialize Firebase for client-side operations.
-- `REACT_APP_API_URL` allows switching between local and production backend easily.
+   **Why these variables?**
+   - `REACT_APP_FIREBASE_*`: Public Firebase configuration for client-side Authentication and Firestore access. Safe to expose in the frontend.
+   - `REACT_APP_API_URL`: Points to the backend (local or production). Set to `http://localhost:3000` for development.
+   - These variables are prefixed with `REACT_APP_` as per React’s convention.
 
-4. **Start the frontend**
+4. **Start the Frontend**
+   ```bash
+   npm start
+   ```
 
-```bash
-npm start
-```
+   - Runs on `http://localhost:3001`.
+   - The `package.json` proxy forwards API requests to `http://localhost:3000`, avoiding CORS issues.
 
-- Runs on `http://localhost:3001`.
-- Uses proxy to forward API calls to backend.
-
----
-
-### 1.3 Firebase Setup
+### 2.3 Firebase Setup
 
 1. **Login to Firebase CLI**
 
-```bash
-firebase login
-```
+   ```bash
+   firebase login
+   ```
 
-2. **Optional: Run local Firestore emulator**
+   Authenticate with your Google account linked to the Firebase project.
 
-```bash
-firebase emulators:start --only firestore
-```
+2. **Run Firestore Emulator (Optional)**
 
-- Useful for testing locally without touching production data.
+   ```bash
+   firebase emulators:start --only firestore
+   ```
 
----
+   - Starts a local Firestore emulator for testing without affecting production data.
+   - Update `REACT_APP_API_URL` to point to the emulator if needed (e.g., `http://localhost:8080`).
 
-## 2. Local Development Workflow
+3. **Verify Firebase Configuration**
+   - Ensure the Firebase project ID in `/server/.env` and `/client/.env` matches the Firebase project.
+   - Check `server/config/firebase.js` for correct Admin SDK initialization:
+     ```javascript
+     const admin = require('firebase-admin');
+     admin.initializeApp({
+       credential: admin.credential.cert({
+         private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+         client_email: process.env.FIREBASE_CLIENT_EMAIL,
+         project_id: process.env.FIREBASE_PROJECT_ID,
+       }),
+     });
+     ```
 
-1. Start backend: `node index.js`
-2. Start frontend: `npm start`
-3. Log in as different users to test role-based routing.
-4. Make API calls via the frontend or Postman.
-5. Debug errors using console logs and Firebase Emulator.
+### 2.4 Documentation Setup
 
----
+1. **Navigate to Docs Folder**
 
-## 3. Deployment Notes
+   ```bash
+   cd docs
+   ```
 
-- **Frontend:** Hosted on Firebase Hosting
-- **Backend:** Hosted on Railway
-- **Environment Variables / Secrets:**
-  - Backend: Add `FIREBASE_PRIVATE_KEY` and `FIREBASE_CLIENT_EMAIL` in Railway secrets.
-  - Frontend: Use Firebase Hosting environment or `.env.production`.
+2. **Install Dependencies**
 
-- **API URLs:** Frontend points to production backend (`https://muscle-mommies-production.up.railway.app`).
+   ```bash
+   npm install
+   ```
 
----
+   The documentation site uses Docusaurus. If missing modules are detected, VSCode will prompt to install them, or run the command above.
 
-## 4. Key Points
+3. **Run Documentation Site**
+   ```bash
+   npm start
+   ```
 
-- Backend and frontend run on separate ports locally.
-- Environment variables keep secrets out of GitHub.
-- Frontend uses proxy in development to avoid CORS issues.
-- Use Firebase Emulator for safe local testing (optional).
+   - Runs on `http://localhost:3002`.
+   - Serves documentation from `docs/docs/` with navigation defined in `docs/sidebars.js`.
+
+## 3. Project Structure
+
+### Backend (`/server`)
+
+- **Entry Point**: `index.js` (sets up Express, CORS, middleware, routes).
+- **Controllers**: `controllers/` (e.g., `itemController.js`, `storeController.js`) handle business logic.
+- **Routes**: `routes/` (e.g., `storeRoutes.js`, `authRoutes.js`) define API endpoints.
+- **Models**: `models/` (e.g., `itemModel.js`, `store.js`) define Firestore schemas.
+- **Middleware**: `middleware/authMiddleware.js` for Firebase JWT verification.
+- **Config**: `config/firebase.js` for Firebase initialization.
+- **Environment**: `.env` for sensitive credentials.
+
+### Frontend (`/client`)
+
+- **Source**: `src/`
+  - **Pages**: `src/pages/` organized by user roles and shared components:
+    - `auth/` (e.g., `Login.js`, `Signup.js`): Authentication pages.
+    - `customer/` (e.g., `BrowseItems.js`, `Outfits.js`): Customer-specific pages.
+    - `store/` (e.g., `StoreDashboard.js`, `AddItem.js`): Store owner pages.
+    - `admin/` (e.g., `AdminUsers.js`): Admin pages for user/store management.
+    - `shared/` (e.g., `StoreMap.js`, `ItemCard.js`): Reusable components.
+  - **Components**: `src/components/` for reusable UI elements.
+  - **Services**: `src/services/` for API calls (e.g., `api.js` using `axios`).
+- **Environment**: `.env` for Firebase and API configuration.
+- **Dependencies**: Includes `react`, `react-router-dom`, `firebase`, `axios`, `leaflet` (for maps), and `react-leaflet`.
+
+### Documentation (`/docs`)
+
+- **Docs**: `docs/docs/` contains Markdown files (e.g., `ThriftFinder_API_Documentation.md`, `ThriftFinder_Firestore_Database_Documentation.md`).
+- **Sidebar**: `docs/sidebars.js` defines navigation for the documentation site.
+- **Run**: `npm start` in `/docs` to serve the site locally.
+
+## 4. Local Development Workflow
+
+1. **Start Backend**
+
+   ```bash
+   cd server
+   node index.js
+   ```
+
+   - Ensure `http://localhost:3000` is running.
+
+2. **Start Frontend**
+
+   ```bash
+   cd client
+   npm start
+   ```
+
+   - Access at `http://localhost:3001`.
+   - Test role-based routing by logging in as `customer`, `storeOwner`, or `admin`.
+
+3. **Test API Endpoints**
+   - Use Postman or curl to test endpoints (e.g., `GET /api/stores`, `POST /api/stores/items`).
+   - Example:
+     ```bash
+     curl -H "Authorization: Bearer <firebase-jwt>" http://localhost:3000/api/my-store
+     ```
+
+4. **Debugging**
+   - Use VSCode’s debugger with breakpoints in `server/index.js` or `client/src`.
+   - Check console logs in browser (F12) or terminal.
+   - Use Firestore Emulator to inspect database changes without affecting production.
+
+5. **Update Documentation**
+   - Add or edit Markdown files in `docs/docs/`.
+   - Update `docs/sidebars.js` to include new documents in the navigation.
+   - Example for adding this guide:
+     ```javascript
+     module.exports = {
+       sidebar: [
+         'ThriftFinder_API_Documentation',
+         'ThriftFinder_Firestore_Database_Documentation',
+         'ThriftFinder_Development_Guide', // Add this line
+       ],
+     };
+     ```
+   - Run `npm start` in `/docs` to preview changes.
+
+## 5. Adding Dependencies
+
+If new features require additional modules (e.g., Leaflet for maps), install them:
+
+- **Backend**:
+
+  ```bash
+  cd server
+  npm install <package>
+  ```
+
+  Example: `npm install leaflet` (if server-side map processing is needed).
+
+- **Frontend**:
+
+  ```bash
+  cd client
+  npm install <package>
+  ```
+
+  Example: `npm install leaflet react-leaflet` for store location maps in `src/pages/shared/StoreMap.js`.
+
+- VSCode will detect missing modules and prompt to install them. Alternatively, check `package.json` for missing dependencies if errors occur.
+
+## 6. Deployment Notes
+
+- **Backend**: Hosted on Render.com (`https://muscle-mommies-server.onrender.com`).
+  - Add `.env` variables to Render’s environment settings:
+    - `FIREBASE_PRIVATE_KEY`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PROJECT_ID`
+    - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+    - `ALLOWED_ORIGINS`, `PORT`
+  - Deploy with `git push` to the Render-linked repository.
+
+- **Frontend**: Hosted on Firebase Hosting.
+  - Deploy with:
+    ```bash
+    cd client
+    npm run build
+    firebase deploy --only hosting
+    ```
+  - Add `.env.production` for production:
+    ```env
+    REACT_APP_API_URL=https://muscle-mommies-server.onrender.com
+    ```
+
+- **Documentation**: Hosted separately (e.g., Firebase Hosting or GitHub Pages).
+  - Deploy with:
+    ```bash
+    cd docs
+    npm run build
+    firebase deploy --only hosting
+    ```
+
+- **Note**: Render’s free tier introduces sleeping times, causing delays on initial requests. Consider paid plans for production.
+
+## 7. Key Points
+
+- **Environment Variables**: Keep sensitive credentials in `.env` files (not committed to Git). Use `REACT_APP_` prefix for client-side variables.
+- **CORS**: Backend restricts CORS to `ALLOWED_ORIGINS`. Update `.env` if adding new frontend domains.
+- **Firebase Emulator**: Use for safe local testing to avoid modifying production data.
+- **Documentation**: Update `docs/docs/` and `docs/sidebars.js` for new guides. Test locally with `npm start`.
+- **Role-Based Routing**: Frontend pages in `src/pages/` are organized by role (`customer`, `store`, `admin`, `auth`, `shared`). Test with different user roles.
+- **Dependencies**: Install missing modules (e.g., `leaflet`) as needed, especially for map features.
+
+## 8. Troubleshooting
+
+- **Backend Errors**:
+  - **"Invalid Firebase credentials"**: Verify `FIREBASE_*` variables in `server/.env`.
+  - **CORS issues**: Ensure `ALLOWED_ORIGINS` includes `http://localhost:3001`.
+- **Frontend Errors**:
+  - **"Module not found"**: Run `npm install` or install missing modules (e.g., `npm install leaflet`).
+  - **API 401 Unauthorized**: Check Firebase JWT in `Authorization` header.
+- **Firestore Emulator**:
+  - If queries fail, ensure emulator is running (`firebase emulators:start --only firestore`).
+- **Documentation**:
+  - If new docs don’t appear, verify `docs/sidebars.js` and restart `npm start`.

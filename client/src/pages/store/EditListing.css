@@ -1,0 +1,572 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') ;
+
+/* Targeted reset for elements likely causing spacing issues */
+.edit-listing h1,
+.edit-listing h3,
+.edit-listing p,
+.edit-listing button {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.edit-listing {
+  display: flex !important;
+  background-color: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.edit-listing .layout-container {
+  display: flex !important;
+  flex: 1 !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .content {
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.edit-listing .page-title {
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin: 0 0 48px 0 !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.edit-listing .error-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .error-box svg {
+  width: 24px !important;
+  height: 24px !important;
+  color: #000000 !important;
+  flex-shrink: 0 !important;
+}
+
+.edit-listing .error-box p {
+  margin: 0 !important;
+}
+
+.edit-listing .item-form-new {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.edit-listing .form-content-grid {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important;
+  gap: 24px !important;
+}
+
+.edit-listing .details-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.edit-listing .form-card {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .form-card h3 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin: 0 0 20px 0 !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #D8FF6C !important;
+}
+
+.edit-listing .form-grid-2-col {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.edit-listing .form-grid-4-col {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.edit-listing .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.edit-listing .form-group label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+}
+
+.edit-listing .required {
+  color: #FF9AE9 !important;
+}
+
+.edit-listing .input-field,
+.edit-listing .text-area,
+.edit-listing .select-menu,
+.edit-listing .file-upload {
+  padding: 14px 12px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.5 !important;
+  min-height: 48px !important;
+}
+
+.edit-listing .input-field:hover,
+.edit-listing .text-area:hover,
+.edit-listing .select-menu:hover,
+.edit-listing .file-upload:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .input-field:focus,
+.edit-listing .text-area:focus,
+.edit-listing .select-menu:focus,
+.edit-listing .file-upload:focus {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+}
+
+.edit-listing .text-area {
+  min-height: 120px !important;
+  resize: vertical !important;
+  border-radius: 12px !important;
+}
+
+.edit-listing .select-menu {
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 16px center !important;
+  cursor: pointer !important;
+}
+
+.edit-listing .price-input-container {
+  display: flex !important;
+  align-items: center !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+}
+
+.edit-listing .price-input-container:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .price-input-container:focus-within {
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+}
+
+.edit-listing .currency-label {
+  padding: 0 12px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+}
+
+.edit-listing .price-input {
+  flex-grow: 1 !important;
+  border: none !important;
+  padding: 14px 12px !important;
+  background-color: transparent !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  line-height: 1.5 !important;
+}
+
+.edit-listing .price-input:focus {
+  outline: none !important;
+}
+
+.edit-listing .image-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.edit-listing .image-card {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .image-carousel-new {
+  position: relative !important;
+  width: 100% !important;
+  height: 200px !important;
+  margin-bottom: 16px !important;
+}
+
+.edit-listing .image-carousel-new img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  border: 1px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .prev-btn,
+.edit-listing .next-btn {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  padding: 8px 12px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  background-color: #D8FF6C !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+}
+
+.edit-listing .prev-btn {
+  left: 10px !important;
+}
+
+.edit-listing .next-btn {
+  right: 10px !important;
+}
+
+.edit-listing .prev-btn:hover,
+.edit-listing .next-btn:hover {
+  transform: translateY(-52%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .prev-btn:active,
+.edit-listing .next-btn:active {
+  transform: translateY(-48%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+  background-color: #BCE84D !important;
+}
+
+.edit-listing .image-counter {
+  position: absolute !important;
+  bottom: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  padding: 4px 12px !important;
+  font-size: 12px !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+}
+
+.edit-listing .no-image {
+  width: 100% !important;
+  height: 200px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  margin-bottom: 16px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .upload-group {
+  display: block !important;
+  margin-bottom: 16px !important;
+}
+
+.edit-listing .upload-note {
+  font-size: 14px !important;
+  color: #000000 !important;
+  margin-top: 8px !important;
+}
+
+.edit-listing .form-actions {
+  display: flex !important;
+  gap: 16px !important;
+  justify-content: flex-start !important;
+  padding: 16px 0 !important;
+}
+
+.edit-listing .primary-button {
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  background-color: #FF9AE9 !important;
+  color: #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-width: 160px !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.edit-listing .primary-button:hover {
+  background-color: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .primary-button:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.edit-listing .cancel-button {
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-width: 160px !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.edit-listing .cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .cancel-button:active {
+  background-color: #F9F9F9 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+/* Sidebar Styling (assuming StoreSidebar is reused) */
+.edit-listing .sidebar-panel {
+  width: 250px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-right: 1px solid #000000 !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .sidebar-option {
+  color: #000000 !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.edit-listing .sidebar-option:hover {
+  background-color: #F9F9F9 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-listing .sidebar-option.active {
+  background-color: #D8FF6C !important;
+  color: #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.edit-listing .sidebar-option svg {
+  color: #000000 !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .edit-listing .form-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .edit-listing .content {
+    padding: 80px 12px 12px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-listing .layout-container {
+    flex-direction: column !important;
+    padding: 12px !important;
+  }
+
+  .edit-listing .sidebar-panel {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #000000 !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding: 10px !important;
+  }
+
+  .edit-listing .sidebar-option p {
+    display: none !important;
+  }
+
+  .edit-listing .sidebar-option {
+    padding: 8px !important;
+    font-size: 14px !important;
+  }
+
+  .edit-listing .content {
+    padding: 80px 12px 80px !important;
+  }
+
+  .edit-listing .page-title {
+    font-size: 36px !important;
+    text-align: center !important;
+  }
+
+  .edit-listing .form-card {
+    padding: 16px !important;
+  }
+
+  .edit-listing .form-card h3 {
+    font-size: 18px !important;
+  }
+
+  .edit-listing .form-grid-2-col,
+  .edit-listing .form-grid-4-col {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .edit-listing .input-field,
+  .edit-listing .text-area,
+  .edit-listing .select-menu,
+  .edit-listing .file-upload,
+  .edit-listing .price-input-container {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+    min-height: 44px !important;
+  }
+
+  .edit-listing .price-input,
+  .edit-listing .currency-label {
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+  }
+
+  .edit-listing .image-carousel-new {
+    height: 120px !important;
+  }
+
+  .edit-listing .no-image {
+    height: 120px !important;
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .edit-listing .upload-note {
+    font-size: 12px !important;
+  }
+
+  .edit-listing .form-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .edit-listing .primary-button,
+  .edit-listing .cancel-button {
+    padding: 12px !important;
+    font-size: 14px !important;
+    min-width: 100% !important;
+  }
+
+  .edit-listing .prev-btn,
+  .edit-listing .next-btn {
+    padding: 6px 10px !important;
+    font-size: 14px !important;
+  }
+
+  .edit-listing .image-counter {
+    font-size: 10px !important;
+    padding: 3px 10px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .edit-listing .layout-container {
+    padding: 32px !important;
+  }
+
+  .edit-listing .content {
+    padding: 80px 32px 32px !important;
+  }
+}

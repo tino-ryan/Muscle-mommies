@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') ;
+
+.reservations {
+  display: flex !important;
+  flex-direction: column !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  min-height: 100vh !important;
+  background-color: #EEEEEE !important;
+  margin-right: 20px !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+  cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto !important;
+  color: #000000 !important;
+  width: 100% !important; /* Ensure full width */
+}
+
+.reservations .layout-container {
+  display: flex !important;
+  flex: 1 !important;
+  width: 100% !important; /* Ensure layout container takes full width */
+}
+
+.reservations .content {
+  max-width: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 8px !important;
+  padding: 60px 20px 20px !important; /* Increased top padding to avoid navbar overlap */
+  color: #000000 !important;
+  width: 100% !important; /* Ensure content takes full width */
+}
+
+.reservations h2 {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-bottom: 20px !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.error {
+  background-color: rgba(248, 215, 218, 0.8) !important;
+  color: #000000 !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+  margin-bottom: 20px !important;
+}
+
+.reservations table {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+  background-color: #FFFFFF !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.reservations th,
+.reservations td {
+  padding: 12px !important;
+  text-align: left !important;
+  border: 1px solid #000000 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  color: #000000 !important;
+}
+
+.reservations th {
+  background-color: #D8FF6C !important; /* Green header */
+  font-weight: 600 !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+.reservations tr:hover {
+  background-color: #F9F9F9 !important;
+}
+
+.status-sold {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  align-items: flex-start !important;
+}
+
+.status-text {
+  font-weight: 500 !important;
+  color: #000000 !important;
+}
+
+.confirm-button {
+  background-color: #D8FF6C !important; /* Green button */
+  color: #000000 !important;
+  border: 1px solid #FF9AE9 !important; /* Pink border */
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  transition: background-color 0.2s, box-shadow 0.2s !important;
+}
+
+.confirm-button:hover {
+  background-color: #BCE84D !important; /* Darker green on hover */
+  color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
+}
+
+.confirm-button:disabled {
+  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
+  color: #000000 !important;
+  cursor: not-allowed !important;
+  border-color: #000000 !important;
+}
+
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000 !important;
+}
+
+.modal-content {
+  background: #FFFFFF !important;
+  padding: 24px !important;
+  border-radius: 8px !important;
+  border: 1px solid #000000 !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+}
+
+.modal-content h3 {
+  margin-bottom: 16px !important;
+  color: #000000 !important;
+}
+
+.modal-content p {
+  margin-bottom: 20px !important;
+  color: #000000 !important;
+  line-height: 1.5 !important;
+}
+
+.form-group {
+  margin-bottom: 20px !important;
+}
+
+.form-group label {
+  display: block !important;
+  margin-bottom: 8px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+}
+
+.star-rating {
+  display: flex !important;
+  gap: 4px !important;
+  margin-bottom: 8px !important;
+}
+
+.star {
+  background: none !important;
+  border: none !important;
+  font-size: 24px !important;
+  color: #ddd !important;
+  cursor: pointer !important;
+  transition: color 0.2s !important;
+}
+
+.star.filled {
+  color: #FF9AE9 !important; /* Pink stars when filled */
+}
+
+.star:hover {
+  color: #FF9AE9 !important; /* Pink on hover */
+}
+
+.form-group textarea {
+  width: 100% !important;
+  padding: 12px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 4px !important;
+  resize: vertical !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  font-size: 14px !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+.form-group textarea:focus {
+  outline: none !important;
+  border-color: #FF9AE9 !important;
+  box-shadow: 0 0 0 2px rgba(255, 154, 233, 0.25) !important;
+}
+
+.form-group small {
+  color: #000000 !important;
+  font-size: 12px !important;
+}
+
+.modal-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+}
+
+.cancel-button {
+  background-color: #6c757d !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.cancel-button:hover {
+  background-color: #545b62 !important;
+  color: #FFFFFF !important;
+}
+
+.cancel-button:disabled {
+  background-color: #adb5bd !important;
+  cursor: not-allowed !important;
+}
+
+.confirm-button {
+  background-color: #D8FF6C !important; /* Green button */
+  color: #000000 !important;
+  border: 1px solid #FF9AE9 !important; /* Pink border */
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s, box-shadow 0.2s !important;
+}
+
+.confirm-button:hover {
+  background-color: #BCE84D !important; /* Darker green on hover */
+  color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
+}
+
+.confirm-button:disabled {
+  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
+  color: #000000 !important;
+  cursor: not-allowed !important;
+  border-color: #000000 !important;
+}
+
+@media (max-width: 768px) {
+  .reservations {
+    margin-left: 0 !important;
+    padding: 10px !important;
+  }
+  .reservations .content {
+    padding: 60px 10px 10px !important; /* Adjusted padding for mobile */
+  }
+}

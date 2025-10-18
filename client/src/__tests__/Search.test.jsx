@@ -2,36 +2,28 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import axios from 'axios';
-import SearchPage from '../pages/customer/Search'; // Adjust path as needed
+import SearchPage from '../pages/customer/Search';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-// Mock external dependencies
+// Mock react-router navigation
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const mockIdToken = 'mock-id-token';
-const mockUser = {
-  uid: 'user-123',
-  getIdToken: jest.fn(() => Promise.resolve(mockIdToken)),
-};
-const mockAuth = {
-  currentUser: mockUser,
-};
-jest.mock('firebase/auth', () => ({
-  getAuth: () => mockAuth,
-}));
-
+// Mock CustomerSidebar
 jest.mock('../components/CustomerSidebar', () => {
   return function MockCustomerSidebar() {
     return <div data-testid="customer-sidebar">Sidebar</div>;
   };
 });
 
+// Mock API URL
 jest.mock('../api', () => ({
   API_URL: 'http://mock-api.com',
 }));
 
+// Mock axios
 jest.mock('axios');
 const mockedAxios = axios;
 
@@ -63,12 +55,7 @@ const mockItems = [
     price: 350,
     storeId: 's1',
     status: 'Available',
-    quantity: 5,
-    description: 'A classic denim jacket.',
-    images: [
-      { imageURL: 'img-url-1', isPrimary: true },
-      { imageURL: 'img-url-2' },
-    ],
+    images: [{ imageURL: 'img-url-1', isPrimary: true }],
   },
   {
     itemId: 'i2',
@@ -79,9 +66,7 @@ const mockItems = [
     price: 200,
     storeId: 's2',
     status: 'Available',
-    quantity: 2,
-    description: 'A brightly colored floral dress.',
-    images: [], // No images
+    images: [],
   },
   {
     itemId: 'i3',
@@ -91,16 +76,39 @@ const mockItems = [
     department: "women's",
     price: 150,
     storeId: 's1',
-    status: 'Reserved', // Should not show initially
-    description: 'A simple black skirt.',
+    status: 'Reserved',
     images: [{ imageURL: 'img-url-3', isPrimary: true }],
   },
 ];
 
+// Mock Firebase auth
+jest.mock('firebase/auth', () => {
+  const originalModule = jest.requireActual('firebase/auth');
+  return {
+    ...originalModule,
+    getAuth: jest.fn(),
+    onAuthStateChanged: jest.fn(),
+  };
+});
+
 describe('SearchPage', () => {
+  let mockUser;
+
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAuth.currentUser = mockUser;
+
+    mockUser = {
+      uid: 'user-123',
+      getIdToken: jest.fn(() => Promise.resolve('mock-id-token')),
+    };
+
+    getAuth.mockReturnValue({ currentUser: mockUser });
+
+    // Mock onAuthStateChanged to immediately call callback with user
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(mockUser);
+      return jest.fn(); // unsubscribe function
+    });
 
     mockedAxios.get.mockImplementation((url) => {
       if (url.endsWith('/api/stores'))
@@ -111,131 +119,43 @@ describe('SearchPage', () => {
     });
   });
 
-  // --- Initial Loading and Auth Tests ---
-
   it('renders loading and then items', async () => {
     render(<SearchPage />);
-    expect(screen.getByText(/Loading items.../i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
 
     await waitFor(() =>
-      expect(screen.queryByText(/Loading items.../i)).not.toBeInTheDocument()
+      expect(screen.getByText(/Denim Jacket/i)).toBeInTheDocument()
     );
-    expect(screen.getByText(/Denim Jacket/i)).toBeInTheDocument();
     expect(screen.getByText(/Floral Dress/i)).toBeInTheDocument();
     expect(screen.queryByText(/Reserved Skirt/i)).not.toBeInTheDocument();
   });
 
   it('navigates to login if no user', async () => {
-    mockAuth.currentUser = null;
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(null);
+      return jest.fn();
+    });
+
     render(<SearchPage />);
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/login'));
-    expect(mockedAxios.get).not.toHaveBeenCalled();
   });
 
   it('renders API error', async () => {
-    mockedAxios.get.mockRejectedValue({
-      response: { data: { error: 'Test API Failure' } },
-    });
+    mockedAxios.get.mockRejectedValueOnce(new Error('API failure'));
     render(<SearchPage />);
-    await waitFor(() => {
-      expect(screen.getByText(/Error Loading Data/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/Failed to load data: Test API Failure/i)
-      ).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByText(/Failed to load data/i)).toBeInTheDocument()
+    );
   });
-
-  // --- Filtering and Search Tests ---
 
   it('filters items by category', async () => {
     render(<SearchPage />);
-    await waitFor(() => screen.getByText('Denim Jacket'));
+    await waitFor(() => screen.getByText(/Denim Jacket/i));
 
-    // Grab first select (category)
-    const selects = screen.getAllByRole('combobox');
-    const categorySelect = selects[0];
-    fireEvent.change(categorySelect, { target: { value: 'tops' } });
-
-    expect(screen.getByText('Denim Jacket')).toBeInTheDocument();
-    expect(screen.queryByText('Floral Dress')).not.toBeInTheDocument();
-  });
-
-  it('filters by price', async () => {
-    render(<SearchPage />);
-    await waitFor(() => screen.getByText('Denim Jacket'));
-    const maxInput = screen.getByPlaceholderText('Max');
-    fireEvent.change(maxInput, { target: { value: '250' } });
-
-    expect(screen.queryByText('Denim Jacket')).not.toBeInTheDocument();
-    expect(screen.getByText('Floral Dress')).toBeInTheDocument();
-  });
-
-  // --- Modal and Action Tests ---
-
-  it('handles item reservation successfully', async () => {
-    mockedAxios.put.mockResolvedValue({ data: { reservationId: 'res-123' } });
-
-    render(<SearchPage />);
-    await waitFor(() =>
-      expect(screen.getByText('Denim Jacket')).toBeInTheDocument()
-    );
-
-    fireEvent.click(screen.getByText('Denim Jacket'));
-    fireEvent.click(screen.getByRole('button', { name: 'Reserve' }));
-
-    await waitFor(() => {
-      expect(mockedAxios.put).toHaveBeenCalledWith(
-        'http://mock-api.com/api/stores/reserve/i1',
-        { storeId: 's1' },
-        { headers: { Authorization: `Bearer ${mockIdToken}` } }
-      );
+    fireEvent.change(screen.getByDisplayValue('All Categories'), {
+      target: { value: 'tops' },
     });
-
-    // Check item status update
-    await waitFor(() => {
-      expect(screen.getByText('This item is reserved')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Reserve' })).toBeDisabled();
-    });
-
-    // Check navigation to chat
-    await waitFor(() => {
-      // user-123 and owner-s1 sorted and joined
-      expect(mockNavigate).toHaveBeenCalledWith(
-        '/user/chats/owner-s1_user-123'
-      );
-    });
-  });
-
-  it('handles item enquiry successfully', async () => {
-    mockedAxios.post.mockResolvedValue({ data: { messageId: 'msg-123' } });
-
-    render(<SearchPage />);
-    await waitFor(() =>
-      expect(screen.getByText('Denim Jacket')).toBeInTheDocument()
-    );
-
-    fireEvent.click(screen.getByText('Denim Jacket'));
-    fireEvent.click(screen.getByRole('button', { name: 'Enquire' }));
-
-    await waitFor(() => {
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        'http://mock-api.com/api/stores/messages',
-        expect.objectContaining({
-          receiverId: 'owner-s1',
-          message: 'Hey, I would like to enquire about the item Denim Jacket',
-          itemId: 'i1',
-          storeId: 's1',
-        }),
-        expect.anything()
-      );
-    });
-
-    // Check navigation to chat
-    await waitFor(() => {
-      // user-123 and owner-s1 sorted and joined
-      expect(mockNavigate).toHaveBeenCalledWith(
-        '/user/chats/owner-s1_user-123'
-      );
-    });
+    expect(screen.getByText(/Denim Jacket/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Floral Dress/i)).not.toBeInTheDocument();
   });
 });

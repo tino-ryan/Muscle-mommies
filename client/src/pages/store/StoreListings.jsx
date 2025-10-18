@@ -20,13 +20,13 @@ export default function StoreListings() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const auth = getAuth();
-  const [loading, setLoading] = useState(true); // Add this to your state declarations
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setLoading(true); // Set loading to true before fetching
+        setLoading(true);
         try {
           const token = await user.getIdToken();
           const storeResponse = await axios.get(`${API_URL}/api/my-store`, {
@@ -49,12 +49,12 @@ export default function StoreListings() {
             setError('Failed to fetch listings: ' + error.message);
           }
         } finally {
-          setLoading(false); // Set loading to false after fetch completes
+          setLoading(false);
         }
       } else {
         setError('Please log in.');
         navigate('/login');
-        setLoading(false); // Ensure loading is false if not authenticated
+        setLoading(false);
       }
     });
     return () => unsubscribe();
@@ -91,7 +91,7 @@ export default function StoreListings() {
   const handleItemClick = (item) => {
     setSelectedItem(item);
     setCurrentImageIndex(0);
-    console.log('Selected item images:', item.images); // Debug log
+    console.log('Selected item images:', item.images);
   };
 
   const closeModal = () => {
@@ -113,8 +113,24 @@ export default function StoreListings() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="store-listings-wrapper">
+        <div className="layout-grid">
+          <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
+          <div className="main-content">
+            <div className="loading-container">
+              <div className="spinner"></div>
+              <p>Loading listings...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   const uniqueDepartments = [
@@ -129,39 +145,24 @@ export default function StoreListings() {
   const uniqueStatuses = [
     ...new Set(items.map((item) => item.status).filter(Boolean)),
   ];
-  if (loading) {
-    return (
-      <div className="store-listings">
-        <div className="layout-container">
-          <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
-          <div className="content">
-            <div className="loading-container">
-              <div className="spinner"></div>
-              <p>Loading listings...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
   return (
-    <div className="store-listings">
-      <div className="layout-container">
+    <div className="store-listings-wrapper">
+      <div className="layout-grid">
         <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
-        <div className="content">
-          <div className="header">
-            <h1>Listings</h1>
-            <button onClick={() => navigate('/store/listings/add')}>
-              Add Listing
+        <div className="main-content">
+          <div className="header-section">
+            <h1 className="page-title">Store Listings</h1>
+            <button
+              className="add-listing-button"
+              onClick={() => navigate('/store/listings/add')}
+            >
+              + Add New Listing
             </button>
           </div>
 
-          <div className="search-filters">
-            <div className="search-bar">
+          <div className="search-filter-section">
+            <div className="search-bar-container">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -172,18 +173,18 @@ export default function StoreListings() {
                 <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
               </svg>
               <input
-                placeholder="Search listings"
+                placeholder="Search listings by name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
             <button
-              className="mobile-filter-toggle"
+              className="mobile-filter-toggle-button"
               onClick={() => setShowFilters(!showFilters)}
             >
               {showFilters ? 'Hide Filters ⬆' : 'Show Filters ⬇'}
             </button>
-            <div className={`filters ${showFilters ? 'visible' : ''}`}>
+            <div className={`filter-options ${showFilters ? 'visible' : ''}`}>
               <select
                 value={filters.department}
                 onChange={(e) =>
@@ -239,8 +240,10 @@ export default function StoreListings() {
             </div>
           </div>
 
-          <div className="table-container">
-            <p className="click-info">Click on an item to view more details.</p>
+          <div className="table-wrapper">
+            <p className="click-info-text">
+              Click on an item to view more details.
+            </p>
             {filteredItems.length === 0 ? (
               <p>No items match the filters.</p>
             ) : (
@@ -264,7 +267,7 @@ export default function StoreListings() {
                         {item.images?.[0]?.imageURL ? (
                           <img src={item.images[0].imageURL} alt={item.name} />
                         ) : (
-                          <div className="no-image">No Image</div>
+                          <div className="no-image-placeholder">No Image</div>
                         )}
                       </td>
                       <td>{item.name}</td>
@@ -273,7 +276,7 @@ export default function StoreListings() {
                       <td>{item.style || 'N/A'}</td>
                       <td>R{Number(item.price).toFixed(2)}</td>
                       <td>
-                        <span className="status-tag">{item.status}</span>
+                        <span className="status-label">{item.status}</span>
                       </td>
                       <td>
                         {item.status.toLowerCase() === 'sold' ? (
@@ -303,7 +306,7 @@ export default function StoreListings() {
       {selectedItem && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={closeModal}>
+            <button className="close-modal-button" onClick={closeModal}>
               ×
             </button>
             <div className="modal-body">
@@ -317,10 +320,10 @@ export default function StoreListings() {
                       />
                       {selectedItem.images.length > 1 && (
                         <div className="carousel-controls">
-                          <button className="prev-btn" onClick={prevImage}>
+                          <button className="prev-button" onClick={prevImage}>
                             ‹
                           </button>
-                          <button className="next-btn" onClick={nextImage}>
+                          <button className="next-button" onClick={nextImage}>
                             ›
                           </button>
                           <p className="image-counter">
@@ -335,16 +338,16 @@ export default function StoreListings() {
                   )}
                 </div>
 
-                <span className="price">
+                <span className="price-value">
                   R{Number(selectedItem.price).toFixed(2)}
                 </span>
                 {selectedItem.status.toLowerCase() === 'sold' ? (
-                  <button className="edit-button disabled" disabled>
+                  <button className="edit-listing-button disabled" disabled>
                     Edit Listing
                   </button>
                 ) : (
                   <button
-                    className="edit-button"
+                    className="edit-listing-button"
                     onClick={() =>
                       handleEdit(selectedItem.itemId, null, selectedItem.status)
                     }
@@ -353,10 +356,10 @@ export default function StoreListings() {
                   </button>
                 )}
               </div>
-              <div className="item-info">
+              <div className="item-details">
                 <h2>
                   {selectedItem.name}{' '}
-                  <span className="status-tag-large">
+                  <span className="status-label-large">
                     {selectedItem.status}
                   </span>
                 </h2>

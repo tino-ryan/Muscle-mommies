@@ -30,7 +30,8 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/', // Docs are served at root URL
-          editUrl: 'https://github.com/tino-ryan/Muscle-mommies/edit/gh-pages/',
+          editUrl:
+            'https://github.com/tino-ryan/Muscle-mommies/edit/main/docs/docs/',
         },
         blog: {
           showReadingTime: true,

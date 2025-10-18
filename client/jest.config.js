@@ -2,7 +2,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest', // This now handles both .js and .jsx
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -22,6 +22,12 @@ module.exports = {
       statements: 0,
     },
   },
+  coverageReporters: [
+    'text-summary', // short readable summary in terminal
+    'lcov', // full report for Codecov
+  ],
+  verbose: false, // hide per-test logging
+  silent: true, // hide console.log output
   moduleFileExtensions: ['js', 'jsx'],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx}',

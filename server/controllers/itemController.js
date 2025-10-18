@@ -57,6 +57,63 @@ const getItems = async (req, res) => {
   }
 };
 
+// Delete an item
+const deleteItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const userId = req.user.uid; // From authMiddleware
+
+    // Check if item exists
+    const itemDoc = await itemsRef.doc(itemId).get();
+    if (!itemDoc.exists) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    const itemData = itemDoc.data();
+
+    // Verify store ownership
+    const storeRef = db.collection('stores').where('ownerId', '==', userId);
+    const storeSnapshot = await storeRef.get();
+    if (storeSnapshot.empty) {
+      return res.status(403).json({ error: 'Unauthorized: Store not found' });
+    }
+    const storeId = storeSnapshot.docs[0].id;
+    if (itemData.storeId !== storeId) {
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized: You do not own this item' });
+    }
+
+    // Delete associated images from itemImages collection and Cloudinary
+    const imageDocs = await db
+      .collection('itemImages')
+      .where('itemId', '==', itemId)
+      .get();
+    for (const imageDoc of imageDocs.docs) {
+      const imageData = imageDoc.data();
+      try {
+        // Extract public_id from Cloudinary URL
+        const publicId = imageData.imageURL.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`muscle-mommies/${publicId}`);
+        await db.collection('itemImages').doc(imageDoc.id).delete();
+      } catch (uploadError) {
+        console.error('Cloudinary deletion error:', uploadError);
+        // Continue deletion even if image deletion fails to ensure item is removed
+      }
+    }
+
+    // Delete the item from Firestore
+    await itemsRef.doc(itemId).delete();
+
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting item:', err);
+    res
+      .status(500)
+      .json({ error: 'Failed to delete item', details: err.message });
+  }
+};
+
 // GET items by store
 const getItemsByStore = async (req, res) => {
   try {
@@ -261,4 +318,5 @@ module.exports = {
   getItemsByStore,
   searchItems,
   createItem,
+  deleteItem,
 };

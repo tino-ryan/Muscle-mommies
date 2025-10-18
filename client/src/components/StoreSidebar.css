@@ -1,193 +1,232 @@
-/* Custom properties for smooth transitions */
-:root {
-  --transition-smooth: all 0.3s ease-in-out;
-}
+/* Remove global imports if already included elsewhere (e.g., in theme.css or index.css) */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 
-/* Top Navigation Bar Styles */
+/* Scope all styles to .store-sidebar or other component-specific classes */
 .store-sidebar {
   width: 100%;
-  background-color: var(--bg-primary);
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 8px 20px;
+  background-color: #000000;
   position: fixed;
   top: 0;
   left: 0;
-  height: 60px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  transition: var(--transition-smooth);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  color: #FFFFFF;
 }
 
-/* Store name styling */
-.store-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--color-text);
+.store-sidebar .sidebar-logo {
+  height: 40px;
+  width: auto;
 }
 
-/* Navigation container */
-.sidebar-nav {
+.store-sidebar .nav-content {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
-/* Theme-specific styles */
-.store-sidebar[data-theme="theme-default"] {
-  --sidebar-bg: #994d51;
-  --sidebar-text: #ffffff;
-}
-
-.store-sidebar[data-theme="theme-vintage"] {
-  --sidebar-bg: #8b5e3c;
-  --sidebar-text: #faf0e6;
-}
-
-.store-sidebar[data-theme="theme-fashion"] {
-  --sidebar-bg: #1c2526;
-  --sidebar-text: #f0f0f0;
-}
-
-.store-sidebar[data-theme="theme-streetwear"] {
-  --sidebar-bg: #ff00ff;
-  --sidebar-text: #3f0071;
-}
-
-.store-sidebar[data-theme="theme-sporty"] {
-  --sidebar-bg: #2a38ea;
-  --sidebar-text: #eeeeee;
-}
-
-/* Apply theme-specific background and text colors */
-.store-sidebar {
-  background-color: var(--sidebar-bg);
-  color: var(--sidebar-text);
-}
-
-/* Sidebar item styles */
-.sidebar-item {
+.store-sidebar .nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 6px;
+  gap: 6px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  font-size: 14px;
-  font-weight: 600;
-  font-family: var(--font-family);
-  color: var(--sidebar-text);
-  text-decoration: none;
-  user-select: none;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  text-transform: uppercase;
+  position: relative;
 }
 
-/* Hover and active states */
-.sidebar-item:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
+.store-sidebar .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-item.active {
-  background-color: rgba(0, 0, 0, 0.3);
+.store-sidebar .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #D8FF6C;
+  border-radius: 9999px;
 }
 
-/* Theme-specific hover and active states */
-.store-sidebar[data-theme="theme-default"] .sidebar-item:hover,
-.store-sidebar[data-theme="theme-default"] .sidebar-item.active {
-  background-color: #7d3c40;
-}
-
-.store-sidebar[data-theme="theme-vintage"] .sidebar-item:hover,
-.store-sidebar[data-theme="theme-vintage"] .sidebar-item.active {
-  background-color: #6b4a2e;
-}
-
-.store-sidebar[data-theme="theme-fashion"] .sidebar-item:hover,
-.store-sidebar[data-theme="theme-fashion"] .sidebar-item.active {
-  background-color: #2e3b3e;
-}
-
-.store-sidebar[data-theme="theme-streetwear"] .sidebar-item:hover,
-.store-sidebar[data-theme="theme-streetwear"] .sidebar-item.active {
-  background-color: #cc00cc;
-}
-
-.store-sidebar[data-theme="theme-sporty"] .sidebar-item:hover,
-.store-sidebar[data-theme="theme-sporty"] .sidebar-item.active {
-  background-color: #1e2db4;
-}
-
-/* Icon wrapper */
-.icon-wrapper {
+/* Hamburger Header */
+.hamburger-header {
+  display: none;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  padding: 1rem 1.5rem;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
 }
 
-.icon-wrapper svg {
-  width: 20px;
-  height: 20px;
-  transition: var(--transition-smooth);
-  color: var(--sidebar-text);
+.hamburger-header .hamburger-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.sidebar-item:hover .icon-wrapper svg {
-  transform: scale(1.1);
+.hamburger-header .hamburger-logo {
+  height: 35px;
+  width: auto;
 }
 
-/* Label styling */
-.label {
-  margin: 0;
+.hamburger-header .menu-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+.hamburger-header .menu-icon span {
+  background: #FFFFFF;
+  height: 3px;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.hamburger-header .menu-icon.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-header .menu-icon.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-header .menu-icon.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Bottom Mobile Nav */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #000000;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  z-index: 1000;
+  border-top: 2px solid #000000;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.mobile-nav .mobile-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+}
+
+.mobile-nav .mobile-logo {
+  height: 35px;
+  width: auto;
+}
+
+.mobile-nav .nav-items-container {
+  display: flex;
+  justify-content: space-around;
+  width: 35%;
+}
+
+.mobile-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 18px;
+}
+
+/* Slide Menu */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+.menu-overlay .menu-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #000000;
+  padding: 20px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+}
+
+.menu-overlay.active .menu-content {
+  transform: translateX(0);
+}
+
+.menu-overlay .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+/* Responsive Rules */
+@media (max-width: 900px) {
   .store-sidebar {
-    padding: 8px 10px;
-    height: 50px;
+    display: none;
   }
-
-  .store-name {
-    font-size: 1.2rem;
-  }
-
-  .sidebar-item {
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-
-  .icon-wrapper svg {
-    width: 18px;
-    height: 18px;
+  .hamburger-header {
+    display: flex;
   }
 }
 
 @media (max-width: 600px) {
-  .store-sidebar {
-    flex-direction: column;
-    height: auto;
-    padding: 8px;
-    top: 0;
-    align-items: flex-start;
+  .hamburger-header {
+    display: none;
   }
-
-  .sidebar-nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+  .mobile-nav {
+    display: flex;
   }
+}
 
-  .sidebar-item {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .store-name {
-    font-size: 1rem;
-    margin-bottom: 8px;
+@media (min-width: 1080px) {
+  .hamburger-header,
+  .mobile-nav,
+  .menu-overlay {
+    display: none;
   }
 }

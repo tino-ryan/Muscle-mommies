@@ -1,4 +1,3 @@
-// src/pages/customer/Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
@@ -7,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import './home.css';
 import axios from 'axios';
-
+import { auth } from '../../firebase'; // Import Firebase auth
 import { API_URL } from '../../api';
 
 // --- LEAFLET ICON CONFIG ---
@@ -46,19 +45,42 @@ const FitBounds = ({ userLocation, stores }) => {
   return null;
 };
 
+// --- SKELETON LOADING COMPONENT ---
+const StoreCardSkeleton = () => (
+  <div className="store-card skeleton">
+    <div className="store-card-image-wrapper skeleton-image"></div>
+    <div className="store-info">
+      <div className="skeleton-text skeleton-title"></div>
+      <div className="skeleton-text skeleton-address"></div>
+      <div className="skeleton-text skeleton-description"></div>
+      <div className="skeleton-text skeleton-distance"></div>
+    </div>
+  </div>
+);
+
 // --- MAIN PAGE COMPONENT ---
 export default function ThriftFinderHome() {
   const [stores, setStores] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [maxDistance, setMaxDistance] = useState(10);
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [loadingStores, setLoadingStores] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        navigate('/login');
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   // Fetch stores
   useEffect(() => {
     const fetchStores = async () => {
       try {
+        setLoadingStores(true);
         const response = await axios.get(`${API_URL}/api/stores`);
         const data = response.data;
         const formatted = data
@@ -89,6 +111,8 @@ export default function ThriftFinderHome() {
         setError(
           'Failed to load stores: ' + (err.response?.data?.error || err.message)
         );
+      } finally {
+        setLoadingStores(false);
       }
     };
     fetchStores();
@@ -111,7 +135,7 @@ export default function ThriftFinderHome() {
   // Live location tracking
   useEffect(() => {
     if (!navigator.geolocation) {
-      setUserLocation({ lat: -26.2041, lng: 28.0473 }); // Fallback to Johannesburg CBD
+      setUserLocation({ lat: -26.2041, lng: 28.0473 });
       setLoadingLocation(false);
       return;
     }
@@ -127,7 +151,7 @@ export default function ThriftFinderHome() {
       },
       (error) => {
         console.error('Geolocation error:', error);
-        setUserLocation({ lat: -26.2041, lng: 28.0473 }); // Fallback to Johannesburg CBD
+        setUserLocation({ lat: -26.2041, lng: 28.0473 });
         setLoadingLocation(false);
         setError('Unable to access location');
       },
@@ -159,73 +183,14 @@ export default function ThriftFinderHome() {
       <CustomerSidebar activePage="home" />
       <div className="layout-container">
         <div className="content">
-          <div
-            className="header"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px',
-            }}
-          >
+          <div className="header">
             <h1>Find Nearby Thrift Stores</h1>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button
-                onClick={() => navigate('/customer/closet')}
-                style={{
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  border: '2px solid #000',
-                  backgroundColor: '#d3f44b',
-                  color: '#1b0e0e',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#994d51';
-                  e.currentTarget.style.color = '#fff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d3f44b';
-                  e.currentTarget.style.color = '#1b0e0e';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Closet
+            <div className="nav-buttons">
+              <button className="button pink">
+                <a onClick={() => navigate('/customer/closet')}>Closet</a>
               </button>
-
-              <button
-                onClick={() => navigate('/badges')}
-                style={{
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderRadius: '8px',
-                  border: '2px solid #000',
-                  backgroundColor: '#d3f44b',
-                  color: '#1b0e0e',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#994d51';
-                  e.currentTarget.style.color = '#fff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d3f44b';
-                  e.currentTarget.style.color = '#1b0e0e';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Badges
+              <button className="button green">
+                <a onClick={() => navigate('/badges')}>Badges</a>
               </button>
             </div>
           </div>
@@ -305,33 +270,50 @@ export default function ThriftFinderHome() {
               </MapContainer>
             </div>
             <div className="store-list">
-              {sortedStores.map((store) => (
-                <div
-                  key={store.id}
-                  className="store-card"
-                  onClick={() => navigate(`/store/${store.id}`)}
-                >
-                  <div className="store-card-image-wrapper">
-                    <img
-                      src={store.profileImageURL}
-                      alt={store.name}
-                      className="store-image"
-                    />
-                  </div>
-                  <div className="store-info">
-                    <h3>{store.name}</h3>
-                    <p className="address">{store.address}</p>
-                    <p className="description">{store.description}</p>
-                    <span className="distance">
-                      {store.distance === null
-                        ? 'Distance: —'
-                        : `${store.distance.toFixed(1)} km away`}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {sortedStores.length === 0 && (
+              {loadingStores ? (
+                // Show 3 skeleton cards while loading
+                <>
+                  <StoreCardSkeleton />
+                  <StoreCardSkeleton />
+                  <StoreCardSkeleton />
+                </>
+              ) : sortedStores.length === 0 ? (
                 <p className="no-stores">No stores match the current filter.</p>
+              ) : (
+                sortedStores.map((store) => (
+                  <div
+                    key={store.id}
+                    className="store-card"
+                    onClick={() => navigate(`/store/${store.id}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') navigate(`/store/${store.id}`);
+                    }}
+                  >
+                    <div className="store-card-image-wrapper">
+                      <img
+                        src={store.profileImageURL}
+                        alt={store.name}
+                        className="store-image"
+                      />
+                    </div>
+                    <div className="store-info">
+                      <h3>{store.name}</h3>
+                      <div className="address">
+                        <i className="fas fa-map-marker-alt"></i>{' '}
+                        {store.address}
+                      </div>
+                      <p className="description">{store.description}</p>
+                      <div className="distance">
+                        <i className="fas fa-location-arrow"></i>{' '}
+                        {store.distance === null
+                          ? 'Distance: —'
+                          : `${store.distance.toFixed(1)} km away`}
+                      </div>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </div>

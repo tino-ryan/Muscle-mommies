@@ -1,3 +1,4 @@
+// __tests__/StoreSidebar.test.jsx
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -8,6 +9,12 @@ const mockedNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedNavigate,
+}));
+
+// Mock firebase/auth
+jest.mock('firebase/auth', () => ({
+  getAuth: jest.fn(() => ({})), // return a dummy auth object
+  signOut: jest.fn(() => Promise.resolve()), // mock signOut to avoid real call
 }));
 
 describe('StoreSidebar', () => {

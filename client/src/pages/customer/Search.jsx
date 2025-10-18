@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import './search.css';
@@ -20,14 +20,12 @@ export default function SearchPage() {
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const getPrimaryImageURL = (item) => {
-    if (!item.images || item.images.length === 0) {
-      return 'https://via.placeholder.com/200x200?text=No+Image';
-    }
-    const primaryImage =
-      item.images.find((img) => img.isPrimary) || item.images[0];
-    return primaryImage.imageURL;
+    return item.images && item.images.length > 0
+      ? (item.images.find((img) => img.isPrimary) || item.images[0]).imageURL
+      : 'https://via.placeholder.com/400x400?text=No+Image';
   };
 
   const getStoreName = (storeId) => {
@@ -35,48 +33,45 @@ export default function SearchPage() {
     return store ? store.storeName : 'Unknown Store';
   };
 
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? (selectedItem.images?.length || 1) - 1 : prev - 1
-    );
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === (selectedItem.images?.length || 1) - 1 ? 0 : prev + 1
-    );
-  };
-
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const token = await auth.currentUser?.getIdToken();
-        const [storesResponse, itemsResponse] = await Promise.all([
-          axios.get(`${API_URL}/api/stores`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${API_URL}/api/items`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-        setStores(storesResponse.data);
-        setItems(itemsResponse.data);
-      } catch (err) {
-        setError(
-          'Failed to load data: ' + (err.response?.data?.error || err.message)
-        );
-        console.error('Error loading data:', err);
-      } finally {
-        setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, load data
+        const loadData = async () => {
+          setLoading(true);
+          try {
+            const token = await user.getIdToken();
+            const [storesResponse, itemsResponse] = await Promise.all([
+              axios.get(`${API_URL}/api/stores`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              axios.get(`${API_URL}/api/items`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+            ]);
+            setStores(storesResponse.data);
+            setItems(itemsResponse.data);
+          } catch (err) {
+            setError(
+              'Failed to load data: ' +
+                (err.response?.data?.error || err.message)
+            );
+            console.error('Error loading data:', err);
+          } finally {
+            setLoading(false);
+            setAuthChecked(true);
+          }
+        };
+        loadData();
+      } else {
+        // No user is signed in, redirect to login
+        setAuthChecked(true);
+        navigate('/login');
       }
-    };
+    });
 
-    if (auth.currentUser) {
-      loadData();
-    } else {
-      navigate('/login');
-    }
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, [navigate, auth]);
 
   const handleReserve = async (itemId) => {
@@ -163,42 +158,74 @@ export default function SearchPage() {
     }
   };
 
-  const filteredStores = stores.filter((store) =>
-    store.storeName?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const categoryOptions = useMemo(() => {
+    return Array.from(
+      new Set(items.map((item) => item.category).filter(Boolean))
+    ).sort();
+  }, [items]);
 
-  const filteredItems = items.filter((item) => {
-    const matchesSearch = searchTerm
-      ? item.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      : true;
-    const matchesCategory = categoryFilter
-      ? item.category === categoryFilter
-      : true;
-    const matchesStyle = styleFilter ? item.style === styleFilter : true;
-    const matchesDepartment = departmentFilter
-      ? item.department === departmentFilter
-      : true;
-    const matchesPrice =
-      item.price >= priceRange[0] && item.price <= priceRange[1];
-    const matchesStatus = item.status === 'Available';
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesStyle &&
-      matchesDepartment &&
-      matchesPrice &&
-      matchesStatus
+  const styleOptions = useMemo(() => {
+    return Array.from(
+      new Set(items.map((item) => item.style).filter(Boolean))
+    ).sort();
+  }, [items]);
+
+  const departmentOptions = useMemo(() => {
+    return Array.from(
+      new Set(items.map((item) => item.department).filter(Boolean))
+    ).sort();
+  }, [items]);
+
+  const filteredStores = useMemo(() => {
+    return stores.filter((store) =>
+      store.storeName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  });
+  }, [stores, searchTerm]);
 
-  if (loading) {
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      const matchesSearch = searchTerm
+        ? item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          getStoreName(item.storeId)
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+        : true;
+      const matchesCategory = categoryFilter
+        ? item.category === categoryFilter
+        : true;
+      const matchesStyle = styleFilter ? item.style === styleFilter : true;
+      const matchesDepartment = departmentFilter
+        ? item.department === departmentFilter
+        : true;
+      const matchesPrice =
+        item.price >= priceRange[0] && item.price <= priceRange[1];
+      const matchesStatus = item.status === 'Available';
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesStyle &&
+        matchesDepartment &&
+        matchesPrice &&
+        matchesStatus
+      );
+    });
+  }, [
+    items,
+    searchTerm,
+    categoryFilter,
+    styleFilter,
+    departmentFilter,
+    priceRange,
+  ]);
+
+  if (!authChecked || loading) {
     return (
       <div className="search-home">
         <CustomerSidebar activePage="search" />
         <div className="content-container">
           <div className="loading-container">
             <div className="spinner"></div>
-            <div className="loading-text">Loading items...</div>
+            <div className="loading-text">Loading...</div>
           </div>
         </div>
       </div>
@@ -240,13 +267,11 @@ export default function SearchPage() {
               className="filter-select"
             >
               <option value="">All Categories</option>
-              <option value="tops">Tops</option>
-              <option value="shirts">Shirts</option>
-              <option value="pants">Pants</option>
-              <option value="dresses">Dresses</option>
-              <option value="footwear">Footwear</option>
-              <option value="skirts">Skirts</option>
-              <option value="accessories">Accessories</option>
+              {categoryOptions.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
             <select
               value={styleFilter}
@@ -254,11 +279,11 @@ export default function SearchPage() {
               className="filter-select"
             >
               <option value="">All Styles</option>
-              <option value="y2k">Y2K</option>
-              <option value="grunge">Grunge</option>
-              <option value="streetwear">Streetwear</option>
-              <option value="vintage">Vintage</option>
-              <option value="basics">Basics</option>
+              {styleOptions.map((style) => (
+                <option key={style} value={style}>
+                  {style}
+                </option>
+              ))}
             </select>
             <select
               value={departmentFilter}
@@ -266,10 +291,11 @@ export default function SearchPage() {
               className="filter-select"
             >
               <option value="">All Departments</option>
-              <option value="women's">Women&apos;s</option>
-              <option value="men's">Men&apos;s</option>
-              <option value="children">Children</option>
-              <option value="unisex">Unisex</option>
+              {departmentOptions.map((department) => (
+                <option key={department} value={department}>
+                  {department}
+                </option>
+              ))}
             </select>
             <div className="price-range">
               <span className="price-label">Price Range:</span>
@@ -277,20 +303,28 @@ export default function SearchPage() {
                 type="number"
                 value={priceRange[0]}
                 onChange={(e) =>
-                  setPriceRange([Number(e.target.value), priceRange[1]])
+                  setPriceRange([
+                    Math.max(0, Number(e.target.value)),
+                    priceRange[1],
+                  ])
                 }
                 className="price-input"
                 placeholder="Min"
+                min="0"
               />
               <span className="price-separator">to</span>
               <input
                 type="number"
                 value={priceRange[1]}
                 onChange={(e) =>
-                  setPriceRange([priceRange[0], Number(e.target.value)])
+                  setPriceRange([
+                    priceRange[0],
+                    Math.max(priceRange[0] + 1, Number(e.target.value)),
+                  ])
                 }
                 className="price-input"
                 placeholder="Max"
+                min={priceRange[0] + 1}
               />
             </div>
           </div>
@@ -315,7 +349,7 @@ export default function SearchPage() {
                     <img
                       src={
                         store.profileImageURL ||
-                        'https://via.placeholder.com/80x80?text=Store'
+                        'https://via.placeholder.com/150x150?text=Store'
                       }
                       alt={store.storeName}
                       className="store-image"
@@ -330,72 +364,82 @@ export default function SearchPage() {
               </div>
             </div>
           )}
-          {filteredItems.length > 0 && (
-            <div className="items-section">
-              <h2 className="section-title">
-                <span className="section-icon"></span>
-                {searchTerm || categoryFilter || styleFilter || departmentFilter
-                  ? 'Search Results'
-                  : 'All Items'}
-                <span className="results-count">
-                  ({filteredItems.length} items)
-                </span>
-              </h2>
-              <div className="items-grid">
-                {filteredItems.map((item) => (
-                  <div
-                    key={item.itemId || item.id}
-                    className="item-card"
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    <div className="item-image-container">
-                      <img
-                        src={getPrimaryImageURL(item)}
-                        alt={item.name}
-                        className="item-image"
-                        onError={(e) => {
-                          e.target.src =
-                            'https://via.placeholder.com/200x200?text=No+Image';
-                        }}
-                      />
-                    </div>
-                    <div className="item-content">
-                      <h3 className="item-title">{item.name}</h3>
-                      <span className="store-name">
-                        {getStoreName(item.storeId)}
-                      </span>
-                      <div className="item-tags">
-                        <span className="item-tag category">
-                          {item.category}
-                        </span>
-                        <span className="item-tag style">{item.style}</span>
-                      </div>
-                      <div className="item-details">
-                        <span className="item-department">
-                          {item.department}
-                        </span>
-                        {item.size && (
-                          <span className="item-size">{item.size}</span>
-                        )}
-                      </div>
-                      <div className="item-footer">
-                        <p className="item-price">R{item.price}</p>
-                        {item.quantity && (
-                          <span className="item-quantity">
-                            {item.quantity} left
-                          </span>
-                        )}
-                      </div>
+          <div className="items-section">
+            <h2 className="section-title">
+              <span className="section-icon">🛍️</span>
+              {searchTerm || categoryFilter || styleFilter || departmentFilter
+                ? 'Search Results'
+                : 'All Items'}
+              <span className="results-count">
+                ({filteredItems.length} items)
+              </span>
+            </h2>
+            <div className="items-grid">
+              {filteredItems.map((item) => (
+                <div
+                  key={item.itemId || item.id}
+                  className="item-card"
+                  onClick={() => setSelectedItem(item)}
+                  tabIndex={0}
+                  data-item-id={item.itemId || item.id}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setSelectedItem(item);
+                    }
+                  }}
+                >
+                  {item.status === 'Reserved' && (
+                    <span className="reserved-badge">Reserved</span>
+                  )}
+                  <div className="item-image-container">
+                    <img
+                      src={getPrimaryImageURL(item)}
+                      alt={item.name || 'Item'}
+                      className="item-image"
+                      onError={(e) => {
+                        e.target.src =
+                          'https://via.placeholder.com/400x400?text=No+Image';
+                      }}
+                    />
+                    <div className="item-overlay">
+                      <span className="view-details">View Details</span>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="item-content">
+                    <h3 className="item-title">
+                      {item.name || 'Unnamed Item'}
+                    </h3>
+                    <span className="store-name">
+                      {getStoreName(item.storeId)}
+                    </span>
+                    <div className="item-meta">
+                      {item.category && (
+                        <span className="item-category">{item.category}</span>
+                      )}
+                      {item.size && (
+                        <span className="item-size">{item.size}</span>
+                      )}
+                    </div>
+                    <div className="item-footer">
+                      <span className="item-price">R{item.price || 'N/A'}</span>
+                      {item.style && (
+                        <span className="item-style">{item.style}</span>
+                      )}
+                      <button
+                        className="go-to-store-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/store/${item.storeId}`);
+                        }}
+                      >
+                        Go to Store
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-          {!loading &&
-            (searchTerm || categoryFilter || styleFilter || departmentFilter) &&
-            filteredStores.length === 0 &&
-            filteredItems.length === 0 && (
+            {filteredItems.length === 0 && (
               <div className="no-results">
                 <div className="no-results-icon">🔍</div>
                 <h3 className="no-results-title">No results found</h3>
@@ -417,123 +461,126 @@ export default function SearchPage() {
                 </button>
               </div>
             )}
-          {!searchTerm &&
-            !categoryFilter &&
-            !styleFilter &&
-            !departmentFilter &&
-            items.length === 0 &&
-            !loading && (
-              <div className="no-items">
-                <div className="no-items-icon">📦</div>
-                <h3 className="no-items-title">No items available</h3>
-                <p className="no-items-message">
-                  Check back later for new thrift finds!
-                </p>
-              </div>
-            )}
+          </div>
           {selectedItem && (
             <div className="modal-overlay">
-              <div className="modal-content">
+              <div className="item-modal">
                 <button
                   onClick={() => setSelectedItem(null)}
-                  className="modal-close"
+                  className="modal-close-button"
                 >
-                  &times;
+                  <i className="fas fa-times"></i>
                 </button>
                 <div className="modal-body">
-                  <div className="modal-image-carousel">
+                  <div className="modal-gallery">
                     <img
                       src={
                         selectedItem.images && selectedItem.images.length > 0
                           ? selectedItem.images[currentImageIndex]?.imageURL ||
-                            'https://via.placeholder.com/250x250?text=No+Image'
-                          : 'https://via.placeholder.com/250x250?text=No+Image'
+                            'https://via.placeholder.com/600x600?text=No+Image'
+                          : 'https://via.placeholder.com/600x600?text=No+Image'
                       }
-                      alt={selectedItem.name}
+                      alt={selectedItem.name || 'Item'}
                       className="modal-image"
                       onError={(e) => {
                         e.target.src =
-                          'https://via.placeholder.com/250x250?text=No+Image';
+                          'https://via.placeholder.com/600x600?text=No+Image';
                       }}
                     />
                     {selectedItem.images && selectedItem.images.length > 1 && (
-                      <>
-                        <button
-                          onClick={handlePrevImage}
-                          className="carousel-button prev"
-                        >
-                          &larr;
-                        </button>
-                        <button
-                          onClick={handleNextImage}
-                          className="carousel-button next"
-                        >
-                          &rarr;
-                        </button>
-                      </>
+                      <div className="thumbnails">
+                        {selectedItem.images.map((img, idx) => (
+                          <img
+                            key={idx}
+                            src={img.imageURL}
+                            alt={`${selectedItem.name} ${idx + 1}`}
+                            className={`thumbnail ${idx === currentImageIndex ? 'thumbnail-active' : ''}`}
+                            onClick={() => setCurrentImageIndex(idx)}
+                            onError={(e) => {
+                              e.target.src =
+                                'https://via.placeholder.com/100x100?text=No+Image';
+                            }}
+                          />
+                        ))}
+                      </div>
                     )}
                   </div>
                   <div className="modal-info">
-                    <h2 className="modal-title">{selectedItem.name}</h2>
-                    <div className="modal-description-section">
-                      <h3 className="modal-section-title">Description</h3>
+                    <h2 className="modal-title">
+                      {selectedItem.name || 'Unnamed Item'}
+                    </h2>
+                    <p className="modal-price">
+                      R{selectedItem.price || 'N/A'}
+                    </p>
+                    {selectedItem.status === 'Reserved' && (
+                      <div className="reserved-banner">
+                        <i className="fas fa-lock"></i> This item is currently
+                        reserved
+                      </div>
+                    )}
+                    <div className="modal-section">
+                      <h4 className="modal-section-title">Description</h4>
                       <p className="modal-description">
                         {selectedItem.description || 'No description available'}
                       </p>
                     </div>
-                    <div className="modal-details-section">
-                      <h3 className="modal-section-title">Details</h3>
-                      <div className="modal-details-grid">
-                        <div className="modal-detail-item">
-                          <span className="material-symbols-outlined modal-icon">
-                            label
-                          </span>
-                          <span>Category: {selectedItem.category}</span>
+                    <div className="modal-section">
+                      <h4 className="modal-section-title">Details</h4>
+                      <div className="details-grid">
+                        <div className="detail-item">
+                          <span className="detail-label">Category:</span>
+                          <span>{selectedItem.category || 'N/A'}</span>
                         </div>
-                        <div className="modal-detail-item">
-                          <span className="material-symbols-outlined modal-icon">
-                            straighten
-                          </span>
-                          <span>Size: {selectedItem.size || 'N/A'}</span>
+                        <div className="detail-item">
+                          <span className="detail-label">Size:</span>
+                          <span>{selectedItem.size || 'N/A'}</span>
                         </div>
-                        <div className="modal-detail-item">
-                          <span className="material-symbols-outlined modal-icon">
-                            group
-                          </span>
-                          <span>Department: {selectedItem.department}</span>
+                        <div className="detail-item">
+                          <span className="detail-label">Style:</span>
+                          <span>{selectedItem.style || 'N/A'}</span>
                         </div>
-                        <div className="modal-detail-item">
-                          <span className="material-symbols-outlined modal-icon">
-                            currency_exchange
-                          </span>
-                          <span>Price: R{selectedItem.price}</span>
+                        <div className="detail-item">
+                          <span className="detail-label">Department:</span>
+                          <span>{selectedItem.department || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
                     {selectedItem.measurements && (
-                      <div className="modal-measurements-section">
-                        <h3 className="modal-section-title">Measurements</h3>
-                        <p className="modal-measurements">
+                      <div className="modal-section">
+                        <h4 className="modal-section-title">Measurements</h4>
+                        <p className="modal-description">
                           {selectedItem.measurements}
                         </p>
                       </div>
-                    )}
-                    {selectedItem.status === 'Reserved' && (
-                      <p className="modal-reserved">This item is reserved</p>
                     )}
                     <div className="modal-actions">
                       <button
                         onClick={() => handleReserve(selectedItem.itemId)}
                         disabled={selectedItem.status === 'Reserved'}
-                        className="modal-button reserve"
+                        className={`action-button primary-button ${
+                          selectedItem.status === 'Reserved'
+                            ? 'disabled-button'
+                            : ''
+                        }`}
                       >
-                        Reserve
+                        <i className="fas fa-shopping-cart"></i>
+                        {selectedItem.status === 'Reserved'
+                          ? 'Reserved'
+                          : 'Reserve Item'}
                       </button>
                       <button
                         onClick={() => handleEnquire(selectedItem.itemId)}
-                        className="modal-button enquire"
+                        className="action-button secondary-button"
                       >
-                        Enquire
+                        <i className="fas fa-envelope"></i> Send Enquiry
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/store/${selectedItem.storeId}`)
+                        }
+                        className="action-button secondary-button"
+                      >
+                        <i className="fas fa-store"></i> Go to Store
                       </button>
                     </div>
                   </div>

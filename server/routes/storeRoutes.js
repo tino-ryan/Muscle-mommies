@@ -24,8 +24,8 @@ const {
   getUserById,
   customerReserve,
   getItemById,
-  updateReservationStatus, // Updated name
-  createReview, // New function
+  updateReservationStatus,
+  createReview,
   confirmReservation,
   getStoreReviews,
 } = require('../controllers/storeController');
@@ -34,6 +34,7 @@ const {
   getItemsByStore,
   searchItems,
   createItem,
+  deleteItem, // Added new controller function
 } = require('../controllers/itemController');
 const authMiddleware = require('../middleware/authMiddleware');
 const multer = require('multer');
@@ -68,22 +69,22 @@ router.post('/stores/messages', authMiddleware, sendMessage);
 router.put('/stores/chats/:chatId/read', authMiddleware, markAsRead);
 router.post('/stores/chats', authMiddleware, createChat);
 
-// Review routes (NEW)
+// Review routes
 router.post('/stores/reviews', authMiddleware, createReview);
 router.get('/stores/:storeId/reviews', getStoreReviews);
 
-// Reservation routes (moved up: specific before parametric)
+// Reservation routes
 router.get('/stores/reservations', authMiddleware, getReservations);
 router.post('/stores/reservations', authMiddleware, createReservation);
 router.put(
   '/stores/reservations/:reservationId',
   authMiddleware,
-  updateReservationStatus // Updated function name
+  updateReservationStatus
 );
 router.put(
   '/stores/reservations/:reservationId/confirm',
   authMiddleware,
-  confirmReservation // NEW endpoint
+  confirmReservation
 );
 
 // Store routes
@@ -126,8 +127,9 @@ router.put(
   upload.array('images', 5),
   updateItem
 );
+router.delete('/stores/items/:itemId', authMiddleware, deleteItem); // Added new DELETE route
 
-// Outfit routes (NEW)
+// Outfit routes
 router.post('/outfits', authMiddleware, saveOutfit);
 router.get('/outfits', authMiddleware, getUserOutfits);
 

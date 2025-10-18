@@ -36,6 +36,8 @@ import {
   FaEye,
   FaHeart,
   FaEnvelope,
+  FaChartLine,
+  FaLightbulb,
 } from 'react-icons/fa';
 import './StoreHome.css';
 
@@ -124,7 +126,6 @@ export default function StoreOwnerDashboard() {
         const storeDoc = storeSnap.docs[0];
         const storeData = storeDoc.data();
         setStore({ id: storeDoc.id, ...storeData });
-        console.log('Store Data:', { id: storeDoc.id, ...storeData });
         const storeId = storeDoc.id;
 
         // Fetch items for price lookup
@@ -135,7 +136,6 @@ export default function StoreOwnerDashboard() {
         itemsSnap.forEach((doc) => {
           const data = doc.data();
           itemPriceMap[doc.id] = parseFloat(data.price) || 0;
-          console.log('Item Doc:', doc.id, { price: data.price }); // Debug item price
         });
 
         // Reservations (for stats and revenue)
@@ -159,7 +159,6 @@ export default function StoreOwnerDashboard() {
 
         reservationsSnap.forEach((doc) => {
           const data = doc.data();
-          console.log('Reservation Doc:', doc.id, data); // Debug reservation data
           const status = data.status || 'Pending';
           reservationStats[status.toLowerCase()] =
             (reservationStats[status.toLowerCase()] || 0) + 1;
@@ -253,23 +252,15 @@ export default function StoreOwnerDashboard() {
     return () => unsubscribe();
   }, [auth, navigate]);
 
-  // Phase 2: Fetch additional stats (unchanged)
+  // Phase 2: Fetch additional stats
   useEffect(() => {
     if (!store || !store.id || priorityLoading) {
-      console.log(
-        'Skipping additional stats fetch: store or store.id is undefined or priorityLoading is true',
-        {
-          store,
-          priorityLoading,
-        }
-      );
       return;
     }
 
     const fetchAdditionalStats = async () => {
       try {
         const storeId = store.id;
-        console.log('Fetching additional stats for storeId:', storeId);
 
         // Fetch reviews
         const reviewsResponse = await axios.get(
@@ -442,15 +433,60 @@ export default function StoreOwnerDashboard() {
   return (
     <div className="dashboard-container fade-in">
       <StoreSidebar currentPage="Home" onLogout={handleLogout} />
-      {/* Top Bar */}
 
-      <div className="topbar-content">
-        <div className="topbar-left">
-          <FaStore size={32} />
-          <div className="store-info">
-            <h1>{store?.storeName || 'Your Store'}</h1>
-            <p>Store Dashboard - Click cards to explore</p>
+      {/* Enhanced Header */}
+      <div className="dashboard-header">
+        <div className="header-main">
+          <div className="header-left">
+            <div className="store-icon-wrapper">
+              <FaStore size={36} />
+            </div>
+            <div className="store-info">
+              <h1 className="store-name">{store?.storeName || 'Your Store'}</h1>
+              <p className="store-subtitle">Store Owner Dashboard</p>
+            </div>
           </div>
+          <div className="header-right">
+            <div className="quick-stat-pill">
+              <FaChartLine size={16} />
+              <span>R {stats.totalRevenue.toLocaleString()}</span>
+              <span className="pill-label">Revenue</span>
+            </div>
+            <div className="quick-stat-pill">
+              <FaBox size={16} />
+              <span>{stats.totalItems}</span>
+              <span className="pill-label">Items</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Help Banner */}
+        <div className="help-banner">
+          <div className="help-banner-icon">
+            <FaLightbulb size={20} />
+          </div>
+          <div className="help-banner-content">
+            <h3 className="help-banner-title">Welcome to Your Dashboard</h3>
+            <p className="help-banner-text">
+              Click any card below to view detailed information and quick
+              actions. Use the navbar to navigate between different sections of
+              your store management.
+              {stats.unreadChats > 0 && (
+                <span className="help-highlight">
+                  {' '}
+                  You have {stats.unreadChats} unread message
+                  {stats.unreadChats !== 1 ? 's' : ''} waiting!
+                </span>
+              )}
+            </p>
+          </div>
+          {/*<button
+            className="help-banner-button"
+            onClick={() => navigate('/store/help')}
+          >
+            <FaInfoCircle size={14} />
+            Learn More
+          </button>*/}
         </div>
       </div>
 
@@ -667,7 +703,7 @@ export default function StoreOwnerDashboard() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate('/store/listings');
+                            navigate('/store/listings/add');
                           }}
                           className="card-btn-primary"
                         >
@@ -1164,15 +1200,58 @@ export default function StoreOwnerDashboard() {
           </div>
         )}
 
-        {/* Footer Help Text */}
+        {/* Enhanced Footer Help Section */}
         {!priorityLoading && (
-          <div className="footer-tip fade-in">
-            <div className="footer-tip-title">
-              💡 Tip: Click on any card above to see more details and quick
-              actions
-            </div>
-            <div className="footer-tip-subtitle">
-              Navigate your store efficiently with our interactive dashboard
+          <div className="footer-section fade-in">
+            <div className="footer-help-card">
+              <div className="footer-help-icon">
+                <FaLightbulb size={24} />
+              </div>
+              <div className="footer-help-content">
+                <h3 className="footer-help-title">Dashboard Tips & Tricks</h3>
+                <div className="footer-help-grid">
+                  <div className="footer-help-item">
+                    <div className="help-item-number">1</div>
+                    <div>
+                      <h4>Interactive Cards</h4>
+                      <p>
+                        Click on top cards above to flip it and see detailed
+                        information with quick actions
+                      </p>
+                    </div>
+                  </div>
+                  <div className="footer-help-item">
+                    <div className="help-item-number">2</div>
+                    <div>
+                      <h4>Real-time Updates</h4>
+                      <p>
+                        Your dashboard updates automatically when new messages
+                        or reservations arrive
+                      </p>
+                    </div>
+                  </div>
+                  <div className="footer-help-item">
+                    <div className="help-item-number">3</div>
+                    <div>
+                      <h4>Quick Navigation</h4>
+                      <p>
+                        Use the nav bar menu to quickly access different
+                        sections of your store management
+                      </p>
+                    </div>
+                  </div>
+                  <div className="footer-help-item">
+                    <div className="help-item-number">4</div>
+                    <div>
+                      <h4>Priority Actions</h4>
+                      <p>
+                        Cards with &quot;Action Required&quot; badges need your
+                        attention
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -32,6 +32,7 @@ const sidebars = {
     'Bug-tracker',
     'TestingDocumentation',
     'API_internal',
+    'user-guide',
   ],
 };
 

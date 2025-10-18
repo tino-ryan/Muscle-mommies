@@ -1,25 +1,25 @@
-# 📦 Third-Party Libraries Used in ThriftFinder
+# Third-Party Libraries Used in ThriftFinder
 
 This project integrates several third-party libraries and APIs to power features like maps, cloud storage, authentication, styling, and gamification.
 
 ---
 
-## 🗺️ Leaflet
+## Leaflet
 
 **Leaflet** is an open-source JavaScript library for interactive maps.
 
 - **Docs**: https://leafletjs.com/reference.html
 
-### 🔧 How Leaflet is Used
+### How Leaflet is Used
 
-### 🔧 How Leaflet is Used
+### How Leaflet is Used
 
 - **MapContainer** and **TileLayer** (from `react-leaflet`) display OpenStreetMap-based maps.
 - **Markers/Popups** show store locations with rich info.
 - **Custom Icons** distinguish user vs store markers.
 - **FitBounds** adjusts zoom to show both user and nearby stores.
 
-### ✅ Why Leaflet?
+### Why Leaflet?
 
 - No API key/billing required (unlike Google Maps).
 - Lightweight and responsive.
@@ -28,14 +28,14 @@ This project integrates several third-party libraries and APIs to power features
 
 ---
 
-## ☁️ Cloudinary
+## Cloudinary
 
 **Cloudinary** is used to handle image uploads for store profiles, items, and external photo journals.
 
 - Images are uploaded using `cloudinary.v2.uploader.upload_stream`.
 - URLs are stored in Firestore (`profileImageURL`, `images`, `externalImages`).
 
-### 📦 Benefits
+### Benefits
 
 - Automatic image optimization and CDN delivery.
 - Organized into folders like `muscle-mommies/` and `muscle-mommies/external`.
@@ -52,7 +52,7 @@ This project integrates several third-party libraries and APIs to power features
 - **Admin SDK** provides full backend access for controllers.
 - **Functions** like timestamps and auth verification streamline logic.
 
-### 🔐 Firebase Admin SDK
+### Firebase Admin SDK
 
 Used in `storeController.js`, `externalController.js`, and more for:
 
@@ -61,7 +61,7 @@ Used in `storeController.js`, `externalController.js`, and more for:
 
 ---
 
-## 🎨 Google Fonts & Icons
+## Google Fonts & Icons
 
 - Fonts are imported via Google Fonts in the `index.html` or `tailwind.config.js`.
 - Icons (e.g., material icons) are pulled from Google Icons or custom React icon libraries.
@@ -73,26 +73,26 @@ Used in `storeController.js`, `externalController.js`, and more for:
 
 ---
 
-## 🎯 Campus Quest API (Custom External Integration)
+## Campus Quest API (Custom External Integration)
 
-### 🔗 API Purpose
+### API Purpose
 
 We integrated with the **Campus Quest** team's custom API to power **badge and reward systems** on the `Badges` page.
 
-### 🏆 How It Works
+### How It Works
 
 - When users visit thrift stores or complete related tasks, they earn **badges** or **rewards**.
 - This info is fetched from the Campus Quest API and displayed dynamically.
 - Helps gamify the app and drive engagement.
 
-### 🔐 Authentication
+### Authentication
 
 - A secure API key (or token) is used to communicate with the Campus Quest backend.
 - Only read access is required for badge data.
 
 ---
 
-## ✅ Summary
+## Summary
 
 | Tool             | Purpose                                 |
 | ---------------- | --------------------------------------- |

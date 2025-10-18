@@ -16,7 +16,7 @@ export default function AddListing() {
     style: '',
     size: '',
     price: '',
-    quantity: '',
+    quantity: '1',
     status: 'Available',
   });
   const [images, setImages] = useState([]);
@@ -24,7 +24,7 @@ export default function AddListing() {
   const auth = getAuth();
   const navigate = useNavigate();
 
-  // --- EFFECT HOOKS ---
+  // EFFECT HOOKS
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -35,10 +35,8 @@ export default function AddListing() {
     return () => unsubscribe();
   }, [auth, navigate]);
 
-  // --- HANDLER FUNCTIONS ---
-
+  // HANDLER FUNCTIONS
   const handleLogout = async () => {
-    // DEFINITION FOR LINE 72
     try {
       await signOut(auth);
       navigate('/login');
@@ -48,10 +46,7 @@ export default function AddListing() {
   };
 
   const handleItemChange = (e) => {
-    // DEFINITIONS FOR LINES 106, 122, 137, 155, 176, 192, 217, 237, 250
     const { name, value } = e.target;
-
-    // Input validation for price and quantity (as you had it)
     if (name === 'price' && value !== '' && parseFloat(value) <= 0) {
       setError('Price must be a positive number.');
       return;
@@ -60,17 +55,15 @@ export default function AddListing() {
       setError('Quantity must be a positive whole number.');
       return;
     }
-    setError(''); // Clear error if input looks valid
+    setError('');
     setItem((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
-    // DEFINITION FOR LINE 280
     setImages([...e.target.files]);
   };
 
   const handleSubmit = async (e) => {
-    // DEFINITION FOR LINE 89
     e.preventDefault();
     setError('');
 
@@ -101,8 +94,6 @@ export default function AddListing() {
     try {
       const token = await auth.currentUser?.getIdToken();
       const formData = new FormData();
-
-      // Append item data
       formData.append('name', item.name);
       formData.append('description', item.description);
       formData.append('category', item.category);
@@ -112,8 +103,6 @@ export default function AddListing() {
       formData.append('status', item.status);
       formData.append('department', item.department);
       formData.append('style', item.style);
-
-      // Append images
       images.forEach((image) => formData.append('images', image));
 
       await axios.post(`${API_URL}/api/stores/items`, formData, {
@@ -133,19 +122,15 @@ export default function AddListing() {
     }
   };
 
-  // --- JSX (RETURN STATEMENT) ---
   return (
     <div className="add-listing">
       <div className="layout-container">
-        {/* Assume StoreSidebar is handled and styled to collapse/hide on mobile */}
         <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
-
         <div className="content">
           <h1 className="page-title">Add New Listing</h1>
 
           {error && (
             <div className="error-box">
-              {/* Error Icon SVG */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -161,9 +146,7 @@ export default function AddListing() {
 
           <form onSubmit={handleSubmit} className="item-form-new">
             <div className="form-content-grid">
-              {/* LEFT COLUMN / DETAILS */}
               <div className="details-pane">
-                {/* 1. Primary Details Card */}
                 <div className="form-card">
                   <h3>Item Details</h3>
                   <div className="form-grid-2-col">
@@ -176,8 +159,9 @@ export default function AddListing() {
                         id="name"
                         name="name"
                         value={item.name}
-                        onChange={handleItemChange} // Referenced
+                        onChange={handleItemChange}
                         placeholder="Enter item name"
+                        className="input-field"
                         required
                       />
                     </div>
@@ -192,8 +176,9 @@ export default function AddListing() {
                           id="price"
                           name="price"
                           value={item.price}
-                          onChange={handleItemChange} // Referenced
+                          onChange={handleItemChange}
                           placeholder="0.00"
+                          className="price-input"
                           step="0.01"
                           min="0.01"
                           required
@@ -207,13 +192,13 @@ export default function AddListing() {
                       id="description"
                       name="description"
                       value={item.description}
-                      onChange={handleItemChange} // Referenced
+                      onChange={handleItemChange}
                       placeholder="Describe the item in detail"
+                      className="text-area"
                     />
                   </div>
                 </div>
 
-                {/* 2. Categorization Card */}
                 <div className="form-card">
                   <h3>Categorization</h3>
                   <div className="form-grid-4-col">
@@ -226,9 +211,9 @@ export default function AddListing() {
                         name="category"
                         value={item.category}
                         onChange={handleItemChange}
+                        className="select-menu"
                         required
                       >
-                        {' '}
                         <option value="">Select Category</option>
                         <option value="tops">Tops</option>
                         <option value="shirts">Shirts</option>
@@ -248,9 +233,9 @@ export default function AddListing() {
                         name="department"
                         value={item.department}
                         onChange={handleItemChange}
+                        className="select-menu"
                         required
                       >
-                        {' '}
                         <option value="">Select Department</option>
                         <option value="women's">Women&apos;s</option>
                         <option value="men's">Men&apos;s</option>
@@ -265,8 +250,8 @@ export default function AddListing() {
                         name="size"
                         value={item.size}
                         onChange={handleItemChange}
+                        className="select-menu"
                       >
-                        {' '}
                         <option value="">Select Size (optional)</option>
                         <option value="XS">XS</option>
                         <option value="S">S</option>
@@ -289,14 +274,14 @@ export default function AddListing() {
                         id="style"
                         name="style"
                         value={item.style}
-                        onChange={handleItemChange} // Referenced
+                        onChange={handleItemChange}
                         placeholder="e.g., y2k, grunge"
+                        className="input-field"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* 3. Inventory Card */}
                 <div className="form-card">
                   <h3>Inventory & Status</h3>
                   <div className="form-grid-2-col">
@@ -309,10 +294,8 @@ export default function AddListing() {
                         id="quantity"
                         name="quantity"
                         value={item.quantity}
-                        onChange={handleItemChange} // Referenced
+                        readOnly
                         placeholder="1"
-                        step="1"
-                        min="1"
                         required
                       />
                     </div>
@@ -323,8 +306,8 @@ export default function AddListing() {
                         name="status"
                         value={item.status}
                         onChange={handleItemChange}
+                        className="select-menu"
                       >
-                        {' '}
                         <option value="Available">Available</option>
                         <option value="Out of Stock">Out of Stock</option>
                       </select>
@@ -333,18 +316,14 @@ export default function AddListing() {
                 </div>
               </div>
 
-              {/* RIGHT COLUMN / IMAGES */}
               <div className="image-pane">
                 <div className="form-card image-card">
                   <h3>
                     Product Images <span className="required">*</span>
                   </h3>
-
                   <div className="no-image-placeholder">
                     <p>Upload 1-5 images below.</p>
                   </div>
-
-                  {/* Image Upload */}
                   <div className="form-group upload-group">
                     <label htmlFor="images">Upload Images (Max 5)</label>
                     <input
@@ -352,7 +331,8 @@ export default function AddListing() {
                       id="images"
                       accept="image/*"
                       multiple
-                      onChange={handleImageChange} // Referenced
+                      onChange={handleImageChange}
+                      className="file-upload"
                       required
                     />
                     {images.length > 0 && (
@@ -365,7 +345,6 @@ export default function AddListing() {
               </div>
             </div>
 
-            {/* Submit Actions */}
             <div className="form-actions">
               <button type="submit" className="primary-button">
                 Add Item
