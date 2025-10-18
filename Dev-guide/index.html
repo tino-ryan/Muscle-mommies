@@ -3,132 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
-<title data-rh="true">Muscle-Mommies Development Guide | Muscle Mommies Docs</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://tino-ryan.github.io/Muscle-mommies/Dev-guide"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Muscle-Mommies Development Guide | Muscle Mommies Docs"><meta data-rh="true" name="description" content="This guide documents how to set up the development environment for Muscle-Mommies, explaining how to run the application locally. It covers backend API, frontend React app, Firebase, environment variables, and local workflows."><meta data-rh="true" property="og:description" content="This guide documents how to set up the development environment for Muscle-Mommies, explaining how to run the application locally. It covers backend API, frontend React app, Firebase, environment variables, and local workflows."><link data-rh="true" rel="icon" href="/Muscle-mommies/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide" hreflang="en"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Muscle-Mommies Development Guide","item":"https://tino-ryan.github.io/Muscle-mommies/Dev-guide"}]}</script><link rel="alternate" type="application/rss+xml" href="/Muscle-mommies/blog/rss.xml" title="Muscle Mommies Docs RSS Feed">
+<title data-rh="true">ThriftFinder Development Guide | Muscle Mommies Docs</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://tino-ryan.github.io/Muscle-mommies/Dev-guide"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="ThriftFinder Development Guide | Muscle Mommies Docs"><meta data-rh="true" name="description" content="This guide provides detailed instructions for setting up the development environment for ThriftFinder, a thrifting platform connecting shops and shoppers. It covers the backend API (Express, Firebase), frontend React app, Firebase configuration, environment variables, local development workflows, and documentation updates. The project uses Visual Studio Code (VSCode) as the recommended IDE, and this guide includes steps for installing missing dependencies (e.g., Leaflet for map features) and updating documentation in the docs folder."><meta data-rh="true" property="og:description" content="This guide provides detailed instructions for setting up the development environment for ThriftFinder, a thrifting platform connecting shops and shoppers. It covers the backend API (Express, Firebase), frontend React app, Firebase configuration, environment variables, local development workflows, and documentation updates. The project uses Visual Studio Code (VSCode) as the recommended IDE, and this guide includes steps for installing missing dependencies (e.g., Leaflet for map features) and updating documentation in the docs folder."><link data-rh="true" rel="icon" href="/Muscle-mommies/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide" hreflang="en"><link data-rh="true" rel="alternate" href="https://tino-ryan.github.io/Muscle-mommies/Dev-guide" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ThriftFinder Development Guide","item":"https://tino-ryan.github.io/Muscle-mommies/Dev-guide"}]}</script><link rel="alternate" type="application/rss+xml" href="/Muscle-mommies/blog/rss.xml" title="Muscle Mommies Docs RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/Muscle-mommies/blog/atom.xml" title="Muscle Mommies Docs Atom Feed"><link rel="stylesheet" href="/Muscle-mommies/assets/css/styles.4769c4bb.css">
-<script src="/Muscle-mommies/assets/js/runtime~main.58d5743b.js" defer="defer"></script>
-<script src="/Muscle-mommies/assets/js/main.35d558f5.js" defer="defer"></script>
+<script src="/Muscle-mommies/assets/js/runtime~main.cb0dba6f.js" defer="defer"></script>
+<script src="/Muscle-mommies/assets/js/main.7d246d7a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
 <symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
 </defs></svg>
-<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Muscle-mommies/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Muscle-mommies/"><div class="navbar__logo"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Muscle Mommies</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Muscle-mommies/intro">Docs</a><a class="navbar__item navbar__link" href="/Muscle-mommies/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/intro">INTRO</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/tech-stack">Tech Stack</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Version-control">Version Control</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/git-methodology">Git Methodology</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Muscle-mommies/Dev-guide">Muscle-Mommies Development Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Structure">structure</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/initial-design">Initial Design</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/development-plan">Development Plan</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/project-management">Project Management Methodology &amp; Setup</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/third-party-code">📦 Third-Party Libraries Used in ThriftFinder</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/api_documentation">ThriftFinder External API Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/database_documentation">ThriftFinder Firestore Database Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/user-feedback">User Feedback &amp; Methodology</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Bug-tracker">Sprint 2 Bug Tracking</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/TestingDocumentation">Testing Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/API_internal">ThriftFinder API Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Security-Audit">Security Audit of the NPM Supply Chain Attacks: A Software Design Case Study</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Muscle-mommies/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Muscle-Mommies Development Guide</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Muscle-Mommies Development Guide</h1></header>
-<p>This guide documents how to set up the development environment for <strong>Muscle-Mommies</strong>, explaining how to run the application locally. It covers backend API, frontend React app, Firebase, environment variables, and local workflows.</p>
-<hr>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1-setting-up-locally">1. Setting Up Locally<a href="#1-setting-up-locally" class="hash-link" aria-label="Direct link to 1. Setting Up Locally" title="Direct link to 1. Setting Up Locally">​</a></h2>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Muscle-mommies/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Muscle-mommies/"><div class="navbar__logo"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Muscle-mommies/img/logo.svg" alt="Muscle Mommies Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Muscle Mommies</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Muscle-mommies/intro">Docs</a><a class="navbar__item navbar__link" href="/Muscle-mommies/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/intro">INTRO</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/tech-stack">Tech Stack</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Version-control">Version Control</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/git-methodology">Git Methodology</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Muscle-mommies/Dev-guide">ThriftFinder Development Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Structure">structure</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/initial-design">Initial Design</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/development-plan">Development Plan</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/project-management">Project Management Methodology &amp; Setup</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/third-party-code">Third-Party Libraries Used in ThriftFinder</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/api_documentation">ThriftFinder External API Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/database_documentation">ThriftFinder Firestore Database Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/user-feedback">User Feedback &amp; Methodology</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Bug-tracker">Sprint 2 Bug Tracking</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/TestingDocumentation">Testing Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/API_internal">ThriftFinder API Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/user-guide">User Guide for The Box E-Commerce Platform</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Muscle-mommies/Security-Audit">Security Audit of the NPM Supply Chain Attacks: A Software Design Case Study</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Muscle-mommies/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">ThriftFinder Development Guide</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>ThriftFinder Development Guide</h1></header>
+<p>This guide provides detailed instructions for setting up the development environment for <strong>ThriftFinder</strong>, a thrifting platform connecting shops and shoppers. It covers the backend API (Express, Firebase), frontend React app, Firebase configuration, environment variables, local development workflows, and documentation updates. The project uses Visual Studio Code (VSCode) as the recommended IDE, and this guide includes steps for installing missing dependencies (e.g., Leaflet for map features) and updating documentation in the <code>docs</code> folder.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1-project-overview">1. Project Overview<a href="#1-project-overview" class="hash-link" aria-label="Direct link to 1. Project Overview" title="Direct link to 1. Project Overview">​</a></h2>
+<ul>
+<li><strong>Backend</strong>: Express.js server with Firebase Admin SDK, Firestore, and Cloudinary for image uploads. Hosted on Render.com (<code>https://muscle-mommies-server.onrender.com</code>).</li>
+<li><strong>Frontend</strong>: React app with Firebase Authentication, hosted on Firebase Hosting.</li>
+<li><strong>Database</strong>: Firestore, storing collections like <code>users</code>, <code>stores</code>, <code>items</code>, <code>Reservations</code>, <code>Reviews</code>, <code>chats</code>, <code>messages</code>, <code>outfits</code>, and <code>externalImages</code>.</li>
+<li><strong>Directory Structure</strong>:<!-- -->
+<ul>
+<li><code>/server</code>: Backend code (<code>index.js</code>, <code>controllers/</code>, <code>routes/</code>, <code>models/</code>, <code>middleware/</code>).</li>
+<li><code>/client</code>: React frontend (<code>src/pages/</code> for pages, organized by user roles and shared components).</li>
+<li><code>/docs</code>: Documentation site (Docusaurus-based), with source files in <code>docs/docs/</code> and sidebar configuration in <code>docs/sidebars.js</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2-setting-up-locally">2. Setting Up Locally<a href="#2-setting-up-locally" class="hash-link" aria-label="Direct link to 2. Setting Up Locally" title="Direct link to 2. Setting Up Locally">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="prerequisites">Prerequisites<a href="#prerequisites" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites">​</a></h3>
 <ul>
-<li>Node.js (v16+ recommended)</li>
-<li>npm or yarn</li>
-<li>Firebase CLI: <code>npm install -g firebase-tools</code></li>
-<li>Access to Firebase project or create a new one</li>
+<li><strong>Node.js</strong>: Version 16+ (LTS recommended). Install from <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>.</li>
+<li><strong>npm</strong>: Included with Node.js, or use <code>yarn</code> if preferred.</li>
+<li><strong>Firebase CLI</strong>: Install globally with <code>npm install -g firebase-tools</code>.</li>
+<li><strong>VSCode</strong>: Recommended IDE. Install from <a href="https://code.visualstudio.com" target="_blank" rel="noopener noreferrer">code.visualstudio.com</a>.</li>
+<li><strong>Firebase Project</strong>: Access to the ThriftFinder Firebase project or create a new one at <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer">console.firebase.google.com</a>.</li>
+<li><strong>Cloudinary Account</strong>: For image uploads. Obtain credentials from <a href="https://cloudinary.com" target="_blank" rel="noopener noreferrer">cloudinary.com</a>.</li>
+<li><strong>Git</strong>: For cloning the repository.</li>
 </ul>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="11-backend-setup">1.1 Backend Setup<a href="#11-backend-setup" class="hash-link" aria-label="Direct link to 1.1 Backend Setup" title="Direct link to 1.1 Backend Setup">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="21-backend-setup">2.1 Backend Setup<a href="#21-backend-setup" class="hash-link" aria-label="Direct link to 2.1 Backend Setup" title="Direct link to 2.1 Backend Setup">​</a></h3>
 <ol>
-<li><strong>Navigate to server folder</strong></li>
-</ol>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd server</span><br></span></code></pre></div></div>
-<ol start="2">
-<li><strong>Install dependencies</strong></li>
-</ol>
+<li>
+<p><strong>Clone the Repository</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git clone &lt;repository-url&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd server</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Install Dependencies</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm install</span><br></span></code></pre></div></div>
-<ol start="3">
-<li><strong>Create <code>.env</code> file</strong>
-Add <strong>only sensitive information</strong>:</li>
-</ol>
-<div class="language-env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">FIREBASE_PRIVATE_KEY=&quot;-----BEGIN PRIVATE KEY-----\n&lt;YOUR_KEY&gt;\n-----END PRIVATE KEY-----\n&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">FIREBASE_CLIENT_EMAIL=your-service-account-email@project.iam.gserviceaccount.com</span><br></span></code></pre></div></div>
-<p><strong>Why we chose these variables:</strong></p>
+<p>If missing modules are detected (e.g., <code>express</code>, <code>firebase-admin</code>, <code>cloudinary</code>, <code>multer</code>), VSCode will prompt to install them. Alternatively, install manually:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm install express firebase-admin cloudinary multer dotenv cors</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Create <code>.env</code> File</strong>
+In the <code>/server</code> directory, create a <code>.env</code> file with sensitive credentials:</p>
+<div class="language-env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">FIREBASE_PRIVATE_KEY=&quot;-----BEGIN PRIVATE KEY-----\n&lt;your-private-key&gt;\n-----END PRIVATE KEY-----\n&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">FIREBASE_CLIENT_EMAIL=&lt;your-service-account-email@project.iam.gserviceaccount.com&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">FIREBASE_PROJECT_ID=&lt;your-project-id&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CLOUDINARY_CLOUD_NAME=&lt;your-cloudinary-cloud-name&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CLOUDINARY_API_KEY=&lt;your-cloudinary-api-key&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CLOUDINARY_API_SECRET=&lt;your-cloudinary-api-secret&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ALLOWED_ORIGINS=http://localhost:3001,https://muscle-mommies.web.app</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">PORT=3000</span><br></span></code></pre></div></div>
+<p><strong>Why these variables?</strong></p>
 <ul>
-<li><code>FIREBASE_PRIVATE_KEY</code> and <code>FIREBASE_CLIENT_EMAIL</code> are sensitive credentials required to authenticate the backend server with Firebase Admin SDK.</li>
-<li>Other Firebase configuration fields are public and do not need to be secret, so we hardcode them for simplicity.</li>
-<li>This separation ensures sensitive credentials are never pushed to GitHub.</li>
+<li><code>FIREBASE_PRIVATE_KEY</code>, <code>FIREBASE_CLIENT_EMAIL</code>, <code>FIREBASE_PROJECT_ID</code>: Sensitive credentials for Firebase Admin SDK to access Firestore and Authentication.</li>
+<li><code>CLOUDINARY_*</code>: Credentials for Cloudinary image uploads (used in <code>itemController.js</code> and <code>storeController.js</code>).</li>
+<li><code>ALLOWED_ORIGINS</code>: Restricts CORS to trusted domains (local and production frontend).</li>
+<li><code>PORT</code>: Specifies the backend port (default: 3000).</li>
+<li>Sensitive credentials are kept in <code>.env</code> to avoid exposure in GitHub.</li>
 </ul>
-<ol start="4">
-<li><strong>Run the backend</strong></li>
-</ol>
+</li>
+<li>
+<p><strong>Run the Backend</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">node index.js</span><br></span></code></pre></div></div>
 <ul>
-<li>Backend should run on <code>http://localhost:3000</code> by default.</li>
-<li>Test endpoints with Postman or curl (<code>GET /api/users</code>).</li>
+<li>The server runs on <code>http://localhost:3000</code>.</li>
+<li>Test with <code>curl http://localhost:3000</code> (returns &quot;Backend is live!&quot;) or use Postman to hit endpoints like <code>GET /api/stores</code>.</li>
 </ul>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="12-frontend-setup">1.2 Frontend Setup<a href="#12-frontend-setup" class="hash-link" aria-label="Direct link to 1.2 Frontend Setup" title="Direct link to 1.2 Frontend Setup">​</a></h3>
+</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="22-frontend-setup">2.2 Frontend Setup<a href="#22-frontend-setup" class="hash-link" aria-label="Direct link to 2.2 Frontend Setup" title="Direct link to 2.2 Frontend Setup">​</a></h3>
 <ol>
-<li><strong>Navigate to client folder</strong></li>
-</ol>
+<li>
+<p><strong>Navigate to Client Folder</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd client</span><br></span></code></pre></div></div>
-<ol start="2">
-<li><strong>Install dependencies</strong></li>
-</ol>
+</li>
+<li>
+<p><strong>Install Dependencies</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm install</span><br></span></code></pre></div></div>
-<ol start="3">
-<li><strong>Create <code>.env</code> file</strong>
-Add Firebase public keys and API URL:</li>
-</ol>
-<div class="language-env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_API_KEY=&lt;your-public-key&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_API_URL=http://localhost:3000</span><br></span></code></pre></div></div>
-<p><strong>Why we chose these variables:</strong></p>
+<p>The frontend uses React and dependencies like <code>react-router-dom</code>, <code>firebase</code> (for Authentication), and <code>axios</code> (for API calls). If map features are used (e.g., store locations), install Leaflet:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm install leaflet react-leaflet</span><br></span></code></pre></div></div>
+<p>In VSCode, missing modules will trigger a prompt to install them. Ensure <code>node_modules</code> includes <code>leaflet</code> and <code>react-leaflet</code> for map components in pages like <code>StoreMap.js</code>.</p>
+</li>
+<li>
+<p><strong>Create <code>.env</code> File</strong>
+In the <code>/client</code> directory, create a <code>.env</code> file with public Firebase keys and API URL:</p>
+<div class="language-env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_API_KEY=&lt;your-public-api-key&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_AUTH_DOMAIN=&lt;your-project-id&gt;.firebaseapp.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_PROJECT_ID=&lt;your-project-id&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_STORAGE_BUCKET=&lt;your-project-id&gt;.appspot.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_MESSAGING_SENDER_ID=&lt;your-messaging-sender-id&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_FIREBASE_APP_ID=&lt;your-app-id&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_API_URL=http://localhost:3000</span><br></span></code></pre></div></div>
+<p><strong>Why these variables?</strong></p>
 <ul>
-<li><code>REACT_APP_FIREBASE_API_KEY</code> is safe to expose in the frontend and is required to initialize Firebase for client-side operations.</li>
-<li><code>REACT_APP_API_URL</code> allows switching between local and production backend easily.</li>
+<li><code>REACT_APP_FIREBASE_*</code>: Public Firebase configuration for client-side Authentication and Firestore access. Safe to expose in the frontend.</li>
+<li><code>REACT_APP_API_URL</code>: Points to the backend (local or production). Set to <code>http://localhost:3000</code> for development.</li>
+<li>These variables are prefixed with <code>REACT_APP_</code> as per React’s convention.</li>
 </ul>
-<ol start="4">
-<li><strong>Start the frontend</strong></li>
-</ol>
+</li>
+<li>
+<p><strong>Start the Frontend</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm start</span><br></span></code></pre></div></div>
 <ul>
 <li>Runs on <code>http://localhost:3001</code>.</li>
-<li>Uses proxy to forward API calls to backend.</li>
+<li>The <code>package.json</code> proxy forwards API requests to <code>http://localhost:3000</code>, avoiding CORS issues.</li>
 </ul>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="13-firebase-setup">1.3 Firebase Setup<a href="#13-firebase-setup" class="hash-link" aria-label="Direct link to 1.3 Firebase Setup" title="Direct link to 1.3 Firebase Setup">​</a></h3>
+</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="23-firebase-setup">2.3 Firebase Setup<a href="#23-firebase-setup" class="hash-link" aria-label="Direct link to 2.3 Firebase Setup" title="Direct link to 2.3 Firebase Setup">​</a></h3>
 <ol>
-<li><strong>Login to Firebase CLI</strong></li>
-</ol>
+<li>
+<p><strong>Login to Firebase CLI</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">firebase login</span><br></span></code></pre></div></div>
-<ol start="2">
-<li><strong>Optional: Run local Firestore emulator</strong></li>
-</ol>
+<p>Authenticate with your Google account linked to the Firebase project.</p>
+</li>
+<li>
+<p><strong>Run Firestore Emulator (Optional)</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">firebase emulators:start --only firestore</span><br></span></code></pre></div></div>
 <ul>
-<li>Useful for testing locally without touching production data.</li>
+<li>Starts a local Firestore emulator for testing without affecting production data.</li>
+<li>Update <code>REACT_APP_API_URL</code> to point to the emulator if needed (e.g., <code>http://localhost:8080</code>).</li>
 </ul>
-<hr>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2-local-development-workflow">2. Local Development Workflow<a href="#2-local-development-workflow" class="hash-link" aria-label="Direct link to 2. Local Development Workflow" title="Direct link to 2. Local Development Workflow">​</a></h2>
-<ol>
-<li>Start backend: <code>node index.js</code></li>
-<li>Start frontend: <code>npm start</code></li>
-<li>Log in as different users to test role-based routing.</li>
-<li>Make API calls via the frontend or Postman.</li>
-<li>Debug errors using console logs and Firebase Emulator.</li>
+</li>
+<li>
+<p><strong>Verify Firebase Configuration</strong></p>
+<ul>
+<li>Ensure the Firebase project ID in <code>/server/.env</code> and <code>/client/.env</code> matches the Firebase project.</li>
+<li>Check <code>server/config/firebase.js</code> for correct Admin SDK initialization:<!-- -->
+<div class="language-javascript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-javascript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> admin </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">require</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;firebase-admin&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">admin</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">initializeApp</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token literal-property property" style="color:#36acaa">credential</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> admin</span><span class="token punctuation" style="color:#393A34">.</span><span class="token property-access">credential</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">cert</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token literal-property property" style="color:#36acaa">private_key</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> process</span><span class="token punctuation" style="color:#393A34">.</span><span class="token property-access">env</span><span class="token punctuation" style="color:#393A34">.</span><span class="token constant" style="color:#36acaa">FIREBASE_PRIVATE_KEY</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">replace</span><span class="token punctuation" style="color:#393A34">(</span><span class="token regex regex-delimiter" style="color:#36acaa">/</span><span class="token regex regex-source language-regex special-escape escape" style="color:#36acaa">\\</span><span class="token regex regex-source language-regex" style="color:#36acaa">n</span><span class="token regex regex-delimiter" style="color:#36acaa">/</span><span class="token regex regex-flags" style="color:#36acaa">g</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;\n&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token literal-property property" style="color:#36acaa">client_email</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> process</span><span class="token punctuation" style="color:#393A34">.</span><span class="token property-access">env</span><span class="token punctuation" style="color:#393A34">.</span><span class="token constant" style="color:#36acaa">FIREBASE_CLIENT_EMAIL</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token literal-property property" style="color:#36acaa">project_id</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> process</span><span class="token punctuation" style="color:#393A34">.</span><span class="token property-access">env</span><span class="token punctuation" style="color:#393A34">.</span><span class="token constant" style="color:#36acaa">FIREBASE_PROJECT_ID</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre></div></div>
+</li>
+</ul>
+</li>
 </ol>
-<hr>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3-deployment-notes">3. Deployment Notes<a href="#3-deployment-notes" class="hash-link" aria-label="Direct link to 3. Deployment Notes" title="Direct link to 3. Deployment Notes">​</a></h2>
-<ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="24-documentation-setup">2.4 Documentation Setup<a href="#24-documentation-setup" class="hash-link" aria-label="Direct link to 2.4 Documentation Setup" title="Direct link to 2.4 Documentation Setup">​</a></h3>
+<ol>
 <li>
-<p><strong>Frontend:</strong> Hosted on Firebase Hosting</p>
+<p><strong>Navigate to Docs Folder</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd docs</span><br></span></code></pre></div></div>
 </li>
 <li>
-<p><strong>Backend:</strong> Hosted on Railway</p>
+<p><strong>Install Dependencies</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm install</span><br></span></code></pre></div></div>
+<p>The documentation site uses Docusaurus. If missing modules are detected, VSCode will prompt to install them, or run the command above.</p>
 </li>
 <li>
-<p><strong>Environment Variables / Secrets:</strong></p>
+<p><strong>Run Documentation Site</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">npm start</span><br></span></code></pre></div></div>
 <ul>
-<li>Backend: Add <code>FIREBASE_PRIVATE_KEY</code> and <code>FIREBASE_CLIENT_EMAIL</code> in Railway secrets.</li>
-<li>Frontend: Use Firebase Hosting environment or <code>.env.production</code>.</li>
+<li>Runs on <code>http://localhost:3002</code>.</li>
+<li>Serves documentation from <code>docs/docs/</code> with navigation defined in <code>docs/sidebars.js</code>.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3-project-structure">3. Project Structure<a href="#3-project-structure" class="hash-link" aria-label="Direct link to 3. Project Structure" title="Direct link to 3. Project Structure">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="backend-server">Backend (<code>/server</code>)<a href="#backend-server" class="hash-link" aria-label="Direct link to backend-server" title="Direct link to backend-server">​</a></h3>
+<ul>
+<li><strong>Entry Point</strong>: <code>index.js</code> (sets up Express, CORS, middleware, routes).</li>
+<li><strong>Controllers</strong>: <code>controllers/</code> (e.g., <code>itemController.js</code>, <code>storeController.js</code>) handle business logic.</li>
+<li><strong>Routes</strong>: <code>routes/</code> (e.g., <code>storeRoutes.js</code>, <code>authRoutes.js</code>) define API endpoints.</li>
+<li><strong>Models</strong>: <code>models/</code> (e.g., <code>itemModel.js</code>, <code>store.js</code>) define Firestore schemas.</li>
+<li><strong>Middleware</strong>: <code>middleware/authMiddleware.js</code> for Firebase JWT verification.</li>
+<li><strong>Config</strong>: <code>config/firebase.js</code> for Firebase initialization.</li>
+<li><strong>Environment</strong>: <code>.env</code> for sensitive credentials.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="frontend-client">Frontend (<code>/client</code>)<a href="#frontend-client" class="hash-link" aria-label="Direct link to frontend-client" title="Direct link to frontend-client">​</a></h3>
+<ul>
+<li><strong>Source</strong>: <code>src/</code>
+<ul>
+<li><strong>Pages</strong>: <code>src/pages/</code> organized by user roles and shared components:<!-- -->
+<ul>
+<li><code>auth/</code> (e.g., <code>Login.js</code>, <code>Signup.js</code>): Authentication pages.</li>
+<li><code>customer/</code> (e.g., <code>BrowseItems.js</code>, <code>Outfits.js</code>): Customer-specific pages.</li>
+<li><code>store/</code> (e.g., <code>StoreDashboard.js</code>, <code>AddItem.js</code>): Store owner pages.</li>
+<li><code>admin/</code> (e.g., <code>AdminUsers.js</code>): Admin pages for user/store management.</li>
+<li><code>shared/</code> (e.g., <code>StoreMap.js</code>, <code>ItemCard.js</code>): Reusable components.</li>
+</ul>
+</li>
+<li><strong>Components</strong>: <code>src/components/</code> for reusable UI elements.</li>
+<li><strong>Services</strong>: <code>src/services/</code> for API calls (e.g., <code>api.js</code> using <code>axios</code>).</li>
+</ul>
+</li>
+<li><strong>Environment</strong>: <code>.env</code> for Firebase and API configuration.</li>
+<li><strong>Dependencies</strong>: Includes <code>react</code>, <code>react-router-dom</code>, <code>firebase</code>, <code>axios</code>, <code>leaflet</code> (for maps), and <code>react-leaflet</code>.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="documentation-docs">Documentation (<code>/docs</code>)<a href="#documentation-docs" class="hash-link" aria-label="Direct link to documentation-docs" title="Direct link to documentation-docs">​</a></h3>
+<ul>
+<li><strong>Docs</strong>: <code>docs/docs/</code> contains Markdown files (e.g., <code>ThriftFinder_API_Documentation.md</code>, <code>ThriftFinder_Firestore_Database_Documentation.md</code>).</li>
+<li><strong>Sidebar</strong>: <code>docs/sidebars.js</code> defines navigation for the documentation site.</li>
+<li><strong>Run</strong>: <code>npm start</code> in <code>/docs</code> to serve the site locally.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4-local-development-workflow">4. Local Development Workflow<a href="#4-local-development-workflow" class="hash-link" aria-label="Direct link to 4. Local Development Workflow" title="Direct link to 4. Local Development Workflow">​</a></h2>
+<ol>
+<li>
+<p><strong>Start Backend</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">node index.js</span><br></span></code></pre></div></div>
+<ul>
+<li>Ensure <code>http://localhost:3000</code> is running.</li>
 </ul>
 </li>
 <li>
-<p><strong>API URLs:</strong> Frontend points to production backend (<code>https://muscle-mommies-production.up.railway.app</code>).</p>
+<p><strong>Start Frontend</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd client</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">npm start</span><br></span></code></pre></div></div>
+<ul>
+<li>Access at <code>http://localhost:3001</code>.</li>
+<li>Test role-based routing by logging in as <code>customer</code>, <code>storeOwner</code>, or <code>admin</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Test API Endpoints</strong></p>
+<ul>
+<li>Use Postman or curl to test endpoints (e.g., <code>GET /api/stores</code>, <code>POST /api/stores/items</code>).</li>
+<li>Example:<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">curl -H &quot;Authorization: Bearer &lt;firebase-jwt&gt;&quot; http://localhost:3000/api/my-store</span><br></span></code></pre></div></div>
 </li>
 </ul>
-<hr>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4-key-points">4. Key Points<a href="#4-key-points" class="hash-link" aria-label="Direct link to 4. Key Points" title="Direct link to 4. Key Points">​</a></h2>
+</li>
+<li>
+<p><strong>Debugging</strong></p>
 <ul>
-<li>Backend and frontend run on separate ports locally.</li>
-<li>Environment variables keep secrets out of GitHub.</li>
-<li>Frontend uses proxy in development to avoid CORS issues.</li>
-<li>Use Firebase Emulator for safe local testing (optional).</li>
-</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tino-ryan/Muscle-mommies/edit/gh-pages/docs/Dev-guide.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Muscle-mommies/git-methodology"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Git Methodology</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Muscle-mommies/Structure"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">structure</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-setting-up-locally" class="table-of-contents__link toc-highlight">1. Setting Up Locally</a><ul><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a></li><li><a href="#11-backend-setup" class="table-of-contents__link toc-highlight">1.1 Backend Setup</a></li><li><a href="#12-frontend-setup" class="table-of-contents__link toc-highlight">1.2 Frontend Setup</a></li><li><a href="#13-firebase-setup" class="table-of-contents__link toc-highlight">1.3 Firebase Setup</a></li></ul></li><li><a href="#2-local-development-workflow" class="table-of-contents__link toc-highlight">2. Local Development Workflow</a></li><li><a href="#3-deployment-notes" class="table-of-contents__link toc-highlight">3. Deployment Notes</a></li><li><a href="#4-key-points" class="table-of-contents__link toc-highlight">4. Key Points</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/tech-stack">Tech Stack</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muscle Mommies.</div></div></div></footer></div>
+<li>Use VSCode’s debugger with breakpoints in <code>server/index.js</code> or <code>client/src</code>.</li>
+<li>Check console logs in browser (F12) or terminal.</li>
+<li>Use Firestore Emulator to inspect database changes without affecting production.</li>
+</ul>
+</li>
+<li>
+<p><strong>Update Documentation</strong></p>
+<ul>
+<li>Add or edit Markdown files in <code>docs/docs/</code>.</li>
+<li>Update <code>docs/sidebars.js</code> to include new documents in the navigation.</li>
+<li>Example for adding this guide:<!-- -->
+<div class="language-javascript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-javascript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">module</span><span class="token punctuation" style="color:#393A34">.</span><span class="token property-access">exports</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token literal-property property" style="color:#36acaa">sidebar</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&#x27;ThriftFinder_API_Documentation&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&#x27;ThriftFinder_Firestore_Database_Documentation&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&#x27;ThriftFinder_Development_Guide&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// Add this line</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre></div></div>
+</li>
+<li>Run <code>npm start</code> in <code>/docs</code> to preview changes.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5-adding-dependencies">5. Adding Dependencies<a href="#5-adding-dependencies" class="hash-link" aria-label="Direct link to 5. Adding Dependencies" title="Direct link to 5. Adding Dependencies">​</a></h2>
+<p>If new features require additional modules (e.g., Leaflet for maps), install them:</p>
+<ul>
+<li>
+<p><strong>Backend</strong>:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">npm install &lt;package&gt;</span><br></span></code></pre></div></div>
+<p>Example: <code>npm install leaflet</code> (if server-side map processing is needed).</p>
+</li>
+<li>
+<p><strong>Frontend</strong>:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd client</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">npm install &lt;package&gt;</span><br></span></code></pre></div></div>
+<p>Example: <code>npm install leaflet react-leaflet</code> for store location maps in <code>src/pages/shared/StoreMap.js</code>.</p>
+</li>
+<li>
+<p>VSCode will detect missing modules and prompt to install them. Alternatively, check <code>package.json</code> for missing dependencies if errors occur.</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="6-deployment-notes">6. Deployment Notes<a href="#6-deployment-notes" class="hash-link" aria-label="Direct link to 6. Deployment Notes" title="Direct link to 6. Deployment Notes">​</a></h2>
+<ul>
+<li>
+<p><strong>Backend</strong>: Hosted on Render.com (<code>https://muscle-mommies-server.onrender.com</code>).</p>
+<ul>
+<li>Add <code>.env</code> variables to Render’s environment settings:<!-- -->
+<ul>
+<li><code>FIREBASE_PRIVATE_KEY</code>, <code>FIREBASE_CLIENT_EMAIL</code>, <code>FIREBASE_PROJECT_ID</code></li>
+<li><code>CLOUDINARY_CLOUD_NAME</code>, <code>CLOUDINARY_API_KEY</code>, <code>CLOUDINARY_API_SECRET</code></li>
+<li><code>ALLOWED_ORIGINS</code>, <code>PORT</code></li>
+</ul>
+</li>
+<li>Deploy with <code>git push</code> to the Render-linked repository.</li>
+</ul>
+</li>
+<li>
+<p><strong>Frontend</strong>: Hosted on Firebase Hosting.</p>
+<ul>
+<li>Deploy with:<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd client</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">npm run build</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">firebase deploy --only hosting</span><br></span></code></pre></div></div>
+</li>
+<li>Add <code>.env.production</code> for production:<!-- -->
+<div class="language-env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">REACT_APP_API_URL=https://muscle-mommies-server.onrender.com</span><br></span></code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Documentation</strong>: Hosted separately (e.g., Firebase Hosting or GitHub Pages).</p>
+<ul>
+<li>Deploy with:<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd docs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">npm run build</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">firebase deploy --only hosting</span><br></span></code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Note</strong>: Render’s free tier introduces sleeping times, causing delays on initial requests. Consider paid plans for production.</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="7-key-points">7. Key Points<a href="#7-key-points" class="hash-link" aria-label="Direct link to 7. Key Points" title="Direct link to 7. Key Points">​</a></h2>
+<ul>
+<li><strong>Environment Variables</strong>: Keep sensitive credentials in <code>.env</code> files (not committed to Git). Use <code>REACT_APP_</code> prefix for client-side variables.</li>
+<li><strong>CORS</strong>: Backend restricts CORS to <code>ALLOWED_ORIGINS</code>. Update <code>.env</code> if adding new frontend domains.</li>
+<li><strong>Firebase Emulator</strong>: Use for safe local testing to avoid modifying production data.</li>
+<li><strong>Documentation</strong>: Update <code>docs/docs/</code> and <code>docs/sidebars.js</code> for new guides. Test locally with <code>npm start</code>.</li>
+<li><strong>Role-Based Routing</strong>: Frontend pages in <code>src/pages/</code> are organized by role (<code>customer</code>, <code>store</code>, <code>admin</code>, <code>auth</code>, <code>shared</code>). Test with different user roles.</li>
+<li><strong>Dependencies</strong>: Install missing modules (e.g., <code>leaflet</code>) as needed, especially for map features.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="8-troubleshooting">8. Troubleshooting<a href="#8-troubleshooting" class="hash-link" aria-label="Direct link to 8. Troubleshooting" title="Direct link to 8. Troubleshooting">​</a></h2>
+<ul>
+<li><strong>Backend Errors</strong>:<!-- -->
+<ul>
+<li><strong>&quot;Invalid Firebase credentials&quot;</strong>: Verify <code>FIREBASE_*</code> variables in <code>server/.env</code>.</li>
+<li><strong>CORS issues</strong>: Ensure <code>ALLOWED_ORIGINS</code> includes <code>http://localhost:3001</code>.</li>
+</ul>
+</li>
+<li><strong>Frontend Errors</strong>:<!-- -->
+<ul>
+<li><strong>&quot;Module not found&quot;</strong>: Run <code>npm install</code> or install missing modules (e.g., <code>npm install leaflet</code>).</li>
+<li><strong>API 401 Unauthorized</strong>: Check Firebase JWT in <code>Authorization</code> header.</li>
+</ul>
+</li>
+<li><strong>Firestore Emulator</strong>:<!-- -->
+<ul>
+<li>If queries fail, ensure emulator is running (<code>firebase emulators:start --only firestore</code>).</li>
+</ul>
+</li>
+<li><strong>Documentation</strong>:<!-- -->
+<ul>
+<li>If new docs don’t appear, verify <code>docs/sidebars.js</code> and restart <code>npm start</code>.</li>
+</ul>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tino-ryan/Muscle-mommies/edit/main/docs/docs/docs/Dev-guide.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Muscle-mommies/git-methodology"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Git Methodology</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Muscle-mommies/Structure"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">structure</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-project-overview" class="table-of-contents__link toc-highlight">1. Project Overview</a></li><li><a href="#2-setting-up-locally" class="table-of-contents__link toc-highlight">2. Setting Up Locally</a><ul><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a></li><li><a href="#21-backend-setup" class="table-of-contents__link toc-highlight">2.1 Backend Setup</a></li><li><a href="#22-frontend-setup" class="table-of-contents__link toc-highlight">2.2 Frontend Setup</a></li><li><a href="#23-firebase-setup" class="table-of-contents__link toc-highlight">2.3 Firebase Setup</a></li><li><a href="#24-documentation-setup" class="table-of-contents__link toc-highlight">2.4 Documentation Setup</a></li></ul></li><li><a href="#3-project-structure" class="table-of-contents__link toc-highlight">3. Project Structure</a><ul><li><a href="#backend-server" class="table-of-contents__link toc-highlight">Backend (<code>/server</code>)</a></li><li><a href="#frontend-client" class="table-of-contents__link toc-highlight">Frontend (<code>/client</code>)</a></li><li><a href="#documentation-docs" class="table-of-contents__link toc-highlight">Documentation (<code>/docs</code>)</a></li></ul></li><li><a href="#4-local-development-workflow" class="table-of-contents__link toc-highlight">4. Local Development Workflow</a></li><li><a href="#5-adding-dependencies" class="table-of-contents__link toc-highlight">5. Adding Dependencies</a></li><li><a href="#6-deployment-notes" class="table-of-contents__link toc-highlight">6. Deployment Notes</a></li><li><a href="#7-key-points" class="table-of-contents__link toc-highlight">7. Key Points</a></li><li><a href="#8-troubleshooting" class="table-of-contents__link toc-highlight">8. Troubleshooting</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Muscle-mommies/tech-stack">Tech Stack</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/tino-ryan/Muscle-mommies" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muscle Mommies.</div></div></div></footer></div>
 </body>
 </html>
