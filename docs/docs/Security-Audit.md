@@ -119,7 +119,7 @@ Embedding these best practices into daily workflows enhances resilience, maintai
 
 ## Appendix A: Audit Script
 
-> This script was executed against both `frontend/package-lock.json` and `backend/package-lock.json` using a compromised package list derived from Aikido and Socket.dev advisories.
+> This script was executed against both `client/package-lock.json` and `server/package-lock.json` using a compromised package list derived from Aikido and Socket.dev advisories.
 
 ```python
 import json
@@ -213,5 +213,5 @@ if __name__ == "__main__":
 
 ## Appendix C: Audit Results
 
-![Audit Results Screenshot](audit_results.png)
+![Audit Results Screenshot](/images/audit_results.png)
 **Figure 1.** Successful execution of the dependency audit script showing no compromised packages detected.
