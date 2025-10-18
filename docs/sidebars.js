@@ -33,6 +33,7 @@ const sidebars = {
     'TestingDocumentation',
     'API_internal',
     'user-guide',
+    'Security-Audit',
   ],
 };
 
