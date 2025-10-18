@@ -1,56 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
 
+/* Reset for consistent spacing */
+.add-listing h1,
+.add-listing h3,
+.add-listing p,
+.add-listing button,
+.add-listing input,
+.add-listing textarea,
+.add-listing select {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .add-listing {
   display: flex !important;
-  background-color: #EEEEEE !important;
+  background: #EEEEEE !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   min-height: 100vh !important;
   width: 100vw !important;
   overflow-x: hidden !important;
-  max-width: 100% !important;
 }
 
-.layout-container {
+/* Layout Container */
+.add-listing .layout-container {
   display: flex !important;
   flex: 1 !important;
   padding: 24px !important;
   max-width: 1400px !important;
   margin: 0 auto !important;
   gap: 24px !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid #000000 !important;
   border-radius: 12px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.content {
+/* Content Area */
+.add-listing .content {
   flex: 1 !important;
   padding: 80px 24px 24px !important;
   overflow-y: auto !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
 }
 
-.page-title {
+/* Page Title */
+.add-listing .page-title {
   font-size: 48px !important;
   font-weight: 700 !important;
   color: #000000 !important;
-  margin: 0 0 48px 0 !important;
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
-  line-height: 1.2 !important;
   text-transform: uppercase !important;
   letter-spacing: 2px !important;
+  margin-bottom: 48px !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-.error-box {
+/* Error Box */
+.add-listing .error-box {
   display: flex !important;
   align-items: center !important;
   gap: 12px !important;
   padding: 16px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid #FF9AE9 !important;
   border-radius: 12px !important;
   color: #000000 !important;
@@ -59,190 +69,218 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.error-box svg {
+.add-listing .error-box svg {
   width: 24px !important;
   height: 24px !important;
-  color: #000000 !important;
+  color: #FF9AE9 !important;
   flex-shrink: 0 !important;
 }
 
-.error-box p {
-  margin: 0 !important;
+.add-listing .error-box p {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.item-form-new {
+/* Form */
+.add-listing .item-form-new {
   display: flex !important;
   flex-direction: column !important;
   gap: 24px !important;
 }
 
-.form-content-grid {
+.add-listing .form-content-grid {
   display: grid !important;
   grid-template-columns: 2fr 1fr !important;
   gap: 24px !important;
 }
 
-.details-pane {
+.add-listing .details-pane {
   display: flex !important;
   flex-direction: column !important;
   gap: 24px !important;
 }
 
-.form-card {
-  background-color: rgba(255, 255, 255, 0.8) !important;
+.add-listing .form-card {
+  background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid #000000 !important;
   border-radius: 12px !important;
   padding: 24px !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.form-card h3 {
+.add-listing .form-card h3 {
   font-size: 20px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   color: #000000 !important;
-  margin: 0 0 20px 0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  margin-bottom: 20px !important;
   padding-bottom: 8px !important;
   border-bottom: 1px solid #D8FF6C !important;
 }
 
-.form-grid-2-col {
+.add-listing .form-grid-2-col {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 16px !important;
   margin-bottom: 16px !important;
 }
 
-.form-grid-4-col {
+.add-listing .form-grid-4-col {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
   gap: 16px !important;
   margin-bottom: 16px !important;
 }
 
-.form-group {
+.add-listing .form-group {
   display: flex !important;
   flex-direction: column !important;
   gap: 8px !important;
 }
 
-.form-group label {
+.add-listing .form-group label {
   font-size: 14px !important;
   font-weight: 600 !important;
   color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  text-transform: uppercase !important;
 }
 
-.required {
+.add-listing .required {
   color: #FF9AE9 !important;
 }
 
-.input-field,
-.text-area,
-.select-menu,
-.file-upload {
-  padding: 14px 12px !important;
+/* Input Fields, Textarea, Select, File Upload */
+.add-listing .input-field,
+.add-listing .text-area,
+.add-listing .select-menu,
+.add-listing .price-input-container {
+  padding: 14px 16px !important;
   border: 1px solid #000000 !important;
   border-radius: 9999px !important;
   font-size: 16px !important;
   color: #000000 !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
   transition: all 0.2s ease !important;
   box-sizing: border-box !important;
-  line-height: 1.5 !important;
   min-height: 48px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.input-field:hover,
-.text-area:hover,
-.select-menu:hover,
-.file-upload:hover {
+.add-listing .file-upload {
+  display: none !important;
+}
+
+.add-listing .file-button {
+  display: inline-block !important;
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  background: #FF9AE9 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  width: 100% !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.add-listing .input-field:hover,
+.add-listing .text-area:hover,
+.add-listing .select-menu:hover,
+.add-listing .file-button:hover,
+.add-listing .price-input-container:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.input-field:focus,
-.text-area:focus,
-.select-menu:focus,
-.file-upload:focus {
+.add-listing .input-field:focus,
+.add-listing .text-area:focus,
+.add-listing .select-menu:focus,
+.add-listing .file-button:active,
+.add-listing .price-input-container:focus-within {
   outline: none !important;
   border-color: #D8FF6C !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 3px rgba(216, 255, 108, 0.3) !important;
 }
 
-.text-area {
+.add-listing .file-button:hover {
+  background: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.add-listing .file-button:active {
+  background: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.add-listing .text-area {
   min-height: 120px !important;
   resize: vertical !important;
   border-radius: 12px !important;
 }
 
-.select-menu {
+.add-listing .select-menu {
   appearance: none !important;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
   background-repeat: no-repeat !important;
   background-position: right 16px center !important;
+  padding-right: 40px !important;
   cursor: pointer !important;
 }
 
-.price-input-container {
+.add-listing .price-input-container {
   display: flex !important;
   align-items: center !important;
-  border: 1px solid #000000 !important;
-  border-radius: 9999px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  transition: all 0.2s ease !important;
-  box-sizing: border-box !important;
-  min-height: 48px !important;
 }
 
-.price-input-container:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.price-input-container:focus-within {
-  border-color: #D8FF6C !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C !important;
-}
-
-.currency-label {
-  padding: 0 12px !important;
+.add-listing .currency-label {
+  padding: 0 16px !important;
   font-size: 16px !important;
   color: #000000 !important;
   font-weight: 600 !important;
   line-height: 1.5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.price-input {
+.add-listing .price-input {
   flex-grow: 1 !important;
   border: none !important;
-  padding: 14px 12px !important;
-  background-color: transparent !important;
+  padding: 14px 0 !important;
+  background: transparent !important;
   font-size: 16px !important;
   color: #000000 !important;
   line-height: 1.5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.price-input:focus {
+.add-listing .price-input:focus {
   outline: none !important;
 }
 
-.image-pane {
+/* Image Pane */
+.add-listing .image-pane {
   display: flex !important;
   flex-direction: column !important;
   gap: 24px !important;
 }
 
-.form-card.image-card {
-  background-color: rgba(255, 255, 255, 0.8) !important;
+.add-listing .image-card {
+  background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid #000000 !important;
   border-radius: 12px !important;
   padding: 24px !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.no-image-placeholder {
+.add-listing .no-image-placeholder {
   width: 100% !important;
   height: 200px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid #000000 !important;
   border-radius: 12px !important;
   display: flex !important;
@@ -254,27 +292,33 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.upload-group {
+.add-listing .no-image-placeholder p {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.add-listing .upload-group {
   display: block !important;
   margin-bottom: 16px !important;
 }
 
-.upload-note {
+.add-listing .upload-note {
   font-size: 14px !important;
   color: #000000 !important;
   margin-top: 8px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.form-actions {
+/* Form Actions */
+.add-listing .form-actions {
   display: flex !important;
   gap: 16px !important;
   justify-content: flex-start !important;
   padding: 16px 0 !important;
 }
 
-.primary-button,
-.cancel-button {
-  padding: 12px 24px !important;
+.add-listing .primary-button,
+.add-listing .cancel-button {
+  padding: 14px 32px !important;
   border: 1px solid #000000 !important;
   border-radius: 9999px !important;
   font-size: 16px !important;
@@ -282,187 +326,145 @@
   cursor: pointer !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
   transition: all 0.2s ease !important;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
-  box-sizing: border-box !important;
+  min-width: 160px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.primary-button {
-  background-color: #FF9AE9 !important;
+.add-listing .primary-button {
+  background: #FF9AE9 !important;
   color: #000000 !important;
 }
 
-.primary-button:hover {
-  background-color: #FF9AE9 !important;
+.add-listing .primary-button:hover {
+  background: #FFC1EE !important;
   transform: translateY(-2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.primary-button:active {
-  background-color: #E88AD0 !important;
+.add-listing .primary-button:active {
+  background: #E88AD0 !important;
   transform: translateY(2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
-.cancel-button {
-  background-color: rgba(255, 255, 255, 0.8) !important;
+.add-listing .cancel-button {
+  background: #CCCCCC !important;
   color: #000000 !important;
 }
 
-.cancel-button:hover {
-  background-color: rgba(255, 255, 255, 0.8) !important;
+.add-listing .cancel-button:hover {
+  background: #D8D8D8 !important;
   transform: translateY(-2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.cancel-button:active {
-  background-color: #F9F9F9 !important;
+.add-listing .cancel-button:active {
+  background: #B3B3B3 !important;
   transform: translateY(2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
-/* --- Sidebar Styling (assuming StoreSidebar is reused) --- */
-.sidebar-panel {
-  width: 250px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  border-right: 1px solid #000000 !important;
-  padding: 20px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-}
-
-.sidebar-option {
-  color: #000000 !important;
-  padding: 10px !important;
-  border-radius: 8px !important;
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-}
-
-.sidebar-option:hover {
-  background-color: #F9F9F9 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.sidebar-option.active {
-  background-color: #D8FF6C !important;
-  color: #000000 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-}
-
-.sidebar-option svg {
-  color: #000000 !important;
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* --- Responsiveness --- */
+/* Responsive Design */
 @media (max-width: 1024px) {
-  .form-content-grid {
+  .add-listing .form-content-grid {
     grid-template-columns: 1fr !important;
   }
 
-  .content {
+  .add-listing .content {
     padding: 80px 12px 12px !important;
   }
 }
 
 @media (max-width: 768px) {
-  .layout-container {
+  .add-listing .layout-container {
     flex-direction: column !important;
     padding: 12px !important;
   }
 
-  .sidebar-panel {
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid #000000 !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    padding: 10px !important;
-  }
-
-  .sidebar-option p {
-    display: none !important;
-  }
-
-  .sidebar-option {
-    padding: 8px !important;
-    font-size: 14px !important;
-  }
-
-  .content {
+  .add-listing .content {
     padding: 80px 12px 80px !important;
   }
 
-  .page-title {
+  .add-listing .page-title {
     font-size: 36px !important;
     text-align: center !important;
   }
 
-  .form-card {
+  .add-listing .form-card {
     padding: 16px !important;
   }
 
-  .form-card h3 {
+  .add-listing .form-card h3 {
     font-size: 18px !important;
   }
 
-  .form-grid-2-col,
-  .form-grid-4-col {
+  .add-listing .form-grid-2-col,
+  .add-listing .form-grid-4-col {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
   }
 
-  .input-field,
-  .text-area,
-  .select-menu,
-  .file-upload,
-  .price-input-container {
-    padding: 12px 10px !important;
+  .add-listing .input-field,
+  .add-listing .text-area,
+  .add-listing .select-menu,
+  .add-listing .file-button,
+  .add-listing .price-input-container {
+    padding: 12px 14px !important;
     font-size: 14px !important;
     min-height: 44px !important;
   }
 
-  .price-input,
-  .currency-label {
-    padding: 12px 10px !important;
+  .add-listing .currency-label,
+  .add-listing .price-input {
+    padding: 12px 0 12px 14px !important;
     font-size: 14px !important;
   }
 
-  .no-image-placeholder {
+  .add-listing .no-image-placeholder {
     height: 120px !important;
     font-size: 14px !important;
     margin-bottom: 16px !important;
   }
 
-  .upload-note {
+  .add-listing .upload-note {
     font-size: 12px !important;
   }
 
-  .form-actions {
+  .add-listing .form-actions {
     flex-direction: column !important;
     gap: 12px !important;
   }
 
-  .primary-button,
-  .cancel-button {
-    padding: 10px !important;
+  .add-listing .primary-button,
+  .add-listing .cancel-button {
+    padding: 12px !important;
     font-size: 14px !important;
-    width: 100% !important;
+    min-width: 100% !important;
   }
 }
 
 @media (min-width: 1024px) {
-  .layout-container {
+  .add-listing .layout-container {
     padding: 32px !important;
   }
 
-  .content {
+  .add-listing .content {
     padding: 80px 32px 32px !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .add-listing .layout-container {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .add-listing .form-actions {
+    display: none !important;
+  }
+
+  .add-listing {
+    background: #FFFFFF !important;
   }
 }

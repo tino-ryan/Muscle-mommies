@@ -6,7 +6,7 @@ import StoreSidebar from '../../components/StoreSidebar';
 import { API_URL } from '../../api';
 import './Reservations.css';
 
-// --- New Mobile Card Component ---
+// Reservation Card Component
 const ReservationCard = ({
   reservation,
   item,
@@ -44,15 +44,15 @@ const ReservationCard = ({
           />
         )}
         <span className="card-item-name">{item?.name || 'Loading...'}</span>
-        <span className={`card-status ${statusClass}`}>
-          {reservation.status}
-        </span>
+        <span className={statusClass}>{reservation.status}</span>
       </div>
       <div className="card-body">
         <p className="card-customer">
           <i className="fas fa-user"></i> {user?.displayName || 'Loading...'}
+          <br />
           <i className="fas fa-calendar-alt"></i>{' '}
           {viewMode === 'sales' ? 'Sold:' : 'Reserved:'} {dateString}
+          <br />
           <i className="fas fa-tag"></i> R{item?.price || 'N/A'}
         </p>
       </div>
@@ -75,10 +75,10 @@ const ReservationCard = ({
   );
 };
 
-// --- Main Component ---
+// Main Component
 export default function StoreReservations() {
   const [reservations, setReservations] = useState([]);
-  const [loading, setLoading] = useState(true); // Add this to your state declarations
+  const [loading, setLoading] = useState(true);
   const [items, setItems] = useState({});
   const [users, setUsers] = useState({});
   const [error, setError] = useState('');
@@ -90,7 +90,7 @@ export default function StoreReservations() {
   const [selectedTime, setSelectedTime] = useState('all');
   const [categories, setCategories] = useState([]);
   const [selectedReservation, setSelectedReservation] = useState(null);
-  const [showMobileFilters, setShowMobileFilters] = useState(false); // New State for Mobile Filters
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const auth = getAuth();
@@ -100,11 +100,11 @@ export default function StoreReservations() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         navigate('/login');
-        setLoading(false); // Ensure loading is false if not authenticated
+        setLoading(false);
         return;
       }
 
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
       try {
         const token = await user.getIdToken();
         const resResponse = await axios.get(
@@ -115,7 +115,7 @@ export default function StoreReservations() {
         setReservations(resData);
 
         if (resData.length === 0) {
-          setLoading(false); // No reservations, stop loading
+          setLoading(false);
           return;
         }
 
@@ -124,7 +124,7 @@ export default function StoreReservations() {
             .get(`${API_URL}/api/items/${res.itemId}`, {
               headers: { Authorization: `Bearer ${token}` },
             })
-            .catch(() => ({ data: { name: 'Unknown Item' } }))
+            .catch(() => ({ data: { name: 'Unknown Item', price: 'N/A', category: 'Uncategorized', images: [], description: 'No description' } }))
         );
         const itemResponses = await Promise.all(itemPromises);
         const itemMap = {};
@@ -153,7 +153,7 @@ export default function StoreReservations() {
             (err.response?.data?.error || err.message)
         );
       } finally {
-        setLoading(false); // Set loading to false after all fetches complete
+        setLoading(false);
       }
     });
 
@@ -162,6 +162,7 @@ export default function StoreReservations() {
 
   useEffect(() => {
     const uniqueCategories = [
+      'all',
       ...new Set(
         Object.values(items).map((item) => item.category || 'Uncategorized')
       ),
@@ -185,7 +186,6 @@ export default function StoreReservations() {
       return;
     }
 
-    // Slight modification to confirmation message to be more mobile-friendly
     const confirmMsg = `Confirm status change to ${newStatus}? ${
       newStatus === 'Completed'
         ? 'This completes the sale and removes it from active reservations.'
@@ -222,8 +222,6 @@ export default function StoreReservations() {
     }
   };
 
-  // (filteredReservations remains the same)
-  // ... [filteredReservations code is omitted for brevity, as it's unchanged]
   const filteredReservations = reservations.filter((res) => {
     const isActive = res.status !== 'Completed';
     if (viewMode === 'active' && !isActive) return false;
@@ -304,6 +302,7 @@ export default function StoreReservations() {
       }
     }
   };
+
   if (loading) {
     return (
       <div className="store-reservations">
@@ -330,17 +329,12 @@ export default function StoreReservations() {
         <StoreSidebar currentPage="Reservations" onLogout={handleLogout} />
         <div className="content">
           <div className="header">
-            <h1>
-              {viewMode === 'active' ? 'Active Reservations' : 'Past Sales 💸'}
-            </h1>
+            <h1>{viewMode === 'active' ? 'Active Reservations' : 'Past Sales 💸'}</h1>
             <button
-              onClick={() =>
-                setViewMode(viewMode === 'active' ? 'sales' : 'active')
-              }
+              className="view-mode-button"
+              onClick={() => setViewMode(viewMode === 'active' ? 'sales' : 'active')}
             >
-              {viewMode === 'active'
-                ? 'View Past Sales'
-                : 'View Active Reservations'}
+              {viewMode === 'active' ? 'View Past Sales' : 'View Active Reservations'}
             </button>
           </div>
 
@@ -348,7 +342,6 @@ export default function StoreReservations() {
           {message && <div className="success-message">{message}</div>}
 
           <div className="header-controls">
-            {/* Mobile Filter Toggle */}
             <button
               className="mobile-filter-toggle"
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -367,7 +360,6 @@ export default function StoreReservations() {
           </div>
 
           <div className={`filters ${showMobileFilters ? 'visible' : ''}`}>
-            {/* ... Filters UI remains the same, but wrapped in a container that can be toggled */}
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -415,7 +407,6 @@ export default function StoreReservations() {
             </div>
           ) : (
             <>
-              {/* Desktop Table View */}
               <table className="reservations-table">
                 <thead>
                   <tr>
@@ -432,37 +423,33 @@ export default function StoreReservations() {
                   {filteredReservations.map((res) => {
                     const item = items[res.itemId];
                     const user = users[res.userId];
+                    const statusClass = `status-${res.status.toLowerCase()}`;
                     return (
                       <tr
                         key={res.reservationId}
                         onClick={() => setSelectedReservation(res)}
-                        style={{ cursor: 'pointer' }} // Add cursor to indicate clickability
                       >
                         <td>
                           <div className="item-info">
                             <strong>{item?.name || 'Loading...'}</strong>
                             {item?.price && (
-                              <div className="item-price">R{item.price}</div>
+                              <div className="item-price">
+                                R{item.price}
+                              </div>
                             )}
                           </div>
                         </td>
                         <td>{user?.displayName || 'Loading...'}</td>
-                        <td className={`status-${res.status.toLowerCase()}`}>
-                          {res.status}
-                        </td>
+                        <td><span className={statusClass}>{res.status}</span></td>
                         <td>
                           {res.reservedAt
-                            ? new Date(
-                                res.reservedAt._seconds * 1000
-                              ).toLocaleString()
+                            ? new Date(res.reservedAt._seconds * 1000).toLocaleString()
                             : 'N/A'}
                         </td>
                         {viewMode === 'sales' && (
                           <td>
                             {res.soldAt
-                              ? new Date(
-                                  res.soldAt._seconds * 1000
-                                ).toLocaleString()
+                              ? new Date(res.soldAt._seconds * 1000).toLocaleString()
                               : 'N/A'}
                           </td>
                         )}
@@ -475,10 +462,7 @@ export default function StoreReservations() {
                               <select
                                 value={res.status}
                                 onChange={(e) =>
-                                  handleUpdateStatus(
-                                    res.reservationId,
-                                    e.target.value
-                                  )
+                                  handleUpdateStatus(res.reservationId, e.target.value)
                                 }
                               >
                                 <option value="Pending">Pending</option>
@@ -494,7 +478,6 @@ export default function StoreReservations() {
                   })}
                 </tbody>
               </table>
-              {/* Mobile Card List View */}
               <div className="reservations-card-list">
                 {filteredReservations.map((res) => (
                   <ReservationCard
@@ -531,11 +514,7 @@ export default function StoreReservations() {
                   items[selectedReservation.itemId]?.images?.length > 0 ? (
                     <>
                       <img
-                        src={
-                          items[selectedReservation.itemId].images[
-                            currentImageIndex
-                          ].imageURL
-                        }
+                        src={items[selectedReservation.itemId].images[currentImageIndex].imageURL}
                         alt={items[selectedReservation.itemId].name}
                       />
                       {items[selectedReservation.itemId].images.length > 1 && (
@@ -547,8 +526,7 @@ export default function StoreReservations() {
                             ›
                           </button>
                           <p className="image-counter">
-                            {currentImageIndex + 1} /{' '}
-                            {items[selectedReservation.itemId].images.length}
+                            {currentImageIndex + 1} / {items[selectedReservation.itemId].images.length}
                           </p>
                         </div>
                       )}
@@ -558,43 +536,34 @@ export default function StoreReservations() {
                   )}
                 </div>
                 <span className="price">
-                  R
-                  {items[selectedReservation.itemId]?.price
-                    ? Number(items[selectedReservation.itemId].price).toFixed(2)
-                    : 'N/A'}
+                  R{items[selectedReservation.itemId]?.price ? Number(items[selectedReservation.itemId].price).toFixed(2) : 'N/A'}
                 </span>
               </div>
               <div className="item-info">
                 <h2>
                   {items[selectedReservation.itemId]?.name || 'N/A'}{' '}
-                  <span className="status-tag-large">
-                    {selectedReservation.status}
-                  </span>
+                  <span className="status-tag-large">{selectedReservation.status}</span>
                 </h2>
                 <div className="info-box">
                   <h3>Description</h3>
                   <p>
-                    {items[selectedReservation.itemId]?.description ||
-                      'No description available.'}
+                    {items[selectedReservation.itemId]?.description || 'No description available.'}
                   </p>
                 </div>
                 <div className="info-box">
                   <h3>Details</h3>
                   <p>
-                    <strong>Customer:</strong>{' '}
-                    {users[selectedReservation.userId]?.displayName || 'N/A'}
+                    <strong>Customer:</strong> {users[selectedReservation.userId]?.displayName || 'N/A'}
                     <br />
-                    <strong>Reserved At:</strong>{' '}
-                    {formatDate(selectedReservation.reservedAt)}
+                    <strong>Reserved At:</strong> {formatDate(selectedReservation.reservedAt)}
                     <br />
                     {selectedReservation.soldAt && (
-                      <p>
-                        <strong>Sold At:</strong>{' '}
-                        {formatDate(selectedReservation.soldAt)}
-                      </p>
+                      <>
+                        <strong>Sold At:</strong> {formatDate(selectedReservation.soldAt)}
+                        <br />
+                      </>
                     )}
-                    <strong>Category:</strong>{' '}
-                    {items[selectedReservation.itemId]?.category || 'N/A'}
+                    <strong>Category:</strong> {items[selectedReservation.itemId]?.category || 'N/A'}
                   </p>
                 </div>
               </div>

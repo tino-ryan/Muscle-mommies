@@ -1,150 +1,114 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
 
-/* Reset for consistent spacing */
-.profile-container h1,
-.profile-container h3,
-.profile-container p,
-.profile-container button,
-.profile-container input,
-.profile-container textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.profile-container {
+.store-profile-container {
   min-height: 100vh !important;
-  background: #EEEEEE !important;
+  background: #F5F5F5 !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   width: 100vw !important;
   overflow-x: hidden !important;
+  position: relative !important;
+  padding-top: 80px !important; /* Added to clear navbar height */
 }
 
-/* Top Navigation Bar */
-.profile-container .profile-topbar {
-  background: #FFFFFF !important;
-  border: 1px solid #000000 !important;
-  border-radius: 12px !important;
-  padding: 24px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 100 !important;
-  margin: 24px !important;
-}
-
-.profile-container .topbar-content {
+.layout-wrapper {
   display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
   max-width: 1400px !important;
   margin: 0 auto !important;
+  padding: 32px !important;
+  gap: 32px !important;
 }
 
-.profile-container .topbar-left {
+.main-content {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  min-height: calc(100vh - 80px) !important; /* Ensure full height minus navbar */
+}
+
+.error-message {
+  background: rgba(255, 245, 253, 0.9) !important;
+  padding: 16px !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  margin-bottom: 24px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 16px !important;
+  gap: 12px !important;
+  color: #000000 !important;
 }
 
-.profile-container .store-info h1 {
-  font-size: 36px !important;
+.error-message i {
+  color: #FF9AE9 !important;
+}
+
+/* Edit Form Styles */
+.profile-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+}
+
+.form-header h1 {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 32px !important;
   font-weight: 700 !important;
   color: #000000 !important;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
   text-transform: uppercase !important;
   letter-spacing: 2px !important;
-}
-
-.profile-container .store-info p {
-  font-size: 14px !important;
-  color: #666666 !important;
-  margin-top: 4px !important;
-}
-
-.profile-container .logout-btn {
-  padding: 14px 32px !important;
-  background-color: #FF9AE9 !important;
-  color: #000000 !important;
-  border: 1px solid #000000 !important;
-  border-radius: 9999px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  transition: all 0.2s ease !important;
-  min-width: 160px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-.profile-container .logout-btn:hover {
-  background-color: #FFC1EE !important;
-  transform: translateY(-2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.profile-container .logout-btn:active {
-  background-color: #E88AD0 !important;
-  transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
-}
-
-/* Main Content */
-.profile-container .profile-main {
-  max-width: 1400px !important;
-  margin: 0 auto !important;
-  padding: 80px 24px 24px !important;
-}
-
-/* Profile Card */
-.profile-container .profile-card {
-  background: rgba(255, 255, 255, 0.8) !important;
-  padding: 24px !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  border: 1px solid #000000 !important;
-  margin-bottom: 32px !important;
-}
-
-.profile-container .profile-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
   margin-bottom: 24px !important;
 }
 
-.profile-container .profile-title {
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  color: #000000 !important;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
-  text-transform: uppercase !important;
+.form-grid {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important;
+  gap: 32px !important;
 }
 
-.profile-container .profile-form {
+.form-section,
+.image-section {
   display: flex !important;
   flex-direction: column !important;
-  gap: 16px !important;
+  gap: 24px !important;
 }
 
-.profile-container .form-group {
+.form-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 24px !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.form-card h2 {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+}
+
+.form-group {
   display: flex !important;
   flex-direction: column !important;
   gap: 8px !important;
+  margin-bottom: 16px !important;
 }
 
-.profile-container .form-label {
+.form-group label {
   font-size: 14px !important;
   font-weight: 600 !important;
   color: #000000 !important;
   text-transform: uppercase !important;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.profile-container .form-input,
-.profile-container .form-textarea {
+.required {
+  color: #FF9AE9 !important;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
   padding: 12px !important;
   border: 1px solid #000000 !important;
   border-radius: 8px !important;
@@ -155,219 +119,484 @@
   transition: all 0.2s ease !important;
 }
 
-.profile-container .form-input:focus,
-.profile-container .form-textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none !important;
   border-color: #D8FF6C !important;
   box-shadow: 0 0 0 3px rgba(216, 255, 108, 0.3) !important;
 }
 
-.profile-container .form-textarea {
+.form-group textarea {
   min-height: 120px !important;
   resize: vertical !important;
 }
 
-.profile-container .form-actions {
+.address-search {
   display: flex !important;
-  gap: 16px !important;
-  margin-top: 16px !important;
+  gap: 12px !important;
 }
 
-.profile-container .form-btn-primary,
-.profile-container .form-btn-secondary {
-  padding: 14px 32px !important;
+.address-search input {
+  flex: 1 !important;
+}
+
+.address-search button {
+  padding: 12px 24px !important;
+  background: #D8FF6C !important;
+  color: #000000 !important;
   border: 1px solid #000000 !important;
   border-radius: 9999px !important;
-  cursor: pointer !important;
-  font-weight: 600 !important;
   font-size: 14px !important;
-  transition: all 0.2s ease !important;
-  min-width: 160px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
 }
 
-.profile-container .form-btn-primary {
-  background: #FF9AE9 !important;
-  color: #000000 !important;
-}
-
-.profile-container .form-btn-primary:hover {
-  background: #FFC1EE !important;
+.address-search button:hover {
+  background: #C0E94D !important;
   transform: translateY(-2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.profile-container .form-btn-primary:active {
-  background: #E88AD0 !important;
-  transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+.address-search button:disabled {
+  background: #CCCCCC !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
 }
 
-.profile-container .form-btn-secondary {
+.address-options select {
+  width: 100% !important;
+  margin-top: 8px !important;
+}
+
+.contact-input {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.contact-input .contact-icon {
+  font-size: 16px !important;
+  color: #FF9AE9 !important;
+}
+
+.form-grid-2-col {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+}
+
+.image-card .profile-image-container {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  margin-bottom: 16px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.image-card .store-profile-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.image-card .no-image {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: #666666 !important;
+}
+
+.form-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  margin-top: 24px !important;
+  padding-bottom: 32px !important; /* Added padding to ensure buttons are not cut off */
+}
+
+.form-actions button {
+  padding: 12px 24px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+}
+
+.form-actions button[type="submit"] {
+  background: #D8FF6C !important;
+  color: #000000 !important;
+}
+
+.form-actions button[type="submit"]:hover {
+  background: #C0E94D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.form-actions .cancel-button {
   background: #CCCCCC !important;
   color: #000000 !important;
 }
 
-.profile-container .form-btn-secondary:hover {
+.form-actions .cancel-button:hover {
   background: #D8D8D8 !important;
   transform: translateY(-2px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.profile-container .form-btn-secondary:active {
-  background: #B3B3B3 !important;
-  transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+/* Display Mode Styles */
+.profile-display {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
 }
 
-/* Loading & Error States */
-.profile-container .loading-container,
-.profile-container .error-container {
+.profile-header .header-background {
+  position: relative !important;
+  width: 100% !important;
+  height: 300px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 2px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  margin-top: -20px !important; /* Slight overlap adjustment if navbar is fixed */
+  z-index: 1 !important; /* Ensure it sits above other content */
+}
+
+.profile-header .header-overlay {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  padding: 24px !important;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) !important;
+}
+
+.profile-header .header-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.profile-header .theme-tag {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 6px 12px !important;
+  border-radius: 9999px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.profile-header .store-name {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 36px !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+}
+
+.profile-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.description-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 24px !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.description-card h2 {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+}
+
+.description-card p {
+  font-size: 16px !important;
+  color: #333333 !important;
+  line-height: 1.6 !important;
+}
+
+.info-cards {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 24px !important;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 24px !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.info-card h2 {
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.info-card p,
+.info-card .hour-item,
+.info-card .contact-item {
+  font-size: 14px !important;
+  color: #333333 !important;
+  margin-bottom: 12px !important;
+}
+
+.hours-list {
+  margin-bottom: 16px !important;
+}
+
+.directions-button {
+  padding: 12px 24px !important;
+  background: #D8FF6C !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+}
+
+.directions-button:hover {
+  background: #C0E94D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.directions-button:disabled {
+  background: #CCCCCC !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
+}
+
+.contact-list {
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.contact-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease !important;
+}
+
+.contact-item:hover {
+  color: #D8FF6C !important;
+}
+
+.contact-icon {
+  font-size: 16px !important;
+  color: #FF9AE9 !important;
+}
+
+.edit-action {
+  text-align: center !important;
+  margin-top: 24px !important;
+  padding-bottom: 32px !important; /* Added padding to ensure button is not cut off */
+}
+
+.edit-action button {
+  padding: 12px 24px !important;
+  background: #D8FF6C !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+}
+
+.edit-action button:hover {
+  background: #C0E94D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000 !important;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 24px !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  position: relative !important;
+}
+
+.close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  color: #000000 !important;
+}
+
+.hours-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin: 16px 0 !important;
+}
+
+.hours-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.time-inputs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.modal-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 16px !important;
+}
+
+.modal-actions button {
+  padding: 12px 24px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+}
+
+.modal-actions button:first-child {
+  background: #D8FF6C !important;
+  color: #000000 !important;
+}
+
+.modal-actions button:first-child:hover {
+  background: #C0E94D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.modal-actions .cancel-button {
+  background: #CCCCCC !important;
+  color: #000000 !important;
+}
+
+.modal-actions .cancel-button:hover {
+  background: #D8D8D8 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Loading State */
+.loading {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   min-height: 100vh !important;
-  background: #EEEEEE !important;
-}
-
-.profile-container .error-card {
-  background: rgba(255, 255, 255, 0.8) !important;
-  padding: 24px !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  border: 1px solid #000000 !important;
-  max-width: 500px !important;
-  text-align: center !important;
-  color: #000000 !important;
-}
-
-.profile-container .loading-icon,
-.profile-container .error-card .loading-icon {
-  font-size: 48px !important;
-  margin-bottom: 16px !important;
-  color: #FF9AE9 !important;
-  animation: pulse 2s ease-in-out infinite !important;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
-}
-
-.profile-container .loading-text {
   font-size: 20px !important;
   font-weight: 600 !important;
   color: #000000 !important;
 }
 
-/* Profile Details Section */
-.profile-container .profile-details {
-  background: rgba(255, 255, 255, 0.8) !important;
-  padding: 24px !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-  border: 1px solid #000000 !important;
-  margin-bottom: 32px !important;
-}
-
-.profile-container .details-header {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  margin-bottom: 24px !important;
-}
-
-.profile-container .details-title {
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  color: #000000 !important;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
-}
-
-.profile-container .details-item {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 12px !important;
-  background: rgba(255, 255, 255, 0.8) !important;
-  border-radius: 12px !important;
-  border-left: 3px solid #FF9AE9 !important;
-  margin-bottom: 10px !important;
-  transition: all 0.2s ease !important;
-}
-
-.profile-container .details-item:hover {
-  transform: translateX(4px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
-}
-
-.profile-container .details-label {
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: #000000 !important;
-}
-
-.profile-container .details-value {
-  font-size: 14px !important;
-  color: #666666 !important;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
-  .profile-container .profile-main {
-    padding: 80px 12px 80px !important;
+  .store-profile-container {
+    padding-top: 60px !important; /* Adjusted for mobile navbar height */
   }
 
-  .profile-container .profile-topbar {
-    padding: 12px !important;
-    margin: 12px !important;
-  }
-
-  .profile-container .topbar-content {
+  .layout-wrapper {
     flex-direction: column !important;
-    gap: 16px !important;
-    align-items: flex-start !important;
+    padding: 16px !important;
   }
 
-  .profile-container .store-info h1 {
-    font-size: 28px !important;
+  .form-grid {
+    grid-template-columns: 1fr !important;
   }
 
-  .profile-container .profile-title {
-    font-size: 20px !important;
+  .info-cards {
+    grid-template-columns: 1fr !important;
   }
 
-  .profile-container .form-actions {
+  .form-actions,
+  .modal-actions {
     flex-direction: column !important;
     gap: 12px !important;
   }
 
-  .profile-container .form-btn-primary,
-  .profile-container .form-btn-secondary {
+  .form-actions button,
+  .modal-actions button {
     width: 100% !important;
+  }
+
+  .profile-header .header-background {
+    height: 200px !important;
+  }
+
+  .profile-header .store-name {
+    font-size: 28px !important;
   }
 }
 
 @media (min-width: 1024px) {
-  .profile-container .profile-main {
-    padding: 80px 32px 32px !important;
-  }
-
-  .profile-container .profile-topbar {
-    padding: 32px !important;
-    margin: 32px !important;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .profile-container .profile-topbar,
-  .profile-container .logout-btn,
-  .profile-container .form-actions {
-    display: none !important;
-  }
-
-  .profile-container {
-    background: #FFFFFF !important;
+  .layout-wrapper {
+    padding: 48px !important;
   }
 }

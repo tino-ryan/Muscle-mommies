@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
@@ -36,9 +37,7 @@ export default function AddListing() {
   }, [auth, navigate]);
 
   // --- HANDLER FUNCTIONS ---
-
   const handleLogout = async () => {
-    // DEFINITION FOR LINE 72
     try {
       await signOut(auth);
       navigate('/login');
@@ -48,10 +47,7 @@ export default function AddListing() {
   };
 
   const handleItemChange = (e) => {
-    // DEFINITIONS FOR LINES 106, 122, 137, 155, 176, 192, 217, 237, 250
     const { name, value } = e.target;
-
-    // Input validation for price and quantity (as you had it)
     if (name === 'price' && value !== '' && parseFloat(value) <= 0) {
       setError('Price must be a positive number.');
       return;
@@ -60,17 +56,15 @@ export default function AddListing() {
       setError('Quantity must be a positive whole number.');
       return;
     }
-    setError(''); // Clear error if input looks valid
+    setError('');
     setItem((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
-    // DEFINITION FOR LINE 280
     setImages([...e.target.files]);
   };
 
   const handleSubmit = async (e) => {
-    // DEFINITION FOR LINE 89
     e.preventDefault();
     setError('');
 
@@ -101,8 +95,6 @@ export default function AddListing() {
     try {
       const token = await auth.currentUser?.getIdToken();
       const formData = new FormData();
-
-      // Append item data
       formData.append('name', item.name);
       formData.append('description', item.description);
       formData.append('category', item.category);
@@ -112,8 +104,6 @@ export default function AddListing() {
       formData.append('status', item.status);
       formData.append('department', item.department);
       formData.append('style', item.style);
-
-      // Append images
       images.forEach((image) => formData.append('images', image));
 
       await axios.post(`${API_URL}/api/stores/items`, formData, {
@@ -133,25 +123,116 @@ export default function AddListing() {
     }
   };
 
+  // Inline styles
+  const inputStyle = {
+    padding: '14px 16px',
+    border: '1px solid #000000',
+    borderRadius: '9999px',
+    fontSize: '16px',
+    color: '#000000',
+    background: 'rgba(255, 255, 255, 0.8)',
+    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000',
+    transition: 'all 0.2s ease',
+    boxSizing: 'border-box',
+    minHeight: '48px',
+    width: '100%',
+    fontFamily: '"Plus Jakarta Sans", sans-serif',
+  };
+
+  const inputHoverFocusStyle = `
+    .input-field:hover, .text-area:hover, .select-menu:hover, .file-upload:hover {
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    .input-field:focus, .text-area:focus, .select-menu:focus, .file-upload:focus, .price-input-container:focus-within {
+      outline: none !important;
+      border-color: #D8FF6C !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 3px rgba(216, 255, 108, 0.3) !important;
+    }
+  `;
+
+  const selectStyle = {
+    ...inputStyle,
+    appearance: 'none',
+    backgroundImage: 'url("data:image/svg+xml;utf8,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"24\\" height=\\"24\\" fill=\\"%23000000\\"><path d=\\"M7 10l5 5 5-5z\\"/></svg>")',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 16px center',
+    paddingRight: '40px',
+    cursor: 'pointer',
+  };
+
+  const textareaStyle = {
+    ...inputStyle,
+    minHeight: '120px',
+    borderRadius: '12px',
+    resize: 'vertical',
+  };
+
+  const fileInputStyle = {
+    display: 'none',
+  };
+
+  const fileButtonStyle = {
+    display: 'inline-block',
+    padding: '14px 32px',
+    border: '1px solid #000000',
+    borderRadius: '9999px',
+    fontSize: '16px',
+    fontWeight: '600',
+    color: '#000000',
+    background: '#FF9AE9',
+    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000',
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
+    textAlign: 'center',
+    width: '100%',
+    fontFamily: '"Plus Jakarta Sans", sans-serif',
+  };
+
+  const fileButtonHoverStyle = `
+    .file-button:hover {
+      background: #FFC1EE !important;
+      transform: translateY(-2px) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    .file-button:active {
+      background: #E88AD0 !important;
+      transform: translateY(2px) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+    }
+  `;
+
+  const buttonStyle = {
+    padding: '14px 32px',
+    border: '1px solid #000000',
+    borderRadius: '9999px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000',
+    transition: 'all 0.2s ease',
+    minWidth: '160px',
+    fontFamily: '"Plus Jakarta Sans", sans-serif',
+  };
+
   // --- JSX (RETURN STATEMENT) ---
   return (
     <div className="add-listing">
+      <style>{inputHoverFocusStyle}</style>
+      <style>{fileButtonHoverStyle}</style>
       <div className="layout-container">
-        {/* Assume StoreSidebar is handled and styled to collapse/hide on mobile */}
         <StoreSidebar currentPage="Listings" onLogout={handleLogout} />
-
         <div className="content">
           <h1 className="page-title">Add New Listing</h1>
 
           {error && (
             <div className="error-box">
-              {/* Error Icon SVG */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 fill="currentColor"
                 viewBox="0 0 256 256"
+                style={{ width: '24px', height: '24px', color: '#FF9AE9', flexShrink: 0 }}
               >
                 <path d="M224,128A96,96,0,1,1,128,32,96.11,96.11,0,0,1,224,128Zm-20,0a76,76,0,1,0-76,76A76.08,76.08,0,0,0,204,128ZM128,168a8,8,0,0,0,8-8V104a8,8,0,0,0-16,0v56A8,8,0,0,0,128,168ZM128,88a8,8,0,1,0-8-8A8,8,0,0,0,128,88Z"></path>
               </svg>
@@ -176,27 +257,33 @@ export default function AddListing() {
                         id="name"
                         name="name"
                         value={item.name}
-                        onChange={handleItemChange} // Referenced
+                        onChange={handleItemChange}
                         placeholder="Enter item name"
                         required
+                        className="input-field"
+                        style={inputStyle}
                       />
                     </div>
                     <div className="form-group">
                       <label htmlFor="price">
                         Price (R) <span className="required">*</span>
                       </label>
-                      <div className="price-input-container">
-                        <span className="currency-label">R</span>
+                      <div className="price-input-container" style={inputStyle}>
+                        <span className="currency-label" style={{ padding: '0 16px', fontSize: '16px', color: '#000000', fontWeight: '600', lineHeight: '1.5' }}>
+                          R
+                        </span>
                         <input
                           type="number"
                           id="price"
                           name="price"
                           value={item.price}
-                          onChange={handleItemChange} // Referenced
+                          onChange={handleItemChange}
                           placeholder="0.00"
                           step="0.01"
                           min="0.01"
                           required
+                          className="price-input"
+                          style={{ flexGrow: 1, border: 'none', padding: '14px 0', background: 'transparent', fontSize: '16px', color: '#000000', lineHeight: '1.5' }}
                         />
                       </div>
                     </div>
@@ -207,8 +294,10 @@ export default function AddListing() {
                       id="description"
                       name="description"
                       value={item.description}
-                      onChange={handleItemChange} // Referenced
+                      onChange={handleItemChange}
                       placeholder="Describe the item in detail"
+                      className="text-area"
+                      style={textareaStyle}
                     />
                   </div>
                 </div>
@@ -227,8 +316,9 @@ export default function AddListing() {
                         value={item.category}
                         onChange={handleItemChange}
                         required
+                        className="select-menu"
+                        style={selectStyle}
                       >
-                        {' '}
                         <option value="">Select Category</option>
                         <option value="tops">Tops</option>
                         <option value="shirts">Shirts</option>
@@ -249,8 +339,9 @@ export default function AddListing() {
                         value={item.department}
                         onChange={handleItemChange}
                         required
+                        className="select-menu"
+                        style={selectStyle}
                       >
-                        {' '}
                         <option value="">Select Department</option>
                         <option value="women's">Women&apos;s</option>
                         <option value="men's">Men&apos;s</option>
@@ -265,8 +356,9 @@ export default function AddListing() {
                         name="size"
                         value={item.size}
                         onChange={handleItemChange}
+                        className="select-menu"
+                        style={selectStyle}
                       >
-                        {' '}
                         <option value="">Select Size (optional)</option>
                         <option value="XS">XS</option>
                         <option value="S">S</option>
@@ -289,8 +381,10 @@ export default function AddListing() {
                         id="style"
                         name="style"
                         value={item.style}
-                        onChange={handleItemChange} // Referenced
+                        onChange={handleItemChange}
                         placeholder="e.g., y2k, grunge"
+                        className="input-field"
+                        style={inputStyle}
                       />
                     </div>
                   </div>
@@ -309,11 +403,13 @@ export default function AddListing() {
                         id="quantity"
                         name="quantity"
                         value={item.quantity}
-                        onChange={handleItemChange} // Referenced
+                        onChange={handleItemChange}
                         placeholder="1"
                         step="1"
                         min="1"
                         required
+                        className="input-field"
+                        style={inputStyle}
                       />
                     </div>
                     <div className="form-group">
@@ -323,8 +419,9 @@ export default function AddListing() {
                         name="status"
                         value={item.status}
                         onChange={handleItemChange}
+                        className="select-menu"
+                        style={selectStyle}
                       >
-                        {' '}
                         <option value="Available">Available</option>
                         <option value="Out of Stock">Out of Stock</option>
                       </select>
@@ -339,22 +436,26 @@ export default function AddListing() {
                   <h3>
                     Product Images <span className="required">*</span>
                   </h3>
-
                   <div className="no-image-placeholder">
                     <p>Upload 1-5 images below.</p>
                   </div>
-
-                  {/* Image Upload */}
                   <div className="form-group upload-group">
                     <label htmlFor="images">Upload Images (Max 5)</label>
-                    <input
-                      type="file"
-                      id="images"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange} // Referenced
-                      required
-                    />
+                    <div>
+                      <input
+                        type="file"
+                        id="images"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        required
+                        className="file-upload"
+                        style={fileInputStyle}
+                      />
+                      <label htmlFor="images" className="file-button" style={fileButtonStyle}>
+                        Choose Images
+                      </label>
+                    </div>
                     {images.length > 0 && (
                       <p className="upload-note">
                         {images.length} image(s) selected.
@@ -367,13 +468,18 @@ export default function AddListing() {
 
             {/* Submit Actions */}
             <div className="form-actions">
-              <button type="submit" className="primary-button">
+              <button
+                type="submit"
+                className="primary-button"
+                style={{ ...buttonStyle, background: '#FF9AE9', color: '#000000' }}
+              >
                 Add Item
               </button>
               <button
                 type="button"
                 className="cancel-button"
                 onClick={() => navigate('/store/listings')}
+                style={{ ...buttonStyle, background: '#CCCCCC', color: '#000000' }}
               >
                 Cancel
               </button>

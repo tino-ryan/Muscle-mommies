@@ -77,7 +77,7 @@ export default function StoreSidebar({ currentPage, onLogout }) {
 
       {/* ===== Bottom Mobile Nav ===== */}
       <div className="mobile-nav">
-        <div className="nav-items-container">
+        <div className="nav-items-container left">
           {navItems.slice(0, 2).map((item, index) => (
             <div
               key={index}
@@ -97,12 +97,12 @@ export default function StoreSidebar({ currentPage, onLogout }) {
           />
         </div>
 
-        <div className="nav-items-container">
-          {navItems.slice(2, 4).map((item, index) => (
+        <div className="nav-items-container right">
+          {navItems.slice(2, 6).map((item, index) => (
             <div
               key={index}
               className={`nav-item ${currentPage === item.label.toLowerCase() ? 'active' : ''}`}
-              onClick={() => navigate(item.path)}
+              onClick={item.onClick || (() => navigate(item.path))}
             >
               <i className={`fas fa-${item.icon}`}></i>
             </div>

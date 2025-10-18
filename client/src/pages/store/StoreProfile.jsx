@@ -555,52 +555,51 @@ export default function StoreProfile() {
   }
 
   return (
-    <div className="store-profile">
-      <div className="layout-container">
+    <div className="store-profile-container">
+      <div className="layout-wrapper">
         <StoreSidebar currentPage="Store Profile" onLogout={handleLogout} />
-        <div className="content">
+        <main className="main-content">
           {error && (
-            <div className="error-box">
-              <i className="fas fa-exclamation-circle"></i>
-              <p>{error}</p>
+            <div className="error-message">
+              <i className="fas fa-exclamation-circle"></i> {error}
             </div>
           )}
           {editing ? (
-            <form onSubmit={handleSubmit} className="store-form">
-              <h1 className="page-title">Edit Store Profile</h1>
-              <div className="form-content-grid">
-                <div className="details-pane">
+            <form onSubmit={handleSubmit} className="profile-form">
+              <header className="form-header">
+                <h1>Edit Store Profile</h1>
+              </header>
+              <div className="form-grid">
+                <section className="form-section details-section">
                   <div className="form-card">
-                    <h3>Store Details</h3>
-                    <div className="form-grid-2-col">
-                      <div className="form-group">
-                        <label htmlFor="storeName">
-                          Store Name <span className="required">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          id="storeName"
-                          name="storeName"
-                          value={store.storeName}
-                          onChange={handleStoreChange}
-                          placeholder="Enter your store name"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="theme">Theme</label>
-                        <select
-                          id="theme"
-                          name="theme"
-                          value={store.theme || 'theme-default'}
-                          onChange={handleStoreChange}
-                        >
-                          <option value="theme-default">Default</option>
-                          <option value="theme-fashion">Fashion</option>
-                          <option value="theme-vintage">Vintage</option>
-                          <option value="theme-streetwear">Streetwear</option>
-                        </select>
-                      </div>
+                    <h2>Store Details</h2>
+                    <div className="form-group">
+                      <label htmlFor="storeName">
+                        Store Name <span className="required">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="storeName"
+                        name="storeName"
+                        value={store.storeName}
+                        onChange={handleStoreChange}
+                        placeholder="Enter your store name"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="theme">Theme</label>
+                      <select
+                        id="theme"
+                        name="theme"
+                        value={store.theme || 'theme-default'}
+                        onChange={handleStoreChange}
+                      >
+                        <option value="theme-default">Default</option>
+                        <option value="theme-fashion">Fashion</option>
+                        <option value="theme-vintage">Vintage</option>
+                        <option value="theme-streetwear">Streetwear</option>
+                      </select>
                     </div>
                     <div className="form-group">
                       <label htmlFor="description">Description</label>
@@ -614,7 +613,7 @@ export default function StoreProfile() {
                     </div>
                   </div>
                   <div className="form-card">
-                    <h3>Location</h3>
+                    <h2>Location</h2>
                     <div className="form-group">
                       <label htmlFor="addressSearch">
                         Search Address <span className="required">*</span>
@@ -666,7 +665,7 @@ export default function StoreProfile() {
                     </div>
                   </div>
                   <div className="form-card">
-                    <h3>Operating Hours</h3>
+                    <h2>Operating Hours</h2>
                     <button
                       type="button"
                       onClick={() => setShowHoursModal(true)}
@@ -675,9 +674,9 @@ export default function StoreProfile() {
                     </button>
                   </div>
                   <div className="form-card">
-                    <h3>
+                    <h2>
                       Contact Information <span className="required">*</span>
-                    </h3>
+                    </h2>
                     <div className="form-grid-2-col">
                       {['email', 'phone', 'instagram', 'facebook'].map(
                         (type) => (
@@ -705,10 +704,10 @@ export default function StoreProfile() {
                       )}
                     </div>
                   </div>
-                </div>
-                <div className="image-pane">
+                </section>
+                <aside className="image-section">
                   <div className="form-card image-card">
-                    <h3>Profile Image</h3>
+                    <h2>Profile Image</h2>
                     <div className="profile-image-container">
                       {store.profileImageURL ? (
                         <img
@@ -730,7 +729,7 @@ export default function StoreProfile() {
                       />
                     </div>
                   </div>
-                </div>
+                </aside>
               </div>
               <div className="form-actions">
                 <button type="submit">Save Profile</button>
@@ -744,67 +743,59 @@ export default function StoreProfile() {
               </div>
             </form>
           ) : (
-            <div className="store-display-v2">
-              {/* Header Section: Profile Image as Background + Overlaid Info */}
-              <div
-                className="profile-header-background"
-                style={{
-                  backgroundImage: `url(${store.profileImageURL || 'https://via.placeholder.com/1200x300?text=Profile+Image'})`,
-                }}
-              >
-                <div className="overlay-info-block">
-                  <div className="tag-rating-line">
-                    <span className="theme-tag">
-                      <i className="fas fa-tag"></i>{' '}
-                      {(store.theme || 'theme-default').replace('theme-', '')}
-                    </span>
-                    <StarRating rating={store.averageRating} />
-                    {store.reviewCount > 0 && (
-                      <button
-                        className="view-reviews-link"
-                        onClick={handleViewReviews}
-                      >
-                        ({store.reviewCount} reviews)
-                      </button>
-                    )}
+            <div className="profile-display">
+              <header className="profile-header">
+                <div
+                  className="header-background"
+                  style={{
+                    backgroundImage: `url(${store.profileImageURL || 'https://via.placeholder.com/1200x300?text=Profile+Image'})`,
+                  }}
+                >
+                  <div className="header-overlay">
+                    <div className="header-info">
+                      <span className="theme-tag">
+                        <i className="fas fa-tag"></i>{' '}
+                        {(store.theme || 'theme-default').replace('theme-', '')}
+                      </span>
+                      <StarRating rating={store.averageRating} />
+                      {store.reviewCount > 0 && (
+                        <button
+                          className="view-reviews-link"
+                          onClick={handleViewReviews}
+                        >
+                          ({store.reviewCount} reviews)
+                        </button>
+                      )}
+                    </div>
+                    <h1 className="store-name">
+                      {store.storeName || 'Your Store Name'}
+                    </h1>
                   </div>
                 </div>
-              </div>
-
-              {/* Main Content: Description and Cards */}
-              <div className="profile-main-content">
-                <h1 className="store-name">
-                  {store.storeName || 'Your Store Name'}
-                </h1>
-                {/* Description */}
+              </header>
+              <section className="profile-content">
                 <div className="description-card">
-                  <h2 className="section-title">About Us</h2>
-                  <p className="store-description">
+                  <h2>About Us</h2>
+                  <p>
                     {store.description ||
-                      'No description provided. Tell your customers what makes your thrift store unique!'}
+                      'No description provided. Tell your customers what makes your store unique!'}
                   </p>
                 </div>
-
-                {/* Info Cards Grid */}
-                <div className="info-cards-grid">
-                  {/* Location & Hours Card */}
+                <div className="info-cards">
                   <div className="info-card location-hours-card">
-                    <h2 className="card-title">
+                    <h2>
                       <i className="fas fa-map-marker-alt"></i> Location & Hours
                     </h2>
-                    <p className="store-address">
-                      {store.address || 'No physical address set.'}
-                    </p>
+                    <p>{store.address || 'No physical address set.'}</p>
                     <div className="hours-list">
                       {groupHours(store.hours).map((group, index) => (
                         <div key={index} className="hour-item">
-                          <strong>{group.days}:</strong>{' '}
-                          <span>{group.hours}</span>
+                          <strong>{group.days}:</strong> {group.hours}
                         </div>
                       ))}
                     </div>
                     <button
-                      className="btn-map"
+                      className="directions-button"
                       onClick={() =>
                         window.open(
                           `https://www.google.com/maps/search/?api=1&query=${store.location.lat},${store.location.lng}`,
@@ -816,47 +807,39 @@ export default function StoreProfile() {
                       Get Directions
                     </button>
                   </div>
-
-                  {/* Contact Info Card */}
                   <div className="info-card contact-info-card">
-                    <h2 className="card-title">
+                    <h2>
                       <i className="fas fa-phone"></i> Contact Info
                     </h2>
                     {contactInfos.length > 0 ? (
-                      <div className="contact-list">
+                      <ul className="contact-list">
                         {contactInfos.map((contact) => (
-                          <p
+                          <li
                             key={contact.id}
                             onClick={() =>
                               openContact(contact.type, contact.value)
                             }
-                            className="contact-link"
+                            className="contact-item"
                           >
                             <i
                               className={`fab fa-${contact.type} contact-icon`}
                             ></i>
                             {contact.value}
-                          </p>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     ) : (
-                      <p className="no-contact">No contact info provided.</p>
+                      <p>No contact info provided.</p>
                     )}
                   </div>
                 </div>
-              </div>
-
-              <div className="edit-button-container">
-                <button
-                  className="edit-profile-btn"
-                  onClick={() => setEditing(true)}
-                >
-                  Edit Profile
-                </button>
+              </section>
+              <div className="edit-action">
+                <button onClick={() => setEditing(true)}>Edit Profile</button>
               </div>
             </div>
           )}
-        </div>
+        </main>
       </div>
       {showReviewsModal && storeId && (
         <ReviewsModal
