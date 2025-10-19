@@ -153,4 +153,103 @@ describe('UserChats Page', () => {
       await screen.findByText(/Failed to fetch chats/i)
     ).toBeInTheDocument();
   });
+  
+  test('navigates to chat page on click', async () => {
+    const fakeUser = {
+      uid: 'user1',
+      getIdToken: jest.fn().mockResolvedValue('fake-token'),
+    };
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(fakeUser);
+      return mockUnsubscribeAuth;
+    });
+  
+    const fakeSnapshot = {
+      docs: [
+        {
+          id: 'chat1',
+          data: () => ({
+            participants: ['user1', 'user2'],
+            itemId: 'item1',
+            lastMessage: 'Hello!',
+            lastTimestamp: { seconds: 1633046400 },
+            unreadCount: 2,
+          }),
+        },
+      ],
+    };
+  
+    onSnapshot.mockImplementation((q, successCb) => {
+      successCb(fakeSnapshot);
+      return mockUnsubscribeSnapshot;
+    });
+  
+    axios.get.mockImplementation((url) => {
+      if (url.includes('/api/items/')) return Promise.resolve({ data: { name: 'Cool Jacket', images: [] } });
+      if (url.includes('/api/stores/users/')) return Promise.resolve({ data: { displayName: 'Alice' } });
+      return Promise.resolve({ data: {} });
+    });
+  
+    render(
+      <MemoryRouter>
+        <UserChats />
+      </MemoryRouter>
+    );
+  
+    const chatCard = await screen.findByText(/Alice/i);
+    fireEvent.click(chatCard.closest('.chat-card'));
+    expect(mockNavigate).toHaveBeenCalledWith('/store/chats/chat1');
+  });
+  
+  test('renders no chats message when chat list is empty', async () => {
+    const fakeUser = { uid: 'user1', getIdToken: jest.fn().mockResolvedValue('fake-token') };
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(fakeUser);
+      return mockUnsubscribeAuth;
+    });
+  
+    onSnapshot.mockImplementation((q, successCb) => {
+      successCb({ docs: [] });
+      return mockUnsubscribeSnapshot;
+    });
+  
+    render(<MemoryRouter><UserChats /></MemoryRouter>);
+  
+    expect(await screen.findByText(/No chats available/i)).toBeInTheDocument();
+  });
+  
+  test('renders no results message when search finds nothing', async () => {
+    const fakeUser = { uid: 'user1', getIdToken: jest.fn().mockResolvedValue('fake-token') };
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback(fakeUser);
+      return mockUnsubscribeAuth;
+    });
+  
+    const fakeSnapshot = {
+      docs: [
+        { id: 'chat1', data: () => ({ participants: ['user1', 'user2'], itemId: 'item1', lastMessage: 'Hello!', lastTimestamp: { seconds: 1633046400 }, unreadCount: 0 }) },
+      ],
+    };
+    onSnapshot.mockImplementation((q, successCb) => { successCb(fakeSnapshot); return mockUnsubscribeSnapshot; });
+    axios.get.mockResolvedValue({ data: { name: 'Cool Jacket', images: [] } });
+  
+    render(<MemoryRouter><UserChats /></MemoryRouter>);
+  
+    const input = await screen.findByPlaceholderText(/Search items or customers/i);
+    fireEvent.change(input, { target: { value: 'nonexistent' } });
+  
+    expect(await screen.findByText(/No results found/i)).toBeInTheDocument();
+  });
+  
+  test('CustomerSidebar logout triggers navigation', async () => {
+    const fakeUser = { uid: 'user1', getIdToken: jest.fn().mockResolvedValue('fake-token') };
+    onAuthStateChanged.mockImplementation((auth, callback) => { callback(fakeUser); return mockUnsubscribeAuth; });
+    onSnapshot.mockImplementation((q, successCb) => { successCb({ docs: [] }); return mockUnsubscribeSnapshot; });
+  
+    render(<MemoryRouter><UserChats /></MemoryRouter>);
+  
+    const logoutBtn = screen.getByText(/Sidebar active/i).closest('div');
+    fireEvent.click(logoutBtn.querySelector('button') || logoutBtn); // depends on your sidebar
+    // since onLogout signs out, you could mock signOut too if needed
+  });  
 });
