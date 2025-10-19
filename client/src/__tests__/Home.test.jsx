@@ -87,6 +87,16 @@ const mockGeolocation = {
 
 global.navigator.geolocation = mockGeolocation;
 
+// Mock document.cookie
+let mockCookie = '';
+Object.defineProperty(document, 'cookie', {
+  get: jest.fn(() => mockCookie),
+  set: jest.fn((value) => {
+    mockCookie = value;
+  }),
+  configurable: true,
+});
+
 const renderHome = () =>
   render(
     <BrowserRouter>
@@ -118,18 +128,20 @@ describe('ThriftFinderHome', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockCookie = ''; // Clear cookie before each test
     axios.get.mockResolvedValue({ data: mockStores });
 
-    mockGeolocation.watchPosition.mockImplementation((success) => {
+    // Mock getCurrentPosition (changed from watchPosition)
+    mockGeolocation.getCurrentPosition.mockImplementation((success) => {
       setTimeout(() => {
         success({
           coords: {
             latitude: -26.2041,
             longitude: 28.0473,
+            accuracy: 50, // Add accuracy
           },
         });
       }, 100);
-      return 1;
     });
   });
 
@@ -220,7 +232,7 @@ describe('ThriftFinderHome', () => {
 
   describe('Geolocation', () => {
     it('shows loading state while getting location', () => {
-      mockGeolocation.watchPosition.mockImplementation(() => 1);
+      mockGeolocation.getCurrentPosition.mockImplementation(() => {});
 
       renderHome();
 
@@ -238,12 +250,13 @@ describe('ThriftFinderHome', () => {
     it('handles geolocation error with fallback', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
-      mockGeolocation.watchPosition.mockImplementation((success, error) => {
-        setTimeout(() => {
-          error({ code: 1, message: 'Permission denied' });
-        }, 100);
-        return 1;
-      });
+      mockGeolocation.getCurrentPosition.mockImplementation(
+        (success, error) => {
+          setTimeout(() => {
+            error({ code: 1, message: 'Permission denied' });
+          }, 100);
+        }
+      );
 
       renderHome();
 
@@ -270,14 +283,24 @@ describe('ThriftFinderHome', () => {
       global.navigator.geolocation = mockGeolocation;
     });
 
-    it('cleans up geolocation watch on unmount', () => {
-      mockGeolocation.watchPosition.mockReturnValue(123); // Return a specific watchId
+    it('uses saved location from cookie when available', async () => {
+      const savedLocation = {
+        lat: -26.1234,
+        lng: 28.5678,
+        address: '123 Test St, Johannesburg',
+      };
+      mockCookie = `userLocation=${encodeURIComponent(JSON.stringify(savedLocation))}`;
 
-      const { unmount } = renderHome();
+      renderHome();
 
-      unmount();
+      await waitFor(() => {
+        expect(
+          screen.getByText('Using: 123 Test St, Johannesburg')
+        ).toBeInTheDocument();
+      });
 
-      expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
+      // Should not call getCurrentPosition when cookie exists
+      expect(mockGeolocation.getCurrentPosition).not.toHaveBeenCalled();
     });
   });
 
@@ -296,16 +319,16 @@ describe('ThriftFinderHome', () => {
     });
 
     it('shows no stores message when all filtered out', async () => {
-      mockGeolocation.watchPosition.mockImplementation((success) => {
+      mockGeolocation.getCurrentPosition.mockImplementation((success) => {
         setTimeout(() => {
           success({
             coords: {
               latitude: 0, // Very far from stores
               longitude: 0,
+              accuracy: 50,
             },
           });
         }, 100);
-        return 1;
       });
 
       renderHome();
@@ -471,6 +494,222 @@ describe('ThriftFinderHome', () => {
         img.src.includes('placeholder')
       );
       expect(placeholderImage).toBeInTheDocument();
+    });
+  });
+
+  describe('Address Search', () => {
+    it('renders Set Address button', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+    });
+
+    it('shows address search input when Set Address clicked', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Set Address'));
+
+      expect(
+        screen.getByPlaceholderText(
+          'Enter house number, street, suburb, city'
+        )
+      ).toBeInTheDocument();
+      expect(screen.getByText('Search')).toBeInTheDocument();
+    });
+
+    it('searches for address and displays options', async () => {
+      const mockAddresses = [
+        {
+          address: {
+            house_number: '123',
+            road: 'Main Street',
+            suburb: 'Sandton',
+            city: 'Johannesburg',
+          },
+          display_name: '123 Main Street, Sandton, Johannesburg',
+          lat: '-26.1234',
+          lon: '28.5678',
+        },
+      ];
+
+      // First call for stores, second for address search
+      axios.get
+        .mockResolvedValueOnce({ data: mockStores })
+        .mockResolvedValueOnce({ data: mockAddresses });
+
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Set Address'));
+
+      const input = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(input, { target: { value: '123 Main Street' } });
+
+      const searchButton = screen.getByText('Search');
+      fireEvent.click(searchButton);
+
+      await waitFor(() => {
+        expect(axios.get).toHaveBeenCalledWith(
+          'https://nominatim.openstreetmap.org/search',
+          expect.objectContaining({
+            params: expect.objectContaining({
+              q: '123 Main Street, South Africa',
+              format: 'json',
+            }),
+          })
+        );
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Select an address')).toBeInTheDocument();
+      });
+    });
+
+    it('selects address and saves to cookie', async () => {
+      const mockAddresses = [
+        {
+          address: {
+            house_number: '123',
+            road: 'Main Street',
+            suburb: 'Sandton',
+            city: 'Johannesburg',
+          },
+          display_name: '123 Main Street, Sandton, Johannesburg',
+          lat: '-26.1234',
+          lon: '28.5678',
+        },
+      ];
+
+      axios.get
+        .mockResolvedValueOnce({ data: mockStores })
+        .mockResolvedValueOnce({ data: mockAddresses });
+
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Set Address'));
+
+      const input = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(input, { target: { value: '123 Main Street' } });
+
+      fireEvent.click(screen.getByText('Search'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Select an address')).toBeInTheDocument();
+      });
+
+      const select = screen.getByDisplayValue('Select an address');
+      fireEvent.change(select, { target: { value: '0' } });
+
+      await waitFor(() => {
+        expect(mockCookie).toContain('userLocation');
+        // Cookie contains URL-encoded JSON, so check for the decoded values
+        const decodedCookie = decodeURIComponent(mockCookie);
+        expect(decodedCookie).toContain('123 Main Street, Sandton, Johannesburg');
+      });
+    });
+
+    it('displays clear button when saved address exists', async () => {
+      const savedLocation = {
+        lat: -26.1234,
+        lng: 28.5678,
+        address: '123 Test St, Johannesburg',
+      };
+      mockCookie = `userLocation=${encodeURIComponent(JSON.stringify(savedLocation))}`;
+
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByTitle('Clear saved location and use GPS')).toBeInTheDocument();
+      });
+    });
+
+    it('clears saved location and uses GPS when clear button clicked', async () => {
+      const savedLocation = {
+        lat: -26.1234,
+        lng: 28.5678,
+        address: '123 Test St, Johannesburg',
+      };
+      mockCookie = `userLocation=${encodeURIComponent(JSON.stringify(savedLocation))}`;
+
+      renderHome();
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Using: 123 Test St, Johannesburg')
+        ).toBeInTheDocument();
+      });
+
+      const clearButton = screen.getByTitle('Clear saved location and use GPS');
+      fireEvent.click(clearButton);
+
+      await waitFor(() => {
+        expect(mockGeolocation.getCurrentPosition).toHaveBeenCalled();
+      });
+    });
+
+    it('shows error when searching without input', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Set Address'));
+
+      const searchButton = screen.getByText('Search');
+      fireEvent.click(searchButton);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'Please enter house number, street name, suburb, and city.'
+          )
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('shows error when no addresses found', async () => {
+      axios.get
+        .mockResolvedValueOnce({ data: mockStores })
+        .mockResolvedValueOnce({ data: [] });
+
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.getByText('Set Address')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Set Address'));
+
+      const input = screen.getByPlaceholderText(
+        'Enter house number, street, suburb, city'
+      );
+      fireEvent.change(input, { target: { value: 'Invalid Address' } });
+
+      fireEvent.click(screen.getByText('Search'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('No results found for the address. Please try again.')
+        ).toBeInTheDocument();
+      });
     });
   });
 });

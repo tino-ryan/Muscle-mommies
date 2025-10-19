@@ -390,3 +390,138 @@
   box-shadow: none !important;
   background: none !important;
 }
+
+/* Address search section */
+.customer-home .address-search-section {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customer-home .address-search-input {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.customer-home .address-search-input input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  background: #ffffff;
+  color: #000000;
+}
+
+.customer-home .address-search-input input:focus {
+  outline: none;
+  border-color: #FF9AE9;
+  box-shadow: 0 0 0 2px rgba(255, 154, 233, 0.2);
+}
+
+.customer-home .address-search-input button {
+  padding: 10px 20px;
+  background: #D8FF6C;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+}
+
+.customer-home .address-search-input button:hover {
+  background: #BCE84D;
+  transform: translateY(-1px);
+}
+
+.customer-home .address-search-input button:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+}
+
+.customer-home .address-search-input button:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.customer-home .address-options {
+  margin-top: 8px;
+}
+
+.customer-home .address-options select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  background: #ffffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+.customer-home .address-options select:focus {
+  outline: none;
+  border-color: #FF9AE9;
+  box-shadow: 0 0 0 2px rgba(255, 154, 233, 0.2);
+}
+
+/* Location control buttons */
+.customer-home .set-address-btn,
+.customer-home .clear-location-btn {
+  padding: 6px 14px;
+  background: #FF9AE9;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 3px 0 #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.customer-home .set-address-btn:hover,
+.customer-home .clear-location-btn:hover {
+  background: #E88AD0;
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+}
+
+.customer-home .set-address-btn:active,
+.customer-home .clear-location-btn:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+}
+
+.customer-home .clear-location-btn {
+  background: #ffffff;
+  padding: 4px 10px;
+  font-size: 14px;
+  min-width: auto;
+}

@@ -58,6 +58,17 @@ const StoreCardSkeleton = () => (
   </div>
 );
 
+// --- COOKIE HELPERS ---
+const setCookie = (name, value, days = 365) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/`;
+};
+
+const getCookie = (name) => {
+  const value = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return value ? JSON.parse(decodeURIComponent(value.pop())) : null;
+};
+
 // --- MAIN PAGE COMPONENT ---
 export default function ThriftFinderHome() {
   const [stores, setStores] = useState([]);
@@ -66,6 +77,11 @@ export default function ThriftFinderHome() {
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [loadingStores, setLoadingStores] = useState(true);
   const [error, setError] = useState('');
+  const [addressSearch, setAddressSearch] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [addressOptions, setAddressOptions] = useState([]);
+  const [showAddressInput, setShowAddressInput] = useState(false);
+  const [savedAddress, setSavedAddress] = useState('');
   const navigate = useNavigate();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -132,8 +148,19 @@ export default function ThriftFinderHome() {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
-  // Live location tracking
+  // Get user location (check cookie first, then GPS)
   useEffect(() => {
+    // Check if there's a saved location in cookie
+    const savedLocation = getCookie('userLocation');
+    if (savedLocation && savedLocation.lat && savedLocation.lng) {
+      setUserLocation(savedLocation);
+      setSavedAddress(savedLocation.address || 'Saved location');
+      setLoadingLocation(false);
+      console.log('Using saved location from cookie:', savedLocation.address);
+      return;
+    }
+
+    // No saved location, try GPS
     if (!navigator.geolocation) {
       setUserLocation({ lat: -26.2041, lng: 28.0473 });
       setLoadingLocation(false);
@@ -141,13 +168,14 @@ export default function ThriftFinderHome() {
     }
 
     setLoadingLocation(true);
-    const watchId = navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
         setUserLocation({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
         setLoadingLocation(false);
+        console.log(`Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`);
       },
       (error) => {
         console.error('Geolocation error:', error);
@@ -155,11 +183,109 @@ export default function ThriftFinderHome() {
         setLoadingLocation(false);
         setError('Unable to access location');
       },
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
-
-    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
+
+  // Address search handlers (similar to StoreProfile)
+  const handleAddressSearchChange = (e) => {
+    setAddressSearch(e.target.value);
+  };
+
+  const handleAddressSearch = async () => {
+    if (!addressSearch.trim()) {
+      setError('Please enter house number, street name, suburb, and city.');
+      return;
+    }
+    setIsSearching(true);
+    setError('');
+    setAddressOptions([]);
+    try {
+      const response = await axios.get(
+        'https://nominatim.openstreetmap.org/search',
+        {
+          params: {
+            q: `${addressSearch}, South Africa`,
+            format: 'json',
+            addressdetails: 1,
+            limit: 5,
+            countrycodes: 'ZA',
+          },
+          headers: { 'User-Agent': 'MuscleMommies/1.0 (contact@example.com)' },
+        }
+      );
+      if (response.data.length > 0) {
+        const options = response.data.map((result) => ({
+          display: `${
+            result.address.house_number ? result.address.house_number + ' ' : ''
+          }${result.address.road || 'Unknown Street'}, ${
+            result.address.suburb || 'Unknown Suburb'
+          }, ${result.address.city || result.address.town || 'Unknown City'}`,
+          fullAddress: result.display_name,
+          lat: result.lat,
+          lng: result.lon,
+        }));
+        setAddressOptions(options);
+      } else {
+        setError('No results found for the address. Please try again.');
+      }
+    } catch (error) {
+      setError(
+        'Failed to search address: ' +
+          (error.response?.data?.error || error.message)
+      );
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleAddressSelect = (option) => {
+    const newLocation = {
+      lat: parseFloat(option.lat),
+      lng: parseFloat(option.lng),
+      address: option.display,
+    };
+    setUserLocation(newLocation);
+    setSavedAddress(option.display);
+    // Save to cookie
+    setCookie('userLocation', newLocation);
+    setAddressOptions([]);
+    setAddressSearch('');
+    setShowAddressInput(false);
+    console.log('Location saved to cookie:', option.display);
+  };
+
+  const handleClearSavedLocation = () => {
+    // Clear cookie
+    document.cookie = 'userLocation=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    setSavedAddress('');
+    setUserLocation(null);
+    setLoadingLocation(true);
+
+    // Re-trigger GPS location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserLocation({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
+          setLoadingLocation(false);
+          console.log(`Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`);
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          setUserLocation({ lat: -26.2041, lng: 28.0473 });
+          setLoadingLocation(false);
+          setError('Unable to access location');
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    } else {
+      setUserLocation({ lat: -26.2041, lng: 28.0473 });
+      setLoadingLocation(false);
+    }
+  };
 
   const storesWithDistance = stores.map((s) => ({
     ...s,
@@ -209,10 +335,27 @@ export default function ThriftFinderHome() {
               >
                 {loadingLocation
                   ? 'Getting your location...'
-                  : userLocation
-                    ? 'Location detected'
-                    : 'Location unavailable'}
+                  : savedAddress
+                    ? `Using: ${savedAddress}`
+                    : userLocation
+                      ? 'Location detected'
+                      : 'Location unavailable'}
               </span>
+              {savedAddress && (
+                <button
+                  className="clear-location-btn"
+                  onClick={handleClearSavedLocation}
+                  title="Clear saved location and use GPS"
+                >
+                  ✕
+                </button>
+              )}
+              <button
+                className="set-address-btn"
+                onClick={() => setShowAddressInput(!showAddressInput)}
+              >
+                {showAddressInput ? 'Cancel' : 'Set Address'}
+              </button>
             </div>
             <div className="distance-selector">
               <label>Max Distance:</label>
@@ -228,6 +371,43 @@ export default function ThriftFinderHome() {
               </select>
             </div>
           </div>
+          {showAddressInput && (
+            <div className="address-search-section">
+              <div className="address-search-input">
+                <input
+                  type="text"
+                  value={addressSearch}
+                  onChange={handleAddressSearchChange}
+                  placeholder="Enter house number, street, suburb, city"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleAddressSearch();
+                  }}
+                />
+                <button onClick={handleAddressSearch} disabled={isSearching}>
+                  {isSearching ? 'Searching...' : 'Search'}
+                </button>
+              </div>
+              {addressOptions.length > 0 && (
+                <div className="address-options">
+                  <select
+                    onChange={(e) =>
+                      handleAddressSelect(addressOptions[e.target.value])
+                    }
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select an address
+                    </option>
+                    {addressOptions.map((option, index) => (
+                      <option key={index} value={index}>
+                        {option.display}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          )}
           <div className="main-layout">
             <div className="map-container">
               <MapContainer
