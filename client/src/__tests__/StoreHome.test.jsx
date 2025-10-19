@@ -774,4 +774,86 @@ describe('StoreHome', () => {
       expect(screen.getByText(/Popular Styles/i)).toBeInTheDocument();
     });
   });
+
+  it('handles empty reviews gracefully', async () => {
+    setupOnAuth(mockUser);
+    setupFirestoreMocks(false, [], [], [], []);
+    axios.get.mockResolvedValue({ data: [] });
+  
+    render(
+      <MemoryRouter>
+        <StoreHome />
+      </MemoryRouter>
+    );
+  
+    await waitFor(() => {
+      expect(screen.getByText('Test Store')).toBeInTheDocument();
+    });
+  
+    // Should render "No reviews yet"
+    await waitFor(() => {
+      expect(screen.getByText(/No reviews yet/i)).toBeInTheDocument();
+    });
+  });
+
+  it('closes multiple flipped cards independently', async () => {
+    setupOnAuth(mockUser);
+    setupFirestoreMocks(false, [], [], [], []);
+    axios.get.mockResolvedValue({ data: [] });
+  
+    render(
+      <MemoryRouter>
+        <StoreHome />
+      </MemoryRouter>
+    );
+  
+    await waitFor(() => {
+      expect(screen.getByText('Test Store')).toBeInTheDocument();
+    });
+  
+    const flipCardWrappers = document.querySelectorAll('.flip-card-wrapper');
+    flipCardWrappers.forEach(wrapper => {
+      const card = wrapper.querySelector('.flip-card-container');
+      fireEvent.click(card);
+    });
+  
+    await waitFor(() => {
+      flipCardWrappers.forEach(wrapper => {
+        const card = wrapper.querySelector('.flip-card-container');
+        expect(card.querySelector('.flipped')).toBeTruthy();
+      });
+    });
+  
+    const closeButtons = document.querySelectorAll('.card-close-btn');
+    closeButtons.forEach(btn => fireEvent.click(btn));
+  
+    await waitFor(() => {
+      flipCardWrappers.forEach(wrapper => {
+        const card = wrapper.querySelector('.flip-card-container');
+        expect(card.querySelector('.flipped')).toBeFalsy();
+      });
+    });
+  });
+
+  it('renders charts with item data', async () => {
+    setupOnAuth(mockUser);
+    const items = [
+      { data: () => ({ ...mockItemData, department: 'Men', category: 'Shirt', style: 'Casual' }) },
+      { data: () => ({ ...mockItemData, id: 'item-2', department: 'Women', category: 'Pants', style: 'Formal' }) },
+    ];
+    setupFirestoreMocks(false, items, [], [], []);
+    axios.get.mockResolvedValue({ data: [] });
+  
+    render(
+      <MemoryRouter>
+        <StoreHome />
+      </MemoryRouter>
+    );
+  
+    await waitFor(() => {
+      expect(screen.getByText(/Items by Department/i)).toBeInTheDocument();
+      expect(screen.getByText(/Items by Category/i)).toBeInTheDocument();
+      expect(screen.getByText(/Popular Styles/i)).toBeInTheDocument();
+    });
+  });  
 });
