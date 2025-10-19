@@ -175,7 +175,9 @@ export default function ThriftFinderHome() {
           lng: pos.coords.longitude,
         });
         setLoadingLocation(false);
-        console.log(`Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`);
+        console.log(
+          `Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`
+        );
       },
       (error) => {
         console.error('Geolocation error:', error);
@@ -257,7 +259,8 @@ export default function ThriftFinderHome() {
 
   const handleClearSavedLocation = () => {
     // Clear cookie
-    document.cookie = 'userLocation=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie =
+      'userLocation=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     setSavedAddress('');
     setUserLocation(null);
     setLoadingLocation(true);
@@ -271,7 +274,9 @@ export default function ThriftFinderHome() {
             lng: pos.coords.longitude,
           });
           setLoadingLocation(false);
-          console.log(`Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`);
+          console.log(
+            `Location acquired: ±${pos.coords.accuracy.toFixed(0)}m accuracy`
+          );
         },
         (error) => {
           console.error('Geolocation error:', error);

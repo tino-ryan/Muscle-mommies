@@ -359,7 +359,7 @@
   }
   .customer-home .main-layout {
     flex-direction: column;
-    height: auto;
+    height: 120vh; /* Adjust height for mobile */
   }
   .customer-home .map-container {
     height: 400px;
