@@ -10,6 +10,9 @@ To gather user feedback for our project, we used the following method:
 - Questions included general feedback, suggested improvements and feature preferences
 - [View sprint 2 survey here](https://docs.google.com/forms/d/e/1FAIpQLSf0ihPCr1UGzcnIMiT2nzkEq5zqt0ezSRXEbI9rU2Ff0Ksefg/viewform)
 - [View sprint 3 survey here](https://docs.google.com/forms/d/e/1FAIpQLSf_g6OuiSoine9kckVr94vn-e8f0Pdth0drJ_0fGaDo6Z694A/viewform?fbzx=-1017252036218515497)
+- [View sprint 4 survey here](https://docs.google.com/forms/d/e/1FAIpQLSempKXPGbE6YAkQRWNG_xIvoRRhswKOmjr22FXajbQGqkRbHg/viewform?usp=header
+)
+
 
 ### 2. Product Pitch Distribution
 
@@ -26,6 +29,7 @@ To gather user feedback for our project, we used the following method:
 
 - [User Feedback for Sprint 2](/pdf/tf.pdf)
 - [User Feedback for Sprint 3](https://docs.google.com/spreadsheets/d/1nDlbpmBOeZT33PT88asfGHM5nBSil1oHtlEXkTxSEwU/edit?gid=860310904#gid=860310904)
+[User Feedback for Sprint 4](https://docs.google.com/spreadsheets/d/11TylpZjzaq_n8K6-vSHLVJ9dOBkDcojGawzKvt4R4dc/edit?usp=sharing)
 
 ### 5. Feedback Summary:
 
@@ -76,6 +80,75 @@ To gather user feedback for our project, we used the following method:
   - Community features (reviews, badges, outfits, points).
   - Notifications for deals, events, and restocks.
   - Ability to shop outside of immediate location.
+
+**_Sprint 4:_**
+
+_Overall Experience:_
+ - Most users rated their overall experience between 4 and 5, showing high satisfaction.
+ - The app was described as visually engaging, intuitive, and fun to use.
+ - A few users reported performance issues (e.g., lag, slow review load times, mobile responsiveness).
+
+_Accessibility & Readability:_
+ - Majority found the app very readable and text clear.
+ - A small number mentioned some text being hard to read on certain pages.
+ - Suggestions included:
+    - Adding a dark mode for better contrast.
+    - Ensuring consistent font sizing and color contrast across pages.
+
+_Aesthetics & Visual Design:_
+ - The color scheme, layout, and bold visuals received strong praise for being creative and engaging.
+ - Several users highlighted the map interface, badges, and closet feature as visually appealing.
+ - A few users felt the color palette was too busy or “doing too much.”
+ - Minor visual improvement requests:
+    - Smoother page transitions and animations.
+    - Consistent theme across all screens.
+
+_Performance & Responsiveness:_
+- Desktop performance rated positively, but some lag and slow loading were observed on mobile.
+- Issues mentioned:
+   - Slow review loading (e.g., “7 seconds for reviews to pop up”).
+   - Error messages not clear (e.g., “Error 400” during reservation).
+- Suggested improvements:
+  - Optimize for mobile devices.
+  - Faster load times for map and item pages.
+  - Display clearer error explanations to users.
+
+_User Experience & Navigation:_
+- The majority found navigation easy and intuitive.
+- Highlights:
+  - Map view and store cards made finding thrift stores straightforward.
+  - Closet and reservation systems were described as helpful and convenient.
+- Suggestions for improvement:
+  - Add a tutorial for first-time users.
+  - Make buttons and icons more clearly labeled.
+  - Allow logo click to return home.
+  -  Improve search fallback — when no stores appear, show nearby results instead.
+
+_Feature Feedback:_
+- Highly praised features:
+  - Badges and rewards system – “fun and motivating.”
+  - Chat functionality – “really convenient for store communication.”
+  - Closet/reservation tracking – helps users manage items.
+-  Commonly requested additions:
+  - Dark mode option.
+  - Wishlist/favorites list.
+  - Price or brand filters.
+  - Analytics for store owners (e.g., item views).
+  - Student discounts or rewards.
+  - Payment gateway and delivery tracking.
+
+_Functionality & Technical Observations:_
+- Some users faced location-based limitations — stores not appearing beyond 10 km.
+-  Occasional bugs and errors were reported on reservations and mobile layouts.
+-  Positive comments emphasized the app’s potential and unique idea despite technical issues.
+
+_Overall Sentiment:_
+- Strongly positive toward design, purpose, and concept.
+- Users appreciated the app’s focus on sustainable fashion and community-driven thrifting.
+- Feedback reinforced that The Box is innovative, useful, and visually distinctive, but should continue improving:
+- Performance optimization:
+  - Mobile friendliness
+  - Clearer communication in UI and error handling.
 
 ## 6. Why this method?:
 
@@ -135,3 +208,42 @@ _4. Polish & Usability_
 - Refine UI consistency and visual polish.
 - Add dark mode and customization options.
 - Introduce tutorials/onboarding for new users.
+
+**_Sprint 4:_**
+
+_1. Accessibility & Visual Improvements_
+- Refine color palette for improved contrast and consistency across all pages.  
+- Implement dark mode for better accessibility and comfort in different lighting environments.  
+- Ensure all text, buttons, and icons meet accessibility standards (contrast ratio, font size, and spacing).  
+- Apply consistent theming between user, store owner, and admin views.
+
+_2. Mobile Responsiveness & Optimization_
+- Conduct full mobile optimization pass to ensure layout scales correctly across screen sizes.  
+- Improve responsiveness of all key pages (home, store view, reservations, chat).  
+- Optimize image loading using lazy loading and compression.  
+- Verify that all features perform smoothly on both Android and iOS browsers.
+
+_3. Performance & Stability_
+- Reduce overall page load times and memory usage.  
+- Fix any outstanding bugs reported in Sprint 3 testing (login issues, reservation errors, map freezes).  
+- Improve caching and data-fetching logic to minimize delays between views.  
+- Conduct regression testing to ensure previous sprint features remain stable.
+
+_4. User Experience & Feature Enhancements_
+- Add loading animations and transition effects for a smoother experience.  
+- Implement clear, descriptive error and success messages throughout the app.  
+- Introduce final touches to wishlist/favourites, reviews, and eco-points reward tracking.  
+- Add onboarding prompts or tooltips to guide new users through key features.  
+- Improve analytics dashboard visuals for store owners (charts, insights, item performance).
+
+_5. Testing, Deployment & Final Validation_
+- Perform comprehensive usability testing with external users.  
+- Validate all feedback-based improvements from Sprint 3.  
+- Conduct final accessibility audit and performance benchmarking.  
+- Prepare production build and deploy final version of _The Box_ to hosting environment.  
+- Create final user documentation and handover materials (usage guide, admin guide, maintenance notes).  
+
+**Success Criteria:**  
+- The web app meets accessibility, responsiveness, and performance benchmarks.  
+- All core features function as intended with no critical bugs.  
+- The final deployed version of _The Box_ is polished, user-friendly, and demo-ready.
