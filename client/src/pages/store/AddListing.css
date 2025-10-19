@@ -1,464 +1,470 @@
-/* AddListing.css */
-/* Remove redundant font import if already included in StoreSidebar.css or globally */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') ;
 
-/* Scope all styles to .add-listing */
+/* Reset for consistent spacing */
+.add-listing h1,
+.add-listing h3,
+.add-listing p,
+.add-listing button,
+.add-listing input,
+.add-listing textarea,
+.add-listing select {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .add-listing {
-  display: flex;
-  background-color: #EEEEEE;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  min-height: 100vh;
-  width: 100% !important ;
-  overflow-x: hidden;
+  display: flex !important;
+  background: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
 }
 
+/* Layout Container */
 .add-listing .layout-container {
-  display: flex;
-  flex: 1;
-  padding: 24px;
-
-  margin: 0 auto;
-  gap: 24px;
-  border: 1px solid #000000;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  display: flex !important;
+  flex: 1 !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
+/* Content Area */
 .add-listing .content {
-  flex: 1;
-  padding: 80px 24px 24px;
-  overflow-y: auto;
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
 }
 
+/* Page Title */
 .add-listing .page-title {
-  font-size: 48px;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 48px;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
-  line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 48px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Error Box */
 .add-listing .error-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #FF9AE9;
-  border-radius: 12px;
-  color: #000000;
-  font-size: 16px;
-  margin-bottom: 24px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .add-listing .error-box svg {
-  width: 24px;
-  height: 24px;
-  color: #000000;
-  flex-shrink: 0;
+  width: 24px !important;
+  height: 24px !important;
+  color: #FF9AE9 !important;
+  flex-shrink: 0 !important;
 }
 
 .add-listing .error-box p {
-  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
+/* Form */
 .add-listing .item-form-new {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
 .add-listing .form-content-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important;
+  gap: 24px !important;
 }
 
 .add-listing .details-pane {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
 .add-listing .form-card {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #000000;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .add-listing .form-card h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #000000;
-  margin-bottom: 20px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #D8FF6C;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #D8FF6C !important;
 }
 
 .add-listing .form-grid-2-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
 }
 
 .add-listing .form-grid-4-col {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
 }
 
 .add-listing .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
 }
 
 .add-listing .form-group label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #000000;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  text-transform: uppercase !important;
 }
 
 .add-listing .required {
-  color: #FF9AE9;
+  color: #FF9AE9 !important;
 }
 
+/* Input Fields, Textarea, Select, File Upload */
 .add-listing .input-field,
 .add-listing .text-area,
 .add-listing .select-menu,
+.add-listing .price-input-container {
+  padding: 14px 16px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
 .add-listing .file-upload {
-  padding: 14px 12px;
-  border: 1px solid #000000;
-  border-radius: 9999px;
-  font-size: 16px;
-  color: #000000;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  line-height: 1.5;
-  min-height: 48px;
+  display: none !important;
+}
+
+.add-listing .file-button {
+  display: inline-block !important;
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  background: #FF9AE9 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  width: 100% !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .add-listing .input-field:hover,
 .add-listing .text-area:hover,
 .add-listing .select-menu:hover,
-.add-listing .file-upload:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
+.add-listing .file-button:hover,
+.add-listing .price-input-container:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .add-listing .input-field:focus,
 .add-listing .text-area:focus,
 .add-listing .select-menu:focus,
-.add-listing .file-upload:focus {
-  outline: none;
-  border-color: #D8FF6C;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C;
+.add-listing .file-button:active,
+.add-listing .price-input-container:focus-within {
+  outline: none !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 3px rgba(216, 255, 108, 0.3) !important;
+}
+
+.add-listing .file-button:hover {
+  background: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.add-listing .file-button:active {
+  background: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
 .add-listing .text-area {
-  min-height: 120px;
-  resize: vertical;
-  border-radius: 12px;
+  min-height: 120px !important;
+  resize: vertical !important;
+  border-radius: 12px !important;
 }
 
 .add-listing .select-menu {
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  cursor: pointer;
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23000000"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 16px center !important;
+  padding-right: 40px !important;
+  cursor: pointer !important;
 }
 
 .add-listing .price-input-container {
-  display: flex;
-  align-items: center;
-  border: 1px solid #000000;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  min-height: 48px;
-}
-
-.add-listing .price-input-container:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.add-listing .price-input-container:focus-within {
-  border-color: #D8FF6C;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px #D8FF6C;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .add-listing .currency-label {
-  padding: 0 12px;
-  font-size: 16px;
-  color: #000000;
-  font-weight: 600;
-  line-height: 1.5;
+  padding: 0 16px !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .add-listing .price-input {
-  flex-grow: 1;
-  border: none;
-  padding: 14px 12px;
-  background-color: transparent;
-  font-size: 16px;
-  color: #000000;
-  line-height: 1.5;
+  flex-grow: 1 !important;
+  border: none !important;
+  padding: 14px 0 !important;
+  background: transparent !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  line-height: 1.5 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .add-listing .price-input:focus {
-  outline: none;
+  outline: none !important;
 }
 
+/* Image Pane */
 .add-listing .image-pane {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
 }
 
-.add-listing .form-card.image-card {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #000000;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+.add-listing .image-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .add-listing .no-image-placeholder {
-  width: 100%;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #000000;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: #000000;
-  margin-bottom: 24px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
+  width: 100% !important;
+  height: 200px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  color: #000000 !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.add-listing .no-image-placeholder p {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .add-listing .upload-group {
-  display: block;
-  margin-bottom: 16px;
+  display: block !important;
+  margin-bottom: 16px !important;
 }
 
 .add-listing .upload-note {
-  font-size: 14px;
-  color: #000000;
-  margin-top: 8px;
+  font-size: 14px !important;
+  color: #000000 !important;
+  margin-top: 8px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
+/* Form Actions */
 .add-listing .form-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-start;
-  padding: 16px 0;
+  display: flex !important;
+  gap: 16px !important;
+  justify-content: flex-start !important;
+  padding: 16px 0 !important;
 }
 
 .add-listing .primary-button,
 .add-listing .cancel-button {
-  padding: 12px 24px;
-  border: 1px solid #000000;
-  border-radius: 9999px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
-  transition: all 0.2s ease;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  min-width: 160px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 .add-listing .primary-button {
-  background-color: #FF9AE9;
-  color: #000000;
+  background: #FF9AE9 !important;
+  color: #000000 !important;
 }
 
 .add-listing .primary-button:hover {
-  background-color: #FF9AE9;
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .add-listing .primary-button:active {
-  background-color: #E88AD0;
-  transform: translateY(2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+  background: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
 .add-listing .cancel-button {
-  background-color: rgba(255, 255, 255, 0.8);
-  color: #000000;
+  background: #CCCCCC !important;
+  color: #000000 !important;
 }
 
 .add-listing .cancel-button:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: #D8D8D8 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .add-listing .cancel-button:active {
-  background-color: #F9F9F9;
-  transform: translateY(2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000;
+  background: #B3B3B3 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
 }
 
-.add-listing .sidebar-panel {
-  width: 250px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-right: 1px solid #000000;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
-}
-
-.add-listing .sidebar-option {
-  color: #000000;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.add-listing .sidebar-option:hover {
-  background-color: #F9F9F9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.add-listing .sidebar-option.active {
-  background-color: #D8FF6C;
-  color: #000000;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000;
-}
-
-.add-listing .sidebar-option svg {
-  color: #000000;
-  width: 20px;
-  height: 20px;
-}
-
-/* Responsiveness */
+/* Responsive Design */
 @media (max-width: 1024px) {
   .add-listing .form-content-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .add-listing .content {
-    padding: 80px 12px 12px;
+    padding: 80px 12px 12px !important;
   }
 }
 
 @media (max-width: 768px) {
   .add-listing .layout-container {
-    flex-direction: column;
-    padding: 12px;
-  }
-
-  .add-listing .sidebar-panel {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #000000;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 10px;
-  }
-
-  .add-listing .sidebar-option p {
-    display: none;
-  }
-
-  .add-listing .sidebar-option {
-    padding: 8px;
-    font-size: 14px;
+    flex-direction: column !important;
+    padding: 12px !important;
   }
 
   .add-listing .content {
-    padding: 80px 12px 80px;
+    padding: 80px 12px 80px !important;
   }
 
   .add-listing .page-title {
-    font-size: 36px;
-    text-align: center;
+    font-size: 36px !important;
+    text-align: center !important;
   }
 
   .add-listing .form-card {
-    padding: 16px;
+    padding: 16px !important;
   }
 
   .add-listing .form-card h3 {
-    font-size: 18px;
+    font-size: 18px !important;
   }
 
   .add-listing .form-grid-2-col,
   .add-listing .form-grid-4-col {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
 
   .add-listing .input-field,
   .add-listing .text-area,
   .add-listing .select-menu,
-  .add-listing .file-upload,
+  .add-listing .file-button,
   .add-listing .price-input-container {
-    padding: 12px 10px;
-    font-size: 14px;
-    min-height: 44px;
+    padding: 12px 14px !important;
+    font-size: 14px !important;
+    min-height: 44px !important;
   }
 
-  .add-listing .price-input,
-  .add-listing .currency-label {
-    padding: 12px 10px;
-    font-size: 14px;
+  .add-listing .currency-label,
+  .add-listing .price-input {
+    padding: 12px 0 12px 14px !important;
+    font-size: 14px !important;
   }
 
   .add-listing .no-image-placeholder {
-    height: 120px;
-    font-size: 14px;
-    margin-bottom: 16px;
+    height: 120px !important;
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
   }
 
   .add-listing .upload-note {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 
   .add-listing .form-actions {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: column !important;
+    gap: 12px !important;
   }
 
   .add-listing .primary-button,
   .add-listing .cancel-button {
-    padding: 10px;
-    font-size: 14px;
-    width: 100%;
+    padding: 12px !important;
+    font-size: 14px !important;
+    min-width: 100% !important;
   }
 }
 
 @media (min-width: 1024px) {
   .add-listing .layout-container {
-    padding: 32px;
+    padding: 32px !important;
   }
 
   .add-listing .content {
-    padding: 80px 32px 32px;
+    padding: 80px 32px 32px !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .add-listing .layout-container {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .add-listing .form-actions {
+    display: none !important;
+  }
+
+  .add-listing {
+    background: #FFFFFF !important;
   }
 }

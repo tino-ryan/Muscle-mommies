@@ -1,124 +1,245 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') ;
 
-.reservations {
-  display: flex !important;
-  flex-direction: column !important;
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
-  min-height: 100vh !important;
-  background-color: #EEEEEE !important;
-  margin-right: 20px !important;
-  padding: 20px !important;
-  box-sizing: border-box !important;
-  cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto !important;
-  color: #000000 !important;
-  width: 100% !important; /* Ensure full width */
+/* Reset for consistent spacing */
+.reservations h1,
+.reservations h2,
+.reservations h3,
+.reservations p,
+.reservations button,
+.reservations select,
+.reservations input,
+.reservations textarea {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
+.reservations {
+  display: flex !important;
+  background-color: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
+  cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto !important;
+  color: #000000 !important;
+}
+
+/* Layout Container */
 .reservations .layout-container {
   display: flex !important;
   flex: 1 !important;
-  width: 100% !important; /* Ensure layout container takes full width */
-}
-
-.reservations .content {
-  max-width: 100% !important;
-  flex: 1 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 20px !important;
-  background: rgba(255, 255, 255, 0.8) !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
   border: 1px solid #000000 !important;
-  border-radius: 8px !important;
-  padding: 60px 20px 20px !important; /* Increased top padding to avoid navbar overlap */
-  color: #000000 !important;
-  width: 100% !important; /* Ensure content takes full width */
+  border-radius: 12px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.reservations h2 {
-  font-size: 32px !important;
+/* Content Area */
+.reservations .content {
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
+}
+
+/* Header */
+.reservations .header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 48px !important;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.reservations .header h1 {
+  font-size: 48px !important;
   font-weight: 700 !important;
   color: #000000 !important;
-  margin-bottom: 20px !important;
   font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-.error {
-  background-color: rgba(248, 215, 218, 0.8) !important;
+/* Messages */
+.reservations .error {
+  padding: 16px !important;
   color: #000000 !important;
-  padding: 12px !important;
-  border-radius: 8px !important;
-  border: 1px solid #000000 !important;
-  margin-bottom: 20px !important;
+  font-size: 16px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.reservations table {
-  width: 100% !important;
-  table-layout: auto !important;
-  border-collapse: collapse !important;
-  background-color: #FFFFFF !important;
-  border: 2px solid #000000 !important;
+/* No Reservations Message */
+.reservations p {
+  padding: 40px 16px !important;
+  color: #000000 !important;
+  text-align: center !important;
+  font-size: 18px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
   border-radius: 8px !important;
-  overflow: hidden !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+}
+
+/* Table */
+.reservations table {
+  width: 100 !important;
+  border-collapse: collapse !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  overflow-x: auto !important;
+  background-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
 .reservations th,
 .reservations td {
   padding: 12px !important;
+  padding-top: 4px !important; /* Add top padding to lower row content */
   text-align: left !important;
-  border: 1px solid #000000 !important;
-  white-space: normal !important;
-  word-break: break-word !important;
   color: #000000 !important;
+  font-size: 14px !important;
+  max-width: 150px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  max-height: 40px !important;
+  vertical-align: middle !important;
 }
 
 .reservations th {
-  background-color: #D8FF6C !important; /* Green header */
   font-weight: 600 !important;
+  background-color: #D8FF6C !important;
+}
+
+.reservations td {
+  border-top: 1px solid #FF9AE9 !important;
+}
+
+/* Status column specific alignment */
+.reservations td.status-column {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 40px !important;
+  position: relative !important;
+}
+
+/* Status text with colored bullet points */
+.status-pending,
+.status-confirmed,
+.status-cancelled,
+.status-completed {
+  font-size: inherit !important; /* Matches table text size */
+  font-weight: inherit !important; /* Matches table text weight */
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
   color: #000000 !important;
-  border: 1px solid #000000 !important;
+  padding: 0 !important; /* No padding */
+  border: none !important; /* No border */
+  background: none !important; /* No background */
+  display: inline !important; /* Flows like regular text */
 }
 
-.reservations tr:hover {
-  background-color: #F9F9F9 !important;
+.status-pending::before {
+  content: "•" !important;
+  color: #FFA000 !important;
+  margin-right: 4px !important;
 }
 
-.status-sold {
+.status-confirmed::before {
+  content: "•" !important;
+  color: #0288D1 !important;
+  margin-right: 4px !important;
+}
+
+.status-cancelled::before {
+  content: "•" !important;
+  color: #D32F2F !important;
+  margin-right: 4px !important;
+}
+
+.status-completed::before {
+  content: "•" !important;
+  color: #388E3C !important;
+  margin-right: 4px !important;
+}
+
+/* Status Sold Styling */
+.reservations .status-sold {
   display: flex !important;
   flex-direction: column !important;
   gap: 8px !important;
-  align-items: flex-start !important;
+  align-items: center !important;
 }
 
-.status-text {
+.reservations .status-text {
   font-weight: 500 !important;
   color: #000000 !important;
+  padding: 1px 4px !important;
+  background-color: #FFECB3 !important;
+  border-radius: 9999px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 0.9 !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.confirm-button {
-  background-color: #D8FF6C !important; /* Green button */
+/* Buttons */
+.reservations .confirm-button {
+  padding: 14px 32px !important;
+  background-color: #FF9AE9 !important;
   color: #000000 !important;
-  border: 1px solid #FF9AE9 !important; /* Pink border */
-  padding: 6px 12px !important;
-  border-radius: 4px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
   cursor: pointer !important;
-  font-size: 12px !important;
-  transition: background-color 0.2s, box-shadow 0.2s !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  min-width: 160px !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.confirm-button:hover {
-  background-color: #BCE84D !important; /* Darker green on hover */
-  color: #000000 !important;
-  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
+.reservations .confirm-button:hover {
+  background-color: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.confirm-button:disabled {
-  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
-  color: #000000 !important;
+.reservations .confirm-button:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.reservations .confirm-button:disabled {
+  background-color: rgba(255, 154, 233, 0.5) !important;
+  color: #666 !important;
   cursor: not-allowed !important;
-  border-color: #000000 !important;
+  border-color: #999 !important;
 }
 
-.modal-overlay {
+/* Modal */
+.reservations .modal-overlay {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -126,52 +247,90 @@
   bottom: 0 !important;
   background-color: rgba(0, 0, 0, 0.5) !important;
   display: flex !important;
-  justify-content: center !important;
   align-items: center !important;
-  z-index: 1000 !important;
+  justify-content: center !important;
+  z-index: 2000 !important;
+  padding: 16px !important;
 }
 
-.modal-content {
-  background: #FFFFFF !important;
-  padding: 24px !important;
-  border-radius: 8px !important;
-  border: 1px solid #000000 !important;
-  width: 90% !important;
-  max-width: 500px !important;
+.reservations .modal-content {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 12px !important;
+  max-width: 700px !important;
   max-height: 90vh !important;
   overflow-y: auto !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  position: relative !important;
+  width: 100 !important;
+  border: 1px solid #000000 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  padding: 32px !important;
 }
 
-.modal-content h3 {
-  margin-bottom: 16px !important;
+.reservations .close-button {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  background: #FF9AE9 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
   color: #000000 !important;
+  z-index: 10 !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.modal-content p {
+.reservations .close-button:hover {
+  background-color: #FFC1EE !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.reservations .close-button:active {
+  background-color: #E88AD0 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.reservations .modal-body {
+  display: flex !important;
+  gap: 24px !important;
+}
+
+.reservations .left-column {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  max-width: 350px !important;
+}
+
+.reservations .form-group {
   margin-bottom: 20px !important;
-  color: #000000 !important;
-  line-height: 1.5 !important;
 }
 
-.form-group {
-  margin-bottom: 20px !important;
-}
-
-.form-group label {
+.reservations .form-group label {
   display: block !important;
   margin-bottom: 8px !important;
   font-weight: 500 !important;
   color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.star-rating {
+.reservations .star-rating {
   display: flex !important;
   gap: 4px !important;
   margin-bottom: 8px !important;
 }
 
-.star {
+.reservations .star {
   background: none !important;
   border: none !important;
   font-size: 24px !important;
@@ -180,19 +339,19 @@
   transition: color 0.2s !important;
 }
 
-.star.filled {
+.reservations .star.filled {
   color: #FF9AE9 !important; /* Pink stars when filled */
 }
 
-.star:hover {
+.reservations .star:hover {
   color: #FF9AE9 !important; /* Pink on hover */
 }
 
-.form-group textarea {
-  width: 100% !important;
+.reservations .form-group textarea {
+  width: 100 !important;
   padding: 12px !important;
   border: 1px solid #000000 !important;
-  border-radius: 4px !important;
+  border-radius: 9999px !important;
   resize: vertical !important;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
   font-size: 14px !important;
@@ -200,73 +359,95 @@
   color: #000000 !important;
 }
 
-.form-group textarea:focus {
+.reservations .form-group textarea:focus {
   outline: none !important;
-  border-color: #FF9AE9 !important;
-  box-shadow: 0 0 0 2px rgba(255, 154, 233, 0.25) !important;
+  border-color: #D8FF6C !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px rgba(216, 255, 108, 0.3) !important;
 }
 
-.form-group small {
-  color: #000000 !important;
+.reservations .form-group small {
+  color: #666 !important;
   font-size: 12px !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.modal-actions {
+.reservations .modal-actions {
   display: flex !important;
   justify-content: flex-end !important;
   gap: 12px !important;
   margin-top: 24px !important;
 }
 
-.cancel-button {
+.reservations .cancel-button {
+  padding: 14px 32px !important;
   background-color: #6c757d !important;
   color: #000000 !important;
   border: 1px solid #000000 !important;
-  padding: 10px 20px !important;
-  border-radius: 4px !important;
+  border-radius: 9999px !important;
   cursor: pointer !important;
-  transition: background-color 0.2s !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  min-width: 160px !important;
+  text-align: center !important;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
 }
 
-.cancel-button:hover {
+.reservations .cancel-button:hover {
   background-color: #545b62 !important;
-  color: #FFFFFF !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.cancel-button:disabled {
+.reservations .cancel-button:active {
+  background-color: #4B5158 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.reservations .cancel-button:disabled {
   background-color: #adb5bd !important;
   cursor: not-allowed !important;
 }
 
-.confirm-button {
-  background-color: #D8FF6C !important; /* Green button */
-  color: #000000 !important;
-  border: 1px solid #FF9AE9 !important; /* Pink border */
-  padding: 10px 20px !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  transition: background-color 0.2s, box-shadow 0.2s !important;
-}
-
-.confirm-button:hover {
-  background-color: #BCE84D !important; /* Darker green on hover */
-  color: #000000 !important;
-  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important; /* Pink shadow */
-}
-
-.confirm-button:disabled {
-  background-color: rgba(216, 255, 108, 0.5) !important; /* Faded green */
-  color: #000000 !important;
-  cursor: not-allowed !important;
-  border-color: #000000 !important;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
-  .reservations {
-    margin-left: 0 !important;
-    padding: 10px !important;
+  .reservations .layout-container {
+    flex-direction: column !important;
+    padding: 16px !important;
   }
+
   .reservations .content {
-    padding: 60px 10px 10px !important; /* Adjusted padding for mobile */
+    padding: 16px !important;
+  }
+
+  .reservations .header h1 {
+    font-size: 32px !important;
+  }
+
+  .reservations table {
+    display: none !important;
+  }
+
+  .reservations .modal-body {
+    flex-direction: column !important;
+  }
+
+  .reservations .left-column {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservations .header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .reservations .confirm-button,
+  .reservations .cancel-button {
+    width: 100% !important;
   }
 }
