@@ -48,7 +48,10 @@ export default function MyCloset() {
               .catch(() => ({
                 data: {
                   images: [
-                    { imageURL: 'https://via.placeholder.com/200x200?text=No+Image' },
+                    {
+                      imageURL:
+                        'https://via.placeholder.com/200x200?text=No+Image',
+                    },
                   ],
                   name: 'Unnamed Item',
                 },
@@ -126,17 +129,60 @@ export default function MyCloset() {
     <div className="customer-home">
       <CustomerSidebar activePage="closet" />
       <div className="content">
-        <div className="header">
+        <div
+          className="header"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px',
+          }}
+        >
           <h1>my closet</h1>
           {error && <div className="error">{error}</div>}
         </div>
-        <div className="closet-layout">
+        <div
+          className="closet-layout"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '30px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+        >
           {/* Side-by-side grids */}
-          <div className="grid-container">
+          <div
+            className="grid-container"
+            style={{
+              display: 'flex',
+              gap: '30px',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+            }}
+          >
             {/* Create new outfit section */}
-            <div className="create-outfit-section">
+            <div
+              className="create-outfit-section"
+              style={{
+                flex: 1,
+                minWidth: '300px',
+                maxWidth: '400px',
+                background: '#fff',
+                padding: '19px',
+                borderRadius: '10px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+              }}
+            >
               <h3>create new outfit</h3>
-              <div className="closet-grid">
+              <div
+                className="closet-grid"
+                style={{
+                  display: 'grid',
+                  minHeight: '400px',
+                  
+                }}
+              >
                 {outfit.map((itemId, index) => {
                   const item = items[itemId] || {};
                   const itemImages = item.images || [];
@@ -145,12 +191,29 @@ export default function MyCloset() {
                       key={index}
                       className="store-card"
                       onClick={() => handleSlotClick(index)}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        border: '1px dashed #ccc',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer',
+                      }}
                     >
                       {itemId && itemImages.length > 0 ? (
                         <div className="store-card-image-wrapper">
                           <img
                             src={itemImages[0].imageURL}
                             alt={item.name || 'Closet item'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              borderRadius: '8px',
+                            }}
                             className="store-image"
                             onError={(e) => {
                               e.target.src =
@@ -159,26 +222,84 @@ export default function MyCloset() {
                           />
                         </div>
                       ) : (
-                        <span className="add-icon">+</span>
+                        <span
+                          className="add-icon"
+                          style={{
+                            fontSize: '2rem',
+                            color: '#aaa',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          +
+                        </span>
                       )}
                     </div>
                   );
                 })}
               </div>
-              <button className="button green" onClick={handleSave}>
+              <button
+                className="button green"
+                onClick={handleSave}
+                style={{
+                  border: 'none',
+                  borderRadius: '6px',
+                  backgroundColor: '#4CAF50',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  margin: '12px',
+                  
+                  
+                }}
+              >
                 <a>SAVE OUTFIT</a>
               </button>
             </div>
 
             {/* Closet items section */}
-            <div className="closet-items-scroll">
-              <h3>closet items</h3>
-              <div className="closet-items-list">
+            <div
+              className="closet-items-scroll"
+              style={{
+                flex: 1,
+                minWidth: '350px',
+                maxWidth: '500px',
+                background: '#fff',
+                padding: '16px',
+                borderRadius: '10px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                maxHeight: '400px',
+                overflowY: 'auto',
+                margin: '12px',
+              }}
+            >
+              <h3 style={{ marginBottom: '12px', padding: '12px' }}>
+                closet items
+              </h3>
+              <div
+                className="closet-items-list"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, 100px)',
+                  gap: '10px',
+                  justifyContent: 'center',
+                }}
+              >
                 {reservations.map((res) => {
                   const item = items[res.itemId] || {};
                   const itemImages = item.images || [];
                   return (
-                    <div key={res.reservationId} className="store-card">
+                    <div
+                      key={res.reservationId}
+                      className="store-card"
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        border: '1px solid #ddd',
+                        backgroundColor: '#fdfdfd',
+                      }}
+                    >
                       <div className="store-card-image-wrapper">
                         {itemImages.length > 0 ? (
                           itemImages.map((img, idx) => (
@@ -186,6 +307,11 @@ export default function MyCloset() {
                               key={idx}
                               src={img.imageURL}
                               alt={item.name || 'Closet item'}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                              }}
                               className="store-image"
                             />
                           ))
@@ -193,6 +319,11 @@ export default function MyCloset() {
                           <img
                             src="https://via.placeholder.com/200x200?text=No+Image"
                             alt="No item available"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
                             className="store-image"
                           />
                         )}
@@ -206,16 +337,35 @@ export default function MyCloset() {
           </div>
 
           {/* My outfits section below */}
-          <div className="my-outfits-section">
+          <div className="my-outfits-section" style={{
+        background: '#fff',
+        padding: '16px',
+        borderRadius: '10px',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+      }}>
             <h3>my outfits</h3>
             {outfits.length === 0 ? (
               <div className="no-stores">
-                <p>You haven’t saved any outfits yet.</p>
+                <p style={{ color: '#777', textAlign: 'center' }}>You haven’t saved any outfits yet.</p>
               </div>
             ) : (
-              <div className="store-list">
+              <div className="store-list" style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '16px',
+            justifyContent: 'center',
+          }}>
                 {outfits.map((outfitDoc, idx) => (
-                  <div key={idx} className="store-card">
+                  <div key={idx} className="store-card" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '6px',
+                backgroundColor: '#fafafa',
+                borderRadius: '8px',
+                padding: '8px',
+                width: '330px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+              }}>
                     {Array(9)
                       .fill()
                       .map((_, slotIdx) => {
@@ -223,19 +373,38 @@ export default function MyCloset() {
                         const item = items[itemId] || {};
                         const itemImages = item.images || [];
                         return (
-                          <div key={slotIdx} className="store-card-image-wrapper">
+                          <div
+                            key={slotIdx}
+                            style={{
+                        width: '100px',
+                        height: '100px',
+                        borderRadius: '6px',
+                        overflow: 'hidden',
+                        backgroundColor: '#eee',
+                      }}
+                            className="store-card-image-wrapper"
+                          >
                             {itemId && itemImages.length > 0 ? (
                               <img
                                 src={itemImages[0].imageURL}
                                 alt={item.name || 'Closet item'}
                                 className="store-image"
+                                style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
                                 onError={(e) => {
                                   e.target.src =
                                     'https://via.placeholder.com/200x200?text=No+Image';
                                 }}
                               />
                             ) : (
-                              <div className="store-card-image-wrapper empty"></div>
+                              <div className="store-card-image-wrapper empty"style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: '#ddd',
+                          }}></div>
                             )}
                           </div>
                         );
@@ -285,7 +454,10 @@ export default function MyCloset() {
                 })}
               </div>
               <div className="popup-actions">
-                <button className="button green" onClick={() => setSelectedSlot(null)}>
+                <button
+                  className="button green"
+                  onClick={() => setSelectedSlot(null)}
+                >
                   <a>CLOSE</a>
                 </button>
                 {outfit[selectedSlot] && (
