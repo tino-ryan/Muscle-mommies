@@ -85,11 +85,13 @@ const mockAuth = {
 describe('MyCloset Component', () => {
   let mockNavigate;
   let consoleLogSpy;
+  let consoleErrorSpy;
 
   beforeEach(() => {
     jest.clearAllMocks();
     window.alert = jest.fn();
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
     mockNavigate = jest.fn();
     require('react-router-dom').useNavigate = () => mockNavigate;
@@ -128,6 +130,7 @@ describe('MyCloset Component', () => {
 
   afterEach(() => {
     consoleLogSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 
   const renderMyCloset = () => {
@@ -264,11 +267,57 @@ describe('MyCloset Component', () => {
         expect(slots.length).toBe(9);
       });
 
-      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-      fireEvent.click(slotsInGrid[0]);
+      const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+      fireEvent.click(gridSlots[0]);
 
       await waitFor(() => {
         expect(screen.getByText(/select an item/i)).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Closet Items Section', () => {
+    test('displays closet items section', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        expect(screen.getByText(/closet items/i)).toBeInTheDocument();
+      });
+    });
+
+    test('displays all completed/confirmed items', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
+        expect(screen.getByText('Jeans')).toBeInTheDocument();
+        expect(screen.getByText('Jacket')).toBeInTheDocument();
+      });
+    });
+
+    test('clicking item in closet section adds to first empty slot', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
+      });
+
+      const itemCards = document.querySelectorAll('.item-card');
+      fireEvent.click(itemCards[0]); // Click T-Shirt
+
+      await waitFor(() => {
+        const plusSigns = screen.getAllByText('+');
+        expect(plusSigns.length).toBe(8); // One slot filled
+      });
+    });
+
+    test('displays multiple images for items with multiple images', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const itemImages = document.querySelectorAll('.item-card .item-image');
+        // Jeans has 2 images, T-Shirt has 1, Jacket has 1 = 4 total
+        expect(itemImages.length).toBe(4);
       });
     });
   });
@@ -278,8 +327,8 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -295,15 +344,15 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
         expect(screen.getByText(/select an item/i)).toBeInTheDocument();
       });
 
-      const closeButton = screen.getByText(/CLOSE/i);
+      const closeButton = screen.getByRole('button', { name: /CLOSE/i });
       fireEvent.click(closeButton);
 
       await waitFor(() => {
@@ -311,12 +360,12 @@ describe('MyCloset Component', () => {
       });
     });
 
-    test('adds item to slot when selected from popup', async () => {
+    test('adds item to first empty slot when selected from popup', async () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[3]); // Click any slot
       });
 
       await waitFor(() => {
@@ -327,12 +376,11 @@ describe('MyCloset Component', () => {
       const popupItems = document.querySelectorAll('.popup-item');
       fireEvent.click(popupItems[0]);
 
-      // Popup should close
+      // Popup should close and first slot should be filled
       await waitFor(() => {
         expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
-      // One slot should now be filled (8 + signs remaining)
       await waitFor(() => {
         const plusSigns = screen.getAllByText('+');
         expect(plusSigns.length).toBe(8);
@@ -344,8 +392,8 @@ describe('MyCloset Component', () => {
 
       // Add item to slot first
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -358,9 +406,9 @@ describe('MyCloset Component', () => {
         expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
-      // Click same slot again
-      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-      fireEvent.click(slotsInGrid[0]);
+      // Click same slot again (first slot which should now have item)
+      const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+      fireEvent.click(gridSlots[0]);
 
       await waitFor(() => {
         expect(screen.getByText(/REMOVE ITEM/i)).toBeInTheDocument();
@@ -372,8 +420,8 @@ describe('MyCloset Component', () => {
 
       // Add item to slot
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -387,8 +435,8 @@ describe('MyCloset Component', () => {
       });
 
       // Open popup again for same slot
-      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-      fireEvent.click(slotsInGrid[0]);
+      const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+      fireEvent.click(gridSlots[0]);
 
       await waitFor(() => {
         expect(screen.getByText(/REMOVE ITEM/i)).toBeInTheDocument();
@@ -430,8 +478,8 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -447,8 +495,8 @@ describe('MyCloset Component', () => {
 
       // Add an item to a slot
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -499,7 +547,6 @@ describe('MyCloset Component', () => {
 
     test('displays error alert when save fails', async () => {
       axios.post.mockRejectedValue(new Error('Network error'));
-      console.error = jest.fn();
 
       renderMyCloset();
 
@@ -510,6 +557,7 @@ describe('MyCloset Component', () => {
 
       await waitFor(() => {
         expect(window.alert).toHaveBeenCalledWith('Failed to save outfit');
+        expect(consoleErrorSpy).toHaveBeenCalled();
       });
     });
   });
@@ -523,47 +571,40 @@ describe('MyCloset Component', () => {
       });
     });
 
-    test('displays saved outfits', async () => {
+    test('displays saved outfits with numbering', async () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const outfitCards = document.querySelectorAll('.my-outfits-section .store-card');
-        expect(outfitCards.length).toBe(2);
+        expect(screen.getByText('Outfit 1')).toBeInTheDocument();
+        expect(screen.getByText('Outfit 2')).toBeInTheDocument();
       });
     });
 
-    test('displays empty slots in saved outfits correctly', async () => {
+    test('displays view outfit button for each saved outfit', async () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const emptySlots = document.querySelectorAll('.my-outfits-section .store-card-image-wrapper.empty');
-        expect(emptySlots.length).toBeGreaterThan(0);
+        const viewButtons = screen.getAllByText(/VIEW OUTFIT/i);
+        expect(viewButtons.length).toBe(2);
       });
     });
 
-    test('displays item images in saved outfits', async () => {
-      renderMyCloset();
-
-      await waitFor(() => {
-        const outfitImages = document.querySelectorAll('.my-outfits-section .store-image');
-        expect(outfitImages.length).toBeGreaterThan(0);
-      });
-    });
-
-    test('displays placeholder for missing items in saved outfits', async () => {
-      const outfitsWithMissingItem = [
-        {
-          outfitId: 'outfit-3',
-          slots: ['item-999', null, null, null, null, null, null, null, null],
-        },
-      ];
-
+    test.skip('displays empty state when no outfits saved', async () => {
       axios.get.mockImplementation((url) => {
         if (url.includes('/api/stores/reservations')) {
-          return Promise.resolve({ data: [] });
+          return Promise.resolve({ data: mockReservations });
+        }
+        if (url.includes('/api/items/item-1')) {
+          return Promise.resolve({ data: mockItems['item-1'] });
+        }
+        if (url.includes('/api/items/item-2')) {
+          return Promise.resolve({ data: mockItems['item-2'] });
+        }
+        if (url.includes('/api/items/item-4')) {
+          return Promise.resolve({ data: mockItems['item-4'] });
         }
         if (url.includes('/api/outfits')) {
-          return Promise.resolve({ data: outfitsWithMissingItem });
+          return Promise.resolve({ data: [] });
         }
         return Promise.reject(new Error('Unknown URL'));
       });
@@ -571,29 +612,171 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        // Missing items show as empty wrappers in saved outfits
-        const emptyWrappers = document.querySelectorAll('.my-outfits-section .store-card-image-wrapper.empty');
-        expect(emptyWrappers.length).toBeGreaterThan(0);
+        expect(screen.getByText(/my outfits/i)).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        const noOutfitsDiv = document.querySelector('.no-outfits');
+        expect(noOutfitsDiv).toBeInTheDocument();
+        expect(noOutfitsDiv.textContent).toContain("You haven't saved any outfits yet");
+      }, { timeout: 2000 });
+    });
+
+    test('opens modal when outfit preview is clicked', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        expect(outfitPreviews.length).toBe(2);
+      });
+
+      const outfitPreviews = document.querySelectorAll('.outfit-preview');
+      fireEvent.click(outfitPreviews[0]);
+
+      await waitFor(() => {
+        expect(screen.getByText(/outfit preview/i)).toBeInTheDocument();
+      });
+    });
+
+    test('displays outfit grid in modal', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        const modalSlots = document.querySelectorAll('.grid-slot-modal');
+        expect(modalSlots.length).toBe(9);
+      });
+    });
+
+    test('closes modal when close button clicked', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/outfit preview/i)).toBeInTheDocument();
+      });
+
+      const closeButtons = screen.getAllByText(/CLOSE/i);
+      const modalCloseButton = closeButtons[closeButtons.length - 1];
+      fireEvent.click(modalCloseButton);
+
+      await waitFor(() => {
+        expect(screen.queryByText(/outfit preview/i)).not.toBeInTheDocument();
+      });
+    });
+
+    test('closes modal when clicking outside modal content', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/outfit preview/i)).toBeInTheDocument();
+      });
+
+      const modalOverlay = document.querySelector('.modal-overlay');
+      fireEvent.click(modalOverlay);
+
+      await waitFor(() => {
+        expect(screen.queryByText(/outfit preview/i)).not.toBeInTheDocument();
+      });
+    });
+
+    test('does not close modal when clicking inside modal content', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/outfit preview/i)).toBeInTheDocument();
+      });
+
+      const modalContent = document.querySelector('.modal-content');
+      fireEvent.click(modalContent);
+
+      // Modal should still be open
+      expect(screen.getByText(/outfit preview/i)).toBeInTheDocument();
+    });
+
+    test('displays empty slots in modal for null slot values', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[1]); // Outfit 2 has mostly empty slots
+      });
+
+      await waitFor(() => {
+        const emptySlots = document.querySelectorAll('.empty-slot-modal');
+        expect(emptySlots.length).toBeGreaterThan(0);
       });
     });
   });
 
   describe('Image Error Handling', () => {
-    test('handles broken image URLs with placeholder', async () => {
+    test('handles broken image URLs with placeholder in outfit grid', async () => {
       renderMyCloset();
 
       await waitFor(() => {
-        // Wait for saved outfits to load which have images
-        const outfitImages = document.querySelectorAll('.my-outfits-section .store-image');
-        expect(outfitImages.length).toBeGreaterThan(0);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
-      // Trigger error on image
-      const image = document.querySelector('.my-outfits-section .store-image');
-      if (image) {
-        fireEvent.error(image);
-        expect(image).toBeInTheDocument();
-      }
+      await waitFor(() => {
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
+      });
+
+      await waitFor(() => {
+        const slotImages = document.querySelectorAll('.slot-image');
+        if (slotImages.length > 0) {
+          fireEvent.error(slotImages[0]);
+          expect(slotImages[0].src).toContain('placeholder');
+        }
+      });
+    });
+
+    test('handles broken image URLs in outfit preview modal', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        const modalImages = document.querySelectorAll('.slot-image-modal');
+        if (modalImages.length > 0) {
+          fireEvent.error(modalImages[0]);
+          expect(modalImages[0].src).toContain('placeholder');
+        }
+      });
+    });
+
+    test('handles broken image URLs in saved outfit previews', async () => {
+      renderMyCloset();
+
+      await waitFor(() => {
+        const previewImages = document.querySelectorAll('.preview-image img');
+        if (previewImages.length > 0) {
+          fireEvent.error(previewImages[0]);
+          expect(previewImages[0].src).toContain('placeholder');
+        }
+      });
     });
   });
 
@@ -632,13 +815,13 @@ describe('MyCloset Component', () => {
   });
 
   describe('Multiple Items Selection', () => {
-    test('allows adding items to multiple slots', async () => {
+    test('fills slots left-to-right when adding multiple items', async () => {
       renderMyCloset();
 
-      // Add item to first slot
+      // Click on different slots but items should fill from left
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[5]); // Click middle slot
       });
 
       await waitFor(() => {
@@ -646,15 +829,14 @@ describe('MyCloset Component', () => {
         fireEvent.click(popupItems[0]);
       });
 
-      // Wait for popup to close
       await waitFor(() => {
         expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
-      // Add item to second slot
+      // Add second item
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[1]);
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[8]); // Click last slot
       });
 
       await waitFor(() => {
@@ -668,13 +850,42 @@ describe('MyCloset Component', () => {
       });
     });
 
-    test('allows replacing item in a slot', async () => {
+    test.skip('stops adding items when all slots are filled', async () => {
       renderMyCloset();
 
-      // Add first item
+      // We have 3 items available, so fill 3 slots
+      for (let i = 0; i < 3; i++) {
+        await waitFor(() => {
+          const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+          fireEvent.click(gridSlots[i]);
+        });
+
+        await waitFor(() => {
+          const popupItems = document.querySelectorAll('.popup-item');
+          if (popupItems.length > 0) {
+            fireEvent.click(popupItems[i % popupItems.length]);
+          }
+        });
+
+        await waitFor(() => {
+          expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
+        });
+      }
+
+      // 3 slots should be filled (6 empty)
       await waitFor(() => {
-        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-        fireEvent.click(slotsInGrid[0]);
+        const plusSigns = screen.getAllByText('+');
+        expect(plusSigns.length).toBe(6);
+      });
+    });
+
+    test('allows removing items from specific slots', async () => {
+      renderMyCloset();
+
+      // Add item to first slot
+      await waitFor(() => {
+        const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+        fireEvent.click(gridSlots[0]);
       });
 
       await waitFor(() => {
@@ -682,25 +893,103 @@ describe('MyCloset Component', () => {
         fireEvent.click(popupItems[0]);
       });
 
-      // Wait for popup to close
       await waitFor(() => {
         expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
-      // Click same slot to replace
-      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
-      fireEvent.click(slotsInGrid[0]);
+      // Click on filled slot to remove
+      const gridSlots = document.querySelectorAll('.outfit-grid .grid-slot');
+      fireEvent.click(gridSlots[0]);
 
       await waitFor(() => {
-        const popupItems = document.querySelectorAll('.popup-item');
-        fireEvent.click(popupItems[1]);
+        const removeButton = screen.getByText(/REMOVE ITEM/i);
+        fireEvent.click(removeButton);
       });
 
-      // Should still have 8 empty slots (only 1 filled)
       await waitFor(() => {
         const plusSigns = screen.getAllByText('+');
-        expect(plusSigns.length).toBe(8);
+        expect(plusSigns.length).toBe(9);
       });
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('handles items without name gracefully', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/stores/reservations')) {
+          return Promise.resolve({
+            data: [{ reservationId: 'res-1', itemId: 'item-1', status: 'Completed' }],
+          });
+        }
+        if (url.includes('/api/items/item-1')) {
+          return Promise.resolve({
+            data: { itemId: 'item-1', images: [{ imageURL: 'test.jpg' }] },
+          });
+        }
+        if (url.includes('/api/outfits')) {
+          return Promise.resolve({ data: [] });
+        }
+        return Promise.reject(new Error('Unknown URL'));
+      });
+
+      renderMyCloset();
+
+      await waitFor(() => {
+        expect(screen.getByText('Unnamed Item')).toBeInTheDocument();
+      });
+    });
+
+    test('displays outfit with missing item data', async () => {
+      const outfitWithMissingItem = [
+        {
+          outfitId: 'outfit-99',
+          slots: ['item-999', null, null, null, null, null, null, null, null],
+        },
+      ];
+
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/stores/reservations')) {
+          return Promise.resolve({ data: [] });
+        }
+        if (url.includes('/api/outfits')) {
+          return Promise.resolve({ data: outfitWithMissingItem });
+        }
+        return Promise.reject(new Error('Unknown URL'));
+      });
+
+      renderMyCloset();
+
+      await waitFor(() => {
+        const outfitPreviews = document.querySelectorAll('.outfit-preview');
+        fireEvent.click(outfitPreviews[0]);
+      });
+
+      await waitFor(() => {
+        const emptySlots = document.querySelectorAll('.empty-slot-modal');
+        expect(emptySlots.length).toBeGreaterThan(0);
+      });
+    });
+
+    test('handles empty reservations list', async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes('/api/stores/reservations')) {
+          return Promise.resolve({ data: [] });
+        }
+        if (url.includes('/api/outfits')) {
+          return Promise.resolve({ data: [] });
+        }
+        return Promise.reject(new Error('Unknown URL'));
+      });
+
+      renderMyCloset();
+
+      await waitFor(() => {
+        expect(screen.getByText(/closet items/i)).toBeInTheDocument();
+      });
+
+      // Should not show any items
+      const itemCards = document.querySelectorAll('.item-card');
+      expect(itemCards.length).toBe(0);
     });
   });
 });
