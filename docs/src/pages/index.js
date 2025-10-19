@@ -8,16 +8,16 @@ export default function Home() {
       description="Documentation site for the ThriftFinder group project"
     >
       <main style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-        <h1>ThriftFinder </h1>
+        <h1>ThriftFinder(aka The Box)</h1>
 
         <section>
-          <h2>Team Members</h2>
+          <h2>Brought to you by :</h2>
           <ul>
-            <li>Mosey Wosey</li>
             <li>Aimée</li>
             <li>Pixelbub</li>
             <li>Yurisha</li>
             <li>Tino Ryan</li>
+            <li>Mosey</li>
           </ul>
         </section>
 

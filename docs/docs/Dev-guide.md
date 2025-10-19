@@ -1,4 +1,4 @@
-# ThriftFinder Development Guide
+# Development Guide
 
 This guide provides detailed instructions for setting up the development environment for **ThriftFinder**, a thrifting platform connecting shops and shoppers. It covers the backend API (Express, Firebase), frontend React app, Firebase configuration, environment variables, local development workflows, and documentation updates. The project uses Visual Studio Code (VSCode) as the recommended IDE, and this guide includes steps for installing missing dependencies (e.g., Leaflet for map features) and updating documentation in the `docs` folder.
 
@@ -67,6 +67,7 @@ This guide provides detailed instructions for setting up the development environ
    - Sensitive credentials are kept in `.env` to avoid exposure in GitHub.
 
 4. **Run the Backend**
+
    ```bash
    node index.js
    ```
@@ -115,6 +116,7 @@ This guide provides detailed instructions for setting up the development environ
    - These variables are prefixed with `REACT_APP_` as per React’s convention.
 
 4. **Start the Frontend**
+
    ```bash
    npm start
    ```
@@ -172,6 +174,7 @@ This guide provides detailed instructions for setting up the development environ
    The documentation site uses Docusaurus. If missing modules are detected, VSCode will prompt to install them, or run the command above.
 
 3. **Run Documentation Site**
+
    ```bash
    npm start
    ```

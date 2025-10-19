@@ -1,4 +1,4 @@
-# User Guide for The Box E-Commerce Platform
+# User Guide
 
 This user guide provides detailed instructions for navigating and using the features of The Box, an e-commerce platform for browsing, reserving, and purchasing thrift store items, as well as managing a thrift store as a store owner. The guide is divided into two main sections: **Customer Features** and **Store Owner Features**, covering all relevant pages and functionalities.
 

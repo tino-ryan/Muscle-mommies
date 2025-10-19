@@ -1,4 +1,4 @@
-# Third-Party Libraries Used in ThriftFinder
+# Third-Party Libraries
 
 This project integrates several third-party libraries and APIs to power features like maps, cloud storage, authentication, styling, and gamification.
 

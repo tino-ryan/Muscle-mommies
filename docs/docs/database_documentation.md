@@ -1,4 +1,4 @@
-# ThriftFinder Firestore Database Documentation
+# Firestore Database Documentation
 
 ## Overview
 
