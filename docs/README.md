@@ -1,6 +1,6 @@
 # 💪 Muscle Mommies
 
-A full-stack fitness application with client, server, and documentation components, built as a monorepo.
+A full-stack ThriftFinder app AKA THE BOX application with client, server, and documentation components, built as a monorepo.
 
 ---
 
@@ -50,27 +50,31 @@ cd ../docs && npm install
 
 ### 📦 Running Locally
 
-#### Client (Frontend)
-
-```bash
-cd client
-npm run dev
-```
-
-Runs at: [http://localhost:3000](http://localhost:3000)
-
----
+follow the order below please !
 
 #### Server (Backend)
 
 ```bash
 cd server
-npm run dev
+npm start
 ```
 
-Runs at: [http://localhost:5000](http://localhost:5000)
+Runs at: [http://localhost:5000](http://localhost:3000)
 
 ---
+
+
+#### Client (Frontend)
+
+```bash
+cd client
+npm start
+```
+
+Runs at: [http://localhost:3000](http://localhost:3001)
+
+---
+
 
 #### Documentation (Docs)
 
@@ -79,7 +83,7 @@ cd docs
 npm run start
 ```
 
-Runs at: [http://localhost:3001](http://localhost:3001)
+Runs at: [http://localhost:3001](http://localhost:3002)
 
 ---
 
@@ -141,7 +145,7 @@ git checkout -b feature/your-feature
 
 ## 📄 License
 
-MIT © 2025 Tino Ryan
+wits © 2025 Tino Ryan
 
 ---
 
