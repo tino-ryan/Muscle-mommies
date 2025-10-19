@@ -425,6 +425,12 @@ export default function StoreOwnerDashboard() {
           <div className="loading-icon">⚠️</div>
           <div className="loading-text">Error</div>
           <div>{error}</div>
+          <button
+            onClick={() => navigate('/store/profile')}
+            className="card-btn-primary"
+          >
+            Set Up Store
+          </button>
         </div>
       </div>
     );
