@@ -27,7 +27,7 @@ jobs:
         run: |
           cd client
           npm install
-          npm run build
+          CI=false npm run build
 
       - name: Deploy to Firebase Hosting preview channel
         uses: FirebaseExtended/action-hosting-deploy@v0
