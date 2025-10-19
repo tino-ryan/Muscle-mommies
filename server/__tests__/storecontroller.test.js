@@ -79,14 +79,32 @@ describe('storeController', () => {
       const req = mockRequest({ params: { storeId: 'abc123' } });
       const res = mockResponse();
 
-      const mockData = { storeName: 'Test Store' };
-      const mockGet = jest.fn().mockResolvedValue({
+      const mockData = {
+        storeName: 'Test Store',
+        hours: {},
+        theme: 'theme-default',
+      };
+      const mockStoreDoc = {
         exists: true,
         id: 'abc123',
         data: () => mockData,
-      });
+      };
+      const mockContactSnapshot = {
+        docs: [
+          {
+            id: 'contact1',
+            data: () => ({ type: 'email', value: 'test@test.com' }),
+          },
+        ],
+      };
+
       admin.firestore().collection = jest.fn().mockReturnValue({
-        doc: jest.fn().mockReturnValue({ get: mockGet }),
+        doc: jest.fn().mockReturnValue({
+          get: jest.fn().mockResolvedValue(mockStoreDoc),
+          collection: jest.fn().mockReturnValue({
+            get: jest.fn().mockResolvedValue(mockContactSnapshot),
+          }),
+        }),
       });
 
       await getStoreById(req, res);
@@ -96,6 +114,9 @@ describe('storeController', () => {
         ...mockData,
         theme: 'theme-default',
         hours: expect.any(Object),
+        contactInfos: [
+          { id: 'contact1', type: 'email', value: 'test@test.com' },
+        ],
       });
     });
   });
@@ -685,37 +706,163 @@ describe('storeController', () => {
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
-          error: 'Missing required fields',
+          error: 'Missing required fields: storeId, rating',
         });
       });
 
-      it('should create review for sold reservation', async () => {
+      it('should return 400 if rating is invalid', async () => {
         const req = mockRequest({
-          body: { reservationId: 'r1', itemId: 'i1', storeId: 's1', rating: 5 },
+          body: { storeId: 's1', rating: 6 },
         });
         const res = mockResponse();
 
-        const mockReservation = {
-          exists: true,
-          data: () => ({ userId: 'testUserId', status: 'Sold' }),
-        };
+        await createReview(req, res);
 
-        admin.firestore().collection = jest.fn().mockImplementation((name) => {
-          if (name === 'Reservations')
-            return {
-              doc: jest.fn(() => ({
-                get: jest.fn().mockResolvedValue(mockReservation),
-              })),
-            };
-          if (name === 'Reviews')
-            return { add: jest.fn().mockResolvedValue({}) };
-          return { doc: jest.fn(() => ({ get: jest.fn() })) };
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+          error: 'Rating must be between 1 and 5',
+        });
+      });
+
+      it('should return 404 if store not found', async () => {
+        const req = mockRequest({
+          body: { storeId: 's1', rating: 5 },
+        });
+        const res = mockResponse();
+
+        admin.firestore().collection = jest.fn().mockReturnValue({
+          doc: jest.fn().mockReturnValue({
+            get: jest.fn().mockResolvedValue({ exists: false }),
+          }),
         });
 
         await createReview(req, res);
 
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Store not found' });
+      });
+
+      it('should create review successfully', async () => {
+        const req = mockRequest({
+          body: {
+            reservationId: 'r1',
+            itemId: 'i1',
+            storeId: 's1',
+            rating: 5,
+            review: 'Great item!',
+          },
+        });
+        const res = mockResponse();
+
+        const mockStoreDoc = { exists: true };
+        const mockAdd = jest.fn().mockResolvedValue({ id: 'review1' });
+        const mockUpdate = jest.fn().mockResolvedValue();
+
+        admin.firestore().collection = jest.fn((name) => {
+          if (name === 'stores') {
+            return {
+              doc: jest.fn().mockReturnValue({
+                get: jest.fn().mockResolvedValue(mockStoreDoc),
+                update: mockUpdate,
+              }),
+            };
+          }
+          if (name === 'Reviews') {
+            return {
+              add: mockAdd,
+              where: jest.fn().mockReturnValue({
+                get: jest.fn().mockResolvedValue({ empty: false, docs: [] }),
+              }),
+            };
+          }
+          return { add: mockAdd };
+        });
+
+        await createReview(req, res);
+
+        expect(mockAdd).toHaveBeenCalledWith(
+          expect.objectContaining({
+            reservationId: 'r1',
+            itemId: 'i1',
+            storeId: 's1',
+            userId: 'testUserId',
+            rating: 5,
+            review: 'Great item!',
+            createdAt: expect.any(Object),
+          })
+        );
         expect(res.json).toHaveBeenCalledWith(
-          expect.objectContaining({ message: 'Review created successfully' })
+          expect.objectContaining({
+            message: 'Review created successfully',
+            review: expect.objectContaining({
+              reservationId: 'r1',
+              itemId: 'i1',
+              storeId: 's1',
+              userId: 'testUserId',
+              rating: 5,
+              review: 'Great item!',
+              createdAt: expect.any(Object),
+            }),
+          })
+        );
+      });
+
+      it('should create review without reservationId or itemId', async () => {
+        const req = mockRequest({
+          body: { storeId: 's1', rating: 4, review: 'Nice store!' },
+        });
+        const res = mockResponse();
+
+        const mockStoreDoc = { exists: true };
+        const mockAdd = jest.fn().mockResolvedValue({ id: 'review2' });
+        const mockUpdate = jest.fn().mockResolvedValue();
+
+        admin.firestore().collection = jest.fn((name) => {
+          if (name === 'stores') {
+            return {
+              doc: jest.fn().mockReturnValue({
+                get: jest.fn().mockResolvedValue(mockStoreDoc),
+                update: mockUpdate,
+              }),
+            };
+          }
+          if (name === 'Reviews') {
+            return {
+              add: mockAdd,
+              where: jest.fn().mockReturnValue({
+                get: jest.fn().mockResolvedValue({ empty: false, docs: [] }),
+              }),
+            };
+          }
+          return { add: mockAdd };
+        });
+
+        await createReview(req, res);
+
+        expect(mockAdd).toHaveBeenCalledWith(
+          expect.objectContaining({
+            reservationId: null,
+            itemId: null,
+            storeId: 's1',
+            userId: 'testUserId',
+            rating: 4,
+            review: 'Nice store!',
+            createdAt: expect.any(Object),
+          })
+        );
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: 'Review created successfully',
+            review: expect.objectContaining({
+              reservationId: null,
+              itemId: null,
+              storeId: 's1',
+              userId: 'testUserId',
+              rating: 4,
+              review: 'Nice store!',
+              createdAt: expect.any(Object),
+            }),
+          })
         );
       });
     });
@@ -1677,87 +1824,6 @@ describe('storeController - additional functions', () => {
     });
 
     // =============== createReview - Edge Cases ===============
-    describe('createReview - Additional Coverage', () => {
-      it('should return 400 if rating is above 5', async () => {
-        const req = mockRequest({
-          body: {
-            reservationId: 'r1',
-            itemId: 'i1',
-            storeId: 's1',
-            rating: 6,
-            review: 'Test review', // Include review to pass initial validation
-          },
-        });
-        const res = mockResponse();
-
-        await createReview(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({
-          error: 'Rating must be between 1 and 5',
-        });
-      });
-
-      it('should return 403 if reservation does not belong to user', async () => {
-        const req = mockRequest({
-          body: {
-            reservationId: 'r1',
-            itemId: 'i1',
-            storeId: 's1',
-            rating: 5,
-          },
-        });
-        const res = mockResponse();
-
-        const mockReservationDoc = {
-          exists: true,
-          data: () => ({ userId: 'differentUser', status: 'Sold' }),
-        };
-
-        admin.firestore().collection = jest.fn(() => ({
-          doc: jest.fn(() => ({
-            get: jest.fn().mockResolvedValue(mockReservationDoc),
-          })),
-        }));
-
-        await createReview(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(403);
-        expect(res.json).toHaveBeenCalledWith({
-          error: 'Unauthorized to review this reservation',
-        });
-      });
-
-      it('should return 400 if reservation status is not Sold', async () => {
-        const req = mockRequest({
-          body: {
-            reservationId: 'r1',
-            itemId: 'i1',
-            storeId: 's1',
-            rating: 5,
-          },
-        });
-        const res = mockResponse();
-
-        const mockReservationDoc = {
-          exists: true,
-          data: () => ({ userId: 'testUserId', status: 'Pending' }),
-        };
-
-        admin.firestore().collection = jest.fn(() => ({
-          doc: jest.fn(() => ({
-            get: jest.fn().mockResolvedValue(mockReservationDoc),
-          })),
-        }));
-
-        await createReview(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({
-          error: 'Can only review sold items',
-        });
-      });
-    });
 
     // =============== confirmReservation - Complete Coverage ===============
     describe('confirmReservation - Full Coverage', () => {

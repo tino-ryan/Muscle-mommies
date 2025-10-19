@@ -39,6 +39,7 @@ jest.mock('../controllers/itemController', () => ({
   getItemsByStore: jest.fn((req, res) => res.json({ items: [] })),
   searchItems: jest.fn((req, res) => res.json({ items: [] })),
   createItem: jest.fn((req, res) => res.json({ item: 'created' })),
+  deleteItem: jest.fn((req, res) => res.json({ message: 'deleted' })),
 }));
 
 jest.mock('../controllers/outfitController', () => ({
