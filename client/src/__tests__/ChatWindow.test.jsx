@@ -3,7 +3,15 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ChatWindow from '../pages/ChatWindow';
 import { getAuth } from 'firebase/auth';
-import { onSnapshot, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  doc,
+  getDoc,
+} from 'firebase/firestore';
 import axios from 'axios';
 
 // Mocks
@@ -12,7 +20,12 @@ jest.mock('firebase/auth', () => ({
 }));
 
 jest.mock('firebase/firestore', () => ({
+  collection: jest.fn(),
+  query: jest.fn(),
+  where: jest.fn(),
+  orderBy: jest.fn(),
   onSnapshot: jest.fn(),
+  doc: jest.fn(),
   getDoc: jest.fn(),
 }));
 
@@ -151,6 +164,12 @@ describe('ChatWindow', () => {
     axios.put.mockResolvedValue({});
 
     // Setup Firestore mocks
+    collection.mockImplementation(() => ({}));
+    doc.mockImplementation(() => ({}));
+    query.mockImplementation((...args) => args);
+    where.mockImplementation(() => ({}));
+    orderBy.mockImplementation(() => ({}));
+
     onSnapshot.mockImplementation((query, successCallback) => {
       const mockSnapshot = {
         docs: mockMessages.map((msg) => ({

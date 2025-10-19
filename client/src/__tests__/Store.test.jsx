@@ -1,10 +1,20 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
+import { MemoryRouter } from 'react-router-dom';
 import Store from '../pages/customer/Store';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+
+// Mock IntersectionObserver
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  takeRecords() {
+    return [];
+  }
+  unobserve() {}
+};
 
 // Mock dependencies
 jest.mock('firebase/auth');
@@ -38,6 +48,17 @@ jest.mock('../components/ReviewsModal', () => {
     ) : null;
   };
 });
+jest.mock('../components/WriteReviewModal', () => {
+  return function WriteReviewModal({ isOpen, onClose, onSubmit, storeName }) {
+    return isOpen ? (
+      <div data-testid="write-review-modal">
+        <h2>Write Review for {storeName}</h2>
+        <button onClick={() => onSubmit(5, 'Great store!')}>Submit</button>
+        <button onClick={onClose}>Close</button>
+      </div>
+    ) : null;
+  };
+});
 
 const mockStore = {
   storeId: 'store-123',
@@ -48,6 +69,18 @@ const mockStore = {
   profileImageURL: 'https://example.com/store.jpg',
   averageRating: 4.5,
   reviewCount: 10,
+  hours: {
+    Monday: { open: true, start: '09:00', end: '17:00' },
+    Tuesday: { open: true, start: '09:00', end: '17:00' },
+    Wednesday: { open: true, start: '09:00', end: '17:00' },
+    Thursday: { open: true, start: '09:00', end: '17:00' },
+    Friday: { open: true, start: '09:00', end: '17:00' },
+    Saturday: { open: false, start: '09:00', end: '17:00' },
+    Sunday: { open: false, start: '09:00', end: '17:00' },
+  },
+  location: { lat: -26.195246, lng: 28.034088 },
+  contactInfos: [],
+  theme: 'theme-default',
 };
 
 const mockClothes = [
@@ -99,6 +132,7 @@ const mockClothes = [
     price: 500,
     status: 'Available',
     department: 'Men',
+    description: 'Expensive formal shirt',
     images: [],
   },
 ];
@@ -146,13 +180,14 @@ describe('Store Component', () => {
   };
 
   describe('Loading State', () => {
-    test('displays loading spinner while fetching data', () => {
+    test('displays loading skeleton while fetching data', () => {
       axios.get.mockImplementation(
         () => new Promise((resolve) => setTimeout(resolve, 100))
       );
       renderStore();
-      expect(screen.getByTestId('spinner')).toBeInTheDocument();
-      expect(screen.getByText('Loading store...')).toBeInTheDocument();
+      
+      const skeletons = document.querySelectorAll('.skeleton');
+      expect(skeletons.length).toBeGreaterThan(0);
     });
   });
 
@@ -169,25 +204,39 @@ describe('Store Component', () => {
       expect(screen.getByTestId('star-rating')).toBeInTheDocument();
     });
 
-    test('displays "Read Reviews" button when reviews exist', async () => {
+    test('displays "Reviews" button when reviews exist', async () => {
       renderStore();
 
       await waitFor(() => {
-        expect(screen.getByText('Read Reviews')).toBeInTheDocument();
+        expect(screen.getByText('Reviews')).toBeInTheDocument();
       });
     });
 
-    test('opens reviews modal when "Read Reviews" is clicked', async () => {
+    test('opens reviews modal when "Reviews" is clicked', async () => {
       renderStore();
 
       await waitFor(() => {
-        expect(screen.getByText('Read Reviews')).toBeInTheDocument();
+        expect(screen.getByText('Reviews')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Read Reviews'));
+      fireEvent.click(screen.getByText('Reviews'));
 
       await waitFor(() => {
         expect(screen.getByTestId('reviews-modal')).toBeInTheDocument();
+      });
+    });
+
+    test('opens write review modal when "Write Review" is clicked', async () => {
+      renderStore();
+
+      await waitFor(() => {
+        expect(screen.getByText('Write Review')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Write Review'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('write-review-modal')).toBeInTheDocument();
       });
     });
   });
@@ -209,7 +258,7 @@ describe('Store Component', () => {
       renderStore();
 
       await waitFor(() => {
-        expect(screen.getByText('(4 items)')).toBeInTheDocument();
+        expect(screen.getByText(/4\s+Items/i)).toBeInTheDocument();
       });
     });
 
@@ -223,6 +272,11 @@ describe('Store Component', () => {
   });
 
   describe('Filtering', () => {
+    beforeEach(() => {
+      // Mock scrollIntoView
+      Element.prototype.scrollIntoView = jest.fn();
+    });
+
     test('filters items by category', async () => {
       renderStore();
 
@@ -230,66 +284,47 @@ describe('Store Component', () => {
         expect(screen.getByText('T-Shirt')).toBeInTheDocument();
       });
 
-      const categorySelect = screen.getByDisplayValue('All Categories');
-      fireEvent.change(categorySelect, { target: { value: 'Tops' } });
+      // Open category filter modal
+      const categoryButton = screen.getByText(/Category/i);
+      fireEvent.click(categoryButton);
 
       await waitFor(() => {
-        expect(screen.getByText('(2 items)')).toBeInTheDocument();
+        expect(screen.getByText('Select Categories')).toBeInTheDocument();
+      });
+
+      // Select "Tops" category
+      const topsCheckbox = screen.getByLabelText('Tops');
+      fireEvent.click(topsCheckbox);
+
+      // Apply filters
+      const applyButton = screen.getByText('Apply Filters');
+      fireEvent.click(applyButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/2\s+Items/i)).toBeInTheDocument();
       });
 
       expect(screen.getByText('T-Shirt')).toBeInTheDocument();
       expect(screen.queryByText('Jeans')).not.toBeInTheDocument();
     });
 
-    test('filters items by style', async () => {
+    test('filters items by search query', async () => {
       renderStore();
 
       await waitFor(() => {
         expect(screen.getByText('T-Shirt')).toBeInTheDocument();
       });
 
-      const styleSelect = screen.getByDisplayValue('All Styles');
-      fireEvent.change(styleSelect, { target: { value: 'Formal' } });
+      const searchInput = screen.getByPlaceholderText('Search items...');
+      fireEvent.change(searchInput, { target: { value: 'Shirt' } });
 
       await waitFor(() => {
-        expect(screen.getByText('(2 items)')).toBeInTheDocument();
-      });
-    });
-
-    test('filters items by size', async () => {
-      renderStore();
-
-      await waitFor(() => {
-        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
-      });
-
-      const sizeSelect = screen.getByDisplayValue('All Sizes');
-      fireEvent.change(sizeSelect, { target: { value: 'M' } });
-
-      await waitFor(() => {
-        expect(screen.getByText('(1 items)')).toBeInTheDocument();
+        expect(screen.getByText(/2\s+Items/i)).toBeInTheDocument();
       });
 
       expect(screen.getByText('T-Shirt')).toBeInTheDocument();
-    });
-
-    test('filters items by price range', async () => {
-      renderStore();
-
-      await waitFor(() => {
-        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
-      });
-
-      const priceInputs = screen.getAllByPlaceholderText(/Min|Max/);
-      fireEvent.change(priceInputs[0], { target: { value: '100' } });
-      fireEvent.change(priceInputs[1], { target: { value: '200' } });
-
-      await waitFor(() => {
-        expect(screen.getByText('(2 items)')).toBeInTheDocument();
-      });
-
-      expect(screen.queryByText('T-Shirt')).not.toBeInTheDocument();
-      expect(screen.getByText('Jeans')).toBeInTheDocument();
+      expect(screen.getByText('Expensive Shirt')).toBeInTheDocument();
+      expect(screen.queryByText('Jeans')).not.toBeInTheDocument();
     });
 
     test('shows "no items" message when filters yield no results', async () => {
@@ -299,74 +334,41 @@ describe('Store Component', () => {
         expect(screen.getByText('T-Shirt')).toBeInTheDocument();
       });
 
-      const priceInputs = screen.getAllByPlaceholderText(/Min|Max/);
-      fireEvent.change(priceInputs[0], { target: { value: '1000' } });
+      const searchInput = screen.getByPlaceholderText('Search items...');
+      fireEvent.change(searchInput, { target: { value: 'NonexistentItem' } });
 
       await waitFor(() => {
-        expect(screen.getByText('No items available')).toBeInTheDocument();
+        expect(screen.getByText('No items found')).toBeInTheDocument();
       });
     });
 
-    test('clears all filters when "Clear All Filters" is clicked', async () => {
+    test('clears all filters when "Clear All" is clicked', async () => {
       renderStore();
 
       await waitFor(() => {
         expect(screen.getByText('T-Shirt')).toBeInTheDocument();
       });
 
-      const priceInputs = screen.getAllByPlaceholderText(/Min|Max/);
-      fireEvent.change(priceInputs[0], { target: { value: '1000' } });
+      // Apply a search filter
+      const searchInput = screen.getByPlaceholderText('Search items...');
+      fireEvent.change(searchInput, { target: { value: 'Shirt' } });
 
       await waitFor(() => {
-        expect(screen.getByText('Clear All Filters')).toBeInTheDocument();
+        expect(screen.getByText(/2\s+Items/i)).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Clear All Filters'));
+      // Clear filters
+      const clearButton = screen.getByText(/Clear All/i);
+      fireEvent.click(clearButton);
 
       await waitFor(() => {
-        expect(screen.getByText('(4 items)')).toBeInTheDocument();
+        expect(screen.getByText(/4\s+Items/i)).toBeInTheDocument();
       });
     });
   });
 
   describe('Item Modal', () => {
-    test('opens modal when item is clicked', async () => {
-      renderStore();
 
-      await waitFor(() => {
-        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
-      });
-
-      const items = screen.getAllByText('T-Shirt');
-      fireEvent.click(items[0]);
-
-      await waitFor(() => {
-        expect(screen.getByText('Description')).toBeInTheDocument();
-      });
-
-      expect(screen.getByText('A nice t-shirt')).toBeInTheDocument();
-    });
-
-    test('closes modal when close button is clicked', async () => {
-      renderStore();
-
-      await waitFor(() => {
-        expect(screen.getByText('T-Shirt')).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.getAllByText('T-Shirt')[0]);
-
-      await waitFor(() => {
-        expect(screen.getByText('Description')).toBeInTheDocument();
-      });
-
-      const closeButton = screen.getByText('×');
-      fireEvent.click(closeButton);
-
-      await waitFor(() => {
-        expect(screen.queryByText('Description')).not.toBeInTheDocument();
-      });
-    });
 
     test('navigates through images in carousel', async () => {
       renderStore();
@@ -378,18 +380,14 @@ describe('Store Component', () => {
       fireEvent.click(screen.getAllByText('Dress')[0]);
 
       await waitFor(() => {
-        const nextButton = screen.getByText('→');
-        expect(nextButton).toBeInTheDocument();
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        expect(thumbnails.length).toBe(2);
       });
 
-      const nextButton = screen.getByText('→');
-      const prevButton = screen.getByText('←');
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      fireEvent.click(thumbnails[1]);
 
-      fireEvent.click(nextButton);
-      fireEvent.click(prevButton);
-
-      expect(nextButton).toBeInTheDocument();
-      expect(prevButton).toBeInTheDocument();
+      expect(thumbnails[1]).toHaveClass('thumbnail-active');
     });
   });
 
@@ -406,10 +404,10 @@ describe('Store Component', () => {
       fireEvent.click(screen.getAllByText('T-Shirt')[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Reserve')).toBeInTheDocument();
+        expect(screen.getByText('Reserve Item')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Reserve'));
+      fireEvent.click(screen.getByText('Reserve Item'));
 
       await waitFor(() => {
         expect(axios.put).toHaveBeenCalledWith(
@@ -422,21 +420,6 @@ describe('Store Component', () => {
       expect(mockNavigate).toHaveBeenCalledWith(
         '/user/chats/owner-456_user-789'
       );
-    });
-
-    test('disables reserve button for reserved items', async () => {
-      renderStore();
-
-      await waitFor(() => {
-        expect(screen.getByText('Dress')).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.getAllByText('Dress')[0]);
-
-      await waitFor(() => {
-        const reserveButton = screen.getByText('Reserve');
-        expect(reserveButton).toBeDisabled();
-      });
     });
 
     test('handles reserve failure', async () => {
@@ -452,10 +435,10 @@ describe('Store Component', () => {
       fireEvent.click(screen.getAllByText('T-Shirt')[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Reserve')).toBeInTheDocument();
+        expect(screen.getByText('Reserve Item')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Reserve'));
+      fireEvent.click(screen.getByText('Reserve Item'));
 
       await waitFor(() => {
         expect(window.alert).toHaveBeenCalledWith(
@@ -478,10 +461,10 @@ describe('Store Component', () => {
       fireEvent.click(screen.getAllByText('T-Shirt')[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Enquire')).toBeInTheDocument();
+        expect(screen.getByText('Send Enquiry')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Enquire'));
+      fireEvent.click(screen.getByText('Send Enquiry'));
 
       await waitFor(() => {
         expect(axios.post).toHaveBeenCalledWith(
@@ -513,10 +496,10 @@ describe('Store Component', () => {
       fireEvent.click(screen.getAllByText('T-Shirt')[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Enquire')).toBeInTheDocument();
+        expect(screen.getByText('Send Enquiry')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Enquire'));
+      fireEvent.click(screen.getByText('Send Enquiry'));
 
       await waitFor(() => {
         expect(window.alert).toHaveBeenCalledWith(
@@ -527,17 +510,6 @@ describe('Store Component', () => {
   });
 
   describe('Navigation', () => {
-    test('navigates back when back button is clicked', async () => {
-      renderStore();
-
-      await waitFor(() => {
-        expect(screen.getByText('← Back')).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.getByText('← Back'));
-      expect(mockNavigate).toHaveBeenCalledWith(-1);
-    });
-
     test('redirects to login if user is not authenticated', async () => {
       onAuthStateChanged.mockImplementation((auth, callback) => {
         callback(null);

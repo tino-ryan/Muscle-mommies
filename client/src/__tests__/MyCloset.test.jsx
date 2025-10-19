@@ -84,10 +84,12 @@ const mockAuth = {
 
 describe('MyCloset Component', () => {
   let mockNavigate;
+  let consoleLogSpy;
 
   beforeEach(() => {
     jest.clearAllMocks();
     window.alert = jest.fn();
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
     mockNavigate = jest.fn();
     require('react-router-dom').useNavigate = () => mockNavigate;
@@ -124,6 +126,10 @@ describe('MyCloset Component', () => {
     axios.post.mockResolvedValue({ data: { outfitId: 'new-outfit' } });
   });
 
+  afterEach(() => {
+    consoleLogSpy.mockRestore();
+  });
+
   const renderMyCloset = () => {
     return render(
       <MemoryRouter>
@@ -137,7 +143,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        expect(screen.getByText('My Closet')).toBeInTheDocument();
+        expect(screen.getByText(/my closet/i)).toBeInTheDocument();
       });
 
       expect(screen.getByTestId('customer-sidebar')).toBeInTheDocument();
@@ -193,6 +199,11 @@ describe('MyCloset Component', () => {
           expect.any(Object)
         );
       });
+
+      // Verify console.log was called with fetched outfits
+      await waitFor(() => {
+        expect(consoleLogSpy).toHaveBeenCalledWith('Fetched outfits:', mockOutfits);
+      });
     });
 
     test('displays error message when fetching fails', async () => {
@@ -208,8 +219,6 @@ describe('MyCloset Component', () => {
     });
 
     test('handles item fetch failure gracefully with placeholder', async () => {
-      // Component filters out pending reservations, so item-3 is never fetched
-      // This test verifies the filtering works correctly
       renderMyCloset();
 
       await waitFor(() => {
@@ -232,7 +241,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Outfit')).toBeInTheDocument();
+        expect(screen.getByText(/create new outfit/i)).toBeInTheDocument();
       });
 
       const slots = screen.getAllByText('+');
@@ -243,7 +252,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        expect(screen.getByText('Save Outfit')).toBeInTheDocument();
+        expect(screen.getByText(/SAVE OUTFIT/i)).toBeInTheDocument();
       });
     });
 
@@ -255,11 +264,11 @@ describe('MyCloset Component', () => {
         expect(slots.length).toBe(9);
       });
 
-      const firstSlot = screen.getAllByText('+')[0];
-      fireEvent.click(firstSlot);
+      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+      fireEvent.click(slotsInGrid[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Select an item')).toBeInTheDocument();
+        expect(screen.getByText(/select an item/i)).toBeInTheDocument();
       });
     });
   });
@@ -269,12 +278,12 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        expect(screen.getByText('Select an item')).toBeInTheDocument();
+        expect(screen.getByText(/select an item/i)).toBeInTheDocument();
       });
 
       // Should display items
@@ -286,19 +295,19 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        expect(screen.getByText('Select an item')).toBeInTheDocument();
+        expect(screen.getByText(/select an item/i)).toBeInTheDocument();
       });
 
-      const closeButton = screen.getByText('Close');
+      const closeButton = screen.getByText(/CLOSE/i);
       fireEvent.click(closeButton);
 
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
     });
 
@@ -306,25 +315,28 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        expect(screen.getByText('Select an item')).toBeInTheDocument();
+        expect(screen.getByText(/select an item/i)).toBeInTheDocument();
       });
 
-      // Click the wrapper div, not the image directly
-      const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-      fireEvent.click(popupWrappers[0]);
+      // Click the first item in popup
+      const popupItems = document.querySelectorAll('.popup-item');
+      fireEvent.click(popupItems[0]);
 
-      // Wait for state to update - popup should close
-      await waitFor(
-        () => {
-          expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
-        },
-        { timeout: 3000 }
-      );
+      // Popup should close
+      await waitFor(() => {
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
+      });
+
+      // One slot should now be filled (8 + signs remaining)
+      await waitFor(() => {
+        const plusSigns = screen.getAllByText('+');
+        expect(plusSigns.length).toBe(8);
+      });
     });
 
     test('displays remove button when slot has item', async () => {
@@ -332,26 +344,26 @@ describe('MyCloset Component', () => {
 
       // Add item to slot first
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[0]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
       });
 
       // Wait for popup to close
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
       // Click same slot again
-      const closetSlots = document.querySelectorAll('.closet-slot');
-      fireEvent.click(closetSlots[0]);
+      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+      fireEvent.click(slotsInGrid[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Remove Item')).toBeInTheDocument();
+        expect(screen.getByText(/REMOVE ITEM/i)).toBeInTheDocument();
       });
     });
 
@@ -360,29 +372,29 @@ describe('MyCloset Component', () => {
 
       // Add item to slot
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[0]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
       });
 
       // Wait for popup to close
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
       // Open popup again for same slot
-      const closetSlots = document.querySelectorAll('.closet-slot');
-      fireEvent.click(closetSlots[0]);
+      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+      fireEvent.click(slotsInGrid[0]);
 
       await waitFor(() => {
-        expect(screen.getByText('Remove Item')).toBeInTheDocument();
+        expect(screen.getByText(/REMOVE ITEM/i)).toBeInTheDocument();
       });
 
-      const removeButton = screen.getByText('Remove Item');
+      const removeButton = screen.getByText(/REMOVE ITEM/i);
       fireEvent.click(removeButton);
 
       await waitFor(() => {
@@ -418,8 +430,8 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
@@ -435,22 +447,22 @@ describe('MyCloset Component', () => {
 
       // Add an item to a slot
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[0]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
       });
 
       // Wait for popup to close
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
       // Click save button
-      const saveButton = screen.getByText('Save Outfit');
+      const saveButton = screen.getByText(/SAVE OUTFIT/i);
       fireEvent.click(saveButton);
 
       await waitFor(() => {
@@ -472,7 +484,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const saveButton = screen.getByText('Save Outfit');
+        const saveButton = screen.getByText(/SAVE OUTFIT/i);
         fireEvent.click(saveButton);
       });
 
@@ -492,7 +504,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const saveButton = screen.getByText('Save Outfit');
+        const saveButton = screen.getByText(/SAVE OUTFIT/i);
         fireEvent.click(saveButton);
       });
 
@@ -507,7 +519,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        expect(screen.getByText('My Outfits')).toBeInTheDocument();
+        expect(screen.getByText(/my outfits/i)).toBeInTheDocument();
       });
     });
 
@@ -515,7 +527,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const outfitCards = document.querySelectorAll('.outfit-card');
+        const outfitCards = document.querySelectorAll('.my-outfits-section .store-card');
         expect(outfitCards.length).toBe(2);
       });
     });
@@ -524,7 +536,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const emptySlots = document.querySelectorAll('.outfit-slot.empty');
+        const emptySlots = document.querySelectorAll('.my-outfits-section .store-card-image-wrapper.empty');
         expect(emptySlots.length).toBeGreaterThan(0);
       });
     });
@@ -533,7 +545,7 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const outfitImages = document.querySelectorAll('.outfit-slot-image');
+        const outfitImages = document.querySelectorAll('.my-outfits-section .store-image');
         expect(outfitImages.length).toBeGreaterThan(0);
       });
     });
@@ -559,8 +571,9 @@ describe('MyCloset Component', () => {
       renderMyCloset();
 
       await waitFor(() => {
-        const placeholders = screen.getAllByAltText('No item available');
-        expect(placeholders.length).toBeGreaterThan(0);
+        // Missing items show as empty wrappers in saved outfits
+        const emptyWrappers = document.querySelectorAll('.my-outfits-section .store-card-image-wrapper.empty');
+        expect(emptyWrappers.length).toBeGreaterThan(0);
       });
     });
   });
@@ -571,15 +584,14 @@ describe('MyCloset Component', () => {
 
       await waitFor(() => {
         // Wait for saved outfits to load which have images
-        const outfitImages = document.querySelectorAll('.outfit-slot-image');
+        const outfitImages = document.querySelectorAll('.my-outfits-section .store-image');
         expect(outfitImages.length).toBeGreaterThan(0);
       });
 
       // Trigger error on image
-      const image = document.querySelector('.outfit-slot-image');
+      const image = document.querySelector('.my-outfits-section .store-image');
       if (image) {
         fireEvent.error(image);
-        // Note: In JSDOM, the src won't actually change, but the onError handler runs
         expect(image).toBeInTheDocument();
       }
     });
@@ -609,7 +621,7 @@ describe('MyCloset Component', () => {
       mockUser.getIdToken.mockClear();
 
       await waitFor(() => {
-        const saveButton = screen.getByText('Save Outfit');
+        const saveButton = screen.getByText(/SAVE OUTFIT/i);
         fireEvent.click(saveButton);
       });
 
@@ -625,29 +637,29 @@ describe('MyCloset Component', () => {
 
       // Add item to first slot
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[0]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
       });
 
       // Wait for popup to close
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
       // Add item to second slot
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]); // First + sign now (since one slot is filled)
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[1]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[1]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[1]);
       });
 
       await waitFor(() => {
@@ -661,30 +673,30 @@ describe('MyCloset Component', () => {
 
       // Add first item
       await waitFor(() => {
-        const slots = screen.getAllByText('+');
-        fireEvent.click(slots[0]);
+        const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+        fireEvent.click(slotsInGrid[0]);
       });
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[0]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[0]);
       });
 
       // Wait for popup to close
       await waitFor(() => {
-        expect(screen.queryByText('Select an item')).not.toBeInTheDocument();
+        expect(screen.queryByText(/select an item/i)).not.toBeInTheDocument();
       });
 
-      // Replace with different item
-      const closetSlots = document.querySelectorAll('.closet-slot');
-      fireEvent.click(closetSlots[0]);
+      // Click same slot to replace
+      const slotsInGrid = document.querySelectorAll('.closet-grid .grid-slot');
+      fireEvent.click(slotsInGrid[0]);
 
       await waitFor(() => {
-        const popupWrappers = document.querySelectorAll('.popup-item-wrapper');
-        fireEvent.click(popupWrappers[1]);
+        const popupItems = document.querySelectorAll('.popup-item');
+        fireEvent.click(popupItems[1]);
       });
 
-      // Should still have 8 empty slots
+      // Should still have 8 empty slots (only 1 filled)
       await waitFor(() => {
         const plusSigns = screen.getAllByText('+');
         expect(plusSigns.length).toBe(8);

@@ -218,6 +218,8 @@ describe('Login', () => {
       });
 
       signInWithEmailAndPassword.mockReturnValueOnce(loginPromise);
+      // Mock axios BEFORE resolving login
+      axios.post.mockResolvedValueOnce({ data: { role: 'customer' } });
 
       renderLogin();
 
@@ -237,10 +239,10 @@ describe('Login', () => {
 
       // Resolve login
       resolveLogin({ user: mockUser });
-      axios.post.mockResolvedValueOnce({ data: { role: 'customer' } });
 
+      // Verify navigation happens (loading screen stays visible until navigation)
       await waitFor(() => {
-        expect(screen.queryByTestId('loading-screen')).not.toBeInTheDocument();
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/home');
       });
     });
 
@@ -309,6 +311,8 @@ describe('Login', () => {
       });
 
       signInWithPopup.mockReturnValueOnce(googlePromise);
+      // Mock axios BEFORE resolving login
+      axios.post.mockResolvedValueOnce({ data: { role: 'customer' } });
 
       renderLogin();
 
@@ -319,10 +323,10 @@ describe('Login', () => {
       });
 
       resolveGoogle({ user: { uid: 'google123', displayName: 'Test' } });
-      axios.post.mockResolvedValueOnce({ data: { role: 'customer' } });
 
+      // Verify navigation happens (loading screen stays visible until navigation)
       await waitFor(() => {
-        expect(screen.queryByTestId('loading-screen')).not.toBeInTheDocument();
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/home');
       });
     });
   });

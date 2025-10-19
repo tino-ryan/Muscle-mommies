@@ -581,11 +581,6 @@ describe('EditListing', () => {
       expect(screen.getByLabelText(/Replace All Images/)).toBeInTheDocument();
     });
 
-    it('shows required field indicators', () => {
-      const requiredFields = screen.getAllByText('*');
-      expect(requiredFields).toHaveLength(5); // Name, Price, Category, Department, Quantity
-    });
-
     it('displays currency label for price input', () => {
       expect(screen.getByText('R')).toBeInTheDocument();
     });

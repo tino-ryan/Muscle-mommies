@@ -197,8 +197,10 @@ describe('StoreReservations', () => {
 
       fireEvent.click(screen.getByText('View Past Sales'));
 
-      expect(screen.getByText('Past Sales 💸')).toBeInTheDocument();
-      expect(screen.getByText('View Active Reservations')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText(/Past Sales/i)).toBeInTheDocument();
+        expect(screen.getByText('View Active Reservations')).toBeInTheDocument();
+      });
 
       // Should now show completed reservations
       await waitFor(() => {

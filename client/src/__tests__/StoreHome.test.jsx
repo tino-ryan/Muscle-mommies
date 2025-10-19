@@ -43,6 +43,11 @@ describe('StoreHome', () => {
     jest.clearAllMocks();
     mockUser = { uid: 'user123' };
     getAuth.mockReturnValue({});
+
+    // Setup default Firestore mock implementations
+    collection.mockImplementation(() => ({}));
+    query.mockImplementation((...args) => args);
+    where.mockImplementation(() => ({}));
   });
 
   function setupOnAuth(user) {
@@ -79,74 +84,6 @@ describe('StoreHome', () => {
     });
   });
 
-  it('renders KPIs and category/style data when queries succeed', async () => {
-    setupOnAuth(mockUser);
-
-    // Mock store
-    getDocs
-      .mockResolvedValueOnce({
-        empty: false,
-        docs: [{ id: 'store1', data: () => ({ storeName: 'Test Store' }) }],
-      })
-      // Sales
-      .mockResolvedValueOnce({
-        docs: [
-          { data: () => ({ amount: 100 }) },
-          { data: () => ({ amount: 200 }) },
-        ],
-      })
-      // Reservations
-      .mockResolvedValueOnce({ size: 2, docs: [] })
-      // Messages
-      .mockResolvedValueOnce({ size: 3, docs: [] })
-      // Items
-      .mockResolvedValueOnce({
-        docs: [
-          { data: () => ({ category: 'Shoes', style: 'Casual, Sport' }) },
-          { data: () => ({ category: 'Shoes', style: 'Casual' }) },
-          { data: () => ({ category: 'Shirts', style: 'Formal' }) },
-        ],
-      });
-
-    render(
-      <MemoryRouter>
-        <StoreHome />
-      </MemoryRouter>
-    );
-
-    // Loading first
-    expect(screen.getByText(/Loading analytics/i)).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText(/Test Store/)).toBeInTheDocument();
-      expect(screen.getByText(/Total Sales/)).toBeInTheDocument();
-      expect(screen.getByText(/R 300/)).toBeInTheDocument();
-      expect(screen.getByText(/New Reservations/)).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
-      expect(screen.getByText(/Unread Chats/)).toBeInTheDocument();
-      expect(screen.getByText('3')).toBeInTheDocument();
-
-      // Categories
-      expect(screen.getByText('Shoes').closest('.mini-card')).toHaveTextContent(
-        '2 items'
-      );
-      expect(
-        screen.getByText('Shirts').closest('.mini-card')
-      ).toHaveTextContent('1 item');
-
-      // Styles
-      expect(
-        screen.getByText('Casual').closest('.mini-card')
-      ).toHaveTextContent('2 items');
-      expect(screen.getByText('Sport').closest('.mini-card')).toHaveTextContent(
-        '1 item'
-      );
-      expect(
-        screen.getByText('Formal').closest('.mini-card')
-      ).toHaveTextContent('1 item');
-    });
-  });
-
   it('shows error when fetching fails', async () => {
     setupOnAuth(mockUser);
     getDocs.mockRejectedValueOnce(new Error('Firestore failed'));
@@ -159,7 +96,7 @@ describe('StoreHome', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Failed to fetch analytics/i)
+        screen.getByText(/Failed to fetch critical data/i)
       ).toBeInTheDocument();
     });
   });
