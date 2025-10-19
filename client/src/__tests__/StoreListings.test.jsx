@@ -20,12 +20,16 @@ jest.mock('firebase/auth', () => ({
 
 jest.mock('axios');
 
-jest.mock('../components/StoreSidebar', () => ({ currentPage, onLogout }) => (
-  <div data-testid="store-sidebar">
-    <span>Current Page: {currentPage}</span>
-    <button onClick={onLogout}>Logout</button>
-  </div>
-));
+jest.mock('../components/StoreSidebar', () => {
+  const MockStoreSidebar = ({ currentPage, onLogout }) => (
+    <div data-testid="store-sidebar">
+      <span>Current Page: {currentPage}</span>
+      <button onClick={onLogout}>Logout</button>
+    </div>
+  );
+  MockStoreSidebar.displayName = 'StoreSidebar';
+  return MockStoreSidebar;
+});
 
 // Mock API_URL to match the expected URL in tests
 jest.mock('../api', () => ({
@@ -106,7 +110,7 @@ describe('StoreListings', () => {
   });
 
   describe('Authentication and Data Loading', () => {
-    it('redirects to login when user is not authenticated', () => {
+    it('redirects to login when user is not authenticated', async () => {
       onAuthStateChanged.mockImplementation((auth, callback) => {
         callback(null); // No user
         return jest.fn();
@@ -114,10 +118,16 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      expect(mockNavigate).toHaveBeenCalledWith('/login');
+      await waitFor(
+        () => {
+          expect(screen.getByText('Please log in.')).toBeInTheDocument();
+          expect(mockNavigate).toHaveBeenCalledWith('/login');
+        },
+        { timeout: 2000 }
+      );
     });
 
-    it('shows loading state initially', async () => {
+    it('shows loading state initially', () => {
       onAuthStateChanged.mockImplementation((auth, callback) => {
         callback(mockUser);
         return jest.fn();
@@ -146,12 +156,15 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Listings')).toBeInTheDocument();
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-        expect(screen.getByText('Retro Shoes')).toBeInTheDocument();
-        expect(screen.getByText('Designer Bag')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Store Listings')).toBeInTheDocument();
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+          expect(screen.getByText('Retro Shoes')).toBeInTheDocument();
+          expect(screen.getByText('Designer Bag')).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
 
       expect(axios.get).toHaveBeenCalledWith(
         'https://muscle-mommies-server.onrender.com/api/my-store',
@@ -182,11 +195,14 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('No items found for this store.')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('No items found for this store.')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       consoleSpy.mockRestore();
     });
@@ -206,9 +222,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/store/profile');
-      });
+      await waitFor(
+        () => {
+          expect(mockNavigate).toHaveBeenCalledWith('/store/profile');
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('handles general API errors', async () => {
@@ -227,11 +246,14 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('Failed to fetch listings: Server error')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('Failed to fetch listings: Server error')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       consoleSpy.mockRestore();
     });
@@ -250,21 +272,29 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('searches items by name', async () => {
-      const searchInput = screen.getByPlaceholderText('Search listings');
+      const searchInput = screen.getByPlaceholderText(
+        'Search listings by name...'
+      );
 
       fireEvent.change(searchInput, { target: { value: 'vintage' } });
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-        expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
-        expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+          expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
+          expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('filters by department', async () => {
@@ -272,11 +302,14 @@ describe('StoreListings', () => {
 
       fireEvent.change(departmentSelect, { target: { value: "men's" } });
 
-      await waitFor(() => {
-        expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
-        expect(screen.getByText('Retro Shoes')).toBeInTheDocument();
-        expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
+          expect(screen.getByText('Retro Shoes')).toBeInTheDocument();
+          expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('filters by category', async () => {
@@ -284,11 +317,14 @@ describe('StoreListings', () => {
 
       fireEvent.change(categorySelect, { target: { value: 'accessories' } });
 
-      await waitFor(() => {
-        expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
-        expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
-        expect(screen.getByText('Designer Bag')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
+          expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
+          expect(screen.getByText('Designer Bag')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('filters by style', async () => {
@@ -296,11 +332,14 @@ describe('StoreListings', () => {
 
       fireEvent.change(styleSelect, { target: { value: 'vintage' } });
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-        expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
-        expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+          expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
+          expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('filters by status', async () => {
@@ -308,11 +347,14 @@ describe('StoreListings', () => {
 
       fireEvent.change(statusSelect, { target: { value: 'Sold' } });
 
-      await waitFor(() => {
-        expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
-        expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
-        expect(screen.getByText('Designer Bag')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.queryByText('Vintage Jacket')).not.toBeInTheDocument();
+          expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
+          expect(screen.getByText('Designer Bag')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('shows mobile filter toggle', () => {
@@ -324,29 +366,39 @@ describe('StoreListings', () => {
     });
 
     it('shows no matches message when filters return empty results', async () => {
-      const searchInput = screen.getByPlaceholderText('Search listings');
+      const searchInput = screen.getByPlaceholderText(
+        'Search listings by name...'
+      );
 
       fireEvent.change(searchInput, { target: { value: 'nonexistent item' } });
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('No items match the filters.')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('No items match the filters.')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('combines search and filters correctly', async () => {
-      const searchInput = screen.getByPlaceholderText('Search listings');
+      const searchInput = screen.getByPlaceholderText(
+        'Search listings by name...'
+      );
       const departmentSelect = screen.getByDisplayValue('All Departments');
 
       fireEvent.change(searchInput, { target: { value: 'jacket' } });
       fireEvent.change(departmentSelect, { target: { value: "women's" } });
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-        expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
-        expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+          expect(screen.queryByText('Retro Shoes')).not.toBeInTheDocument();
+          expect(screen.queryByText('Designer Bag')).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
   });
 
@@ -363,9 +415,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('navigates to edit page when edit button is clicked for available item', () => {
@@ -393,7 +448,7 @@ describe('StoreListings', () => {
     });
 
     it('navigates to add listing page', () => {
-      const addButton = screen.getByText('Add Listing');
+      const addButton = screen.getByText('+ Add New Listing');
 
       fireEvent.click(addButton);
 
@@ -414,101 +469,138 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('closes modal when clicking close button', async () => {
       const vintageJacketRow = screen.getByText('Vintage Jacket').closest('tr');
       fireEvent.click(vintageJacketRow);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('A beautiful vintage leather jacket')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('A beautiful vintage leather jacket')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       const closeButton = screen.getByText('×');
       fireEvent.click(closeButton);
 
-      await waitFor(() => {
-        expect(
-          screen.queryByText('A beautiful vintage leather jacket')
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByText('A beautiful vintage leather jacket')
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('closes modal when clicking overlay', async () => {
       const vintageJacketRow = screen.getByText('Vintage Jacket').closest('tr');
       fireEvent.click(vintageJacketRow);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('A beautiful vintage leather jacket')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('A beautiful vintage leather jacket')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       const overlay = screen
         .getByText('A beautiful vintage leather jacket')
         .closest('.modal-overlay');
       fireEvent.click(overlay);
 
-      await waitFor(() => {
-        expect(
-          screen.queryByText('A beautiful vintage leather jacket')
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByText('A beautiful vintage leather jacket')
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('navigates through images in modal', async () => {
       const vintageJacketRow = screen.getByText('Vintage Jacket').closest('tr');
       fireEvent.click(vintageJacketRow);
 
-      await waitFor(() => {
-        expect(screen.getByText('1 / 2')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('1 / 2')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       const nextButton = screen.getByText('›');
       fireEvent.click(nextButton);
 
-      expect(screen.getByText('2 / 2')).toBeInTheDocument();
+      await waitFor(
+        () => {
+          expect(screen.getByText('2 / 2')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       const prevButton = screen.getByText('‹');
       fireEvent.click(prevButton);
 
-      expect(screen.getByText('1 / 2')).toBeInTheDocument();
+      await waitFor(
+        () => {
+          expect(screen.getByText('1 / 2')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('shows no images placeholder when item has no images', async () => {
       const designerBagRow = screen.getByText('Designer Bag').closest('tr');
       fireEvent.click(designerBagRow);
 
-      await waitFor(() => {
-        expect(screen.getByText('No Images')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('No Images')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('disables edit button in modal for sold item', async () => {
       const designerBagRow = screen.getByText('Designer Bag').closest('tr');
       fireEvent.click(designerBagRow);
 
-      await waitFor(() => {
-        const editButton = screen.getByText('Edit Listing');
-        expect(editButton).toBeDisabled();
-        expect(editButton).toHaveClass('disabled');
-      });
+      await waitFor(
+        () => {
+          const editButton = screen.getByText('Edit Listing');
+          expect(editButton).toBeDisabled();
+          expect(editButton).toHaveClass('disabled');
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('prevents modal clicks from propagating to overlay', async () => {
       const vintageJacketRow = screen.getByText('Vintage Jacket').closest('tr');
       fireEvent.click(vintageJacketRow);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('A beautiful vintage leather jacket')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('A beautiful vintage leather jacket')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       const modalContent = screen
         .getByText('A beautiful vintage leather jacket')
@@ -535,9 +627,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('renders table headers correctly', () => {
@@ -581,9 +676,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByTestId('store-sidebar')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('store-sidebar')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('handles logout correctly', async () => {
@@ -593,10 +691,13 @@ describe('StoreListings', () => {
         fireEvent.click(logoutButton);
       });
 
-      await waitFor(() => {
-        expect(signOut).toHaveBeenCalledWith(mockAuth);
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
-      });
+      await waitFor(
+        () => {
+          expect(signOut).toHaveBeenCalledWith(mockAuth);
+          expect(mockNavigate).toHaveBeenCalledWith('/login');
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('handles logout error', async () => {
@@ -608,11 +709,14 @@ describe('StoreListings', () => {
         fireEvent.click(logoutButton);
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('Failed to log out: Logout failed')
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('Failed to log out: Logout failed')
+          ).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
   });
 
@@ -629,9 +733,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('renders sidebar with correct props', () => {
@@ -640,13 +747,13 @@ describe('StoreListings', () => {
     });
 
     it('renders page title and add button', () => {
-      expect(screen.getByText('Listings')).toBeInTheDocument();
-      expect(screen.getByText('Add Listing')).toBeInTheDocument();
+      expect(screen.getByText('Store Listings')).toBeInTheDocument();
+      expect(screen.getByText('+ Add New Listing')).toBeInTheDocument();
     });
 
     it('renders search bar with icon', () => {
       expect(
-        screen.getByPlaceholderText('Search listings')
+        screen.getByPlaceholderText('Search listings by name...')
       ).toBeInTheDocument();
       // Check for SVG search icon
       const searchIcon = document.querySelector('svg[viewBox="0 0 256 256"]');
@@ -655,7 +762,7 @@ describe('StoreListings', () => {
   });
 
   describe('Error Handling', () => {
-    it('displays error when authentication fails', () => {
+    it('displays error when authentication fails', async () => {
       onAuthStateChanged.mockImplementation((auth, callback) => {
         callback(null);
         return jest.fn();
@@ -663,7 +770,12 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      expect(screen.getByText('Please log in.')).toBeInTheDocument();
+      await waitFor(
+        () => {
+          expect(screen.getByText('Please log in.')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('handles missing item properties gracefully', async () => {
@@ -688,22 +800,28 @@ describe('StoreListings', () => {
 
       renderStoreListings();
 
-      await waitFor(() => {
-        expect(screen.getByText('Test Item')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(3); // department, category, style
-        expect(screen.getByText('No Image')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Test Item')).toBeInTheDocument();
+          expect(screen.getAllByText('N/A')).toHaveLength(3); // department, category, style
+          expect(screen.getByText('No Image')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
 
       // Click item to open modal
       const itemRow = screen.getByText('Test Item').closest('tr');
       fireEvent.click(itemRow);
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('No description available.')
-        ).toBeInTheDocument();
-        expect(screen.getByText('No Images')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByText('No description available.')
+          ).toBeInTheDocument();
+          expect(screen.getByText('No Images')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
   });
 });

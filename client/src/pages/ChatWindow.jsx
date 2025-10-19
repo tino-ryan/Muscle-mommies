@@ -322,13 +322,9 @@ export default function ChatWindow() {
               `${API_URL}/api/stores/${data.storeId}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
-            const contactResponse = await axios.get(
-              `${API_URL}/api/stores/contact-infos?storeId=${data.storeId}`,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
+
             setStore({
               ...storeResponse.data,
-              contactInfos: contactResponse.data || [],
             });
           } catch (err) {
             console.error(
@@ -387,162 +383,160 @@ export default function ChatWindow() {
       <button onClick={() => navigate(-1)} className="back-button">
         ← Back
       </button>
-      <div className="layout-container">
-        <div className="content">
-          <div
-            className="chat-header"
-            onClick={() => setDrawerOpen(!drawerOpen)}
-          >
-            <h2>Chat with {otherName}</h2>
-            <span>{drawerOpen ? 'Close Details' : 'Open Details'}</span>
-          </div>
-          {error && <div className="error">{error}</div>}
-          <div className="messages-container">
-            {messages.length === 0 && !error && (
-              <p>No messages yet. Start the conversation!</p>
-            )}
-            {messages.map((msg) => (
-              <div
-                key={msg.messageId}
-                className={`message ${
-                  msg.senderId === auth.currentUser?.uid ? 'sent' : 'received'
-                } ${msg.read ? 'read' : 'unread'}`}
-              >
-                {msg.message}
-                <div className="message-footer">
-                  <span className="timestamp">
-                    {formatMessageDate(msg.timestamp)}
-                  </span>
-                  {msg.senderId === auth.currentUser?.uid && (
-                    <span className="read-indicator">
-                      {msg.read ? '✓✓' : '✓'}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className="suggestions">
-            {(role === 'customer' ? shopperSuggestions : ownerSuggestions).map(
-              (sug, idx) => (
-                <div
-                  key={idx}
-                  className="suggestion-chip"
-                  onClick={() => handleSuggestionClick(sug)}
-                >
-                  {sug}
-                </div>
-              )
-            )}
-          </div>
-          <div className="input-container">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type a message..."
-            />
-            <button onClick={handleSend}>Send</button>
-          </div>
+      <div className="content">
+        <div className="chat-header" onClick={() => setDrawerOpen(!drawerOpen)}>
+          <h2>Chat with {otherName}</h2>
+          <span>{drawerOpen ? 'Close Details' : 'Open Details'}</span>
         </div>
-        <div className={`drawer ${drawerOpen ? '' : 'hidden'}`}>
-          <h3>Chat Details</h3>
-          {item ? (
-            <div className="info-card item-info-card">
-              <h4 className="card-title">
-                <i className="fas fa-tag"></i> Item Details
-              </h4>
-              <div className="item-image-container">
-                <img
-                  src={
-                    item.images?.[0]?.imageURL ||
-                    'https://via.placeholder.com/150?text=No+Image'
-                  }
-                  alt={item.name || 'Item'}
-                  className="item-image"
-                />
-              </div>
-              <p className="item-name">
-                {item.name} - R
-                {item.price ? Number(item.price).toFixed(2) : 'N/A'} (
-                {item.status})
-              </p>
-              <p className="item-detail">
-                <strong>Description:</strong>{' '}
-                {item.description || 'No description available.'}
-              </p>
-              <p className="item-detail">
-                <strong>Department:</strong> {item.category || 'Uncategorized'}
-              </p>
-              <p className="item-detail">
-                <strong>Size:</strong> {item.size || 'Not specified'}
-              </p>
-            </div>
-          ) : (
-            <p>No linked item available or item no longer exists.</p>
+        {error && <div className="error">{error}</div>}
+        <div className="messages-container">
+          {messages.length === 0 && !error && (
+            <p>No messages yet. Start the conversation!</p>
           )}
-          {store ? (
-            <div className="info-card store-info-card">
-              <h4 className="card-title">
-                <i className="fas fa-store"></i> Store Info
-              </h4>
-              <div className="store-image-container">
-                <img
-                  src={
-                    store.profileImageURL ||
-                    'https://via.placeholder.com/150?text=No+Image'
-                  }
-                  alt={store.storeName || 'Store'}
-                  className="store-image"
-                />
+          {messages.map((msg) => (
+            <div
+              key={msg.messageId}
+              className={`message ${
+                msg.senderId === auth.currentUser?.uid ? 'sent' : 'received'
+              } ${msg.read ? 'read' : 'unread'}`}
+            >
+              {msg.message}
+              <div className="message-footer">
+                <span className="timestamp">
+                  {formatMessageDate(msg.timestamp)}
+                </span>
+                {msg.senderId === auth.currentUser?.uid && (
+                  <span className="read-indicator">
+                    {msg.read ? '✓✓' : '✓'}
+                  </span>
+                )}
               </div>
-              <p className="store-name">{store.storeName}</p>
-              <p className="store-address">
-                {store.address || 'No address provided.'}
-              </p>
-              <button
-                className="btn-map"
-                onClick={() =>
-                  window.open(
-                    `https://www.google.com/maps/search/?api=1&query=${store.location.lat},${store.location.lng}`,
-                    '_blank'
-                  )
-                }
-                disabled={!store.location?.lat}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="suggestions">
+          {(role === 'customer' ? shopperSuggestions : ownerSuggestions).map(
+            (sug, idx) => (
+              <div
+                key={idx}
+                className="suggestion-chip"
+                onClick={() => handleSuggestionClick(sug)}
               >
-                Get Directions
-              </button>
-              <h5>Operating Hours</h5>
-              <div className="hours-list">
-                {groupHours(store.hours || {}).map((group, index) => (
-                  <div key={index} className="hour-item">
-                    <strong>{group.days}:</strong> <span>{group.hours}</span>
-                  </div>
+                {sug}
+              </div>
+            )
+          )}
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+          />
+          <button onClick={handleSend}>Send</button>
+        </div>
+      </div>
+      <div className={`drawer ${drawerOpen ? '' : 'hidden'}`}>
+        <h3>Chat Details</h3>
+        <div onClick={() => setDrawerOpen(!drawerOpen)}>
+          <span>{drawerOpen ? 'Close Details' : 'Open Details'}</span>
+        </div>
+        {item ? (
+          <div className="info-card item-info-card">
+            <h4 className="card-title">
+              <i className="fas fa-tag"></i> Item Details
+            </h4>
+            <div className="item-image-container">
+              <img
+                src={
+                  item.images?.[0]?.imageURL ||
+                  'https://via.placeholder.com/150?text=No+Image'
+                }
+                alt={item.name || 'Item'}
+                className="item-image"
+              />
+            </div>
+            <p className="item-name">
+              {item.name} - R
+              {item.price ? Number(item.price).toFixed(2) : 'N/A'} (
+              {item.status})
+            </p>
+            <p className="item-detail">
+              <strong>Description:</strong>{' '}
+              {item.description || 'No description available.'}
+            </p>
+            <p className="item-detail">
+              <strong>Department:</strong> {item.category || 'Uncategorized'}
+            </p>
+            <p className="item-detail">
+              <strong>Size:</strong> {item.size || 'Not specified'}
+            </p>
+          </div>
+        ) : (
+          <p>No linked item available or item no longer exists.</p>
+        )}
+        {store ? (
+          <div className="info-card store-info-card">
+            <h4 className="card-title">
+              <i className="fas fa-store"></i> Store Info
+            </h4>
+            <div className="store-image-container">
+              <img
+                src={
+                  store.profileImageURL ||
+                  'https://via.placeholder.com/150?text=No+Image'
+                }
+                alt={store.storeName || 'Store'}
+                className="store-image"
+              />
+            </div>
+            <p className="store-name">{store.storeName}</p>
+            <p className="store-address">
+              {store.address || 'No address provided.'}
+            </p>
+            <button
+              className="btn-map"
+              onClick={() =>
+                window.open(
+                  `https://www.google.com/maps/search/?api=1&query=${store.location.lat},${store.location.lng}`,
+                  '_blank'
+                )
+              }
+              disabled={!store.location?.lat}
+            >
+              Get Directions
+            </button>
+            <h5>Operating Hours</h5>
+            <div className="hours-list">
+              {groupHours(store.hours || {}).map((group, index) => (
+                <div key={index} className="hour-item">
+                  <strong>{group.days}:</strong> <span>{group.hours}</span>
+                </div>
+              ))}
+            </div>
+            <h5>Contact Info</h5>
+            {store.contactInfos?.length > 0 ? (
+              <div className="contact-list">
+                {store.contactInfos.map((contact) => (
+                  <p
+                    key={contact.id}
+                    onClick={() => openContact(contact.type, contact.value)}
+                    className="contact-link"
+                  >
+                    <i className={`fab fa-${contact.type} contact-icon`}></i>
+                    {contact.value}
+                  </p>
                 ))}
               </div>
-              <h5>Contact Info</h5>
-              {store.contactInfos?.length > 0 ? (
-                <div className="contact-list">
-                  {store.contactInfos.map((contact) => (
-                    <p
-                      key={contact.id}
-                      onClick={() => openContact(contact.type, contact.value)}
-                      className="contact-link"
-                    >
-                      <i className={`fab fa-${contact.type} contact-icon`}></i>
-                      {contact.value}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <p className="no-contact">No contact info provided.</p>
-              )}
-            </div>
-          ) : (
-            <p>No store information available.</p>
-          )}
-        </div>
+            ) : (
+              <p className="no-contact">No contact info provided.</p>
+            )}
+          </div>
+        ) : (
+          <p>No store information available.</p>
+        )}
       </div>
     </div>
   );
