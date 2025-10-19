@@ -426,10 +426,6 @@
     font-size: 32px !important;
   }
 
-  .reservations table {
-    display: none !important;
-  }
-
   .reservations .modal-body {
     flex-direction: column !important;
   }
