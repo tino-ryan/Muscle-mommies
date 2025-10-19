@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import CustomerSidebar from '../CustomerSidebar';
-//import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 
 // Mock react-router navigate
@@ -12,20 +11,15 @@ jest.mock('react-router-dom', () => ({
 }));
 
 // Mock Firebase auth
-const mockSignOut = jest.fn();
 const mockAuth = { currentUser: { uid: '123' } };
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => mockAuth),
-  signOut: jest.fn(() => mockSignOut()),
+  signOut: jest.fn(),
 }));
 
 beforeEach(() => {
   jest.clearAllMocks();
-  // reset document.cookie
-  Object.defineProperty(document, 'cookie', {
-    writable: true,
-    value: '',
-  });
+  Object.defineProperty(document, 'cookie', { writable: true, value: '' });
 });
 
 describe('CustomerSidebar', () => {
@@ -38,7 +32,13 @@ describe('CustomerSidebar', () => {
     expect(screen.getByText(/Logout/i)).toBeInTheDocument();
   });
 
-  it('navigates to correct page when items are clicked', () => {
+  it('adds active class based on activePage prop', () => {
+    render(<CustomerSidebar activePage="chats" />);
+    expect(screen.getByText(/Chats/i).parentElement).toHaveClass('active');
+    expect(screen.getByText(/Home/i).parentElement).not.toHaveClass('active');
+  });
+
+  it('navigates to correct page when sidebar items are clicked', () => {
     render(<CustomerSidebar activePage="home" />);
 
     fireEvent.click(screen.getByText(/Search/i));
@@ -77,5 +77,34 @@ describe('CustomerSidebar', () => {
     expect(signOut).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith('Error logging out:', expect.any(Error));
     spy.mockRestore();
+  });
+
+  it('toggles hamburger menu and slide-out menu', () => {
+    render(<CustomerSidebar activePage="home" />);
+    const menuIcon = document.querySelector('.menu-icon');
+    expect(menuIcon).toBeInTheDocument();
+
+    // Initially menu closed
+    expect(document.querySelector('.menu-overlay')).toBeNull();
+
+    // Open menu
+    fireEvent.click(menuIcon);
+    expect(document.querySelector('.menu-overlay')).toHaveClass('active');
+
+    // Click overlay closes menu
+    const overlay = document.querySelector('.menu-overlay');
+    fireEvent.click(overlay);
+    expect(document.querySelector('.menu-overlay')).toBeNull();
+  });
+
+  it('mobile nav items navigate correctly', () => {
+    render(<CustomerSidebar activePage="home" />);
+    const mobileNavItems = document.querySelectorAll('.mobile-nav .nav-item');
+
+    fireEvent.click(mobileNavItems[0]); // Home
+    expect(mockNavigate).toHaveBeenCalledWith('/customer/home');
+
+    fireEvent.click(mobileNavItems[1]); // Search
+    expect(mockNavigate).toHaveBeenCalledWith('/search');
   });
 });
