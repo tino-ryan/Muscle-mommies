@@ -1,216 +1,484 @@
-/* Full page layout */
-.closet {
-  display: flex;
-  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-  min-height: 100vh;
-  width: 100vw;
-  background-color: #4c53f9;
-  color: #000;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
+
+/* Reset for consistent spacing */
+.my-closet h1,
+.my-closet h3,
+.my-closet p,
+.my-closet button,
+.my-closet input,
+.my-closet textarea,
+.my-closet select {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* Push content to the right of the sidebar */
-.content-container {
-  display: flex;
-  flex-direction: column;
-
-  padding: 20px;
-  margin-left: 300px;;
-  margin-top: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  flex: 1;
-  background-color: #e22a98;
-  border-style: solid;
-  border-color: #000;
-  color: #000;
-  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+.my-closet {
+  display: flex !important;
+  background: #EEEEEE !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
 }
 
-.closet h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 20px;
-  margin-left: 20px;
+/* Layout Container */
+.my-closet .layout-container {
+  display: flex !important;
+  flex: 1 !important;
+  padding: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 24px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.closet h3 {
-  margin-left: 20px;
-  margin-top: 20px;
+/* Content Area */
+.my-closet .content {
+  flex: 1 !important;
+  padding: 80px 24px 24px !important;
+  overflow-y: auto !important;
 }
 
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+/* Page Title */
+.my-closet .page-title {
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 48px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Closet items grid */
-.closet-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+/* Error Box */
+.my-closet .error-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #FF9AE9 !important;
+  border-radius: 12px !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  margin-bottom: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.closet-item {
-  background: #fff;
-  border: 1px solid #e7d0d1;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+/* Form */
+.my-closet .form-content-grid {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important;
+  gap: 24px !important;
 }
 
-.closet-image {
-  width: 100%;
-  height: 200px;
-  border-radius: 6px;
-  object-fit: cover;
+.my-closet .form-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.closet-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 120px);
-  grid-gap: 18px;
-  margin-bottom: 20px;
-  margin-right: 770px;
-  margin-left: 20px;
-  background-color: #d3f44b;
-  border-radius: 8px;
-  padding: 30px;
-  border: #000;
-  border-style: solid;
+.my-closet .form-card h3 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #D8FF6C !important;
 }
 
-.closet-slot {
-  width: 120px;
-  height: 120px;
-  border: 2px dashed #000;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+.my-closet .outfit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 120px) !important;
+  gap: 24px !important;
+  margin-bottom: 24px !important;
+  padding: 24px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.closet-slot-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.my-closet .grid-slot {
+  width: 120px !important;
+  height: 120px !important;
+  border: 2px dashed #ccc !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  background: rgba(255, 255, 255, 0.8) !important;
 }
 
-.save-button {
-  padding: 10px 20px;
-  background: #8c9eff;
-  color: #000;
-  border: #000;
-  border-style: solid;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-left: 20px;
+.my-closet .grid-slot:hover {
+  border-color: #D8FF6C !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.closet p{
-  color: #000;
-}
-/* Popup styles */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.my-closet .slot-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 6px !important;
 }
 
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border-color: #000;
-  border-style: solid;
-  max-width: 600px;
+.my-closet .add-icon {
+  font-size: 24px !important;
+  color: #666 !important;
 }
 
-.popup-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+/* Closet Items */
+.my-closet .items-scroll {
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 24px !important;
+  padding: 24px 0 !important;
 }
 
-.popup-item {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  cursor: pointer;
-  border-radius: 6px;
+.my-closet .item-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
-.my-outfits-section {
-  margin-top: 30px;
+.my-closet .item-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.outfits-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+.my-closet .item-image-wrapper {
+  width: 100% !important;
+  height: 160px !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
 }
 
-.outfit-card {
-  border: 2px solid #000;
-  border-radius: 10px;
-  padding: 8px;
-  width: 300px; /* fits a 3x3 mini grid nicely */
-  height: 300px;
-  display: grid;
-  grid-gap: 5px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2px;
+.my-closet .item-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
-.outfit-slot {
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f9f9f9;
-  border-radius: 4px;
+.my-closet .item-name {
+  font-size: 14px !important;
+  margin-top: 12px !important;
+  color: #000000 !important;
 }
 
-.outfit-slot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* My Outfits */
+.my-closet .no-outfits {
+  padding: 24px !important;
+  text-align: center !important;
+  color: #666 !important;
 }
 
-.outfit-slot.empty {
-  background-color: #f0f0f0;
+.my-closet .outfits-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 24px !important;
+  margin-top: 24px !important;
 }
 
-.closet .popup-actions button{
-  background-color: #8c9eff;
-  color: #000;
-  border: #000;
-  border-style: solid;
-  margin-right: 10px;
+.my-closet .outfit-preview {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
 }
 
+.my-closet .outfit-preview:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
 
+.my-closet .outfit-preview p {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+  color: #000000 !important;
+}
 
-/* Mobile responsiveness */
+.my-closet .preview-image {
+  width: 100% !important;
+  height: 180px !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
+}
+
+.my-closet .preview-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.my-closet .empty-preview {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 6px !important;
+}
+
+/* Buttons */
+.my-closet .primary-button,
+.my-closet .cancel-button {
+  padding: 14px 32px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  transition: all 0.2s ease !important;
+  min-width: 160px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.my-closet .primary-button {
+  background: #FF9AE9 !important;
+  color: #000000 !important;
+}
+
+.my-closet .primary-button:hover {
+  background: #D8FF6C  !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.my-closet .primary-button:active {
+  background: #D8FF6C !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+.my-closet .cancel-button {
+  background: #CCCCCC !important;
+  color: #000000 !important;
+}
+
+.my-closet .cancel-button:hover {
+  background: #D8D8D8 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.my-closet .cancel-button:active {
+  background: #B3B3B3 !important;
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important;
+}
+
+/* Popup */
+.my-closet .popup {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+}
+
+.my-closet .popup-content {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  max-width: 600px !important;
+  width: 90% !important;
+}
+
+.my-closet .popup-content h3 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #D8FF6C !important;
+}
+
+.my-closet .popup-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+  gap: 24px !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  padding: 24px 0 !important;
+}
+
+.my-closet .popup-item {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.my-closet .popup-item:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.my-closet .form-actions {
+  display: flex !important;
+  gap: 16px !important;
+  justify-content: flex-start !important;
+  padding: 16px 0 !important;
+}
+
+/* Modal for Outfit Preview */
+.my-closet .modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+}
+
+.my-closet .modal-content {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+  max-width: 450px !important;
+  width: 90% !important;
+  position: relative !important;
+}
+
+.my-closet .outfit-grid-modal {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+.my-closet .grid-slot-modal {
+  width: 120px !important;
+  height: 120px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important;
+}
+
+.my-closet .slot-image-modal {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+}
+
+.my-closet .empty-slot-modal {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 4px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .my-closet .form-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .my-closet .content {
+    padding: 80px 12px 12px !important;
+  }
+}
+
 @media (max-width: 768px) {
-  .content-container {
-    margin-left: 0;
-    padding: 10px;
+  .my-closet .layout-container {
+    flex-direction: column !important;
+    padding: 12px !important;
+  }
+
+  .my-closet .content {
+    padding: 80px 12px 80px !important;
+  }
+
+  .my-closet .page-title {
+    font-size: 36px !important;
+    text-align: center !important;
+  }
+
+  .my-closet .form-card {
+    padding: 16px !important;
+  }
+
+  .my-closet .form-card h3 {
+    font-size: 18px !important;
+  }
+
+  .my-closet .outfit-grid {
+    grid-template-columns: repeat(3, 100px) !important;
+  }
+
+  .my-closet .grid-slot {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .my-closet .items-scroll {
+    max-height: 300px !important;
+  }
+
+  .my-closet .outfits-list {
+    grid-template-columns: 1fr !important;
+  }
+
+  .my-closet .grid-slot-modal {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .my-closet .form-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .my-closet .primary-button,
+  .my-closet .cancel-button {
+    padding: 12px !important;
+    font-size: 14px !important;
+    min-width: 100% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .my-closet .layout-container {
+    padding: 32px !important;
+  }
+
+  .my-closet .content {
+    padding: 80px 32px 32px !important;
   }
 }

@@ -5,6 +5,7 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import CustomerSidebar from '../../components/CustomerSidebar';
 import { db } from '../../firebase';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners'; // Added for loading state
 import './UserChats.css';
 import { API_URL } from '../../api';
 
@@ -12,15 +13,15 @@ export default function UserChats() {
   const [chats, setChats] = useState([]);
   const [error, setError] = useState('');
   const [items, setItems] = useState({});
-  const [loading, setLoading] = useState(true); // Add this to your state declarations
-  const [searchTerm, setSearchTerm] = useState(''); // New State for Search
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setLoading(true); // Set loading to true before fetching
+        setLoading(true);
         try {
           const token = await user.getIdToken();
           const q = query(
@@ -36,13 +37,12 @@ export default function UserChats() {
               }));
 
               if (chatData.length === 0) {
-                setChats([]); // No chats, clear state
+                setChats([]);
                 setItems({});
-                setLoading(false); // No data to fetch, stop loading
+                setLoading(false);
                 return;
               }
 
-              // Fetch item data for chats that have an associated itemId
               const itemPromises = chatData
                 .filter((chat) => chat.itemId)
                 .map((chat) =>
@@ -56,7 +56,7 @@ export default function UserChats() {
                 );
               const itemResponses = await Promise.all(itemPromises);
               const itemMap = {};
-              const itemsToProcess = [...itemResponses]; // Create a mutable copy
+              const itemsToProcess = [...itemResponses];
 
               chatData.forEach((chat) => {
                 if (chat.itemId) {
@@ -68,7 +68,6 @@ export default function UserChats() {
               });
               setItems(itemMap);
 
-              // Fetch user data for other participants
               const chatsWithDetails = await Promise.all(
                 chatData.map(async (chat) => {
                   const otherId = chat.participants.find(
@@ -89,7 +88,6 @@ export default function UserChats() {
                         'Unknown User',
                     };
                   } catch (err) {
-                    // Log the error but continue with 'Unknown User'
                     console.error(
                       `Failed to fetch user ${otherId}:`,
                       err.message
@@ -99,31 +97,30 @@ export default function UserChats() {
                 })
               );
 
-              // Sort chats by last message timestamp (most recent first)
               chatsWithDetails.sort(
                 (a, b) =>
                   (b.lastTimestamp?.seconds || 0) -
                   (a.lastTimestamp?.seconds || 0)
               );
               setChats(chatsWithDetails);
-              setLoading(false); // Set loading to false after all data is fetched
+              setLoading(false);
             },
             (err) => {
               console.error('Firestore error:', err.code, err.message);
               setError('Failed to fetch chats: ' + err.message);
-              setLoading(false); // Set loading to false on error
+              setLoading(false);
             }
           );
           return () => unsubscribeSnapshot();
         } catch (error) {
           console.error('Error in chat fetch:', error);
           setError('Failed to fetch chats: ' + error.message);
-          setLoading(false); // Set loading to false on error
+          setLoading(false);
         }
       } else {
         setError('Please log in.');
         navigate('/login');
-        setLoading(false); // Set loading to false if not authenticated
+        setLoading(false);
       }
     });
     return () => unsubscribeAuth();
@@ -167,6 +164,7 @@ export default function UserChats() {
 
     return matchesName || matchesMessage || matchesItem;
   });
+
   if (loading) {
     return (
       <div className="chats">
@@ -177,6 +175,7 @@ export default function UserChats() {
           />
           <div className="content">
             <div className="loading-container">
+              <ClipLoader color="#3498db" size={40} />
               <p>Loading chats...</p>
             </div>
           </div>
@@ -190,21 +189,20 @@ export default function UserChats() {
   }
 
   return (
-    <div className="Userchats">
-      <div className="chats-layout-container">
+    <div className="chats">
+      <div className="layout-container">
         <CustomerSidebar
           currentPage="Chats"
           onLogout={() => auth.signOut().then(() => navigate('/login'))}
         />
-        <div className="chats-content">
+        <div className="content">
           <div className="header">
             <h1>Chats</h1>
           </div>
 
           {error && <div className="error">{error}</div>}
 
-          {/* Search Bar - New */}
-          <div className="csearch-bar-container">
+          <div className="search-bar-container">
             <input
               type="text"
               placeholder="Search items or customers..."
@@ -212,7 +210,6 @@ export default function UserChats() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* End Search Bar */}
 
           {filteredChats.length === 0 && !searchTerm ? (
             <p className="no-chats">
@@ -224,22 +221,19 @@ export default function UserChats() {
               No results found for &quot;{searchTerm}&quot;.
             </p>
           ) : (
-            <div className="cchat-list">
+            <div className="chat-list">
               {filteredChats.map((chat) => {
                 const item = items[chat.itemId];
                 const isUnread = chat.unreadCount > 0;
 
-                // Determine the primary display name
                 const primaryName = chat.otherName;
-                // Determine the secondary line (item name or message preview)
 
                 return (
                   <div
                     key={chat.chatId}
                     onClick={() => handleOpenChat(chat.chatId)}
-                    className={`cchat-card ${isUnread ? 'unread' : ''}`}
+                    className={`chat-card ${isUnread ? 'unread' : ''}`}
                   >
-                    {/* LEFT SECTION: Avatar/Image */}
                     <div className="chat-avatar">
                       {item?.images?.[0]?.imageURL ? (
                         <img src={item.images[0].imageURL} alt={item.name} />
@@ -248,9 +242,8 @@ export default function UserChats() {
                       )}
                     </div>
 
-                    {/* MIDDLE SECTION: Content */}
-                    <div className="cchat-content">
-                      <div className="cchat-name-preview">
+                    <div className="chat-content">
+                      <div className="chat-name-preview">
                         <h3 className={isUnread ? 'bold-text' : ''}>
                           {primaryName}
                           {chat.itemId && item?.name && (
@@ -258,22 +251,21 @@ export default function UserChats() {
                           )}
                         </h3>
                         <p
-                          className={`cchat-preview ${isUnread ? 'bold-text' : ''}`}
+                          className={`chat-preview ${isUnread ? 'bold-text' : ''}`}
                         >
                           {chat.lastMessage || 'Start the conversation...'}
                         </p>
                       </div>
                     </div>
 
-                    {/* RIGHT SECTION: Time/Badge */}
-                    <div className="cchat-right-info">
+                    <div className="chat-right-info">
                       <p
                         className={`chat-timestamp ${isUnread ? 'bold-text' : ''}`}
                       >
                         {formatDate(chat.lastTimestamp)}
                       </p>
                       {isUnread && (
-                        <span className="cunread-badge">
+                        <span className="unread-badge">
                           {chat.unreadCount}
                         </span>
                       )}

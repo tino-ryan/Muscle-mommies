@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
 
 /* Targeted reset for elements to prevent spacing issues */
-.chat-window h1,
-.chat-window h3,
-.chat-window p,
-.chat-window button,
-.chat-window input {
+.chat-window.chat-window h1,
+.chat-window.chat-window h3,
+.chat-window.chat-window p,
+.chat-window.chat-window button,
+.chat-window.chat-window input {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.chat-window {
+.chat-window.chat-window {
   display: flex !important;
   background-color: #EEEEEE !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -109,18 +109,18 @@
   max-width: 70% !important;
   word-wrap: break-word !important;
   position: relative !important;
+  background: #FFFFFF !important; /* Plain white background */
+  color: #000000 !important;
+  border: 1px solid #00a3a3 !important; /* Green border */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-  border: 1px solid #000000 !important;
 }
 
-.chat-window .sent {
-  background: #994d51 !important;
-  color: #ffffff !important;
+.chat-window .message.sent {
   align-self: flex-end !important;
   margin-left: auto !important;
 }
 
-.chat-window .sent::before {
+.chat-window .message.sent::before {
   content: '' !important;
   position: absolute !important;
   bottom: 0 !important;
@@ -129,18 +129,16 @@
   height: 0 !important;
   border-top: 10px solid transparent !important;
   border-bottom: 10px solid transparent !important;
-  border-left: 10px solid #994d51 !important;
+  border-left: 10px solid #00a3a3 !important; /* Green tail */
   transform: translateY(100%) !important;
 }
 
-.chat-window .received {
-  background: #e6f3f3 !important;
-  color: #000000 !important;
+.chat-window .message.received {
   align-self: flex-start !important;
   margin-right: auto !important;
 }
 
-.chat-window .received::before {
+.chat-window .message.received::before {
   content: '' !important;
   position: absolute !important;
   bottom: 0 !important;
@@ -149,16 +147,17 @@
   height: 0 !important;
   border-top: 10px solid transparent !important;
   border-bottom: 10px solid transparent !important;
-  border-right: 10px solid #e6f3f3 !important;
+  border-right: 10px solid #00a3a3 !important; /* Green tail */
   transform: translateY(100%) !important;
 }
 
-.chat-window .received.unread {
-  background: #d1e8e8 !important;
+.chat-window .message.received.unread {
+  background: #FFFFFF !important; /* Keep white for unread */
+  border: 1px solid #00a3a3 !important;
 }
 
-.chat-window .received.read {
-  background: #e6f3f3 !important;
+.chat-window .message.received.read {
+  background: #FFFFFF !important; /* Keep white for read */
   border: 1px solid #00a3a3 !important;
 }
 
@@ -423,7 +422,7 @@
 }
 
 .chat-window .contact-link:hover {
-  color: #D8FF6C!important;
+  color: #D8FF6C !important;
 }
 
 .chat-window .contact-icon {
@@ -441,6 +440,7 @@
   .chat-window .layout-container {
     flex-direction: column !important;
     padding: 12px !important;
+    border: 2px solid #000000 !important;
   }
 
   .chat-window .content {
@@ -508,6 +508,7 @@
 @media (min-width: 1024px) {
   .chat-window .layout-container {
     padding: 32px !important;
+    border: 2px solid #000000 !important;
   }
 
   .chat-window .content {
