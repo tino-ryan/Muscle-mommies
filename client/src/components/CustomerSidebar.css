@@ -149,7 +149,7 @@ body {
 .nav-items-container {
   display: flex;
   justify-content: space-around;
-  width: 35%;
+  width: 50%; /* Increased to accommodate logout button */
 }
 
 .mobile-nav .nav-item {
@@ -158,6 +158,21 @@ body {
   align-items: center;
   color: #fff;
   font-size: 18px;
+}
+
+.mobile-nav .nav-item.logout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 4px; /* Reduced padding to fit */
+}
+
+.mobile-nav .nav-item.logout:hover {
+  color: #D8FF6C; /* Highlight on hover */
 }
 
 /* ===== SLIDE MENU ===== */

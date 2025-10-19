@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap') !important;
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons') !important; /* Import Material Icons */
 
 .search-home {
   display: flex !important;
@@ -9,10 +10,11 @@
   overflow-x: hidden !important;
   cursor: url(http://www.rw-designer.com/cursor-extern.php?id=178894), auto !important;
   color: #000000 !important;
+  padding-top: 60px !important; /* Space for fixed navbar */
 }
 
 .search-home .content-container {
-  margin-top: 60px !important;
+  margin-top: 20px !important;
   margin-bottom: 20px !important;
   padding: 20px !important;
   flex: 1 !important;
@@ -35,30 +37,37 @@
 }
 
 .search-home .search-bar {
-  width: 100% !important;
+  width: 100% !important; /* Ensure full width */
 }
 
 .search-home .search-controls input.search-input {
-  width: 100% !important;
-  padding: 6px 12px !important;
-  font-size: 14px !important;
-  border: 1px solid #FF9AE9 !important;
-  border-radius: 8px !important;
-  background: none !important; /* Reset any inherited background */
-  background-color: transparent !important; /* Additional reset */
-  background-image: none !important; /* Reset background image if any */
-  background: #D8FF6C !important; /* Enforce green */
-  color: #000000 !important; /* Enforce black text */
-  transition: border 0.2s, box-shadow 0.2s !important;
+  width: 100% !important; /* Full width of container */
+  padding: 10px 16px !important; /* Increased padding for better touch area */
+  font-size: 16px !important; /* Slightly larger text */
+  border: 2px solid #FF9AE9 !important; /* Thicker border for emphasis */
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.9) !important; /* White background, no green pill */
+  color: #000000 !important; /* Black text */
+  transition: all 0.2s ease !important;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
-  /* Override common maroon shades */
-  background-color: #D8FF6C !important; /* Ensure no maroon (#800000, #A52A2A) */
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
 }
 
 .search-home .search-controls input.search-input:focus {
   border-color: #FF9AE9 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(255, 154, 233, 0.3) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(255, 154, 233, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Stronger focus shadow */
+}
+
+.search-home .search-controls input.search-input:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
+}
+
+.search-home .search-controls input.search-input:active {
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
+  background: #F0F0F0 !important; /* Slight gray on press */
 }
 
 .search-home .filters {
@@ -70,20 +79,31 @@
 }
 
 .search-home .filter-select {
-  padding: 6px 12px !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  border: 2px solid #000000 !important; /* Thicker border */
+  border-radius: 9999px !important;
   font-size: 14px !important;
   background: rgba(255, 255, 255, 0.8) !important;
   color: #000000 !important;
-  transition: border 0.2s, box-shadow 0.2s !important;
+  transition: all 0.2s ease !important;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
 }
 
 .search-home .filter-select:focus {
   border-color: #000000 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Stronger focus shadow */
+}
+
+.search-home .filter-select:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
+}
+
+.search-home .filter-select:active {
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
 }
 
 .search-home .price-range {
@@ -91,10 +111,21 @@
   align-items: center !important;
   gap: 8px !important;
   background: rgba(255, 255, 255, 0.8) !important;
-  padding: 6px 12px !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  border: 2px solid #000000 !important; /* Thicker border */
+  border-radius: 9999px !important;
   color: #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
+}
+
+.search-home .price-range:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
+}
+
+.search-home .price-range:active {
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
 }
 
 .search-home .price-label {
@@ -108,18 +139,30 @@
 .search-home .price-input {
   width: 80px !important;
   padding: 6px !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
+  border: 2px solid #000000 !important; /* Thicker border */
+  border-radius: 9999px !important;
   font-size: 14px !important;
   text-align: center !important;
   color: #000000 !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
 }
 
 .search-home .price-input:focus {
   border-color: #000000 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Stronger focus shadow */
+}
+
+.search-home .price-input:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
+}
+
+.search-home .price-input:active {
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
 }
 
 .search-home .price-separator {
@@ -156,6 +199,8 @@
 .search-home .section-icon {
   font-size: 24px !important;
   color: #000000 !important;
+  font-family: 'Material Icons' !important; /* Use Material Icons */
+  content: 'store' !important; /* Material Icon for store (adjust as needed) */
 }
 
 .search-home .results-count {
@@ -179,7 +224,7 @@
   background: #FFFFFF !important;
   border-radius: 10px !important;
   border: 1px solid #000000 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
   display: grid !important;
   grid-template-columns: 150px 1fr !important;
   gap: 16px !important;
@@ -191,13 +236,13 @@
 }
 
 .search-home .store-card:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .store-card:active {
   transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #F8F8F8 !important;
 }
 
@@ -262,7 +307,7 @@
   background: #FFFFFF !important;
   border-radius: 10px !important;
   border: 1px solid #000000 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
@@ -272,18 +317,18 @@
 }
 
 .search-home .item-card:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .item-card:active {
   transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #F8F8F8 !important;
 }
 
 .search-home .item-image-container {
-  width: 100% !important;
+  width: 100 !important;
   height: 250px !important;
   overflow: hidden !important;
   display: flex !important;
@@ -293,8 +338,8 @@
 }
 
 .search-home .item-image {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100 !important;
+  height: 100 !important;
   object-fit: cover !important;
   border-radius: 8px !important;
 }
@@ -473,6 +518,8 @@
   font-size: 48px !important;
   color: #000000 !important;
   margin-bottom: 12px !important;
+  font-family: 'Material Icons' !important; /* Use Material Icons */
+  content: 'search_off' !important; /* Material Icon for no results (adjust as needed) */
 }
 
 .search-home .no-results-title,
@@ -504,7 +551,7 @@
   text-align: center !important;
   text-decoration: none !important;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
   border-radius: 9999px !important;
   transition: all 0.2s ease !important;
   cursor: pointer !important;
@@ -512,14 +559,15 @@
 }
 
 .search-home .clear-filters-button:hover {
-  transform: translateY(-2px) !important;
+  transform: translateY(-3px) !important;
   background: #E88AD0 !important;
   color: white !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .clear-filters-button:active {
   transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #E88AD0 !important;
 }
 
@@ -546,7 +594,7 @@
   max-height: 80vh !important;
   overflow-y: auto !important;
   position: relative !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
   color: #000000 !important;
 }
 
@@ -560,6 +608,8 @@
   color: #000000 !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
+  font-family: 'Material Icons' !important; /* Use Material Icons */
+  content: 'close' !important; /* Material Icon for close */
 }
 
 .search-home .modal-close:hover {
@@ -577,7 +627,7 @@
 }
 
 .search-home .modal-image {
-  width: 100% !important;
+  width: 100 !important;
   max-height: 300px !important;
   object-fit: cover !important;
   border-radius: 8px !important;
@@ -642,6 +692,8 @@
   font-variation-settings: 'GRAD' -50 !important;
   font-size: 20px !important;
   color: #000000 !important;
+  font-family: 'Material Icons' !important; /* Use Material Icons */
+  /* Add specific icons as needed, e.g., 'info' for details */
 }
 
 .search-home .modal-reserved {
@@ -668,7 +720,7 @@
   text-align: center !important;
   text-decoration: none !important;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, 0 4px 0 #000000 !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
   border-radius: 9999px !important;
   transition: all 0.2s ease !important;
   cursor: pointer !important;
@@ -681,14 +733,15 @@
 }
 
 .search-home .modal-button.reserve:hover:not(:disabled) {
-  transform: translateY(-2px) !important;
+  transform: translateY(-3px) !important;
   background: #BCE84D !important;
   color: white !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .modal-button.reserve:active:not(:disabled) {
   transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #BCE84D !important;
 }
 
@@ -704,14 +757,15 @@
 }
 
 .search-home .modal-button.enquire:hover {
-  transform: translateY(-2px) !important;
+  transform: translateY(-3px) !important;
   background: #E88AD0 !important;
   color: white !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .modal-button.enquire:active {
   transform: translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #E88AD0 !important;
 }
 
@@ -720,31 +774,37 @@
   top: 50% !important;
   transform: translateY(-50%) !important;
   background: rgba(255, 255, 255, 0.8) !important;
-  border: 1px solid #000000 !important;
+  border: 2px solid #000000 !important; /* Thicker border */
   border-radius: 9999px !important;
   padding: 8px !important;
   font-size: 16px !important;
   color: #000000 !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #000000 !important; /* Enhanced shadows */
+  font-family: 'Material Icons' !important; /* Use Material Icons */
 }
 
 .search-home .carousel-button.prev {
   left: 8px !important;
+  content: 'chevron_left' !important; /* Material Icon for previous */
 }
 
 .search-home .carousel-button.next {
   right: 8px !important;
+  content: 'chevron_right' !important; /* Material Icon for next */
 }
 
 .search-home .carousel-button:hover {
   background: #FF9AE9 !important;
   color: white !important;
+  transform: translateY(-50%) translateY(-3px) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 0 #000000 !important; /* Deeper hover shadow */
 }
 
 .search-home .carousel-button:active {
   transform: translateY(-50%) translateY(2px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important, inset 0 -2px 0 #000000 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 #000000 !important; /* Pressed effect */
   background: #E88AD0 !important;
 }
 
@@ -766,7 +826,7 @@
   }
   .search-home .filter-select,
   .search-home .price-range {
-    width: 100% !important;
+    width: 100 !important;
   }
   .search-home .stores-grid,
   .search-home .items-grid {
