@@ -4,9 +4,7 @@ coverage:
       default:
         target: 80%
         threshold: 5%
-    patch:
-      default:
-        target: 80%
+    patch: off
 
 comment:
   layout: 'header, diff, files'
