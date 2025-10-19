@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'; // Add useMemo import
+import { useEffect, useState, useMemo } from 'react';
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -7,7 +7,7 @@ import {
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import LoadingScreen from '../../components/LoadingScreen'; // Import your loading screen component
+import LoadingScreen from '../../components/LoadingScreen';
 import { API_URL } from '../../api';
 import '../../styles/login.css';
 
@@ -21,9 +21,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [userName, setUserName] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [role, setRole] = useState('');
   const [currentTheme, setCurrentTheme] = useState('vintage');
   const [currentImage, setCurrentImage] = useState(() => {
@@ -145,7 +143,7 @@ export default function Login() {
         img.src = image;
       });
     });
-  }, [themes]); // Add 'themes' to the dependency array
+  }, [themes]);
 
   // Theme cycling with random image and tagline
   useEffect(() => {
@@ -176,7 +174,7 @@ export default function Login() {
 
   // Swipe-in animation on mount
   useEffect(() => {
-    setTimeout(() => setSwipeIn(false), 1200); // Match swipe-out duration
+    setTimeout(() => setSwipeIn(false), 1200);
   }, []);
 
   const getRoleAndRedirect = async (uid) => {
@@ -191,6 +189,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
       setError('Error fetching role.');
+      setLoading(false);
     }
   };
 
@@ -210,7 +209,6 @@ export default function Login() {
     } catch (err) {
       console.error(err);
       setError('Login failed.');
-    } finally {
       setLoading(false);
     }
   };
@@ -226,8 +224,11 @@ export default function Login() {
       await getRoleAndRedirect(uid);
     } catch (err) {
       console.error(err);
-      setError('Google login failed.');
-    } finally {
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        setError('');
+      } else {
+        setError('Google login failed.');
+      }
       setLoading(false);
     }
   };
@@ -246,11 +247,9 @@ export default function Login() {
         fontFamily: themeData.font,
       }}
     >
-      {/* Replace the old loading overlay with the new LoadingScreen component */}
       <LoadingScreen
         isLoading={loading}
-        //logoText="THRIFT"
-        logoSrc="/logo.png"
+        logoSrc="/images/themes/logo_final.png"
       />
 
       <div className={`left-scroll ${isMobile ? 'hidden' : ''}`}>

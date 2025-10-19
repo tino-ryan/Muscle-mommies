@@ -6,9 +6,9 @@
   width: 100vw;
   transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
   position: relative;
-  font-family: inherit !important; /* Override dashboard.css */
-  color: inherit !important; /* Override dashboard.css */
-  text-shadow: none !important; /* Override dashboard.css */
+  font-family: inherit !important;
+  color: inherit !important;
+  text-shadow: none !important;
 }
 
 .login-container.mobile {
@@ -28,27 +28,13 @@
   }
 }
 
-/* Loading overlay */
-.login-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* Left image slider */
 .left-scroll {
   width: 50%;
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-color: #f0f0f0; /* Fallback */
+  background-color: #f0f0f0;
 }
 
 .left-scroll.hidden {
@@ -90,6 +76,11 @@
   font-size: 3rem;
   margin: 1rem 0 0.5rem 0;
   transition: transform 0.3s ease;
+  display: inline-block !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 .right-form .theme-icon:hover {
@@ -101,7 +92,7 @@
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.05em;
-  text-shadow: none !important; /* Override dashboard.css */
+  text-shadow: none !important;
 }
 
 .right-form .theme-tagline {
@@ -116,7 +107,7 @@
   color: inherit;
   font-family: inherit;
   text-align: center;
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5) !important; /* Subtle shadow for readability */
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5) !important;
 }
 
 @keyframes fadeIn {
@@ -148,6 +139,7 @@
   background: rgba(255, 255, 255, 0.95);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   font-family: inherit;
+  color: #000 !important;
 }
 
 .login-form input:focus {
@@ -161,7 +153,7 @@
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: #fff !important;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-family: inherit;
@@ -178,7 +170,7 @@
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: #fff !important;
   width: 100%;
   max-width: 400px;
   margin-top: 1rem;
@@ -206,7 +198,7 @@
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #fff;
+  color: #fff !important;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-family: inherit;
@@ -219,7 +211,7 @@
 
 /* Error message */
 .error-message {
-  color: #e53935;
+  color: #e53935 !important;
   margin-top: 1rem;
   font-size: 0.9rem;
   text-align: center;
@@ -237,13 +229,13 @@
     display: none;
   }
 
-.right-form {
-  width: 100%;
-  padding: 10px 20px;
-  justify-content: flex-start;
-  background: rgba(0, 0, 0, 0.5); /* Increased opacity for goth theme */
-  backdrop-filter: blur(5px);
-}
+  .right-form {
+    width: 100%;
+    padding: 10px 20px;
+    justify-content: flex-start;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
 
   .right-form h2 {
     font-size: 2rem;

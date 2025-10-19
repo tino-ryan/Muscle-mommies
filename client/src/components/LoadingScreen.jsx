@@ -78,14 +78,14 @@ const LoadingScreen = ({
           position: 'absolute',
           left: `${position.x}px`,
           top: `${position.y}px`,
-          width: '500px',
-          height: '330px',
+          width: '300px', // REDUCED from 500px
+          height: '200px', // REDUCED from 330px
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: logoSrc ? 'transparent' : '#fff', // Transparent for images, white for text
-          borderRadius: logoSrc ? '0' : '12px', // No border radius for images
-          boxShadow: logoSrc ? 'none' : '0 4px 20px rgba(0, 0, 0, 0.3)', // No shadow for images
+          backgroundColor: logoSrc ? 'transparent' : '#fff',
+          borderRadius: logoSrc ? '0' : '12px',
+          boxShadow: logoSrc ? 'none' : '0 4px 20px rgba(0, 0, 0, 0.3)',
           fontFamily: 'Arial, sans-serif',
           fontWeight: 'bold',
           fontSize: '24px',
@@ -99,8 +99,8 @@ const LoadingScreen = ({
             src={logoSrc}
             alt="Logo"
             style={{
-              maxWidth: '380px',
-              maxHeight: '280px',
+              maxWidth: '250px', // REDUCED from 380px
+              maxHeight: '180px', // REDUCED from 280px
               objectFit: 'contain',
             }}
             draggable={false}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'; // Add useMemo import
+import { useEffect, useState, useMemo } from 'react';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -7,7 +7,7 @@ import {
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CustomLoading from '../../components/CustomLoading';
+import LoadingScreen from '../../components/LoadingScreen';
 import { API_URL } from '../../api';
 import '../../styles/signup.css';
 
@@ -137,7 +137,7 @@ export default function SignupPage({ role }) {
         img.src = image;
       });
     });
-  }, [themes]); // Add 'themes' to the dependency array
+  }, [themes]);
 
   // Theme cycling with random image and tagline
   useEffect(() => {
@@ -168,7 +168,7 @@ export default function SignupPage({ role }) {
 
   // Swipe-in animation on mount
   useEffect(() => {
-    setTimeout(() => setSwipeIn(false), 1200); // Match swipe-out duration
+    setTimeout(() => setSwipeIn(false), 1200);
   }, []);
 
   // Handle regular email/password signup
@@ -199,7 +199,6 @@ export default function SignupPage({ role }) {
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
-    } finally {
       setLoading(false);
     }
   };
@@ -228,8 +227,11 @@ export default function SignupPage({ role }) {
         navigate('/store/home');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Google signup failed');
-    } finally {
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        setError('');
+      } else {
+        setError(err.response?.data?.message || 'Google signup failed');
+      }
       setLoading(false);
     }
   };
@@ -248,16 +250,10 @@ export default function SignupPage({ role }) {
         fontFamily: themeData.font,
       }}
     >
-      {loading && (
-        <div className="signup-overlay">
-          <CustomLoading
-            userName={name || 'ThriftSeeker'}
-            onComplete={() =>
-              navigate(role === 'customer' ? '/customer/home' : '/store/home')
-            }
-          />
-        </div>
-      )}
+      <LoadingScreen
+        isLoading={loading}
+        logoSrc="/images/themes/logo_final.png"
+      />
 
       <div className={`left-scroll ${isMobile ? 'hidden' : ''}`}>
         {themes.map((theme) =>
